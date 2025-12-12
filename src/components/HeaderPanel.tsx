@@ -1,3 +1,5 @@
+import { Card } from "@/components/ui/card";
+
 interface HeaderPanelProps {
   visible: boolean;
 }
@@ -6,13 +8,15 @@ export function HeaderPanel({ visible }: HeaderPanelProps) {
   if (!visible) return null;
 
   return (
-    <div
-      className="header-panel"
+    <Card
+      className="w-[400px] h-[60px] flex items-center justify-center"
       role="status"
       aria-live="polite"
       aria-label="RAIC Overlay status panel"
     >
-      <h1>RAIC Overlay</h1>
-    </div>
+      <h1 className="text-card-foreground text-lg font-semibold m-0 font-sans">
+        RAIC Overlay
+      </h1>
+    </Card>
   );
 }

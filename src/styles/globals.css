@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+/*
+ * Dark Theme CSS Variables
+ * From contracts/theme-contract.css
+ * All values use HSL format for shadcn/ui compatibility
+ */
+:root {
+  /* === Core Colors === */
+  --background: 224 71.4% 4.1%;
+  --foreground: 210 20% 98%;
+
+  /* === Card === */
+  --card: 224 71.4% 4.1%;
+  --card-foreground: 210 20% 98%;
+
+  /* === Popover === */
+  --popover: 224 71.4% 4.1%;
+  --popover-foreground: 210 20% 98%;
+
+  /* === Primary === */
+  --primary: 210 20% 98%;
+  --primary-foreground: 220.9 39.3% 11%;
+
+  /* === Secondary === */
+  --secondary: 215 27.9% 16.9%;
+  --secondary-foreground: 210 20% 98%;
+
+  /* === Muted === */
+  --muted: 215 27.9% 16.9%;
+  --muted-foreground: 217.9 10.6% 64.9%;
+
+  /* === Accent === */
+  --accent: 215 27.9% 16.9%;
+  --accent-foreground: 210 20% 98%;
+
+  /* === Destructive === */
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 20% 98%;
+
+  /* === Form Elements === */
+  --border: 215 27.9% 16.9%;
+  --input: 215 27.9% 16.9%;
+  --ring: 216 12.2% 83.9%;
+
+  /* === Geometry === */
+  --radius: 0.5rem;
+
+  /* === Sidebar (for future shadcn sidebar component) === */
+  --sidebar-background: 224 71.4% 4.1%;
+  --sidebar-foreground: 210 20% 98%;
+  --sidebar-primary: 210 20% 98%;
+  --sidebar-primary-foreground: 220.9 39.3% 11%;
+  --sidebar-accent: 215 27.9% 16.9%;
+  --sidebar-accent-foreground: 210 20% 98%;
+  --sidebar-border: 215 27.9% 16.9%;
+  --sidebar-ring: 216 12.2% 83.9%;
+}
+
+/* Tailwind theme integration */
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/*
+ * Overlay Transparency Rules
+ * CRITICAL: Must override any Tailwind base styles
+ * Required for Tauri transparent overlay window
+ */
+html,
+body {
+  background: transparent !important;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#root {
+  background: transparent !important;
+}
