@@ -1,0 +1,57 @@
+/**
+ * Theme Contract: Dark Theme CSS Variables
+ *
+ * This contract defines the CSS custom properties that must be present
+ * for shadcn/ui components to render correctly with the dark theme.
+ *
+ * All components consuming these variables will use HSL format:
+ * background-color: hsl(var(--background));
+ */
+
+:root {
+  /* === Core Colors === */
+  --background: 224 71.4% 4.1%;
+  --foreground: 210 20% 98%;
+
+  /* === Card === */
+  --card: 224 71.4% 4.1%;
+  --card-foreground: 210 20% 98%;
+
+  /* === Popover === */
+  --popover: 224 71.4% 4.1%;
+  --popover-foreground: 210 20% 98%;
+
+  /* === Primary === */
+  --primary: 210 20% 98%;
+  --primary-foreground: 220.9 39.3% 11%;
+
+  /* === Secondary === */
+  --secondary: 215 27.9% 16.9%;
+  --secondary-foreground: 210 20% 98%;
+
+  /* === Muted === */
+  --muted: 215 27.9% 16.9%;
+  --muted-foreground: 217.9 10.6% 64.9%;
+
+  /* === Accent === */
+  --accent: 215 27.9% 16.9%;
+  --accent-foreground: 210 20% 98%;
+
+  /* === Destructive === */
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 20% 98%;
+
+  /* === Form Elements === */
+  --border: 215 27.9% 16.9%;
+  --input: 215 27.9% 16.9%;
+  --ring: 216 12.2% 83.9%;
+
+  /* === Geometry === */
+  --radius: 0.5rem;
+}
+
+/*
+ * IMPORTANT: No .dark class wrapper needed.
+ * This theme is dark-mode only by design.
+ * The values above ARE the dark theme values.
+ */
