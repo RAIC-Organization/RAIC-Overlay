@@ -5,7 +5,6 @@ import { getCurrentWindow, currentMonitor, LogicalPosition } from "@tauri-apps/a
 import { HeaderPanel } from "./components/HeaderPanel";
 import { OverlayState, initialState } from "./types/overlay";
 import { OverlayReadyPayload } from "./types/ipc";
-import "./styles/overlay.css";
 
 function App() {
   const [state, setState] = useState<OverlayState>(initialState);

@@ -72,10 +72,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T014 [US2] Refactor HeaderPanel to use Tailwind classes with theme CSS variables (bg-background, border-border, text-foreground) in src/components/HeaderPanel.tsx
-- [ ] T015 [US2] Preserve ARIA attributes (role, aria-live, aria-label) in src/components/HeaderPanel.tsx
-- [ ] T016 [US2] Remove old overlay.css import from src/App.tsx (if still present)
-- [ ] T017 [US2] Delete src/styles/overlay.css (migrated to globals.css)
+- [x] T014 [US2] Refactor HeaderPanel to use Tailwind classes with theme CSS variables (bg-background, border-border, text-foreground) in src/components/HeaderPanel.tsx
+- [x] T015 [US2] Preserve ARIA attributes (role, aria-live, aria-label) in src/components/HeaderPanel.tsx
+- [x] T016 [US2] Remove old overlay.css import from src/App.tsx (if still present)
+- [x] T017 [US2] Delete src/styles/overlay.css (migrated to globals.css)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work - HeaderPanel shows with dark theme
 
