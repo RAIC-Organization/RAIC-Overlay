@@ -89,9 +89,9 @@
 
 ### Implementation for User Story 3
 
-- [ ] T018 [US3] Verify all standard shadcn CSS variables from contracts/theme-contract.css are defined in src/styles/globals.css (background, foreground, card, popover, primary, secondary, muted, accent, destructive, border, input, ring, radius)
-- [ ] T019 [US3] Add sidebar variables to src/styles/globals.css (for future shadcn sidebar component)
-- [ ] T020 [US3] Create src/components/ui/ directory structure for future shadcn components
+- [x] T018 [US3] Verify all standard shadcn CSS variables from contracts/theme-contract.css are defined in src/styles/globals.css (background, foreground, card, popover, primary, secondary, muted, accent, destructive, border, input, ring, radius)
+- [x] T019 [US3] Add sidebar variables to src/styles/globals.css (for future shadcn sidebar component)
+- [x] T020 [US3] Create src/components/ui/ directory structure for future shadcn components
 
 **Checkpoint**: All user stories complete - theme is production-ready for future development
 
