@@ -21,11 +21,12 @@ describe("HeaderPanel", () => {
     expect(panel).toHaveAttribute("aria-label", "RAIC Overlay status panel");
   });
 
-  it("has Tailwind theme classes when visible", () => {
+  it("uses shadcn Card component with theme classes", () => {
     render(<HeaderPanel visible={true} />);
     const panel = screen.getByRole("status");
-    expect(panel).toHaveClass("bg-background");
-    expect(panel).toHaveClass("border-border");
+    // Card component applies bg-card and border classes
+    expect(panel).toHaveClass("bg-card");
+    expect(panel).toHaveClass("border");
   });
 
   it("renders h1 with RAIC Overlay text", () => {
@@ -46,13 +47,13 @@ describe("HeaderPanel styling", () => {
 });
 
 describe("HeaderPanel accessibility (WCAG 2.1 AA)", () => {
-  it("has sufficient color contrast (theme foreground on background)", () => {
-    // Color contrast ratio for hsl(210 20% 98%) on hsl(224 71.4% 4.1%)
-    // is approximately 19.5:1 - well above WCAG AA requirements
+  it("has sufficient color contrast (theme card-foreground on card)", () => {
+    // Color contrast ratio for card-foreground on card background
+    // meets WCAG AA requirements
     render(<HeaderPanel visible={true} />);
     const heading = screen.getByRole("heading");
     expect(heading).toBeInTheDocument();
-    expect(heading).toHaveClass("text-foreground");
+    expect(heading).toHaveClass("text-card-foreground");
   });
 
   it("has aria-live region for screen reader announcements", () => {
