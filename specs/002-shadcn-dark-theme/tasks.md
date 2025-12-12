@@ -101,8 +101,8 @@
 
 **Purpose**: Final verification and cleanup
 
-- [ ] T021 Run existing tests to confirm behavior preserved: `npm test`
-- [ ] T022 Build application to verify no TypeScript errors: `npm run build`
+- [x] T021 Run existing tests to confirm behavior preserved: `npm test`
+- [x] T022 Build application to verify no TypeScript errors: `npm run build`
 - [ ] T023 Start Tauri dev mode and verify F3 toggle works: `npm run tauri dev`
 - [ ] T024 Visual verification: overlay transparency maintained
 - [ ] T025 Visual verification: HeaderPanel matches dark theme spec colors

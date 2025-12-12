@@ -21,10 +21,11 @@ describe("HeaderPanel", () => {
     expect(panel).toHaveAttribute("aria-label", "RAIC Overlay status panel");
   });
 
-  it("has header-panel class when visible", () => {
+  it("has Tailwind theme classes when visible", () => {
     render(<HeaderPanel visible={true} />);
     const panel = screen.getByRole("status");
-    expect(panel).toHaveClass("header-panel");
+    expect(panel).toHaveClass("bg-background");
+    expect(panel).toHaveClass("border-border");
   });
 
   it("renders h1 with RAIC Overlay text", () => {
@@ -35,24 +36,23 @@ describe("HeaderPanel", () => {
 });
 
 describe("HeaderPanel styling", () => {
-  it("panel has correct dimensions (400x60)", () => {
+  it("panel has correct dimensions via Tailwind classes", () => {
     render(<HeaderPanel visible={true} />);
     const panel = screen.getByRole("status");
-    // Note: In jsdom, computed styles may not reflect CSS exactly
-    // This test verifies the class is applied; visual tests need browser
-    expect(panel).toHaveClass("header-panel");
+    // Tailwind classes for 400x60 dimensions
+    expect(panel).toHaveClass("w-[400px]");
+    expect(panel).toHaveClass("h-[60px]");
   });
 });
 
 describe("HeaderPanel accessibility (WCAG 2.1 AA)", () => {
-  it("has sufficient color contrast (white on black = 21:1 ratio)", () => {
-    // Color contrast ratio for #ffffff on #000000 is 21:1
-    // WCAG AA requires 4.5:1 for normal text, 3:1 for large text
-    // 21:1 exceeds both requirements
+  it("has sufficient color contrast (theme foreground on background)", () => {
+    // Color contrast ratio for hsl(210 20% 98%) on hsl(224 71.4% 4.1%)
+    // is approximately 19.5:1 - well above WCAG AA requirements
     render(<HeaderPanel visible={true} />);
     const heading = screen.getByRole("heading");
     expect(heading).toBeInTheDocument();
-    // Actual contrast verification requires visual testing tools
+    expect(heading).toHaveClass("text-foreground");
   });
 
   it("has aria-live region for screen reader announcements", () => {
