@@ -31,12 +31,10 @@ async fn set_visibility(
     Ok(())
 }
 
+// T013: Updated to use to_response() method which includes mode field
 #[tauri::command]
 fn get_overlay_state(state: tauri::State<'_, OverlayState>) -> types::OverlayStateResponse {
-    types::OverlayStateResponse {
-        visible: state.is_visible(),
-        initialized: state.is_initialized(),
-    }
+    state.to_response()
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]

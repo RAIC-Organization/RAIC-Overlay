@@ -39,13 +39,13 @@
 
 **⚠️ CRITICAL**: User story implementation depends on this phase
 
-- [ ] T007 Extend OverlayState struct with mode and saved_window_state fields in src-tauri/src/state.rs
-- [ ] T008 Add get_mode() method to OverlayState in src-tauri/src/state.rs
-- [ ] T009 Add set_mode() method to OverlayState in src-tauri/src/state.rs
-- [ ] T010 Add save_window_state() method to OverlayState in src-tauri/src/state.rs
-- [ ] T011 Add get_saved_window_state() method to OverlayState in src-tauri/src/state.rs
-- [ ] T012 Add to_response() method to OverlayState in src-tauri/src/state.rs
-- [ ] T013 Update get_overlay_state command to include mode in response in src-tauri/src/lib.rs
+- [x] T007 Extend OverlayState struct with mode and saved_window_state fields in src-tauri/src/state.rs
+- [x] T008 Add get_mode() method to OverlayState in src-tauri/src/state.rs
+- [x] T009 Add set_mode() method to OverlayState in src-tauri/src/state.rs
+- [x] T010 Add save_window_state() method to OverlayState in src-tauri/src/state.rs
+- [x] T011 Add get_saved_window_state() method to OverlayState in src-tauri/src/state.rs
+- [x] T012 Add to_response() method to OverlayState in src-tauri/src/state.rs
+- [x] T013 Update get_overlay_state command to include mode in response in src-tauri/src/lib.rs
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
