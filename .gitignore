@@ -42,3 +42,6 @@ coverage/
 
 # Tauri specific
 src-tauri/target/
+
+# Temp files
+temp/
