@@ -10,8 +10,22 @@ function App() {
   const [state, setState] = useState<OverlayState>(initialState);
 
   useEffect(() => {
-    // T024: Update toggle-overlay handler to call toggle_mode command
-    const unlistenToggle = listen("toggle-overlay", async () => {
+    // F3: Toggle visibility (show/hide)
+    const unlistenVisibility = listen("toggle-visibility", async () => {
+      try {
+        const result = await invoke<OverlayStateResponse>("toggle_visibility");
+        setState((prev) => ({
+          ...prev,
+          visible: result.visible,
+          mode: result.mode,
+        }));
+      } catch (err: unknown) {
+        console.error("Failed to toggle visibility:", err);
+      }
+    });
+
+    // F5: Toggle mode (click-through/interactive)
+    const unlistenMode = listen("toggle-mode", async () => {
       try {
         const result = await invoke<OverlayStateResponse>("toggle_mode");
         setState((prev) => ({
@@ -24,7 +38,7 @@ function App() {
       }
     });
 
-    // T025: Add mode-changed event listener
+    // Mode-changed event listener
     const unlistenModeChanged = listen<ModeChangePayload>("mode-changed", (event) => {
       console.log(
         `Mode changed from ${event.payload.previousMode} to ${event.payload.currentMode}`
@@ -58,29 +72,17 @@ function App() {
     positionWindow();
 
     return () => {
-      unlistenToggle.then((f) => f());
+      unlistenVisibility.then((f) => f());
+      unlistenMode.then((f) => f());
       unlistenModeChanged.then((f) => f());
       unlistenReady.then((f) => f());
     };
   }, []);
 
-  // T029: Conditionally render fullscreen overlay container when mode is fullscreen
-  // T031: Position HeaderPanel absolutely within fullscreen container
-  if (state.mode === 'fullscreen') {
-    return (
-      <div className="fullscreen-container">
-        {/* Transparent overlay background */}
-        <div className="fullscreen-overlay" />
-        {/* Header panel positioned at top-center */}
-        <div className="fullscreen-header-wrapper">
-          <HeaderPanel />
-        </div>
-      </div>
-    );
-  }
-
-  // Windowed mode: render HeaderPanel directly
-  return <HeaderPanel visible={state.visible} />;
+  // Render HeaderPanel with mode-based opacity
+  // fullscreen mode = click-through (60% transparent)
+  // windowed mode = interactive (0% transparent, fully visible)
+  return <HeaderPanel visible={state.visible} mode={state.mode} />;
 }
 
 export default App;

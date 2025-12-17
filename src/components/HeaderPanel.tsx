@@ -1,19 +1,24 @@
 import { Card } from "@/components/ui/card";
+import { OverlayMode } from "@/types/overlay";
 
-// T030: Updated HeaderPanel to support both visible prop and always-visible modes
-// When visible prop is provided, it controls rendering (windowed mode)
-// When no prop is provided (fullscreen mode), the panel is always rendered
+// HeaderPanel with mode-based opacity
+// fullscreen mode = click-through (60% transparent)
+// windowed mode = interactive (0% transparent, fully visible)
 interface HeaderPanelProps {
   visible?: boolean;
+  mode?: OverlayMode;
 }
 
-export function HeaderPanel({ visible = true }: HeaderPanelProps) {
+export function HeaderPanel({ visible = true, mode = 'windowed' }: HeaderPanelProps) {
   // If visible prop is explicitly false, don't render
   if (!visible) return null;
 
+  // Apply opacity class based on mode
+  const opacityClass = mode === 'fullscreen' ? 'header-click-through' : 'header-interactive';
+
   return (
     <Card
-      className="w-[400px] h-[60px] flex items-center justify-center"
+      className={`w-[400px] h-[60px] flex items-center justify-center ${opacityClass}`}
       role="status"
       aria-live="polite"
       aria-label="RAIC Overlay status panel"

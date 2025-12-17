@@ -31,18 +31,54 @@ async fn set_visibility(
     Ok(())
 }
 
-// T013: Updated to use to_response() method which includes mode field
 #[tauri::command]
 fn get_overlay_state(state: tauri::State<'_, OverlayState>) -> types::OverlayStateResponse {
     state.to_response()
 }
 
-// T018-T021: Toggle mode command (windowed <-> fullscreen)
+// F3: Toggle visibility - show (click-through mode) / hide
+#[tauri::command]
+async fn toggle_visibility(
+    window: tauri::WebviewWindow,
+    state: tauri::State<'_, OverlayState>,
+) -> Result<types::OverlayStateResponse, String> {
+    let is_visible = state.is_visible();
+
+    if is_visible {
+        // Hide the window
+        window
+            .hide()
+            .map_err(|e| format!("Failed to hide window: {}", e))?;
+        state.set_visible(false);
+        // Reset to click-through mode when hiding
+        state.set_mode(OverlayMode::Fullscreen);
+    } else {
+        // Show the window in click-through mode (60% transparent)
+        window
+            .show()
+            .map_err(|e| format!("Failed to show window: {}", e))?;
+        window
+            .set_ignore_cursor_events(true)
+            .map_err(|e| format!("Failed to set cursor events: {}", e))?;
+        state.set_visible(true);
+        state.set_mode(OverlayMode::Fullscreen);
+    }
+
+    Ok(state.to_response())
+}
+
+// F5: Toggle mode - click-through (60% transparent) / interactive (fully visible)
+// Only works when window is visible
 #[tauri::command]
 async fn toggle_mode(
     window: tauri::WebviewWindow,
     state: tauri::State<'_, OverlayState>,
 ) -> Result<types::OverlayStateResponse, String> {
+    // Only toggle mode if window is visible
+    if !state.is_visible() {
+        return Ok(state.to_response());
+    }
+
     let current_mode = state.get_mode();
     let previous_mode_str = match current_mode {
         OverlayMode::Windowed => "windowed",
@@ -50,46 +86,20 @@ async fn toggle_mode(
     };
 
     match current_mode {
-        // T018: Windowed -> Fullscreen transition
+        // Windowed (interactive) -> Fullscreen (click-through) transition
         OverlayMode::Windowed => {
-            // Save current window state for later restoration
-            let current_state = window::get_current_window_state(&window)?;
-            state.save_window_state(current_state);
-
-            // T036: Show window when entering fullscreen mode
-            window
-                .show()
-                .map_err(|e| format!("Failed to show window: {}", e))?;
-
-            // Expand to fullscreen
-            window::expand_to_fullscreen(&window)?;
-
-            // T033: Enable click-through in fullscreen mode
+            // Enable click-through mode (header at 60% transparency)
             window
                 .set_ignore_cursor_events(true)
                 .map_err(|e| format!("Failed to set cursor events: {}", e))?;
-
-            // Update state
             state.set_mode(OverlayMode::Fullscreen);
-            state.set_visible(true);
         }
-        // T019: Fullscreen -> Windowed transition
+        // Fullscreen (click-through) -> Windowed (interactive) transition
         OverlayMode::Fullscreen => {
-            // Restore saved window state or use default
-            if let Some(saved_state) = state.get_saved_window_state() {
-                window::restore_window_state(&window, &saved_state)?;
-            } else {
-                // Fallback to default windowed state
-                let default_state = window::get_default_windowed_state(&window)?;
-                window::restore_window_state(&window, &default_state)?;
-            }
-
-            // T034: Disable click-through in windowed mode (header is interactive)
+            // Disable click-through mode (header fully visible)
             window
                 .set_ignore_cursor_events(false)
                 .map_err(|e| format!("Failed to set cursor events: {}", e))?;
-
-            // Update state
             state.set_mode(OverlayMode::Windowed);
         }
     }
@@ -100,7 +110,7 @@ async fn toggle_mode(
         OverlayMode::Fullscreen => "fullscreen",
     };
 
-    // T021: Emit mode-changed event
+    // Emit mode-changed event
     let payload = ModeChangePayload {
         previous_mode: previous_mode_str.to_string(),
         current_mode: current_mode_str.to_string(),
@@ -118,17 +128,17 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .plugin(hotkey::build_shortcut_plugin().build())
         .manage(OverlayState::default())
-        // T020: Register toggle_mode command in invoke_handler
         .invoke_handler(tauri::generate_handler![
             set_visibility,
             get_overlay_state,
+            toggle_visibility,
             toggle_mode
         ])
         .setup(|app| {
             let handle = app.handle().clone();
 
-            // Register F3 global shortcut
-            if let Err(e) = hotkey::register_f3_shortcut(&handle) {
+            // Register F3 and F5 global shortcuts
+            if let Err(e) = hotkey::register_shortcuts(&handle) {
                 eprintln!("Warning: {}", e);
             }
 
