@@ -2,13 +2,20 @@ use std::sync::atomic::{AtomicBool, AtomicU8, Ordering};
 use std::sync::Mutex;
 
 use crate::types::{OverlayMode, OverlayStateResponse, WindowState};
+#[cfg(windows)]
+use crate::types::TargetWindowState;
 
-// T007: Extended OverlayState with mode and saved_window_state fields
+// T007: Extended OverlayState with mode, saved_window_state, target_binding, and auto_hidden fields
 pub struct OverlayState {
     pub visible: AtomicBool,
     pub initialized: AtomicBool,
     mode: AtomicU8, // 0 = Windowed, 1 = Fullscreen
     saved_window_state: Mutex<Option<WindowState>>,
+    // T007: Target window binding state (Windows only)
+    #[cfg(windows)]
+    pub target_binding: TargetWindowState,
+    // T007: Auto-hidden due to focus loss (not user toggle)
+    pub auto_hidden: AtomicBool,
 }
 
 impl Default for OverlayState {
@@ -18,6 +25,9 @@ impl Default for OverlayState {
             initialized: AtomicBool::new(false),
             mode: AtomicU8::new(0), // Default: Windowed
             saved_window_state: Mutex::new(None),
+            #[cfg(windows)]
+            target_binding: TargetWindowState::default(),
+            auto_hidden: AtomicBool::new(false),
         }
     }
 }
@@ -73,7 +83,37 @@ impl OverlayState {
         self.saved_window_state.lock().ok().and_then(|s| *s)
     }
 
+    // T007: Check if auto-hidden
+    pub fn is_auto_hidden(&self) -> bool {
+        self.auto_hidden.load(Ordering::SeqCst)
+    }
+
+    // T007: Set auto-hidden state
+    pub fn set_auto_hidden(&self, auto_hidden: bool) {
+        self.auto_hidden.store(auto_hidden, Ordering::SeqCst);
+    }
+
     // T012: Convert state to response
+    #[cfg(windows)]
+    pub fn to_response(&self) -> OverlayStateResponse {
+        use crate::target_window::TARGET_WINDOW_NAME;
+
+        let mode_str = match self.get_mode() {
+            OverlayMode::Windowed => "windowed",
+            OverlayMode::Fullscreen => "fullscreen",
+        };
+        OverlayStateResponse {
+            visible: self.is_visible(),
+            initialized: self.is_initialized(),
+            mode: mode_str.to_string(),
+            target_bound: self.target_binding.is_bound(),
+            target_name: TARGET_WINDOW_NAME.to_string(),
+            target_rect: self.target_binding.get_rect(),
+            auto_hidden: self.is_auto_hidden(),
+        }
+    }
+
+    #[cfg(not(windows))]
     pub fn to_response(&self) -> OverlayStateResponse {
         let mode_str = match self.get_mode() {
             OverlayMode::Windowed => "windowed",
@@ -83,6 +123,10 @@ impl OverlayState {
             visible: self.is_visible(),
             initialized: self.is_initialized(),
             mode: mode_str.to_string(),
+            target_bound: false,
+            target_name: String::new(),
+            target_rect: None,
+            auto_hidden: false,
         }
     }
 }
