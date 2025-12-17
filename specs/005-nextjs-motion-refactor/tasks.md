@@ -65,21 +65,21 @@
 
 ### Implementation for User Story 4
 
-- [ ] T017 [US4] Migrate App.tsx state management to app/page.tsx
-- [ ] T018 [US4] Migrate Tauri event listeners (toggle-visibility, toggle-mode, etc.) to app/page.tsx
-- [ ] T019 [US4] Migrate Tauri invoke commands to app/page.tsx
-- [ ] T020 [US4] Migrate window positioning logic (getCurrentWindow, currentMonitor) to app/page.tsx
-- [ ] T021 [US4] Update HeaderPanel.tsx imports for Next.js compatibility in src/components/HeaderPanel.tsx
-- [ ] T022 [US4] Update ErrorModal.tsx imports for Next.js compatibility in src/components/ErrorModal.tsx
-- [ ] T023 [US4] Update Card component imports in src/components/ui/card.tsx
-- [ ] T024 [US4] Verify debug border functionality works in app/page.tsx
-- [ ] T025 [US4] Test F3 visibility toggle works correctly
-- [ ] T026 [US4] Test F5 mode toggle works correctly
-- [ ] T027 [US4] Test target window attachment positioning works correctly
-- [ ] T028 [US4] Test click-through mode in fullscreen works correctly
-- [ ] T029 [US4] Test error modal appears and auto-dismisses correctly
-- [ ] T030 [US4] Run npm run build and verify static export generates out/ directory
-- [ ] T031 [US4] Run npm run tauri:dev and verify Tauri app launches with Next.js frontend
+- [x] T017 [US4] Migrate App.tsx state management to app/page.tsx
+- [x] T018 [US4] Migrate Tauri event listeners (toggle-visibility, toggle-mode, etc.) to app/page.tsx
+- [x] T019 [US4] Migrate Tauri invoke commands to app/page.tsx
+- [x] T020 [US4] Migrate window positioning logic (getCurrentWindow, currentMonitor) to app/page.tsx
+- [x] T021 [US4] Update HeaderPanel.tsx imports for Next.js compatibility in src/components/HeaderPanel.tsx
+- [x] T022 [US4] Update ErrorModal.tsx imports for Next.js compatibility in src/components/ErrorModal.tsx
+- [x] T023 [US4] Update Card component imports in src/components/ui/card.tsx
+- [x] T024 [US4] Verify debug border functionality works in app/page.tsx
+- [x] T025 [US4] Test F3 visibility toggle works correctly
+- [x] T026 [US4] Test F5 mode toggle works correctly
+- [x] T027 [US4] Test target window attachment positioning works correctly
+- [x] T028 [US4] Test click-through mode in fullscreen works correctly
+- [x] T029 [US4] Test error modal appears and auto-dismisses correctly
+- [x] T030 [US4] Run npm run build and verify static export generates out/ directory
+- [x] T031 [US4] Run npm run tauri:dev and verify Tauri app launches with Next.js frontend
 
 **Checkpoint**: All existing functionality works identically after Next.js migration
 
