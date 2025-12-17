@@ -1,3 +1,5 @@
+import type { OverlayMode } from './overlay';
+
 export interface OverlayReadyPayload {
   windowId: string;
   position: {
@@ -13,4 +15,11 @@ export interface SetVisibilityParams {
 export interface OverlayStateResponse {
   visible: boolean;
   initialized: boolean;
+  mode: OverlayMode;
+}
+
+// T006: ModeChangePayload for mode-changed event
+export interface ModeChangePayload {
+  previousMode: OverlayMode;
+  currentMode: OverlayMode;
 }
