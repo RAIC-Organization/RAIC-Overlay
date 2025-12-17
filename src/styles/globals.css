@@ -100,3 +100,33 @@ body {
 #root {
   background: transparent !important;
 }
+
+/* T028: Fullscreen overlay styles for 60% transparent background */
+.fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4); /* 40% opacity = 60% transparency */
+  /* T035: pointer-events none ensures CSS-level click-through */
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Container for positioning header panel in fullscreen mode */
+.fullscreen-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
+/* Header panel positioning in fullscreen mode - centered at top */
+.fullscreen-header-wrapper {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}

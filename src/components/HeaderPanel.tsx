@@ -1,10 +1,14 @@
 import { Card } from "@/components/ui/card";
 
+// T030: Updated HeaderPanel to support both visible prop and always-visible modes
+// When visible prop is provided, it controls rendering (windowed mode)
+// When no prop is provided (fullscreen mode), the panel is always rendered
 interface HeaderPanelProps {
-  visible: boolean;
+  visible?: boolean;
 }
 
-export function HeaderPanel({ visible }: HeaderPanelProps) {
+export function HeaderPanel({ visible = true }: HeaderPanelProps) {
+  // If visible prop is explicitly false, don't render
   if (!visible) return null;
 
   return (

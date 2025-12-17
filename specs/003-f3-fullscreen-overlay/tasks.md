@@ -90,14 +90,14 @@
 
 ### Tests for User Story 2
 
-- [ ] T027 [P] [US2] Create integration test for header position preservation in tests/integration/header-position.test.ts
+- [x] T027 [P] [US2] Create integration test for header position preservation in tests/integration/header-position.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T028 [P] [US2] Add fullscreen-overlay CSS class to src/index.css with 60% transparency background
-- [ ] T029 [US2] Conditionally render fullscreen overlay container in src/App.tsx when mode is fullscreen
-- [ ] T030 [US2] Update HeaderPanel to remove visibility-based conditional rendering in src/components/HeaderPanel.tsx
-- [ ] T031 [US2] Position HeaderPanel absolutely within fullscreen container in src/App.tsx
+- [x] T028 [P] [US2] Add fullscreen-overlay CSS class to src/index.css with 60% transparency background
+- [x] T029 [US2] Conditionally render fullscreen overlay container in src/App.tsx when mode is fullscreen
+- [x] T030 [US2] Update HeaderPanel to remove visibility-based conditional rendering in src/components/HeaderPanel.tsx
+- [x] T031 [US2] Position HeaderPanel absolutely within fullscreen container in src/App.tsx
 
 **Checkpoint**: Header panel visible and correctly positioned in fullscreen mode
 

@@ -64,8 +64,23 @@ function App() {
     };
   }, []);
 
-  // Render HeaderPanel (visibility controlled by mode/visible state)
-  return <HeaderPanel visible={state.visible || state.mode === 'fullscreen'} />;
+  // T029: Conditionally render fullscreen overlay container when mode is fullscreen
+  // T031: Position HeaderPanel absolutely within fullscreen container
+  if (state.mode === 'fullscreen') {
+    return (
+      <div className="fullscreen-container">
+        {/* Transparent overlay background */}
+        <div className="fullscreen-overlay" />
+        {/* Header panel positioned at top-center */}
+        <div className="fullscreen-header-wrapper">
+          <HeaderPanel />
+        </div>
+      </div>
+    );
+  }
+
+  // Windowed mode: render HeaderPanel directly
+  return <HeaderPanel visible={state.visible} />;
 }
 
 export default App;
