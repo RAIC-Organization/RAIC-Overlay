@@ -100,3 +100,14 @@ body {
 #root {
   background: transparent !important;
 }
+
+/* Header panel opacity for click-through mode (60% transparent = 40% opacity) */
+.header-click-through {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Header panel opacity for interactive mode (0% transparent = 100% opacity) */
+.header-interactive {
+  opacity: 1;
+}
