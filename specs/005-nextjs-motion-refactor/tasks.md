@@ -141,19 +141,19 @@
 
 ### Implementation for User Story 3
 
-- [ ] T054 [US3] Import motion and AnimatePresence from "motion/react" in src/components/ErrorModal.tsx
-- [ ] T055 [US3] Import useReducedMotion hook in src/components/ErrorModal.tsx
-- [ ] T056 [US3] Wrap ErrorModal content with AnimatePresence in src/components/ErrorModal.tsx
-- [ ] T057 [US3] Convert ErrorModal outer div to motion.div in src/components/ErrorModal.tsx
-- [ ] T058 [US3] Add initial={{ opacity: 0, scale: 0.95 }} for entrance start state in src/components/ErrorModal.tsx
-- [ ] T059 [US3] Add animate={{ opacity: 1, scale: 1 }} for visible state in src/components/ErrorModal.tsx
-- [ ] T060 [US3] Add exit={{ opacity: 0, scale: 0.95 }} for exit end state in src/components/ErrorModal.tsx
-- [ ] T061 [US3] Add transition={{ duration: 0.2, ease: "easeOut" }} in src/components/ErrorModal.tsx
-- [ ] T062 [US3] Implement useReducedMotion fallback in src/components/ErrorModal.tsx
-- [ ] T063 [US3] Add unique key prop to motion component in src/components/ErrorModal.tsx
-- [ ] T064 [US3] Test modal entrance animation when error occurs
-- [ ] T065 [US3] Test modal exit animation when dismiss button clicked
-- [ ] T066 [US3] Test modal exit animation when auto-dismiss timer expires
+- [x] T054 [US3] Import motion and AnimatePresence from "motion/react" in src/components/ErrorModal.tsx
+- [x] T055 [US3] Import useReducedMotion hook in src/components/ErrorModal.tsx
+- [x] T056 [US3] Wrap ErrorModal content with AnimatePresence in src/components/ErrorModal.tsx
+- [x] T057 [US3] Convert ErrorModal outer div to motion.div in src/components/ErrorModal.tsx
+- [x] T058 [US3] Add initial={{ opacity: 0, scale: 0.95 }} for entrance start state in src/components/ErrorModal.tsx
+- [x] T059 [US3] Add animate={{ opacity: 1, scale: 1 }} for visible state in src/components/ErrorModal.tsx
+- [x] T060 [US3] Add exit={{ opacity: 0, scale: 0.95 }} for exit end state in src/components/ErrorModal.tsx
+- [x] T061 [US3] Add transition={{ duration: 0.2, ease: "easeOut" }} in src/components/ErrorModal.tsx
+- [x] T062 [US3] Implement useReducedMotion fallback in src/components/ErrorModal.tsx
+- [x] T063 [US3] Add unique key prop to motion component in src/components/ErrorModal.tsx
+- [x] T064 [US3] Test modal entrance animation when error occurs
+- [x] T065 [US3] Test modal exit animation when dismiss button clicked
+- [x] T066 [US3] Test modal exit animation when auto-dismiss timer expires
 
 **Checkpoint**: Error modal animates smoothly on entrance and exit
 
