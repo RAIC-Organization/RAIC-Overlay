@@ -1,8 +1,11 @@
+"use client";
+
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Card } from "@/components/ui/card";
 import { OverlayMode } from "@/types/overlay";
 import { WindowRect } from "@/types/ipc";
 
-// T022: HeaderPanel with mode-based opacity and scale factor calculation
+// HeaderPanel with motion animations for show/hide and mode transitions
 // fullscreen mode = click-through (60% transparent)
 // windowed mode = interactive (0% transparent, fully visible)
 interface HeaderPanelProps {
@@ -11,7 +14,7 @@ interface HeaderPanelProps {
   targetRect?: WindowRect | null;
 }
 
-// T022: Calculate scale factor based on target window size
+// Calculate scale factor based on target window size
 // This ensures the header panel scales appropriately when attached to different window sizes
 function calculateScaleFactor(targetRect: WindowRect | null): number {
   if (!targetRect) return 1;
@@ -36,53 +39,88 @@ export function HeaderPanel({
   mode = "windowed",
   targetRect = null,
 }: HeaderPanelProps) {
-  // If visible prop is explicitly false, don't render
-  if (!visible) return null;
+  // Respect user's reduced motion preference
+  const prefersReducedMotion = useReducedMotion();
 
-  // Apply opacity class based on mode
-  const opacityClass =
-    mode === "fullscreen" ? "header-click-through" : "header-interactive";
+  // Animation durations (0 if reduced motion is preferred)
+  const showHideDuration = prefersReducedMotion ? 0 : 0.3;
+  const modeChangeDuration = prefersReducedMotion ? 0 : 0.25;
 
-  // T022: Calculate scale factor for target window attachment
+  // Calculate target opacity based on mode
+  // fullscreen = 40% opacity (60% transparent), windowed = 100% opacity
+  const targetOpacity = mode === "fullscreen" ? 0.4 : 1;
+
+  // pointer-events class for click-through mode
+  const pointerEventsClass = mode === "fullscreen" ? "pointer-events-none" : "";
+
+  // Calculate scale factor for target window attachment
   const scaleFactor = calculateScaleFactor(targetRect);
 
-  // When attached to target, use a container to center the header at top
-  if (targetRect) {
-    return (
-      <div className="w-full h-full flex justify-center items-start pt-0">
-        <Card
-          className={`w-[400px] h-[60px] flex items-center justify-center ${opacityClass}`}
-          role="status"
-          aria-live="polite"
-          aria-label="RAIC Overlay status panel"
-          style={{
-            fontSize: `${scaleFactor}rem`,
+  // Card content that will be animated
+  const cardContent = (
+    <h1
+      className="text-card-foreground font-semibold m-0 font-sans"
+      style={{
+        fontSize: targetRect ? `${1.125 * scaleFactor}rem` : undefined,
+      }}
+    >
+      RAIC Overlay
+    </h1>
+  );
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          key="header-panel"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: targetOpacity }}
+          exit={{ opacity: 0 }}
+          transition={{
+            duration: showHideDuration,
+            ease: "easeOut",
+            // Use faster duration for mode opacity changes
+            opacity: { duration: showHideDuration }
           }}
+          className={pointerEventsClass}
         >
-          <h1
-            className="text-card-foreground font-semibold m-0 font-sans"
-            style={{
-              fontSize: `${1.125 * scaleFactor}rem`,
+          {/* Inner motion.div for mode opacity transitions */}
+          <motion.div
+            animate={{ opacity: targetOpacity }}
+            transition={{
+              duration: modeChangeDuration,
+              ease: "easeOut"
             }}
           >
-            RAIC Overlay
-          </h1>
-        </Card>
-      </div>
-    );
-  }
-
-  // Default: no target, render as fixed size
-  return (
-    <Card
-      className={`w-[400px] h-[60px] flex items-center justify-center ${opacityClass}`}
-      role="status"
-      aria-live="polite"
-      aria-label="RAIC Overlay status panel"
-    >
-      <h1 className="text-card-foreground font-semibold m-0 font-sans text-lg">
-        RAIC Overlay
-      </h1>
-    </Card>
+            {targetRect ? (
+              // When attached to target, use a container to center the header at top
+              <div className="w-full h-full flex justify-center items-start pt-0">
+                <Card
+                  className="w-[400px] h-[60px] flex items-center justify-center"
+                  role="status"
+                  aria-live="polite"
+                  aria-label="RAIC Overlay status panel"
+                  style={{
+                    fontSize: `${scaleFactor}rem`,
+                  }}
+                >
+                  {cardContent}
+                </Card>
+              </div>
+            ) : (
+              // Default: no target, render as fixed size
+              <Card
+                className="w-[400px] h-[60px] flex items-center justify-center text-lg"
+                role="status"
+                aria-live="polite"
+                aria-label="RAIC Overlay status panel"
+              >
+                {cardContent}
+              </Card>
+            )}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

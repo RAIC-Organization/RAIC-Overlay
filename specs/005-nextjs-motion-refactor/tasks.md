@@ -93,19 +93,19 @@
 
 ### Implementation for User Story 1
 
-- [ ] T032 [US1] Import motion and AnimatePresence from "motion/react" in src/components/HeaderPanel.tsx
-- [ ] T033 [US1] Import useReducedMotion hook in src/components/HeaderPanel.tsx
-- [ ] T034 [US1] Wrap HeaderPanel content with AnimatePresence in src/components/HeaderPanel.tsx
-- [ ] T035 [US1] Convert HeaderPanel inner content to motion.div with fade animation props in src/components/HeaderPanel.tsx
-- [ ] T036 [US1] Add initial={{ opacity: 0 }} for fade-in start state in src/components/HeaderPanel.tsx
-- [ ] T037 [US1] Add animate={{ opacity: 1 }} for visible state in src/components/HeaderPanel.tsx
-- [ ] T038 [US1] Add exit={{ opacity: 0 }} for fade-out end state in src/components/HeaderPanel.tsx
-- [ ] T039 [US1] Add transition={{ duration: 0.3, ease: "easeOut" }} in src/components/HeaderPanel.tsx
-- [ ] T040 [US1] Implement useReducedMotion fallback (duration: 0 when reduced motion) in src/components/HeaderPanel.tsx
-- [ ] T041 [US1] Add unique key prop to motion component for AnimatePresence tracking in src/components/HeaderPanel.tsx
-- [ ] T042 [US1] Test fade-in animation when pressing F3 to show overlay
-- [ ] T043 [US1] Test fade-out animation when pressing F3 to hide overlay
-- [ ] T044 [US1] Test rapid F3 toggling handles animation interruption gracefully
+- [x] T032 [US1] Import motion and AnimatePresence from "motion/react" in src/components/HeaderPanel.tsx
+- [x] T033 [US1] Import useReducedMotion hook in src/components/HeaderPanel.tsx
+- [x] T034 [US1] Wrap HeaderPanel content with AnimatePresence in src/components/HeaderPanel.tsx
+- [x] T035 [US1] Convert HeaderPanel inner content to motion.div with fade animation props in src/components/HeaderPanel.tsx
+- [x] T036 [US1] Add initial={{ opacity: 0 }} for fade-in start state in src/components/HeaderPanel.tsx
+- [x] T037 [US1] Add animate={{ opacity: 1 }} for visible state in src/components/HeaderPanel.tsx
+- [x] T038 [US1] Add exit={{ opacity: 0 }} for fade-out end state in src/components/HeaderPanel.tsx
+- [x] T039 [US1] Add transition={{ duration: 0.3, ease: "easeOut" }} in src/components/HeaderPanel.tsx
+- [x] T040 [US1] Implement useReducedMotion fallback (duration: 0 when reduced motion) in src/components/HeaderPanel.tsx
+- [x] T041 [US1] Add unique key prop to motion component for AnimatePresence tracking in src/components/HeaderPanel.tsx
+- [x] T042 [US1] Test fade-in animation when pressing F3 to show overlay
+- [x] T043 [US1] Test fade-out animation when pressing F3 to hide overlay
+- [x] T044 [US1] Test rapid F3 toggling handles animation interruption gracefully
 
 **Checkpoint**: Show/hide transitions animate smoothly with 300ms fade
 
@@ -119,15 +119,15 @@
 
 ### Implementation for User Story 2
 
-- [ ] T045 [US2] Update HeaderPanel to use motion.div for opacity animation in src/components/HeaderPanel.tsx
-- [ ] T046 [US2] Add animate={{ opacity: mode === "fullscreen" ? 0.6 : 1 }} for mode-based opacity in src/components/HeaderPanel.tsx
-- [ ] T047 [US2] Add transition={{ duration: 0.25, ease: "easeOut" }} for opacity changes in src/components/HeaderPanel.tsx
-- [ ] T048 [US2] Ensure opacity animation works independently of show/hide animation in src/components/HeaderPanel.tsx
-- [ ] T049 [US2] Update useReducedMotion to also affect opacity transition duration in src/components/HeaderPanel.tsx
-- [ ] T050 [US2] Remove CSS-based opacity class switching (header-click-through, header-interactive) in src/components/HeaderPanel.tsx
-- [ ] T051 [US2] Test opacity animates from 100% to 60% when pressing F5 (windowed → fullscreen)
-- [ ] T052 [US2] Test opacity animates from 60% to 100% when pressing F5 (fullscreen → windowed)
-- [ ] T053 [US2] Test rapid F5 toggling handles animation interruption gracefully
+- [x] T045 [US2] Update HeaderPanel to use motion.div for opacity animation in src/components/HeaderPanel.tsx
+- [x] T046 [US2] Add animate={{ opacity: mode === "fullscreen" ? 0.6 : 1 }} for mode-based opacity in src/components/HeaderPanel.tsx
+- [x] T047 [US2] Add transition={{ duration: 0.25, ease: "easeOut" }} for opacity changes in src/components/HeaderPanel.tsx
+- [x] T048 [US2] Ensure opacity animation works independently of show/hide animation in src/components/HeaderPanel.tsx
+- [x] T049 [US2] Update useReducedMotion to also affect opacity transition duration in src/components/HeaderPanel.tsx
+- [x] T050 [US2] Remove CSS-based opacity class switching (header-click-through, header-interactive) in src/components/HeaderPanel.tsx
+- [x] T051 [US2] Test opacity animates from 100% to 60% when pressing F5 (windowed → fullscreen)
+- [x] T052 [US2] Test opacity animates from 60% to 100% when pressing F5 (fullscreen → windowed)
+- [x] T053 [US2] Test rapid F5 toggling handles animation interruption gracefully
 
 **Checkpoint**: Mode opacity transitions animate smoothly with 250ms duration
 
