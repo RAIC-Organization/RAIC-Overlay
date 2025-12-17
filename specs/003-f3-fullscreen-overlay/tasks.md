@@ -111,14 +111,14 @@
 
 ### Tests for User Story 3
 
-- [ ] T032 [P] [US3] Create integration test for click-through behavior in tests/integration/click-through.test.ts
+- [x] T032 [P] [US3] Create integration test for click-through behavior in tests/integration/click-through.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T033 [US3] Ensure set_ignore_cursor_events(true) called when entering fullscreen in src-tauri/src/lib.rs
-- [ ] T034 [US3] Ensure set_ignore_cursor_events(false) called when exiting fullscreen in src-tauri/src/lib.rs
-- [ ] T035 [US3] Add pointer-events: none to fullscreen-overlay CSS in src/index.css
-- [ ] T036 [US3] Verify window.show() is called when entering fullscreen mode in src-tauri/src/lib.rs
+- [x] T033 [US3] Ensure set_ignore_cursor_events(true) called when entering fullscreen in src-tauri/src/lib.rs
+- [x] T034 [US3] Ensure set_ignore_cursor_events(false) called when exiting fullscreen in src-tauri/src/lib.rs
+- [x] T035 [US3] Add pointer-events: none to fullscreen-overlay CSS in src/index.css
+- [x] T036 [US3] Verify window.show() is called when entering fullscreen mode in src-tauri/src/lib.rs
 
 **Checkpoint**: All mouse events pass through to background applications
 
