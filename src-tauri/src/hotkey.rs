@@ -3,8 +3,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use tauri::Emitter;
 use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState};
 
-// Debounce time in milliseconds
-const DEBOUNCE_MS: u64 = 50;
+// T026: Debounce time in milliseconds (updated from 50 to 200 per spec requirement)
+const DEBOUNCE_MS: u64 = 200;
 
 // Last press timestamp for debouncing
 static LAST_PRESS: AtomicU64 = AtomicU64::new(0);

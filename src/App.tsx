@@ -4,22 +4,35 @@ import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow, currentMonitor, LogicalPosition } from "@tauri-apps/api/window";
 import { HeaderPanel } from "./components/HeaderPanel";
 import { OverlayState, initialState } from "./types/overlay";
-import { OverlayReadyPayload } from "./types/ipc";
+import { OverlayReadyPayload, OverlayStateResponse, ModeChangePayload } from "./types/ipc";
 
 function App() {
   const [state, setState] = useState<OverlayState>(initialState);
 
   useEffect(() => {
-    // Listen for toggle-overlay event from Rust (F12 press)
-    const unlistenToggle = listen("toggle-overlay", () => {
-      setState((prev) => {
-        const newVisible = !prev.visible;
-        // Sync visibility with backend
-        invoke("set_visibility", { visible: newVisible }).catch((err: unknown) =>
-          console.error("Failed to set visibility:", err)
-        );
-        return { ...prev, visible: newVisible };
-      });
+    // T024: Update toggle-overlay handler to call toggle_mode command
+    const unlistenToggle = listen("toggle-overlay", async () => {
+      try {
+        const result = await invoke<OverlayStateResponse>("toggle_mode");
+        setState((prev) => ({
+          ...prev,
+          visible: result.visible,
+          mode: result.mode,
+        }));
+      } catch (err: unknown) {
+        console.error("Failed to toggle mode:", err);
+      }
+    });
+
+    // T025: Add mode-changed event listener
+    const unlistenModeChanged = listen<ModeChangePayload>("mode-changed", (event) => {
+      console.log(
+        `Mode changed from ${event.payload.previousMode} to ${event.payload.currentMode}`
+      );
+      setState((prev) => ({
+        ...prev,
+        mode: event.payload.currentMode,
+      }));
     });
 
     // Listen for overlay-ready event
@@ -46,11 +59,13 @@ function App() {
 
     return () => {
       unlistenToggle.then((f) => f());
+      unlistenModeChanged.then((f) => f());
       unlistenReady.then((f) => f());
     };
   }, []);
 
-  return <HeaderPanel visible={state.visible} />;
+  // Render HeaderPanel (visibility controlled by mode/visible state)
+  return <HeaderPanel visible={state.visible || state.mode === 'fullscreen'} />;
 }
 
 export default App;

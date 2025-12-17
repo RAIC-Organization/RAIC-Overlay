@@ -61,22 +61,22 @@
 
 > **NOTE**: Write tests FIRST per Constitution Testing Standards principle
 
-- [ ] T014 [P] [US1] Create integration test for mode toggle in tests/integration/mode-toggle.test.ts
+- [x] T014 [P] [US1] Create integration test for mode toggle in tests/integration/mode-toggle.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T015 [P] [US1] Add get_monitor_size() function to src-tauri/src/window.rs
-- [ ] T016 [P] [US1] Add expand_to_fullscreen() function to src-tauri/src/window.rs
-- [ ] T017 [P] [US1] Add restore_window_state() function to src-tauri/src/window.rs
-- [ ] T018 [US1] Implement toggle_mode command in src-tauri/src/lib.rs (windowed → fullscreen transition)
-- [ ] T019 [US1] Extend toggle_mode command for fullscreen → windowed transition in src-tauri/src/lib.rs
-- [ ] T020 [US1] Register toggle_mode command in invoke_handler in src-tauri/src/lib.rs
-- [ ] T021 [US1] Emit mode-changed event from toggle_mode command in src-tauri/src/lib.rs
-- [ ] T022 [US1] Update OverlayState interface with mode field in src/types/overlay.ts
-- [ ] T023 [US1] Update initialState with mode: 'windowed' in src/types/overlay.ts
-- [ ] T024 [US1] Update toggle-overlay event handler to call toggle_mode command in src/App.tsx
-- [ ] T025 [US1] Add mode-changed event listener in src/App.tsx
-- [ ] T026 [US1] Update DEBOUNCE_MS constant from 50 to 200 in src-tauri/src/hotkey.rs
+- [x] T015 [P] [US1] Add get_monitor_size() function to src-tauri/src/window.rs
+- [x] T016 [P] [US1] Add expand_to_fullscreen() function to src-tauri/src/window.rs
+- [x] T017 [P] [US1] Add restore_window_state() function to src-tauri/src/window.rs
+- [x] T018 [US1] Implement toggle_mode command in src-tauri/src/lib.rs (windowed → fullscreen transition)
+- [x] T019 [US1] Extend toggle_mode command for fullscreen → windowed transition in src-tauri/src/lib.rs
+- [x] T020 [US1] Register toggle_mode command in invoke_handler in src-tauri/src/lib.rs
+- [x] T021 [US1] Emit mode-changed event from toggle_mode command in src-tauri/src/lib.rs
+- [x] T022 [US1] Update OverlayState interface with mode field in src/types/overlay.ts
+- [x] T023 [US1] Update initialState with mode: 'windowed' in src/types/overlay.ts
+- [x] T024 [US1] Update toggle-overlay event handler to call toggle_mode command in src/App.tsx
+- [x] T025 [US1] Add mode-changed event listener in src/App.tsx
+- [x] T026 [US1] Update DEBOUNCE_MS constant from 50 to 200 in src-tauri/src/hotkey.rs
 
 **Checkpoint**: F3 toggles mode and window resizes correctly
 
