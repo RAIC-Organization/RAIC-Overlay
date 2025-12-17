@@ -73,25 +73,27 @@ describe('Mode Toggle Integration', () => {
 
   describe('mode-changed event', () => {
     it('should emit mode-changed event with correct payload', async () => {
-      const eventHandler = vi.fn();
+      let capturedHandler: ((event: { payload: unknown }) => void) | null = null;
 
       // Simulate listening to the event
       mockListen.mockImplementation((eventName, handler) => {
         if (eventName === 'mode-changed') {
-          // Store handler for later invocation
-          eventHandler.mockImplementation(handler);
+          capturedHandler = handler as (event: { payload: unknown }) => void;
         }
         return Promise.resolve(mockUnlisten);
       });
 
-      await mockListen('mode-changed', eventHandler);
+      const testHandler = vi.fn();
+      await mockListen('mode-changed', testHandler);
 
-      // Simulate event being emitted
+      // Simulate event being emitted by calling the captured handler
       const payload = {
         previousMode: 'windowed',
         currentMode: 'fullscreen',
       };
-      eventHandler({ payload });
+      if (capturedHandler) {
+        capturedHandler({ payload });
+      }
 
       expect(mockListen).toHaveBeenCalledWith('mode-changed', expect.any(Function));
     });

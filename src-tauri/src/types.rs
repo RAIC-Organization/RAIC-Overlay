@@ -1,16 +1,11 @@
 use serde::{Deserialize, Serialize};
 
 // T001: OverlayMode enum for windowed/fullscreen states
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum OverlayMode {
+    #[default]
     Windowed,
     Fullscreen,
-}
-
-impl Default for OverlayMode {
-    fn default() -> Self {
-        Self::Windowed
-    }
 }
 
 // T002: WindowState struct for position/size restoration

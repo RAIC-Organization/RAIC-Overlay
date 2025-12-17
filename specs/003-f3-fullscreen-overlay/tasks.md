@@ -128,16 +128,16 @@
 
 **Purpose**: Edge cases, performance validation, and final validation
 
-- [ ] T037 [P] Verify always-on-top behavior in fullscreen mode (already configured in tauri.conf.json)
-- [ ] T038 [P] Test multi-monitor behavior: overlay expands to current monitor
-- [ ] T039 [P] Test DPI scaling: verify correct sizing at 100%, 125%, 150% scale factors
-- [ ] T040 [P] Test rapid F3 toggling: debounce prevents flickering
-- [ ] T041 [P] Measure toggle response time and verify <100ms (SC-001) using performance.now()
-- [ ] T042 [P] Verify click-through latency <50ms (SC-002) via manual testing with timestamp logging
-- [ ] T043 [P] Perform 100+ toggle cycles and monitor memory usage for leaks (SC-005)
-- [ ] T044 Run cargo clippy and fix any warnings in src-tauri/src/
-- [ ] T045 Run npm run build and fix any TypeScript errors
-- [ ] T046 Validate implementation against quickstart.md testing checklist
+- [x] T037 [P] Verify always-on-top behavior in fullscreen mode (already configured in tauri.conf.json)
+- [x] T038 [P] Test multi-monitor behavior: overlay expands to current monitor
+- [x] T039 [P] Test DPI scaling: verify correct sizing at 100%, 125%, 150% scale factors
+- [x] T040 [P] Test rapid F3 toggling: debounce prevents flickering
+- [x] T041 [P] Measure toggle response time and verify <100ms (SC-001) using performance.now()
+- [x] T042 [P] Verify click-through latency <50ms (SC-002) via manual testing with timestamp logging
+- [x] T043 [P] Perform 100+ toggle cycles and monitor memory usage for leaks (SC-005)
+- [x] T044 Run cargo clippy and fix any warnings in src-tauri/src/
+- [x] T045 Run npm run build and fix any TypeScript errors
+- [x] T046 Validate implementation against quickstart.md testing checklist
 
 ---
 
