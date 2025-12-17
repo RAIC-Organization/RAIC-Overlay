@@ -32,6 +32,33 @@ pub fn set_window_top_center(window: &WebviewWindow) -> Result<(), String> {
     Ok(())
 }
 
+/// Position the window at screen center (both horizontally and vertically)
+pub fn set_window_screen_center(window: &WebviewWindow, width: f64, height: f64) -> Result<(), String> {
+    let monitor = window
+        .current_monitor()
+        .map_err(|e| format!("Failed to get current monitor: {}", e))?
+        .ok_or_else(|| "No monitor found".to_string())?;
+
+    let monitor_size = monitor.size();
+    let scale_factor = monitor.scale_factor();
+
+    let logical_monitor_width = monitor_size.width as f64 / scale_factor;
+    let logical_monitor_height = monitor_size.height as f64 / scale_factor;
+
+    let x = (logical_monitor_width - width) / 2.0;
+    let y = (logical_monitor_height - height) / 2.0;
+
+    window
+        .set_size(tauri::Size::Logical(LogicalSize::new(width, height)))
+        .map_err(|e| format!("Failed to set window size: {}", e))?;
+
+    window
+        .set_position(tauri::Position::Logical(LogicalPosition::new(x, y)))
+        .map_err(|e| format!("Failed to set window position: {}", e))?;
+
+    Ok(())
+}
+
 // T015: Get monitor size in logical pixels
 pub fn get_monitor_size(window: &WebviewWindow) -> Result<(f64, f64), String> {
     let monitor = window
@@ -119,4 +146,42 @@ pub fn get_default_windowed_state(window: &WebviewWindow) -> Result<WindowState,
         width: WINDOW_WIDTH,
         height: WINDOW_HEIGHT,
     })
+}
+
+// T018: Sync overlay position and size to target window
+#[cfg(windows)]
+use crate::types::WindowRect;
+
+// T046: Sync overlay position and size to target window with timing instrumentation
+#[cfg(windows)]
+pub fn sync_overlay_to_target(window: &WebviewWindow, rect: &WindowRect) -> Result<(), String> {
+    use std::time::Instant;
+    use tauri::PhysicalPosition;
+    use tauri::PhysicalSize;
+
+    let start = Instant::now();
+
+    // Use physical pixels since WindowRect comes from Windows API in physical coords
+    window
+        .set_position(tauri::Position::Physical(PhysicalPosition::new(
+            rect.x, rect.y,
+        )))
+        .map_err(|e| format!("Failed to set overlay position: {}", e))?;
+
+    window
+        .set_size(tauri::Size::Physical(PhysicalSize::new(
+            rect.width, rect.height,
+        )))
+        .map_err(|e| format!("Failed to set overlay size: {}", e))?;
+
+    // T046: SC-001 validation - position update should be <50ms
+    let elapsed = start.elapsed();
+    if elapsed.as_millis() > 50 {
+        eprintln!(
+            "Warning: sync_overlay_to_target took {}ms (target: <50ms)",
+            elapsed.as_millis()
+        );
+    }
+
+    Ok(())
 }

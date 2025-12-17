@@ -1,11 +1,17 @@
 pub mod hotkey;
 pub mod state;
+#[cfg(windows)]
+pub mod focus_monitor;
+#[cfg(windows)]
+pub mod target_window;
 pub mod types;
 pub mod window;
 
 use state::OverlayState;
 use tauri::{Emitter, Manager};
-use types::{ModeChangePayload, OverlayMode, OverlayReadyPayload, Position};
+use types::{ModeChangePayload, OverlayMode, OverlayReadyPayload, Position, TargetWindowInfo};
+#[cfg(windows)]
+use types::{ShowErrorModalPayload, TargetWindowChangedPayload, TargetWindowError};
 
 #[tauri::command]
 async fn set_visibility(
@@ -36,7 +42,8 @@ fn get_overlay_state(state: tauri::State<'_, OverlayState>) -> types::OverlaySta
     state.to_response()
 }
 
-// F3: Toggle visibility - show (click-through mode) / hide
+// T019: F3: Toggle visibility with target window validation (Windows)
+#[cfg(windows)]
 #[tauri::command]
 async fn toggle_visibility(
     window: tauri::WebviewWindow,
@@ -50,10 +57,118 @@ async fn toggle_visibility(
             .hide()
             .map_err(|e| format!("Failed to hide window: {}", e))?;
         state.set_visible(false);
+        state.set_auto_hidden(false);
         // Reset to click-through mode when hiding
         state.set_mode(OverlayMode::Fullscreen);
+        // Clear target binding
+        state.target_binding.clear();
     } else {
+        // T019: Check target window before showing overlay
+        let target_hwnd = match target_window::find_target_window() {
+            Ok(hwnd) => hwnd,
+            Err(TargetWindowError::NotFound { pattern }) => {
+                // Show window temporarily for error modal - centered on screen
+                let _ = window::set_window_screen_center(&window, 420.0, 280.0);
+                let _ = window.show();
+                let _ = window.set_ignore_cursor_events(false);
+
+                // Emit error modal event
+                let payload = ShowErrorModalPayload {
+                    target_name: pattern.clone(),
+                    message: format!("Please start {} first", pattern),
+                    auto_dismiss_ms: 5000,
+                };
+                let _ = window.emit("show-error-modal", payload);
+                return Ok(state.to_response());
+            }
+            Err(e) => {
+                // Show window temporarily for error modal - centered on screen
+                let _ = window::set_window_screen_center(&window, 420.0, 280.0);
+                let _ = window.show();
+                let _ = window.set_ignore_cursor_events(false);
+
+                let _ = window.emit("show-error-modal", ShowErrorModalPayload {
+                    target_name: target_window::TARGET_WINDOW_NAME.to_string(),
+                    message: format!("Target window error: {}", e),
+                    auto_dismiss_ms: 5000,
+                });
+                return Ok(state.to_response());
+            }
+        };
+
+        // Check if target is focused
+        if !target_window::is_target_focused(target_hwnd) {
+            // Target exists but not focused - don't show overlay
+            return Ok(state.to_response());
+        }
+
+        // Get target window rect
+        let rect = match target_window::get_window_rect(target_hwnd) {
+            Ok(r) => r,
+            Err(e) => {
+                // Show window temporarily for error modal - centered on screen
+                let _ = window::set_window_screen_center(&window, 420.0, 280.0);
+                let _ = window.show();
+                let _ = window.set_ignore_cursor_events(false);
+
+                let _ = window.emit("show-error-modal", ShowErrorModalPayload {
+                    target_name: target_window::TARGET_WINDOW_NAME.to_string(),
+                    message: format!("Failed to get target window position: {}", e),
+                    auto_dismiss_ms: 5000,
+                });
+                return Ok(state.to_response());
+            }
+        };
+
+        // Store target binding
+        state.target_binding.set_hwnd(target_window::hwnd_to_u64(target_hwnd));
+        state.target_binding.set_focused(true);
+        state.target_binding.set_rect(Some(rect));
+        state.target_binding.update_last_check();
+
+        // T018: Sync overlay to target window
+        window::sync_overlay_to_target(&window, &rect)
+            .map_err(|e| format!("Failed to sync overlay: {}", e))?;
+
         // Show the window in click-through mode (60% transparent)
+        window
+            .show()
+            .map_err(|e| format!("Failed to show window: {}", e))?;
+        window
+            .set_ignore_cursor_events(true)
+            .map_err(|e| format!("Failed to set cursor events: {}", e))?;
+        state.set_visible(true);
+        state.set_auto_hidden(false);
+        state.set_mode(OverlayMode::Fullscreen);
+
+        // Emit target-window-changed event
+        let payload = TargetWindowChangedPayload {
+            bound: true,
+            focused: true,
+            rect: Some(rect),
+        };
+        let _ = window.emit("target-window-changed", payload);
+    }
+
+    Ok(state.to_response())
+}
+
+// F3: Toggle visibility - non-Windows fallback
+#[cfg(not(windows))]
+#[tauri::command]
+async fn toggle_visibility(
+    window: tauri::WebviewWindow,
+    state: tauri::State<'_, OverlayState>,
+) -> Result<types::OverlayStateResponse, String> {
+    let is_visible = state.is_visible();
+
+    if is_visible {
+        window
+            .hide()
+            .map_err(|e| format!("Failed to hide window: {}", e))?;
+        state.set_visible(false);
+        state.set_mode(OverlayMode::Fullscreen);
+    } else {
         window
             .show()
             .map_err(|e| format!("Failed to show window: {}", e))?;
@@ -122,6 +237,53 @@ async fn toggle_mode(
     Ok(state.to_response())
 }
 
+// T054: Get target window info command
+#[cfg(windows)]
+#[tauri::command]
+fn get_target_window_info(_state: tauri::State<'_, OverlayState>) -> TargetWindowInfo {
+    use target_window::TARGET_WINDOW_NAME;
+
+    // Try to find target window
+    match target_window::find_target_window() {
+        Ok(hwnd) => {
+            let focused = target_window::is_target_focused(hwnd);
+            let rect = target_window::get_window_rect(hwnd).ok();
+
+            TargetWindowInfo {
+                pattern: TARGET_WINDOW_NAME.to_string(),
+                found: true,
+                focused,
+                rect,
+            }
+        }
+        Err(_) => TargetWindowInfo {
+            pattern: TARGET_WINDOW_NAME.to_string(),
+            found: false,
+            focused: false,
+            rect: None,
+        },
+    }
+}
+
+#[cfg(not(windows))]
+#[tauri::command]
+fn get_target_window_info(_state: tauri::State<'_, OverlayState>) -> TargetWindowInfo {
+    TargetWindowInfo {
+        pattern: String::new(),
+        found: false,
+        focused: false,
+        rect: None,
+    }
+}
+
+// T043: Dismiss error modal command
+#[tauri::command]
+fn dismiss_error_modal(window: tauri::WebviewWindow) -> Result<(), String> {
+    window
+        .emit("dismiss-error-modal", ())
+        .map_err(|e| format!("Failed to emit dismiss event: {}", e))
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -132,7 +294,9 @@ pub fn run() {
             set_visibility,
             get_overlay_state,
             toggle_visibility,
-            toggle_mode
+            toggle_mode,
+            get_target_window_info,
+            dismiss_error_modal
         ])
         .setup(|app| {
             let handle = app.handle().clone();
@@ -172,6 +336,10 @@ pub fn run() {
             if let Err(e) = app.emit("overlay-ready", payload) {
                 eprintln!("Failed to emit overlay-ready: {}", e);
             }
+
+            // T026: Start focus monitor (Windows only)
+            #[cfg(windows)]
+            focus_monitor::start_focus_monitor(handle);
 
             Ok(())
         })

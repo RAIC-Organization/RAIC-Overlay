@@ -99,6 +99,14 @@ body {
 
 #root {
   background: transparent !important;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Debug border class - applied via VITE_DEBUG_BORDER env variable */
+#root.debug-border {
+  border: 10px solid red;
 }
 
 /* Header panel opacity for click-through mode (60% transparent = 40% opacity) */
