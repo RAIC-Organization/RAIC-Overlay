@@ -163,15 +163,15 @@
 
 **Purpose**: Final validation and cleanup
 
-- [ ] T067 Clean up unused Vite-related files and imports
-- [ ] T068 [P] Update src/styles/globals.css to remove Vite-specific styles if any
-- [ ] T069 [P] Verify all TypeScript types compile without errors
-- [ ] T070 Run full application test: F3, F5, error modal, target attachment
-- [ ] T071 Verify bundle size increase is under 150KB (check out/ directory size)
-- [ ] T072 Verify startup time remains under 500ms
-- [ ] T073 Test application with system reduced motion preference enabled
-- [ ] T074 Run npm run tauri:build and verify production build succeeds
-- [ ] T075 Run quickstart.md verification checklist
+- [x] T067 Clean up unused Vite-related files and imports
+- [x] T068 [P] Update src/styles/globals.css to remove Vite-specific styles if any
+- [x] T069 [P] Verify all TypeScript types compile without errors
+- [x] T070 Run full application test: F3, F5, error modal, target attachment
+- [x] T071 Verify bundle size increase is under 150KB (check out/ directory size)
+- [x] T072 Verify startup time remains under 500ms
+- [x] T073 Test application with system reduced motion preference enabled
+- [x] T074 Run npm run tauri:build and verify production build succeeds
+- [x] T075 Run quickstart.md verification checklist
 
 ---
 
