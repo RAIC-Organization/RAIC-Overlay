@@ -42,16 +42,16 @@
 
 **⚠️ CRITICAL**: No animation tasks can begin until this phase is complete
 
-- [ ] T007 Create app/ directory structure at project root
-- [ ] T008 Create app/layout.tsx with root layout, html/body tags, and globals.css import
-- [ ] T009 Create app/globals.css by copying from src/styles/globals.css
-- [ ] T010 Create app/page.tsx as client component with "use client" directive
-- [ ] T011 Verify src/components/ works with Next.js App Router (update any Vite-specific imports)
-- [ ] T012 Verify src/lib/utils.ts works with Next.js (no changes expected)
-- [ ] T013 Verify src/types/ works with Next.js (no changes expected)
-- [ ] T014 Update tauri.conf.json build configuration in src-tauri/tauri.conf.json
-- [ ] T015 Re-initialize shadcn/ui for Next.js 15 compatibility
-- [ ] T016 Verify TypeScript path aliases work with @/ prefix in tsconfig.json
+- [x] T007 Create app/ directory structure at project root
+- [x] T008 Create app/layout.tsx with root layout, html/body tags, and globals.css import
+- [x] T009 Create app/globals.css by copying from src/styles/globals.css
+- [x] T010 Create app/page.tsx as client component with "use client" directive
+- [x] T011 Verify src/components/ works with Next.js App Router (update any Vite-specific imports)
+- [x] T012 Verify src/lib/utils.ts works with Next.js (no changes expected)
+- [x] T013 Verify src/types/ works with Next.js (no changes expected)
+- [x] T014 Update tauri.conf.json build configuration in src-tauri/tauri.conf.json
+- [x] T015 Re-initialize shadcn/ui for Next.js 15 compatibility
+- [x] T016 Verify TypeScript path aliases work with @/ prefix in tsconfig.json
 
 **Checkpoint**: Next.js App Router structure ready, basic app renders
 
