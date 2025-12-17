@@ -5,6 +5,8 @@ node_modules/
 dist/
 build/
 target/
+out/
+.next/
 
 # Rust specific
 *.rs.bk

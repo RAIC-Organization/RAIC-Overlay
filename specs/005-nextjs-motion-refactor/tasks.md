@@ -25,12 +25,12 @@
 
 **Purpose**: Project initialization and Next.js migration setup
 
-- [ ] T001 Remove Vite dependencies (vite, @vitejs/plugin-react) from package.json
-- [ ] T002 Install Next.js and motion dependencies in package.json
-- [ ] T003 [P] Create next.config.mjs with static export configuration at project root
-- [ ] T004 [P] Update package.json scripts for Next.js (dev, build, tauri:dev, tauri:build)
-- [ ] T005 [P] Update tsconfig.json for Next.js App Router paths and configuration
-- [ ] T006 Delete vite.config.ts from project root
+- [x] T001 Remove Vite dependencies (vite, @vitejs/plugin-react) from package.json
+- [x] T002 Install Next.js and motion dependencies in package.json
+- [x] T003 [P] Create next.config.mjs with static export configuration at project root
+- [x] T004 [P] Update package.json scripts for Next.js (dev, build, tauri:dev, tauri:build)
+- [x] T005 [P] Update tsconfig.json for Next.js App Router paths and configuration
+- [x] T006 Delete vite.config.ts from project root
 
 **Checkpoint**: Next.js dependencies installed, configuration files ready
 
