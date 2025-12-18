@@ -76,13 +76,13 @@
 
 ### Implementation for User Story 2
 
-- [ ] T015 [US2] Add drag functionality to WindowHeader in src/components/windows/WindowHeader.tsx (pointer events, position updates)
-- [ ] T016 [US2] Add resize functionality to Window edges/corners in src/components/windows/Window.tsx (cursor changes, size updates)
-- [ ] T017 [US2] Add close button to WindowHeader in src/components/windows/WindowHeader.tsx
-- [ ] T018 [US2] Implement z-order focus on window click in src/components/windows/Window.tsx (bring to front)
-- [ ] T019 [US2] Add position constraints to prevent windows going off-screen in src/contexts/WindowsContext.tsx
-- [ ] T020 [US2] Add size constraints (min 150x100) to resize logic in src/contexts/WindowsContext.tsx
-- [ ] T021 [US2] Add window close animation using motion.js in src/components/windows/Window.tsx
+- [X] T015 [US2] Add drag functionality to WindowHeader in src/components/windows/WindowHeader.tsx (pointer events, position updates)
+- [X] T016 [US2] Add resize functionality to Window edges/corners in src/components/windows/Window.tsx (cursor changes, size updates)
+- [X] T017 [US2] Add close button to WindowHeader in src/components/windows/WindowHeader.tsx
+- [X] T018 [US2] Implement z-order focus on window click in src/components/windows/Window.tsx (bring to front)
+- [X] T019 [US2] Add position constraints to prevent windows going off-screen in src/contexts/WindowsContext.tsx
+- [X] T020 [US2] Add size constraints (min 150x100) to resize logic in src/contexts/WindowsContext.tsx
+- [X] T021 [US2] Add window close animation using motion.js in src/components/windows/Window.tsx
 
 **Checkpoint**: User Story 2 complete - full window manipulation available in interaction mode
 
