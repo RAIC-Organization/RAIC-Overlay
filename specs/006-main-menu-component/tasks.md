@@ -100,9 +100,9 @@ Based on plan.md structure:
 
 ### Implementation for User Story 3
 
-- [ ] T023 [US3] Verify MainMenu visibility logic correctly hides when mode !== 'windowed' in src/components/MainMenu.tsx
-- [ ] T024 [US3] Verify exit animation triggers when mode changes from windowed to fullscreen in src/components/MainMenu.tsx
-- [ ] T025 [US3] Test rapid F5 toggling to ensure AnimatePresence handles state changes gracefully
+- [X] T023 [US3] Verify MainMenu visibility logic correctly hides when mode !== 'windowed' in src/components/MainMenu.tsx
+- [X] T024 [US3] Verify exit animation triggers when mode changes from windowed to fullscreen in src/components/MainMenu.tsx
+- [X] T025 [US3] Test rapid F5 toggling to ensure AnimatePresence handles state changes gracefully
 
 **Checkpoint**: MainMenu properly shows/hides based on overlay mode with smooth animations
 
