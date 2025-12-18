@@ -52,23 +52,23 @@ Based on plan.md structure:
 
 > **NOTE**: Write these tests FIRST, ensure they FAIL before implementation
 
-- [ ] T004 [P] [US1] Create MainMenu component test file at src/components/__tests__/MainMenu.test.tsx
-- [ ] T005 [P] [US1] Add test: MainMenu renders when mode is 'windowed' in src/components/__tests__/MainMenu.test.tsx
-- [ ] T006 [P] [US1] Add test: MainMenu hidden when mode is 'fullscreen' in src/components/__tests__/MainMenu.test.tsx
-- [ ] T007 [P] [US1] Add test: Button click logs button name to console in src/components/__tests__/MainMenu.test.tsx
+- [X] T004 [P] [US1] Create MainMenu component test file at tests/react/MainMenu.test.tsx
+- [X] T005 [P] [US1] Add test: MainMenu renders when mode is 'windowed' in tests/react/MainMenu.test.tsx
+- [X] T006 [P] [US1] Add test: MainMenu hidden when mode is 'fullscreen' in tests/react/MainMenu.test.tsx
+- [X] T007 [P] [US1] Add test: Button click logs button name to console in tests/react/MainMenu.test.tsx
 
 ### Implementation for User Story 1
 
-- [ ] T008 [US1] Create MainMenu component with props interface in src/components/MainMenu.tsx
-- [ ] T009 [US1] Add AnimatePresence and motion wrapper with 300ms fade animation in src/components/MainMenu.tsx
-- [ ] T010 [US1] Add transparent background container with flexbox layout in src/components/MainMenu.tsx
-- [ ] T011 [US1] Add ButtonGroup 1 with Option 1 and Option 2 buttons in src/components/MainMenu.tsx
-- [ ] T012 [US1] Add ButtonGroup 2 with Option 3 button in src/components/MainMenu.tsx
-- [ ] T013 [US1] Implement handleButtonClick function that logs button name to console in src/components/MainMenu.tsx
-- [ ] T014 [US1] Add useReducedMotion hook for accessibility in src/components/MainMenu.tsx
-- [ ] T015 [US1] Add visibility logic: show only when mode === 'windowed' in src/components/MainMenu.tsx
-- [ ] T016 [US1] Import MainMenu component in app/page.tsx
-- [ ] T017 [US1] Add MainMenu to page.tsx JSX with visible, mode, and targetRect props in app/page.tsx
+- [X] T008 [US1] Create MainMenu component with props interface in src/components/MainMenu.tsx
+- [X] T009 [US1] Add AnimatePresence and motion wrapper with 300ms fade animation in src/components/MainMenu.tsx
+- [X] T010 [US1] Add transparent background container with flexbox layout in src/components/MainMenu.tsx
+- [X] T011 [US1] Add ButtonGroup 1 with Option 1 and Option 2 buttons in src/components/MainMenu.tsx
+- [X] T012 [US1] Add ButtonGroup 2 with Option 3 button in src/components/MainMenu.tsx
+- [X] T013 [US1] Implement handleButtonClick function that logs button name to console in src/components/MainMenu.tsx
+- [X] T014 [US1] Add useReducedMotion hook for accessibility in src/components/MainMenu.tsx
+- [X] T015 [US1] Add visibility logic: show only when mode === 'windowed' in src/components/MainMenu.tsx
+- [X] T016 [US1] Import MainMenu component in app/page.tsx
+- [X] T017 [US1] Add MainMenu to page.tsx JSX with visible, mode, and targetRect props in app/page.tsx
 
 **Checkpoint**: MainMenu appears in interactive mode with two button groups and console logging works
 
