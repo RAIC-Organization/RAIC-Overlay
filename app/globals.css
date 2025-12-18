@@ -125,3 +125,34 @@ body {
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
 }
+
+/* Window system styles */
+.window-container {
+  pointer-events: none;
+}
+
+.window-container > * {
+  pointer-events: auto;
+}
+
+/* Window resize cursors */
+.cursor-ns-resize {
+  cursor: ns-resize;
+}
+
+.cursor-ew-resize {
+  cursor: ew-resize;
+}
+
+.cursor-nesw-resize {
+  cursor: nesw-resize;
+}
+
+.cursor-nwse-resize {
+  cursor: nwse-resize;
+}
+
+/* Window transitions for mode changes */
+.window-mode-transition {
+  transition: opacity 100ms ease-out, border 100ms ease-out;
+}

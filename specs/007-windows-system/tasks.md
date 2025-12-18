@@ -112,10 +112,10 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T027 Add window styles to globals.css in app/globals.css (resize cursors, transitions)
-- [ ] T028 Verify 10+ concurrent windows performance in WindowsContainer
-- [ ] T029 Run manual validation per quickstart.md scenarios
-- [ ] T030 Code cleanup: remove console.logs, verify TypeScript strict compliance
+- [X] T027 Add window styles to globals.css in app/globals.css (resize cursors, transitions)
+- [X] T028 Verify 10+ concurrent windows performance in WindowsContainer
+- [X] T029 Run manual validation per quickstart.md scenarios
+- [X] T030 Code cleanup: remove console.logs, verify TypeScript strict compliance
 
 ---
 

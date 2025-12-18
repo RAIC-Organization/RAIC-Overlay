@@ -11,6 +11,9 @@
 
 import type { ComponentType } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyComponent = ComponentType<any>;
+
 // ============================================================================
 // Event Payloads
 // ============================================================================
@@ -21,7 +24,7 @@ import type { ComponentType } from 'react';
  */
 export interface WindowOpenPayload {
   /** React component to render inside the window */
-  component: ComponentType<unknown>;
+  component: AnyComponent;
 
   /** Title displayed in window header (interaction mode only) */
   title: string;
@@ -129,7 +132,7 @@ export interface WindowInstance {
   title: string;
 
   /** React component rendered in window body */
-  component: ComponentType<unknown>;
+  component: AnyComponent;
 
   /** Props passed to the component */
   componentProps?: Record<string, unknown>;
