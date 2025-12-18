@@ -6,6 +6,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow, currentMonitor, LogicalPosition } from "@tauri-apps/api/window";
 import { HeaderPanel } from "@/components/HeaderPanel";
 import { ErrorModal } from "@/components/ErrorModal";
+import { MainMenu } from "@/components/MainMenu";
 import { OverlayState, initialState } from "@/types/overlay";
 import {
   OverlayReadyPayload,
@@ -186,16 +187,26 @@ export default function Home() {
     });
   }, []);
 
-  // Render HeaderPanel with mode-based opacity
-  // fullscreen mode = click-through (60% transparent)
-  // windowed mode = interactive (0% transparent, fully visible)
+  // Render MainMenu at top, HeaderPanel at bottom when interactive mode
+  // fullscreen mode = click-through (60% transparent, MainMenu hidden)
+  // windowed mode = interactive (0% transparent, MainMenu visible)
   return (
-    <>
-      <HeaderPanel
+    <div className="flex flex-col justify-between h-full">
+      {/* MainMenu at top - only visible in interactive mode */}
+      <MainMenu
         visible={state.visible}
         mode={state.mode}
         targetRect={state.targetRect}
       />
+
+      {/* Header at bottom when interactive, top otherwise */}
+      <HeaderPanel
+        visible={state.visible}
+        mode={state.mode}
+        targetRect={state.targetRect}
+        position={state.mode === "windowed" ? "bottom" : "top"}
+      />
+
       {/* Error modal rendering */}
       <ErrorModal
         visible={errorModal.visible}
@@ -204,6 +215,6 @@ export default function Home() {
         autoDismissMs={errorModal.autoDismissMs}
         onDismiss={handleDismissError}
       />
-    </>
+    </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { OverlayMode } from "@/types/overlay";
 import { WindowRect } from "@/types/ipc";
 
@@ -12,6 +13,7 @@ interface HeaderPanelProps {
   visible?: boolean;
   mode?: OverlayMode;
   targetRect?: WindowRect | null;
+  position?: "top" | "bottom";
 }
 
 // Calculate scale factor based on target window size
@@ -38,6 +40,7 @@ export function HeaderPanel({
   visible = true,
   mode = "windowed",
   targetRect = null,
+  position = "top",
 }: HeaderPanelProps) {
   // Respect user's reduced motion preference
   const prefersReducedMotion = useReducedMotion();
@@ -93,8 +96,11 @@ export function HeaderPanel({
             }}
           >
             {targetRect ? (
-              // When attached to target, use a container to center the header at top
-              <div className="w-full h-full flex justify-center items-start pt-0">
+              // When attached to target, use a container to center the header
+              <div className={cn(
+                "w-full h-full flex justify-center pt-0",
+                position === "bottom" ? "items-end" : "items-start"
+              )}>
                 <Card
                   className="w-[400px] h-[60px] flex items-center justify-center"
                   role="status"
