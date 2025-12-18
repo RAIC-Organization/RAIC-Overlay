@@ -48,10 +48,10 @@
 
 ## Phase 5: User Story 3 - Mode Toggle (P3)
 
-- [ ] T021 [US3] Add useEffect for setEditable sync in src/components/windows/NotesContent.tsx
-- [ ] T022 [US3] Set initial editable state in useEditor options
-- [ ] T023 [US3] Verify toolbar hides on F5 toggle
-- [ ] T024 [US3] Verify read-only in non-interaction mode
+- [X] T021 [US3] Add useEffect for setEditable sync in src/components/windows/NotesContent.tsx
+- [X] T022 [US3] Set initial editable state in useEditor options
+- [X] T023 [US3] Verify toolbar hides on F5 toggle
+- [X] T024 [US3] Verify read-only in non-interaction mode
 
 ---
 
