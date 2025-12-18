@@ -5,13 +5,16 @@
  *
  * Renders a single window with header and content. Supports drag-to-move
  * via header, resize via edges/corners, and click-to-focus z-ordering.
- * Includes open/close animations.
+ * Includes open/close animations and mode-aware styling.
+ *
+ * In interactive mode (windowed): Header visible, border, fully opaque, drag/resize enabled
+ * In passive mode (fullscreen): Header hidden, no border, 60% transparent, drag/resize disabled
  *
  * @feature 007-windows-system
  */
 
 import { useRef, useCallback, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import type { WindowInstance } from '@/types/windows';
 import { WINDOW_CONSTANTS } from '@/types/windows';
 import { useWindows } from '@/contexts/WindowsContext';
@@ -19,6 +22,7 @@ import { WindowHeader } from './WindowHeader';
 
 interface WindowProps {
   window: WindowInstance;
+  isInteractive?: boolean;
   onExitComplete?: () => void;
 }
 
@@ -26,7 +30,7 @@ type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw' | null;
 
 const RESIZE_HANDLE_SIZE = 8;
 
-export function Window({ window: windowInstance, onExitComplete }: WindowProps) {
+export function Window({ window: windowInstance, isInteractive = true, onExitComplete }: WindowProps) {
   const { id, title, component: Component, componentProps, x, y, width, height, zIndex } =
     windowInstance;
 
@@ -42,13 +46,16 @@ export function Window({ window: windowInstance, onExitComplete }: WindowProps) 
   } | null>(null);
   const [resizeDirection, setResizeDirection] = useState<ResizeDirection>(null);
 
-  // Handle window focus on click
+  // Handle window focus on click (only in interactive mode)
   const handleWindowClick = useCallback(() => {
-    focusWindow(id);
-  }, [id, focusWindow]);
+    if (isInteractive) {
+      focusWindow(id);
+    }
+  }, [id, focusWindow, isInteractive]);
 
-  // Get cursor style based on position
+  // Get cursor style based on position (only in interactive mode)
   const getCursorStyle = (direction: ResizeDirection): string => {
+    if (!isInteractive) return '';
     switch (direction) {
       case 'n':
       case 's':
@@ -89,8 +96,10 @@ export function Window({ window: windowInstance, onExitComplete }: WindowProps) 
     return null;
   };
 
-  // Handle resize pointer down
+  // Handle resize pointer down (only in interactive mode)
   const handleResizePointerDown = useCallback((e: React.PointerEvent) => {
+    if (!isInteractive) return;
+
     const direction = getResizeDirection(e);
     if (!direction) return;
 
@@ -107,10 +116,12 @@ export function Window({ window: windowInstance, onExitComplete }: WindowProps) 
       windowHeight: height,
     };
     setResizeDirection(direction);
-  }, [x, y, width, height]);
+  }, [x, y, width, height, isInteractive]);
 
-  // Handle resize pointer move
+  // Handle resize pointer move (only in interactive mode)
   const handleResizePointerMove = useCallback((e: React.PointerEvent) => {
+    if (!isInteractive) return;
+
     // Update cursor based on position when not dragging
     if (!resizeRef.current) {
       const direction = getResizeDirection(e);
@@ -157,7 +168,7 @@ export function Window({ window: windowInstance, onExitComplete }: WindowProps) 
         resizeWindow(id, newWidth, newHeight);
       }
     });
-  }, [id, moveWindow, resizeWindow]);
+  }, [id, moveWindow, resizeWindow, isInteractive]);
 
   // Handle resize pointer up
   const handleResizePointerUp = useCallback((e: React.PointerEvent) => {
@@ -172,9 +183,19 @@ export function Window({ window: windowInstance, onExitComplete }: WindowProps) 
     }
   }, []);
 
+  // Mode-aware styles
+  const modeClasses = isInteractive
+    ? 'border border-border rounded-lg shadow-lg'
+    : 'border-0 rounded-lg shadow-none';
+
+  // Content height based on header visibility
+  const contentHeight = isInteractive
+    ? `calc(100% - ${WINDOW_CONSTANTS.HEADER_HEIGHT}px)`
+    : '100%';
+
   return (
     <motion.div
-      className={`absolute bg-background border border-border rounded-lg shadow-lg overflow-hidden ${getCursorStyle(resizeDirection)}`}
+      className={`absolute bg-background overflow-hidden ${modeClasses} ${getCursorStyle(resizeDirection)}`}
       style={{
         left: x,
         top: y,
@@ -183,9 +204,9 @@ export function Window({ window: windowInstance, onExitComplete }: WindowProps) 
         zIndex,
       }}
       initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
+      animate={{ opacity: isInteractive ? 1 : 0.6, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.15, ease: "easeOut" }}
+      transition={{ duration: isInteractive ? 0.15 : 0.1, ease: "easeOut" }}
       onPointerDown={handleWindowClick}
       onAnimationComplete={(definition) => {
         if (definition === 'exit' && onExitComplete) {
@@ -195,26 +216,29 @@ export function Window({ window: windowInstance, onExitComplete }: WindowProps) 
     >
       {/* Resize handles - invisible overlay for detecting edge/corner hover */}
       <div
-        className="absolute inset-0 pointer-events-auto"
+        className={`absolute inset-0 ${isInteractive ? 'pointer-events-auto' : 'pointer-events-none'}`}
         onPointerDown={handleResizePointerDown}
         onPointerMove={handleResizePointerMove}
         onPointerUp={handleResizePointerUp}
         onPointerLeave={handlePointerLeave}
       >
-        {/* Header - needs to be inside to capture events */}
-        <div className="pointer-events-auto">
-          <WindowHeader
-            windowId={id}
-            title={title}
-            x={x}
-            y={y}
-          />
-        </div>
+        {/* Header - only visible in interactive mode */}
+        {isInteractive && (
+          <div className="pointer-events-auto">
+            <WindowHeader
+              windowId={id}
+              title={title}
+              x={x}
+              y={y}
+              isInteractive={isInteractive}
+            />
+          </div>
+        )}
 
         {/* Content */}
         <div
           className="overflow-auto pointer-events-auto"
-          style={{ height: `calc(100% - ${WINDOW_CONSTANTS.HEADER_HEIGHT}px)` }}
+          style={{ height: contentHeight }}
         >
           <Component {...(componentProps ?? {})} />
         </div>

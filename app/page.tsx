@@ -211,7 +211,7 @@ export default function Home() {
         />
 
         {/* Windows container - renders all windows */}
-        <WindowsContainer />
+        <WindowsContainer mode={state.mode} />
 
         {/* Error modal rendering */}
         <ErrorModal

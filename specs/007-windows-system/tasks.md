@@ -98,11 +98,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] Pass interaction mode prop from overlay state to WindowsContainer in app/page.tsx
-- [ ] T023 [US3] Implement mode-aware styling in Window component in src/components/windows/Window.tsx (border, opacity)
-- [ ] T024 [US3] Implement mode-aware header visibility in WindowHeader in src/components/windows/WindowHeader.tsx
-- [ ] T025 [US3] Disable drag/resize pointer events in passive mode in src/components/windows/Window.tsx
-- [ ] T026 [US3] Add smooth mode transition animations (100ms) in src/components/windows/Window.tsx
+- [X] T022 [US3] Pass interaction mode prop from overlay state to WindowsContainer in app/page.tsx
+- [X] T023 [US3] Implement mode-aware styling in Window component in src/components/windows/Window.tsx (border, opacity)
+- [X] T024 [US3] Implement mode-aware header visibility in WindowHeader in src/components/windows/WindowHeader.tsx
+- [X] T025 [US3] Disable drag/resize pointer events in passive mode in src/components/windows/Window.tsx
+- [X] T026 [US3] Add smooth mode transition animations (100ms) in src/components/windows/Window.tsx
 
 **Checkpoint**: User Story 3 complete - windows respond correctly to F5 mode toggle
 

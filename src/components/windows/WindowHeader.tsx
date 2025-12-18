@@ -5,6 +5,7 @@
  *
  * Displays the window title with drag-to-move functionality and close button.
  * Drag functionality uses pointer events for unified mouse/touch support.
+ * Only renders/functions in interactive mode.
  *
  * @feature 007-windows-system
  */
@@ -19,13 +20,16 @@ interface WindowHeaderProps {
   title: string;
   x: number;
   y: number;
+  isInteractive?: boolean;
 }
 
-export function WindowHeader({ windowId, title, x, y }: WindowHeaderProps) {
+export function WindowHeader({ windowId, title, x, y, isInteractive = true }: WindowHeaderProps) {
   const { moveWindow, closeWindow } = useWindows();
   const dragStartRef = useRef<{ startX: number; startY: number; windowX: number; windowY: number } | null>(null);
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    if (!isInteractive) return;
+
     // Prevent dragging when clicking the close button
     if ((e.target as HTMLElement).closest('button')) {
       return;
@@ -38,10 +42,10 @@ export function WindowHeader({ windowId, title, x, y }: WindowHeaderProps) {
       windowX: x,
       windowY: y,
     };
-  }, [x, y]);
+  }, [x, y, isInteractive]);
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
-    if (!dragStartRef.current) return;
+    if (!isInteractive || !dragStartRef.current) return;
 
     const deltaX = e.clientX - dragStartRef.current.startX;
     const deltaY = e.clientY - dragStartRef.current.startY;
@@ -52,7 +56,7 @@ export function WindowHeader({ windowId, title, x, y }: WindowHeaderProps) {
     requestAnimationFrame(() => {
       moveWindow(windowId, newX, newY);
     });
-  }, [windowId, moveWindow]);
+  }, [windowId, moveWindow, isInteractive]);
 
   const handlePointerUp = useCallback((e: React.PointerEvent) => {
     e.currentTarget.releasePointerCapture(e.pointerId);
@@ -60,8 +64,14 @@ export function WindowHeader({ windowId, title, x, y }: WindowHeaderProps) {
   }, []);
 
   const handleClose = useCallback(() => {
+    if (!isInteractive) return;
     closeWindow(windowId);
-  }, [windowId, closeWindow]);
+  }, [windowId, closeWindow, isInteractive]);
+
+  // Don't render in passive mode (header is hidden)
+  if (!isInteractive) {
+    return null;
+  }
 
   return (
     <div
