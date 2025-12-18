@@ -7,6 +7,7 @@ import { OverlayMode } from "@/types/overlay";
 import { WindowRect } from "@/types/ipc";
 import { windowEvents } from "@/lib/windowEvents";
 import { TestWindowContent } from "@/components/windows/TestWindowContent";
+import { NotesContent } from "@/components/windows/NotesContent";
 
 interface MainMenuProps {
   visible?: boolean;
@@ -25,8 +26,12 @@ export function MainMenu({
   // Only show in windowed (interactive) mode
   const shouldShow = visible && mode === "windowed";
 
-  const handleButtonClick = (buttonName: string) => {
-    console.log(`Button clicked: ${buttonName}`);
+  const handleOpenNotes = () => {
+    windowEvents.emit("window:open", {
+      component: NotesContent,
+      title: "Notes",
+      componentProps: { isInteractive: mode === "windowed" },
+    });
   };
 
   const handleTestWindows = () => {
@@ -47,25 +52,11 @@ export function MainMenu({
           transition={{ duration: showHideDuration, ease: "easeOut" }}
           className="bg-transparent flex justify-center gap-2 p-2"
         >
-          {/* Group 1: Option 1 & Option 2 */}
+          {/* Windows: Notes & Test Windows */}
           <ButtonGroup>
-            <Button variant="secondary" onClick={() => handleButtonClick("Option 1")}>
-              Option 1
+            <Button variant="secondary" onClick={handleOpenNotes}>
+              Notes
             </Button>
-            <Button variant="secondary" onClick={() => handleButtonClick("Option 2")}>
-              Option 2
-            </Button>
-          </ButtonGroup>
-
-          {/* Group 2: Option 3 */}
-          <ButtonGroup>
-            <Button variant="secondary" onClick={() => handleButtonClick("Option 3")}>
-              Option 3
-            </Button>
-          </ButtonGroup>
-
-          {/* Group 3: Test Windows */}
-          <ButtonGroup>
             <Button variant="secondary" onClick={handleTestWindows}>
               Test Windows
             </Button>
