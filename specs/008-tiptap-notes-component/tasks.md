@@ -33,16 +33,16 @@
 
 ## Phase 4: User Story 2 - Toolbar (P2)
 
-- [ ] T011 [P] [US2] Add Bold button in src/components/windows/NotesToolbar.tsx
-- [ ] T012 [P] [US2] Add Italic button in src/components/windows/NotesToolbar.tsx
-- [ ] T013 [P] [US2] Add Underline button in src/components/windows/NotesToolbar.tsx
-- [ ] T014 [P] [US2] Add Strikethrough button in src/components/windows/NotesToolbar.tsx
-- [ ] T015 [P] [US2] Add H1,H2,H3 buttons in src/components/windows/NotesToolbar.tsx
-- [ ] T016 [P] [US2] Add List buttons in src/components/windows/NotesToolbar.tsx
-- [ ] T017 [P] [US2] Add Align buttons in src/components/windows/NotesToolbar.tsx
-- [ ] T018 [US2] Add active state styling in src/components/windows/NotesToolbar.tsx
-- [ ] T019 [US2] Render toolbar conditionally in src/components/windows/NotesContent.tsx
-- [ ] T020 [US2] Verify formatting works
+- [X] T011 [P] [US2] Add Bold button in src/components/windows/NotesToolbar.tsx
+- [X] T012 [P] [US2] Add Italic button in src/components/windows/NotesToolbar.tsx
+- [X] T013 [P] [US2] Add Underline button in src/components/windows/NotesToolbar.tsx
+- [X] T014 [P] [US2] Add Strikethrough button in src/components/windows/NotesToolbar.tsx
+- [X] T015 [P] [US2] Add H1,H2,H3 buttons in src/components/windows/NotesToolbar.tsx
+- [X] T016 [P] [US2] Add List buttons in src/components/windows/NotesToolbar.tsx
+- [X] T017 [P] [US2] Add Align buttons in src/components/windows/NotesToolbar.tsx
+- [X] T018 [US2] Add active state styling in src/components/windows/NotesToolbar.tsx
+- [X] T019 [US2] Render toolbar conditionally in src/components/windows/NotesContent.tsx
+- [X] T020 [US2] Verify formatting works
 
 ---
 
