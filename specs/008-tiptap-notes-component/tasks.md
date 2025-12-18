@@ -57,9 +57,9 @@
 
 ## Phase 6: User Story 4 - Ephemeral (P4)
 
-- [ ] T025 [US4] Verify editor destroyed on unmount
-- [ ] T026 [US4] Verify independent window content
-- [ ] T027 [US4] Verify new window starts empty
+- [X] T025 [US4] Verify editor destroyed on unmount
+- [X] T026 [US4] Verify independent window content
+- [X] T027 [US4] Verify new window starts empty
 
 ---
 
