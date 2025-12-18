@@ -104,7 +104,7 @@ body {
   box-sizing: border-box;
 }
 
-/* Debug border class - applied via VITE_DEBUG_BORDER env variable */
+/* Debug border class - applied via NEXT_PUBLIC_DEBUG_BORDER env variable */
 #root.debug-border {
   border: 10px solid red;
 }
@@ -118,4 +118,10 @@ body {
 /* Header panel opacity for interactive mode (0% transparent = 100% opacity) */
 .header-interactive {
   opacity: 1;
+}
+
+/* Error modal styling */
+.error-modal {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
 }

@@ -1,10 +1,12 @@
+"use client";
+
 import { useEffect, useState, useCallback } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow, currentMonitor, LogicalPosition } from "@tauri-apps/api/window";
-import { HeaderPanel } from "./components/HeaderPanel";
-import { ErrorModal } from "./components/ErrorModal";
-import { OverlayState, initialState } from "./types/overlay";
+import { HeaderPanel } from "@/components/HeaderPanel";
+import { ErrorModal } from "@/components/ErrorModal";
+import { OverlayState, initialState } from "@/types/overlay";
 import {
   OverlayReadyPayload,
   OverlayStateResponse,
@@ -12,9 +14,9 @@ import {
   TargetWindowChangedPayload,
   ShowErrorModalPayload,
   AutoHideChangedPayload,
-} from "./types/ipc";
+} from "@/types/ipc";
 
-// T040: Error modal state
+// Error modal state
 interface ErrorModalState {
   visible: boolean;
   targetName: string;
@@ -22,9 +24,9 @@ interface ErrorModalState {
   autoDismissMs: number;
 }
 
-function App() {
+export default function Home() {
   const [state, setState] = useState<OverlayState>(initialState);
-  // T040: Error modal state
+  // Error modal state
   const [errorModal, setErrorModal] = useState<ErrorModalState>({
     visible: false,
     targetName: "",
@@ -32,9 +34,9 @@ function App() {
     autoDismissMs: 5000,
   });
 
-  // Apply debug border if VITE_DEBUG_BORDER is enabled
+  // Apply debug border if NEXT_PUBLIC_DEBUG_BORDER is enabled
   useEffect(() => {
-    const debugBorder = import.meta.env.VITE_DEBUG_BORDER === "true";
+    const debugBorder = process.env.NEXT_PUBLIC_DEBUG_BORDER === "true";
     const root = document.getElementById("root");
     if (root) {
       if (debugBorder) {
@@ -95,7 +97,7 @@ function App() {
       setState((prev) => ({ ...prev, initialized: true }));
     });
 
-    // T023: Target window changed event listener
+    // Target window changed event listener
     const unlistenTargetChanged = listen<TargetWindowChangedPayload>(
       "target-window-changed",
       (event) => {
@@ -108,7 +110,7 @@ function App() {
       }
     );
 
-    // T039: Show error modal event listener
+    // Show error modal event listener
     const unlistenShowError = listen<ShowErrorModalPayload>(
       "show-error-modal",
       (event) => {
@@ -127,7 +129,7 @@ function App() {
       setErrorModal((prev) => ({ ...prev, visible: false }));
     });
 
-    // T033: Auto-hide changed event listener
+    // Auto-hide changed event listener
     const unlistenAutoHide = listen<AutoHideChangedPayload>(
       "auto-hide-changed",
       (event) => {
@@ -168,7 +170,7 @@ function App() {
     };
   }, []);
 
-  // T041: Handler to dismiss error modal
+  // Handler to dismiss error modal
   const handleDismissError = useCallback(async () => {
     setErrorModal((prev) => ({ ...prev, visible: false }));
     // Hide window if overlay is not actually visible (error modal was shown temporarily)
@@ -194,7 +196,7 @@ function App() {
         mode={state.mode}
         targetRect={state.targetRect}
       />
-      {/* T045: Error modal rendering */}
+      {/* Error modal rendering */}
       <ErrorModal
         visible={errorModal.visible}
         targetName={errorModal.targetName}
@@ -205,5 +207,3 @@ function App() {
     </>
   );
 }
-
-export default App;
