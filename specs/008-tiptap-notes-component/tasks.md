@@ -22,12 +22,12 @@
 
 ## Phase 3: User Story 1 - Open Notes Window (P1) MVP
 
-- [ ] T005 [US1] Remove Option 1,2,3 buttons from MainMenu in src/components/MainMenu.tsx
-- [ ] T006 [US1] Add Notes and Test Windows buttons in single group in src/components/MainMenu.tsx
-- [ ] T007 [US1] Import NotesContent in src/components/MainMenu.tsx
-- [ ] T008 [US1] Add handleOpenNotes with window:open event in src/components/MainMenu.tsx
-- [ ] T009 [US1] Connect Notes button onClick in src/components/MainMenu.tsx
-- [ ] T010 [US1] Verify multiple Notes windows open independently
+- [X] T005 [US1] Remove Option 1,2,3 buttons from MainMenu in src/components/MainMenu.tsx
+- [X] T006 [US1] Add Notes and Test Windows buttons in single group in src/components/MainMenu.tsx
+- [X] T007 [US1] Import NotesContent in src/components/MainMenu.tsx
+- [X] T008 [US1] Add handleOpenNotes with window:open event in src/components/MainMenu.tsx
+- [X] T009 [US1] Connect Notes button onClick in src/components/MainMenu.tsx
+- [X] T010 [US1] Verify multiple Notes windows open independently
 
 ---
 

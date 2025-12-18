@@ -240,7 +240,7 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
           className="overflow-auto pointer-events-auto"
           style={{ height: contentHeight }}
         >
-          <Component {...(componentProps ?? {})} />
+          <Component {...(componentProps ?? {})} isInteractive={isInteractive} />
         </div>
       </div>
     </motion.div>
