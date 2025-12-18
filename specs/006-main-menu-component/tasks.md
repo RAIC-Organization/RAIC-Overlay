@@ -112,12 +112,12 @@ Based on plan.md structure:
 
 **Purpose**: Final verification and edge case handling
 
-- [ ] T026 Verify transparent background allows 60%+ visibility of underlying content (bg-transparent class)
-- [ ] T027 Verify animation timing is ~300ms (SC-001 compliance)
-- [ ] T028 Test button click logging for all three buttons (SC-006 compliance)
-- [ ] T029 Run quickstart.md verification checklist
-- [ ] T030 Test with small target window to verify buttons remain readable (min 44x44px touch target)
-- [ ] T031 Verify TypeScript compilation passes with no errors
+- [X] T026 Verify transparent background allows 60%+ visibility of underlying content (bg-transparent class)
+- [X] T027 Verify animation timing is ~300ms (SC-001 compliance)
+- [X] T028 Test button click logging for all three buttons (SC-006 compliance)
+- [X] T029 Run quickstart.md verification checklist
+- [X] T030 Test with small target window to verify buttons remain readable (min 44x44px touch target)
+- [X] T031 Verify TypeScript compilation passes with no errors
 
 ---
 
