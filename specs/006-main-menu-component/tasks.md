@@ -82,11 +82,11 @@ Based on plan.md structure:
 
 ### Implementation for User Story 2
 
-- [ ] T018 [US2] Add position prop ('top' | 'bottom') to HeaderPanelProps interface in src/components/HeaderPanel.tsx
-- [ ] T019 [US2] Add position parameter to HeaderPanel function with default value 'top' in src/components/HeaderPanel.tsx
-- [ ] T020 [US2] Update container className to use items-end when position is 'bottom' in src/components/HeaderPanel.tsx
-- [ ] T021 [US2] Update HeaderPanel usage in page.tsx to pass position based on mode in app/page.tsx
-- [ ] T022 [US2] Wrap page.tsx content in flex container with justify-between for top/bottom layout in app/page.tsx
+- [X] T018 [US2] Add position prop ('top' | 'bottom') to HeaderPanelProps interface in src/components/HeaderPanel.tsx
+- [X] T019 [US2] Add position parameter to HeaderPanel function with default value 'top' in src/components/HeaderPanel.tsx
+- [X] T020 [US2] Update container className to use items-end when position is 'bottom' in src/components/HeaderPanel.tsx
+- [X] T021 [US2] Update HeaderPanel usage in page.tsx to pass position based on mode in app/page.tsx
+- [X] T022 [US2] Wrap page.tsx content in flex container with justify-between for top/bottom layout in app/page.tsx
 
 **Checkpoint**: Header moves to bottom in interactive mode, stays at top in click-through mode
 
