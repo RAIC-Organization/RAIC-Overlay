@@ -65,11 +65,11 @@
 
 ## Phase 7: Polish
 
-- [ ] T028 [P] Add prose styling in src/components/windows/NotesContent.tsx
-- [ ] T029 [P] Style toolbar in src/components/windows/NotesToolbar.tsx
-- [ ] T030 Verify scroll behavior
-- [ ] T031 Test 10+ concurrent windows
-- [ ] T032 Run quickstart validation
+- [X] T028 [P] Add prose styling in src/components/windows/NotesContent.tsx
+- [X] T029 [P] Style toolbar in src/components/windows/NotesToolbar.tsx
+- [X] T030 Verify scroll behavior
+- [X] T031 Test 10+ concurrent windows
+- [X] T032 Run quickstart validation
 
 ---
 
