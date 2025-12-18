@@ -184,9 +184,11 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
   }, []);
 
   // Mode-aware styles
+  // Interactive: Full border, shadow, opaque
+  // Passive: Subtle border, backdrop blur for readability over game backgrounds
   const modeClasses = isInteractive
     ? 'border border-border rounded-lg shadow-lg'
-    : 'border-0 rounded-lg shadow-none';
+    : 'border border-white/20 rounded-lg shadow-md backdrop-blur-sm';
 
   // Content height based on header visibility
   const contentHeight = isInteractive
@@ -204,7 +206,7 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
         zIndex,
       }}
       initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: isInteractive ? 1 : 0.6, scale: 1 }}
+      animate={{ opacity: isInteractive ? 1 : 0.85, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: isInteractive ? 0.15 : 0.1, ease: "easeOut" }}
       onPointerDown={handleWindowClick}

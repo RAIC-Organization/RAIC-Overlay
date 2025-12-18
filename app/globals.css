@@ -7,15 +7,15 @@
  */
 :root {
   /* === Core Colors === */
-  --background: 224 71.4% 4.1%;
+  --background: 220 20% 14%;
   --foreground: 210 20% 98%;
 
   /* === Card === */
-  --card: 224 71.4% 4.1%;
+  --card: 220 20% 14%;
   --card-foreground: 210 20% 98%;
 
   /* === Popover === */
-  --popover: 224 71.4% 4.1%;
+  --popover: 220 20% 14%;
   --popover-foreground: 210 20% 98%;
 
   /* === Primary === */
@@ -39,7 +39,7 @@
   --destructive-foreground: 210 20% 98%;
 
   /* === Form Elements === */
-  --border: 215 27.9% 16.9%;
+  --border: 215 20% 28%;
   --input: 215 27.9% 16.9%;
   --ring: 216 12.2% 83.9%;
 
@@ -47,7 +47,7 @@
   --radius: 0.5rem;
 
   /* === Sidebar (for future shadcn sidebar component) === */
-  --sidebar-background: 224 71.4% 4.1%;
+  --sidebar-background: 220 20% 14%;
   --sidebar-foreground: 210 20% 98%;
   --sidebar-primary: 210 20% 98%;
   --sidebar-primary-foreground: 220.9 39.3% 11%;
