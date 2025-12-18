@@ -7,6 +7,8 @@ import { getCurrentWindow, currentMonitor, LogicalPosition } from "@tauri-apps/a
 import { HeaderPanel } from "@/components/HeaderPanel";
 import { ErrorModal } from "@/components/ErrorModal";
 import { MainMenu } from "@/components/MainMenu";
+import { WindowsProvider } from "@/contexts/WindowsContext";
+import { WindowsContainer } from "@/components/windows/WindowsContainer";
 import { OverlayState, initialState } from "@/types/overlay";
 import {
   OverlayReadyPayload,
@@ -191,30 +193,35 @@ export default function Home() {
   // fullscreen mode = click-through (60% transparent, MainMenu hidden)
   // windowed mode = interactive (0% transparent, MainMenu visible)
   return (
-    <div className="flex flex-col justify-between h-full">
-      {/* MainMenu at top - only visible in interactive mode */}
-      <MainMenu
-        visible={state.visible}
-        mode={state.mode}
-        targetRect={state.targetRect}
-      />
+    <WindowsProvider>
+      <div className="flex flex-col justify-between h-full relative">
+        {/* MainMenu at top - only visible in interactive mode */}
+        <MainMenu
+          visible={state.visible}
+          mode={state.mode}
+          targetRect={state.targetRect}
+        />
 
-      {/* Header at bottom when interactive, top otherwise */}
-      <HeaderPanel
-        visible={state.visible}
-        mode={state.mode}
-        targetRect={state.targetRect}
-        position={state.mode === "windowed" ? "bottom" : "top"}
-      />
+        {/* Header at bottom when interactive, top otherwise */}
+        <HeaderPanel
+          visible={state.visible}
+          mode={state.mode}
+          targetRect={state.targetRect}
+          position={state.mode === "windowed" ? "bottom" : "top"}
+        />
 
-      {/* Error modal rendering */}
-      <ErrorModal
-        visible={errorModal.visible}
-        targetName={errorModal.targetName}
-        message={errorModal.message}
-        autoDismissMs={errorModal.autoDismissMs}
-        onDismiss={handleDismissError}
-      />
-    </div>
+        {/* Windows container - renders all windows */}
+        <WindowsContainer mode={state.mode} />
+
+        {/* Error modal rendering */}
+        <ErrorModal
+          visible={errorModal.visible}
+          targetName={errorModal.targetName}
+          message={errorModal.message}
+          autoDismissMs={errorModal.autoDismissMs}
+          onDismiss={handleDismissError}
+        />
+      </div>
+    </WindowsProvider>
   );
 }

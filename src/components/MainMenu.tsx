@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { OverlayMode } from "@/types/overlay";
 import { WindowRect } from "@/types/ipc";
+import { windowEvents } from "@/lib/windowEvents";
+import { TestWindowContent } from "@/components/windows/TestWindowContent";
 
 interface MainMenuProps {
   visible?: boolean;
@@ -25,6 +27,13 @@ export function MainMenu({
 
   const handleButtonClick = (buttonName: string) => {
     console.log(`Button clicked: ${buttonName}`);
+  };
+
+  const handleTestWindows = () => {
+    windowEvents.emit("window:open", {
+      component: TestWindowContent,
+      title: "Test Windows",
+    });
   };
 
   return (
@@ -52,6 +61,13 @@ export function MainMenu({
           <ButtonGroup>
             <Button variant="secondary" onClick={() => handleButtonClick("Option 3")}>
               Option 3
+            </Button>
+          </ButtonGroup>
+
+          {/* Group 3: Test Windows */}
+          <ButtonGroup>
+            <Button variant="secondary" onClick={handleTestWindows}>
+              Test Windows
             </Button>
           </ButtonGroup>
         </motion.div>
