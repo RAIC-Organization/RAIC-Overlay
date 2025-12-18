@@ -15,8 +15,8 @@
 
 ## Phase 2: Foundational
 
-- [ ] T003 Create NotesToolbar skeleton in src/components/windows/NotesToolbar.tsx
-- [ ] T004 Create NotesContent skeleton in src/components/windows/NotesContent.tsx with useEditor
+- [X] T003 Create NotesToolbar skeleton in src/components/windows/NotesToolbar.tsx
+- [X] T004 Create NotesContent skeleton in src/components/windows/NotesContent.tsx with useEditor
 
 ---
 
