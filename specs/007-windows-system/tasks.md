@@ -54,13 +54,13 @@
 
 ### Implementation for User Story 1
 
-- [ ] T008 [P] [US1] Create TestWindowContent component in src/components/windows/TestWindowContent.tsx
-- [ ] T009 [P] [US1] Create basic WindowHeader component in src/components/windows/WindowHeader.tsx (title display only, no drag/close yet)
-- [ ] T010 [US1] Create Window component with basic structure in src/components/windows/Window.tsx (positioned, sized, renders content)
-- [ ] T011 [US1] Create WindowsContainer component in src/components/windows/WindowsContainer.tsx (subscribes to events, renders windows)
-- [ ] T012 [US1] Add "Test Windows" button to MainMenu in src/components/MainMenu.tsx (emits window:open event)
-- [ ] T013 [US1] Integrate WindowsContainer into main page in app/page.tsx (wrap with WindowsProvider)
-- [ ] T014 [US1] Add window open animation using motion.js in src/components/windows/Window.tsx
+- [X] T008 [P] [US1] Create TestWindowContent component in src/components/windows/TestWindowContent.tsx
+- [X] T009 [P] [US1] Create basic WindowHeader component in src/components/windows/WindowHeader.tsx (title display only, no drag/close yet)
+- [X] T010 [US1] Create Window component with basic structure in src/components/windows/Window.tsx (positioned, sized, renders content)
+- [X] T011 [US1] Create WindowsContainer component in src/components/windows/WindowsContainer.tsx (subscribes to events, renders windows)
+- [X] T012 [US1] Add "Test Windows" button to MainMenu in src/components/MainMenu.tsx (emits window:open event)
+- [X] T013 [US1] Integrate WindowsContainer into main page in app/page.tsx (wrap with WindowsProvider)
+- [X] T014 [US1] Add window open animation using motion.js in src/components/windows/Window.tsx
 
 **Checkpoint**: User Story 1 complete - can open windows via event with centered positioning and animation
 
