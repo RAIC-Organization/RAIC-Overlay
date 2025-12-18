@@ -38,9 +38,9 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T005 Implement WindowEventEmitter class in src/lib/windowEvents.ts
-- [ ] T006 Implement WindowsContext with useReducer in src/contexts/WindowsContext.tsx
-- [ ] T007 Implement useWindowEvents hook in src/hooks/useWindowEvents.ts
+- [X] T005 Implement WindowEventEmitter class in src/lib/windowEvents.ts
+- [X] T006 Implement WindowsContext with useReducer in src/contexts/WindowsContext.tsx
+- [X] T007 Implement useWindowEvents hook in src/hooks/useWindowEvents.ts
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
