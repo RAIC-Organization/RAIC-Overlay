@@ -9,6 +9,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-12
 - N/A (in-memory state only) (003-f3-fullscreen-overlay)
 - Rust 2021 Edition (backend), TypeScript 5.7.2 (frontend) + Tauri 2.x, React 19.0.0, tauri-plugin-global-shortcut 2.x, Windows API (windows-rs crate) (004-external-window-attach)
 - TypeScript 5.7.2, Rust 2021 Edition (backend unchanged) + Next.js 15.x (static export), React 19.x, motion (motion.dev), shadcn/ui, Tailwind CSS 4.x, Tauri 2.x (005-nextjs-motion-refactor)
+- TypeScript 5.7.2, React 19.0.0 + Next.js 16.x, motion (12.x), shadcn/ui, Tailwind CSS 4.x, Tauri 2.x (006-main-menu-component)
+- N/A (UI component only, uses existing overlay state) (006-main-menu-component)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -33,9 +35,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 006-main-menu-component: Added TypeScript 5.7.2, React 19.0.0 + Next.js 16.x, motion (12.x), shadcn/ui, Tailwind CSS 4.x, Tauri 2.x
 - 005-nextjs-motion-refactor: Added TypeScript 5.7.2, Rust 2021 Edition (backend unchanged) + Next.js 15.x (static export), React 19.x, motion (motion.dev), shadcn/ui, Tailwind CSS 4.x, Tauri 2.x
 - 004-external-window-attach: Added Rust 2021 Edition (backend), TypeScript 5.7.2 (frontend) + Tauri 2.x, React 19.0.0, tauri-plugin-global-shortcut 2.x, Windows API (windows-rs crate)
-- 003-f3-fullscreen-overlay: Added Rust 1.92 (Tauri backend), TypeScript 5.7 (React 19.2 frontend) + Tauri 2.x, React 19.2, tailwindcss 4.x, shadcn/ui
 
 
 <!-- MANUAL ADDITIONS START -->

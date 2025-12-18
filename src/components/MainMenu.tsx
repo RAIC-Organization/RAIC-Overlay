@@ -40,17 +40,17 @@ export function MainMenu({
         >
           {/* Group 1: Option 1 & Option 2 */}
           <ButtonGroup>
-            <Button onClick={() => handleButtonClick("Option 1")}>
+            <Button variant="secondary" onClick={() => handleButtonClick("Option 1")}>
               Option 1
             </Button>
-            <Button onClick={() => handleButtonClick("Option 2")}>
+            <Button variant="secondary" onClick={() => handleButtonClick("Option 2")}>
               Option 2
             </Button>
           </ButtonGroup>
 
           {/* Group 2: Option 3 */}
           <ButtonGroup>
-            <Button onClick={() => handleButtonClick("Option 3")}>
+            <Button variant="secondary" onClick={() => handleButtonClick("Option 3")}>
               Option 3
             </Button>
           </ButtonGroup>
