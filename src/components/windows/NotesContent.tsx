@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEffect, useRef } from "react";
+import { useEditor, EditorContent, type JSONContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
@@ -9,9 +9,20 @@ import { NotesToolbar } from "./NotesToolbar";
 
 export interface NotesContentProps {
   isInteractive: boolean;
+  /** Initial content from persistence (TipTap JSON) */
+  initialContent?: JSONContent;
+  /** Callback when content changes (for persistence) */
+  onContentChange?: (content: JSONContent) => void;
 }
 
-export function NotesContent({ isInteractive }: NotesContentProps) {
+export function NotesContent({
+  isInteractive,
+  initialContent,
+  onContentChange,
+}: NotesContentProps) {
+  const onContentChangeRef = useRef(onContentChange);
+  onContentChangeRef.current = onContentChange;
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -22,9 +33,14 @@ export function NotesContent({ isInteractive }: NotesContentProps) {
         types: ["heading", "paragraph"],
       }),
     ],
-    content: "",
+    content: initialContent ?? "",
     editable: isInteractive,
     immediatelyRender: false,
+    onUpdate: ({ editor }) => {
+      if (onContentChangeRef.current) {
+        onContentChangeRef.current(editor.getJSON());
+      }
+    },
   });
 
   // Sync editable state with interaction mode

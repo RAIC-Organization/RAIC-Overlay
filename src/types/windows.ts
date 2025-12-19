@@ -29,6 +29,9 @@ export interface WindowOpenPayload {
   /** Title displayed in window header (interaction mode only) */
   title: string;
 
+  /** Window content type for persistence (required for save/restore) */
+  contentType?: WindowContentType;
+
   /** Optional props to pass to the component */
   componentProps?: Record<string, unknown>;
 
@@ -37,6 +40,18 @@ export interface WindowOpenPayload {
 
   /** Optional override for initial height (default: 300px) */
   initialHeight?: number;
+
+  /** Optional: Initial x position (for restored windows) */
+  initialX?: number;
+
+  /** Optional: Initial y position (for restored windows) */
+  initialY?: number;
+
+  /** Optional: Pre-assigned window ID (for restored windows) */
+  windowId?: string;
+
+  /** Optional: Initial z-index (for restored windows) */
+  initialZIndex?: number;
 }
 
 /**
@@ -122,6 +137,12 @@ export interface IWindowEventEmitter {
 // ============================================================================
 
 /**
+ * Window type for persistence.
+ * Maps to the component type for serialization.
+ */
+export type WindowContentType = 'notes' | 'draw' | 'test';
+
+/**
  * Represents a single window instance in the system.
  */
 export interface WindowInstance {
@@ -130,6 +151,9 @@ export interface WindowInstance {
 
   /** Window title */
   title: string;
+
+  /** Window content type for persistence */
+  contentType?: WindowContentType;
 
   /** React component rendered in window body */
   component: AnyComponent;

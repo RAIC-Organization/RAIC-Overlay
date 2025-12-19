@@ -19,6 +19,7 @@ interface MainMenuProps {
 export function MainMenu({
   visible = true,
   mode = "windowed",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   targetRect = null,
 }: MainMenuProps) {
   const prefersReducedMotion = useReducedMotion();
@@ -31,6 +32,7 @@ export function MainMenu({
     windowEvents.emit("window:open", {
       component: NotesContent,
       title: "Notes",
+      contentType: "notes",
       componentProps: { isInteractive: mode === "windowed" },
     });
   };
@@ -39,6 +41,7 @@ export function MainMenu({
     windowEvents.emit("window:open", {
       component: DrawContent,
       title: "Draw",
+      contentType: "draw",
       componentProps: { isInteractive: mode === "windowed" },
     });
   };
@@ -47,6 +50,7 @@ export function MainMenu({
     windowEvents.emit("window:open", {
       component: TestWindowContent,
       title: "Test Windows",
+      contentType: "test",
     });
   };
 

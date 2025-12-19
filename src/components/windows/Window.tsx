@@ -6,11 +6,13 @@
  * Renders a single window with header and content. Supports drag-to-move
  * via header, resize via edges/corners, and click-to-focus z-ordering.
  * Includes open/close animations and mode-aware styling.
+ * Triggers persistence on resize completion.
  *
  * In interactive mode (windowed): Header visible, border, fully opaque, drag/resize enabled
  * In passive mode (fullscreen): Header hidden, no border, 60% transparent, drag/resize disabled
  *
  * @feature 007-windows-system
+ * @feature 010-state-persistence-system
  */
 
 import { useRef, useCallback, useState } from "react";
@@ -18,6 +20,7 @@ import { motion } from "motion/react";
 import type { WindowInstance } from '@/types/windows';
 import { WINDOW_CONSTANTS } from '@/types/windows';
 import { useWindows } from '@/contexts/WindowsContext';
+import { usePersistenceContext } from '@/contexts/PersistenceContext';
 import { WindowHeader } from './WindowHeader';
 
 interface WindowProps {
@@ -35,6 +38,7 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
     windowInstance;
 
   const { focusWindow, resizeWindow, moveWindow } = useWindows();
+  const persistence = usePersistenceContext();
   const resizeRef = useRef<{
     direction: ResizeDirection;
     startX: number;
@@ -173,8 +177,12 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
   // Handle resize pointer up
   const handleResizePointerUp = useCallback((e: React.PointerEvent) => {
     e.currentTarget.releasePointerCapture(e.pointerId);
+    // Trigger persistence save on resize end
+    if (resizeRef.current) {
+      persistence?.onWindowMoved();
+    }
     resizeRef.current = null;
-  }, []);
+  }, [persistence]);
 
   // Handle pointer leave to reset cursor
   const handlePointerLeave = useCallback(() => {
