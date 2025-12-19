@@ -46,13 +46,13 @@
 
 ### Tests for User Story 1
 
-- [ ] T002 [US1] Create integration test for DrawContent component in src/components/windows/__tests__/DrawContent.test.tsx
+- [X] T002 [US1] Create integration test for DrawContent component in src/components/windows/__tests__/DrawContent.test.tsx
 
 ### Implementation for User Story 1
 
-- [ ] T003 [US1] Create DrawContent component with Excalidraw wrapper in src/components/windows/DrawContent.tsx
-- [ ] T004 [US1] Add DrawContent import and handleOpenDraw handler in src/components/MainMenu.tsx
-- [ ] T005 [US1] Add Draw button between Notes and Test Windows buttons in src/components/MainMenu.tsx ButtonGroup
+- [X] T003 [US1] Create DrawContent component with Excalidraw wrapper in src/components/windows/DrawContent.tsx
+- [X] T004 [US1] Add DrawContent import and handleOpenDraw handler in src/components/MainMenu.tsx
+- [X] T005 [US1] Add Draw button between Notes and Test Windows buttons in src/components/MainMenu.tsx ButtonGroup
 
 **Checkpoint**: User Story 1 complete - Draw button in menu opens Excalidraw window
 
