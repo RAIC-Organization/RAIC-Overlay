@@ -68,8 +68,8 @@
 
 ### Implementation for User Story 2
 
-- [ ] T006 [US2] Verify Excalidraw toolbar displays all standard tools in src/components/windows/DrawContent.tsx
-- [ ] T007 [US2] Configure UIOptions to disable non-essential actions (load/save/export) in src/components/windows/DrawContent.tsx
+- [X] T006 [US2] Verify Excalidraw toolbar displays all standard tools in src/components/windows/DrawContent.tsx
+- [X] T007 [US2] Configure UIOptions to disable non-essential actions (load/save/export) in src/components/windows/DrawContent.tsx
 
 **Checkpoint**: User Story 2 complete - full drawing toolkit available
 
