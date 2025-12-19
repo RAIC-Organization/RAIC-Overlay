@@ -102,10 +102,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T032 [US3] Update window close handler in WindowsContext to call delete_window_content
-- [ ] T033 [US3] Update window close handler to immediately save updated state.json (window removed)
-- [ ] T034 [US3] Add orphan cleanup to load_state in `src-tauri/src/persistence.rs` - delete window-*.json files not in state.json
-- [ ] T035 [US3] Add temp file cleanup to load_state - delete *.json.tmp files on startup
+- [x] T032 [US3] Update window close handler in WindowsContext to call delete_window_content
+- [x] T033 [US3] Update window close handler to immediately save updated state.json (window removed)
+- [x] T034 [US3] Add orphan cleanup to load_state in `src-tauri/src/persistence.rs` - delete window-*.json files not in state.json
+- [x] T035 [US3] Add temp file cleanup to load_state - delete *.json.tmp files on startup
 
 **Checkpoint**: User Story 3 complete - window deletion is permanent, no orphaned files
 

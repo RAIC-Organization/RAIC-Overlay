@@ -31,6 +31,8 @@ import { DrawContent } from "@/components/windows/DrawContent";
 import { OverlayState, initialState } from "@/types/overlay";
 import type { WindowStructure, WindowContentFile, NotesContent as NotesContentType, DrawContent as DrawContentType } from "@/types/persistence";
 import type { WindowContentType } from "@/types/windows";
+import { persistenceService } from "@/stores/persistenceService";
+import { serializeState } from "@/lib/serialization";
 import {
   OverlayReadyPayload,
   OverlayStateResponse,
@@ -361,10 +363,23 @@ export default function Home() {
     });
   }, []);
 
-  // Handle window close for persistence cleanup (will be wired in Phase 5)
-  const handleWindowClose = useCallback((windowId: string, contentType?: WindowContentType) => {
-    // This will be implemented in Phase 5 (US3)
+  // Track windows ref for use in handleWindowClose
+  // This will be updated by OverlayContent to track current windows
+  const windowsRef = useRef<WindowStructure[]>([]);
+
+  // Handle window close for persistence cleanup
+  const handleWindowClose = useCallback(async (windowId: string, contentType?: WindowContentType) => {
     console.log(`Window closed: ${windowId} (type: ${contentType})`);
+
+    // Delete the window content file if it's a persistable window
+    if (contentType === 'notes' || contentType === 'draw') {
+      const deleteResult = await persistenceService.deleteWindowContent(windowId);
+      if (!deleteResult.success) {
+        console.error('Failed to delete window content:', deleteResult.error);
+      }
+    }
+
+    // Note: State save is handled by PersistenceContext which detects window removal
   }, []);
 
   // Show loading screen until hydration completes

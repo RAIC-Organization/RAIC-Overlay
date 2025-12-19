@@ -81,6 +81,7 @@ export function useWindowEvents(): void {
     // Subscribe to window:close events
     const unsubscribeClose = windowEvents.on('window:close', ({ windowId }) => {
       closeWindow(windowId);
+      // Note: Window close persistence is handled via onWindowClose callback in WindowsContext
     });
 
     // Subscribe to window:focus events

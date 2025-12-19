@@ -46,6 +46,11 @@ export interface PersistenceContextValue {
   onDrawContentChange: (windowId: string, elements: any[], appState?: any) => void;
 
   /**
+   * Handle window close - delete content and save state.
+   */
+  onWindowClosed: (windowId: string, contentType?: WindowContentType) => void;
+
+  /**
    * Flush all pending saves (call before app close).
    */
   flushPendingSaves: () => void;
@@ -94,10 +99,10 @@ export function PersistenceProvider({
     overlayVisible,
   });
 
-  // Track previous windows to detect new windows
+  // Track previous windows to detect added/removed windows
   const prevWindowsRef = useRef<WindowInstance[]>([]);
 
-  // Save state immediately when windows are added
+  // Save state when windows are added or removed
   useEffect(() => {
     const prevWindowIds = new Set(prevWindowsRef.current.map((w) => w.id));
     const currentWindowIds = new Set(windows.map((w) => w.id));
@@ -105,6 +110,10 @@ export function PersistenceProvider({
     // Find newly added windows
     const addedWindows = windows.filter((w) => !prevWindowIds.has(w.id));
 
+    // Find removed windows
+    const removedWindowIds = Array.from(prevWindowIds).filter(id => !currentWindowIds.has(id));
+
+    // Handle added windows
     if (addedWindows.length > 0) {
       // Save state immediately for new windows
       saveStateImmediate(windows);
@@ -119,6 +128,11 @@ export function PersistenceProvider({
           saveWindowContentImmediate(content);
         }
       }
+    }
+
+    // Handle removed windows - save state immediately
+    if (removedWindowIds.length > 0) {
+      saveStateImmediate(windows);
     }
 
     prevWindowsRef.current = windows;
@@ -153,10 +167,27 @@ export function PersistenceProvider({
     [saveDrawContentDebounced]
   );
 
+  // Handle window close - delete content and save state
+  const onWindowClosed = useCallback(
+    async (windowId: string, contentType?: WindowContentType) => {
+      // Only delete content for persistable windows
+      if (contentType === 'notes' || contentType === 'draw') {
+        await deleteWindowContent(windowId);
+      }
+
+      // Get updated windows list (window was already removed from state)
+      // Save the updated state immediately
+      const currentState = getStateForPersistence();
+      saveStateImmediate(currentState.windows);
+    },
+    [deleteWindowContent, saveStateImmediate, getStateForPersistence]
+  );
+
   const value: PersistenceContextValue = {
     onWindowMoved,
     onNotesContentChange,
     onDrawContentChange,
+    onWindowClosed,
     flushPendingSaves,
   };
 
