@@ -38,7 +38,7 @@ export function AppIcon({ visible = true, mode = "windowed" }: AppIconProps) {
             duration: showHideDuration,
             ease: "easeOut",
           }}
-          className={`fixed top-[50px] left-[50px] ${pointerEventsClass}`}
+          className={`fixed top-[10px] left-[10px] ${pointerEventsClass}`}
         >
           {/* Inner motion.div for mode opacity transitions */}
           <motion.div

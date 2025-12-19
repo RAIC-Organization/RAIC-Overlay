@@ -82,12 +82,12 @@ describe("AppIcon", () => {
     expect(image).toHaveAttribute("height", "50");
   });
 
-  it("has correct positioning (fixed, top-50px, left-50px)", () => {
+  it("has correct positioning (fixed, top-10px, left-10px)", () => {
     render(<AppIcon visible={true} />);
     const container = screen.getByTestId("app-icon-container");
     expect(container).toHaveClass("fixed");
-    expect(container).toHaveClass("top-[50px]");
-    expect(container).toHaveClass("left-[50px]");
+    expect(container).toHaveClass("top-[10px]");
+    expect(container).toHaveClass("left-[10px]");
   });
 });
 
