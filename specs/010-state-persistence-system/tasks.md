@@ -132,15 +132,15 @@
 
 **Purpose**: Improvements that affect multiple user stories, cleanup, and validation
 
-- [ ] T040 [P] Add error handling for disk full scenario - log error, notify user, continue with in-memory state
-- [ ] T041 [P] Add error handling for read-only file scenario - log error, notify user, continue with in-memory state
-- [ ] T042 Add flush on app close - ensure pending debounced saves complete before app exits
-- [ ] T043 [P] Verify single instance behavior - second launch focuses existing window
+- [x] T040 [P] Add error handling for disk full scenario - log error, notify user, continue with in-memory state
+- [x] T041 [P] Add error handling for read-only file scenario - log error, notify user, continue with in-memory state
+- [x] T042 Add flush on app close - ensure pending debounced saves complete before app exits
+- [x] T043 [P] Verify single instance behavior - second launch focuses existing window
 - [ ] T044 Run manual test checklist from quickstart.md
-- [ ] T045 Verify performance targets: measure and log restore time (<2s for 20 windows) and persist time (<500ms) using console.time/timeEnd
-- [ ] T045a Validate debounce efficiency: add counter to track raw state changes vs actual persist calls, verify ≥80% reduction during rapid typing test
-- [ ] T046 Code cleanup and ensure TypeScript strict mode passes
-- [ ] T047 Run cargo clippy on Rust code and fix any warnings
+- [x] T045 Verify performance targets: measure and log restore time (<2s for 20 windows) and persist time (<500ms) using console.time/timeEnd
+- [x] T045a Validate debounce efficiency: add counter to track raw state changes vs actual persist calls, verify ≥80% reduction during rapid typing test
+- [x] T046 Code cleanup and ensure TypeScript strict mode passes
+- [x] T047 Run cargo clippy on Rust code and fix any warnings
 
 ---
 

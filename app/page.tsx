@@ -32,7 +32,6 @@ import { OverlayState, initialState } from "@/types/overlay";
 import type { WindowStructure, WindowContentFile, NotesContent as NotesContentType, DrawContent as DrawContentType } from "@/types/persistence";
 import type { WindowContentType } from "@/types/windows";
 import { persistenceService } from "@/stores/persistenceService";
-import { serializeState } from "@/lib/serialization";
 import {
   OverlayReadyPayload,
   OverlayStateResponse,
@@ -363,9 +362,6 @@ export default function Home() {
     });
   }, []);
 
-  // Track windows ref for use in handleWindowClose
-  // This will be updated by OverlayContent to track current windows
-  const windowsRef = useRef<WindowStructure[]>([]);
 
   // Handle window close for persistence cleanup
   const handleWindowClose = useCallback(async (windowId: string, contentType?: WindowContentType) => {

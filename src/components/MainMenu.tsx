@@ -19,6 +19,7 @@ interface MainMenuProps {
 export function MainMenu({
   visible = true,
   mode = "windowed",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   targetRect = null,
 }: MainMenuProps) {
   const prefersReducedMotion = useReducedMotion();

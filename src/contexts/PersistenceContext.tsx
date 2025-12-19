@@ -20,7 +20,6 @@ import {
 import { usePersistence } from '@/hooks/usePersistence';
 import { useWindows } from '@/contexts/WindowsContext';
 import type { WindowInstance, WindowContentType } from '@/types/windows';
-import type { WindowContentFile } from '@/types/persistence';
 import { serializeNotesContent, serializeDrawContent } from '@/lib/serialization';
 
 // ============================================================================

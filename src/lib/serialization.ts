@@ -12,7 +12,6 @@ import type {
   PersistedState,
   WindowStructure,
   WindowType,
-  GlobalSettings,
   WindowContentFile,
   NotesContent,
   DrawContent,
@@ -53,7 +52,6 @@ export const migrations: Record<number, Migration> = {
  * @param fromVersion - The version of the persisted state
  * @returns Migrated state or null if migration failed
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function migrateState(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   state: any,
