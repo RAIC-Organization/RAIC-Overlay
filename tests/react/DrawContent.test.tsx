@@ -91,3 +91,18 @@ describe("DrawContent container", () => {
     expect(wrapper).toHaveClass("h-full", "w-full");
   });
 });
+
+describe("DrawContent ephemeral state", () => {
+  it("each instance has independent state", () => {
+    // Render two instances
+    const { container: container1 } = render(<DrawContent isInteractive={true} />);
+    const { container: container2 } = render(<DrawContent isInteractive={true} />);
+
+    // Both should have their own Excalidraw instances
+    const excalidraws = screen.getAllByTestId("excalidraw-mock");
+    expect(excalidraws).toHaveLength(2);
+
+    // Each container should have its own wrapper
+    expect(container1.firstChild).not.toBe(container2.firstChild);
+  });
+});

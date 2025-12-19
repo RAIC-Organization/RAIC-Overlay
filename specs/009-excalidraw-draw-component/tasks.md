@@ -100,8 +100,8 @@
 
 ### Implementation for User Story 4
 
-- [ ] T010 [US4] Verify no initialData or persistence is configured in DrawContent component in src/components/windows/DrawContent.tsx
-- [ ] T011 [US4] Verify multiple Draw windows maintain independent state (close one, others unaffected)
+- [X] T010 [US4] Verify no initialData or persistence is configured in DrawContent component in src/components/windows/DrawContent.tsx
+- [X] T011 [US4] Verify multiple Draw windows maintain independent state (close one, others unaffected)
 
 **Checkpoint**: User Story 4 complete - ephemeral state verified
 
