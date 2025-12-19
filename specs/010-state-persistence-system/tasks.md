@@ -119,10 +119,10 @@
 
 ### Implementation for User Story 4
 
-- [ ] T036 [US4] Ensure version field is included in all saved state.json files (verify T023 implementation)
-- [ ] T037 [US4] Add migration hooks structure in `src/lib/serialization.ts` with empty migrations map for future use
-- [ ] T038 [US4] Add user notification when state reset due to version mismatch (console.warn + optional toast)
-- [ ] T039 [US4] Document version migration process in comments for future developers
+- [x] T036 [US4] Ensure version field is included in all saved state.json files (verify T023 implementation)
+- [x] T037 [US4] Add migration hooks structure in `src/lib/serialization.ts` with empty migrations map for future use
+- [x] T038 [US4] Add user notification when state reset due to version mismatch (console.warn + optional toast)
+- [x] T039 [US4] Document version migration process in comments for future developers
 
 **Checkpoint**: User Story 4 complete - versioning infrastructure in place for future migrations
 
