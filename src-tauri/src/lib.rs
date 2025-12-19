@@ -1,4 +1,6 @@
 pub mod hotkey;
+pub mod persistence;
+pub mod persistence_types;
 pub mod state;
 #[cfg(windows)]
 pub mod focus_monitor;
@@ -7,6 +9,7 @@ pub mod target_window;
 pub mod types;
 pub mod window;
 
+use persistence::{delete_window_content, load_state, save_state, save_window_content};
 use state::OverlayState;
 use tauri::{Emitter, Manager};
 use types::{ModeChangePayload, OverlayMode, OverlayReadyPayload, Position, TargetWindowInfo};
@@ -288,6 +291,13 @@ fn dismiss_error_modal(window: tauri::WebviewWindow) -> Result<(), String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_single_instance::init(|app, _argv, _cwd| {
+            // Focus existing window when second instance is launched
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.set_focus();
+                let _ = window.show();
+            }
+        }))
         .plugin(hotkey::build_shortcut_plugin().build())
         .manage(OverlayState::default())
         .invoke_handler(tauri::generate_handler![
@@ -296,7 +306,11 @@ pub fn run() {
             toggle_visibility,
             toggle_mode,
             get_target_window_info,
-            dismiss_error_modal
+            dismiss_error_modal,
+            load_state,
+            save_state,
+            save_window_content,
+            delete_window_content
         ])
         .setup(|app| {
             let handle = app.handle().clone();

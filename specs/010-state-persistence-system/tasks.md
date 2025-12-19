@@ -37,13 +37,13 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T006 Create persistence module `src-tauri/src/persistence.rs` with atomic_write helper function
-- [ ] T007 Implement `load_state` command in `src-tauri/src/persistence.rs` per contracts/tauri-commands.md
-- [ ] T008 Implement `save_state` command in `src-tauri/src/persistence.rs` per contracts/tauri-commands.md
-- [ ] T009 Implement `save_window_content` command in `src-tauri/src/persistence.rs` per contracts/tauri-commands.md
-- [ ] T010 Implement `delete_window_content` command in `src-tauri/src/persistence.rs` per contracts/tauri-commands.md
-- [ ] T011 Register single-instance plugin and persistence commands in `src-tauri/src/lib.rs`
-- [ ] T012 Create persistence service `src/stores/persistenceService.ts` wrapping Tauri invoke calls
+- [x] T006 Create persistence module `src-tauri/src/persistence.rs` with atomic_write helper function
+- [x] T007 Implement `load_state` command in `src-tauri/src/persistence.rs` per contracts/tauri-commands.md
+- [x] T008 Implement `save_state` command in `src-tauri/src/persistence.rs` per contracts/tauri-commands.md
+- [x] T009 Implement `save_window_content` command in `src-tauri/src/persistence.rs` per contracts/tauri-commands.md
+- [x] T010 Implement `delete_window_content` command in `src-tauri/src/persistence.rs` per contracts/tauri-commands.md
+- [x] T011 Register single-instance plugin and persistence commands in `src-tauri/src/lib.rs`
+- [x] T012 Create persistence service `src/stores/persistenceService.ts` wrapping Tauri invoke calls
 
 **Checkpoint**: Backend storage layer ready - user story implementation can now begin
 

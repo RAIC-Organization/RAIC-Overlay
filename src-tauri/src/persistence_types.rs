@@ -1,11 +1,9 @@
-/**
- * Persistence Types for State Persistence System
- *
- * Defines the Rust types for persisted state, matching the TypeScript
- * interfaces defined in data-model.md.
- *
- * @feature 010-state-persistence-system
- */
+//! Persistence Types for State Persistence System
+//!
+//! Defines the Rust types for persisted state, matching the TypeScript
+//! interfaces defined in data-model.md.
+//!
+//! @feature 010-state-persistence-system
 
 use serde::{Deserialize, Serialize};
 
@@ -69,7 +67,7 @@ pub struct Size {
     pub height: u32,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct WindowFlags {
     pub minimized: bool,
     pub maximized: bool,
@@ -133,14 +131,6 @@ impl Default for GlobalSettings {
     }
 }
 
-impl Default for WindowFlags {
-    fn default() -> Self {
-        Self {
-            minimized: false,
-            maximized: false,
-        }
-    }
-}
 
 impl Default for PersistedState {
     fn default() -> Self {
