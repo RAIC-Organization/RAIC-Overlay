@@ -81,20 +81,20 @@
 
 ### Tests for User Story 3
 
-- [ ] T023 [P] [US3] Add test: "has 100% opacity in windowed mode" in tests/react/AppIcon.test.tsx
-- [ ] T024 [P] [US3] Add test: "has 40% opacity in fullscreen mode" in tests/react/AppIcon.test.tsx
-- [ ] T025 [P] [US3] Add test: "respects reduced motion preferences" in tests/react/AppIcon.test.tsx
+- [x] T023 [P] [US3] Add test: "has 100% opacity in windowed mode" in tests/react/AppIcon.test.tsx
+- [x] T024 [P] [US3] Add test: "has 40% opacity in fullscreen mode" in tests/react/AppIcon.test.tsx
+- [x] T025 [P] [US3] Add test: "respects reduced motion preferences" in tests/react/AppIcon.test.tsx
 
 ### Implementation for User Story 3
 
-- [ ] T026 [US3] Calculate targetOpacity based on mode (fullscreen ? 0.4 : 1) in src/components/AppIcon.tsx
-- [ ] T027 [US3] Add showHideDuration calculation respecting useReducedMotion in src/components/AppIcon.tsx
-- [ ] T028 [US3] Add modeChangeDuration calculation respecting useReducedMotion in src/components/AppIcon.tsx
-- [ ] T029 [US3] Wrap Image with AnimatePresence and motion.div for show/hide animation in src/components/AppIcon.tsx
-- [ ] T030 [US3] Add initial={{ opacity: 0 }}, animate={{ opacity: targetOpacity }}, exit={{ opacity: 0 }} to outer motion.div in src/components/AppIcon.tsx
-- [ ] T031 [US3] Add inner motion.div for mode transition with animate={{ opacity: targetOpacity }} in src/components/AppIcon.tsx
-- [ ] T032 [US3] Add transition={{ duration: modeChangeDuration, ease: "easeOut" }} to inner motion.div in src/components/AppIcon.tsx
-- [ ] T033 Run tests to verify US3 implementation: npm test -- AppIcon
+- [x] T026 [US3] Calculate targetOpacity based on mode (fullscreen ? 0.4 : 1) in src/components/AppIcon.tsx
+- [x] T027 [US3] Add showHideDuration calculation respecting useReducedMotion in src/components/AppIcon.tsx
+- [x] T028 [US3] Add modeChangeDuration calculation respecting useReducedMotion in src/components/AppIcon.tsx
+- [x] T029 [US3] Wrap Image with AnimatePresence and motion.div for show/hide animation in src/components/AppIcon.tsx
+- [x] T030 [US3] Add initial={{ opacity: 0 }}, animate={{ opacity: targetOpacity }}, exit={{ opacity: 0 }} to outer motion.div in src/components/AppIcon.tsx
+- [x] T031 [US3] Add inner motion.div for mode transition with animate={{ opacity: targetOpacity }} in src/components/AppIcon.tsx
+- [x] T032 [US3] Add transition={{ duration: modeChangeDuration, ease: "easeOut" }} to inner motion.div in src/components/AppIcon.tsx
+- [x] T033 Run tests to verify US3 implementation: npm test -- AppIcon
 
 **Checkpoint**: Icon should now smoothly transition between opacity levels when mode changes
 
@@ -108,14 +108,14 @@
 
 ### Tests for User Story 4
 
-- [ ] T034 [P] [US4] Add test: "has pointer-events-none in fullscreen mode" in tests/react/AppIcon.test.tsx
-- [ ] T035 [P] [US4] Add test: "has pointer-events-auto in windowed mode" in tests/react/AppIcon.test.tsx
+- [x] T034 [P] [US4] Add test: "has pointer-events-none in fullscreen mode" in tests/react/AppIcon.test.tsx
+- [x] T035 [P] [US4] Add test: "has pointer-events-auto in windowed mode" in tests/react/AppIcon.test.tsx
 
 ### Implementation for User Story 4
 
-- [ ] T036 [US4] Calculate pointerEventsClass based on mode (fullscreen ? "pointer-events-none" : "") in src/components/AppIcon.tsx
-- [ ] T037 [US4] Apply pointerEventsClass to the outer motion.div className in src/components/AppIcon.tsx
-- [ ] T038 Run tests to verify US4 implementation: npm test -- AppIcon
+- [x] T036 [US4] Calculate pointerEventsClass based on mode (fullscreen ? "pointer-events-none" : "") in src/components/AppIcon.tsx
+- [x] T037 [US4] Apply pointerEventsClass to the outer motion.div className in src/components/AppIcon.tsx
+- [x] T038 Run tests to verify US4 implementation: npm test -- AppIcon
 
 **Checkpoint**: All user stories complete - icon displays, animates, and has correct click-through behavior
 
