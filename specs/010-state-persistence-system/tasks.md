@@ -57,15 +57,15 @@
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Create useHydration hook in `src/hooks/useHydration.ts` to load state on startup
-- [ ] T014 [US1] Create LoadingScreen component in `src/components/LoadingScreen.tsx` for hydration blocking
-- [ ] T015 [US1] Update `app/page.tsx` to use useHydration and show LoadingScreen until hydrated
-- [ ] T016 [US1] Extend WindowsContext in `src/contexts/WindowsContext.tsx` to accept initial hydrated state
-- [ ] T017 [US1] Add version check to useHydration - reset to defaults on version mismatch per spec
-- [ ] T018 [US1] Handle corrupted state in useHydration - fall back to defaults and log error
-- [ ] T019 [US1] Implement window content restoration in WindowsContext from hydrated windowContents map
-- [ ] T020 [US1] Update NotesContent in `src/components/windows/NotesContent.tsx` to accept initial content from persistence
-- [ ] T021 [US1] Update DrawContent in `src/components/windows/DrawContent.tsx` to accept initial content from persistence
+- [x] T013 [US1] Create useHydration hook in `src/hooks/useHydration.ts` to load state on startup
+- [x] T014 [US1] Create LoadingScreen component in `src/components/LoadingScreen.tsx` for hydration blocking
+- [x] T015 [US1] Update `app/page.tsx` to use useHydration and show LoadingScreen until hydrated
+- [x] T016 [US1] Extend WindowsContext in `src/contexts/WindowsContext.tsx` to accept initial hydrated state
+- [x] T017 [US1] Add version check to useHydration - reset to defaults on version mismatch per spec
+- [x] T018 [US1] Handle corrupted state in useHydration - fall back to defaults and log error
+- [x] T019 [US1] Implement window content restoration in WindowsContext from hydrated windowContents map
+- [x] T020 [US1] Update NotesContent in `src/components/windows/NotesContent.tsx` to accept initial content from persistence
+- [x] T021 [US1] Update DrawContent in `src/components/windows/DrawContent.tsx` to accept initial content from persistence
 
 **Checkpoint**: User Story 1 complete - app restores full session state on launch, falls back to defaults gracefully
 

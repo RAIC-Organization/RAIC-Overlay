@@ -31,6 +31,7 @@ export function MainMenu({
     windowEvents.emit("window:open", {
       component: NotesContent,
       title: "Notes",
+      contentType: "notes",
       componentProps: { isInteractive: mode === "windowed" },
     });
   };
@@ -39,6 +40,7 @@ export function MainMenu({
     windowEvents.emit("window:open", {
       component: DrawContent,
       title: "Draw",
+      contentType: "draw",
       componentProps: { isInteractive: mode === "windowed" },
     });
   };
@@ -47,6 +49,7 @@ export function MainMenu({
     windowEvents.emit("window:open", {
       component: TestWindowContent,
       title: "Test Windows",
+      contentType: "test",
     });
   };
 

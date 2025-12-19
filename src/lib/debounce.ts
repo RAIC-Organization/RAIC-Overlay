@@ -15,12 +15,14 @@
  * @param delay - The delay in milliseconds
  * @returns A debounced function with cancel and flush methods
  */
-export function debounce<T extends (...args: Parameters<T>) => void>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function debounce<T extends (...args: any[]) => void>(
   fn: T,
   delay: number
 ): T & { cancel: () => void; flush: () => void } {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
-  let lastArgs: Parameters<T> | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let lastArgs: any[] | null = null;
 
   const debounced = ((...args: Parameters<T>) => {
     lastArgs = args;

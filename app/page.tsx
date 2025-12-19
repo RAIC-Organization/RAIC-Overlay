@@ -1,15 +1,35 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+/**
+ * Main Page Component
+ *
+ * Entry point for the overlay application. Handles:
+ * - State hydration from persistence on startup
+ * - Tauri event listeners for visibility/mode toggling
+ * - Window restoration from persisted state
+ * - Error modal display
+ *
+ * @feature 003-f3-fullscreen-overlay
+ * @feature 010-state-persistence-system
+ */
+
+import { useEffect, useState, useCallback, useRef } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow, currentMonitor, LogicalPosition } from "@tauri-apps/api/window";
 import { HeaderPanel } from "@/components/HeaderPanel";
 import { ErrorModal } from "@/components/ErrorModal";
 import { MainMenu } from "@/components/MainMenu";
+import { LoadingScreen } from "@/components/LoadingScreen";
 import { WindowsProvider } from "@/contexts/WindowsContext";
 import { WindowsContainer } from "@/components/windows/WindowsContainer";
+import { useHydration } from "@/hooks/useHydration";
+import { useWindows } from "@/contexts/WindowsContext";
+import { NotesContent } from "@/components/windows/NotesContent";
+import { DrawContent } from "@/components/windows/DrawContent";
 import { OverlayState, initialState } from "@/types/overlay";
+import type { WindowStructure, WindowContentFile, NotesContent as NotesContentType, DrawContent as DrawContentType } from "@/types/persistence";
+import type { WindowContentType } from "@/types/windows";
 import {
   OverlayReadyPayload,
   OverlayStateResponse,
@@ -27,7 +47,141 @@ interface ErrorModalState {
   autoDismissMs: number;
 }
 
+/**
+ * Component that restores windows from hydrated state.
+ * Must be inside WindowsProvider to access openWindow.
+ */
+function WindowRestorer({
+  windows,
+  windowContents,
+  mode,
+}: {
+  windows: WindowStructure[];
+  windowContents: Map<string, WindowContentFile>;
+  mode: string;
+}) {
+  const { openWindow } = useWindows();
+  const restoredRef = useRef(false);
+
+  useEffect(() => {
+    // Only restore once
+    if (restoredRef.current || windows.length === 0) return;
+    restoredRef.current = true;
+
+    // Restore each window
+    for (const win of windows) {
+      const content = windowContents.get(win.id);
+      const windowType = win.type;
+
+      // Get the component and initial content based on type
+      if (windowType === 'notes') {
+        const notesContent = content?.content as NotesContentType | undefined;
+        openWindow({
+          component: NotesContent,
+          title: 'Notes',
+          contentType: 'notes',
+          windowId: win.id,
+          initialX: win.position.x,
+          initialY: win.position.y,
+          initialWidth: win.size.width,
+          initialHeight: win.size.height,
+          initialZIndex: win.zIndex,
+          componentProps: {
+            isInteractive: mode === 'windowed',
+            initialContent: notesContent,
+          },
+        });
+      } else if (windowType === 'draw') {
+        const drawContent = content?.content as DrawContentType | undefined;
+        openWindow({
+          component: DrawContent,
+          title: 'Draw',
+          contentType: 'draw',
+          windowId: win.id,
+          initialX: win.position.x,
+          initialY: win.position.y,
+          initialWidth: win.size.width,
+          initialHeight: win.size.height,
+          initialZIndex: win.zIndex,
+          componentProps: {
+            isInteractive: mode === 'windowed',
+            initialElements: drawContent?.elements,
+            initialAppState: drawContent?.appState,
+          },
+        });
+      }
+      // Note: 'test' windows are not persisted (ephemeral)
+    }
+  }, [windows, windowContents, mode, openWindow]);
+
+  return null;
+}
+
+/**
+ * Main content component that wraps the overlay UI.
+ */
+function OverlayContent({
+  state,
+  errorModal,
+  onDismissError,
+  hydratedWindows,
+  hydratedContents,
+}: {
+  state: OverlayState;
+  errorModal: ErrorModalState;
+  onDismissError: () => void;
+  hydratedWindows: WindowStructure[];
+  hydratedContents: Map<string, WindowContentFile>;
+}) {
+  return (
+    <div className="flex flex-col justify-between h-full relative">
+      {/* Window restorer - runs once on mount */}
+      <WindowRestorer
+        windows={hydratedWindows}
+        windowContents={hydratedContents}
+        mode={state.mode}
+      />
+
+      {/* MainMenu at top - only visible in interactive mode */}
+      <MainMenu
+        visible={state.visible}
+        mode={state.mode}
+        targetRect={state.targetRect}
+      />
+
+      {/* Header at bottom when interactive, top otherwise */}
+      <HeaderPanel
+        visible={state.visible}
+        mode={state.mode}
+        targetRect={state.targetRect}
+        position={state.mode === "windowed" ? "bottom" : "top"}
+      />
+
+      {/* Windows container - renders all windows */}
+      <WindowsContainer mode={state.mode} />
+
+      {/* Error modal rendering */}
+      <ErrorModal
+        visible={errorModal.visible}
+        targetName={errorModal.targetName}
+        message={errorModal.message}
+        autoDismissMs={errorModal.autoDismissMs}
+        onDismiss={onDismissError}
+      />
+    </div>
+  );
+}
+
 export default function Home() {
+  // Hydration hook - loads persisted state on startup
+  const {
+    isHydrated,
+    state: hydratedState,
+    windowContents: hydratedContents,
+    error: hydrationError,
+    wasReset,
+  } = useHydration();
+
   const [state, setState] = useState<OverlayState>(initialState);
   // Error modal state
   const [errorModal, setErrorModal] = useState<ErrorModalState>({
@@ -36,6 +190,16 @@ export default function Home() {
     message: "",
     autoDismissMs: 5000,
   });
+
+  // Log hydration warnings/resets
+  useEffect(() => {
+    if (hydrationError) {
+      console.warn('Hydration warning:', hydrationError);
+    }
+    if (wasReset) {
+      console.warn('State was reset to defaults due to version mismatch');
+    }
+  }, [hydrationError, wasReset]);
 
   // Apply debug border if NEXT_PUBLIC_DEBUG_BORDER is enabled
   useEffect(() => {
@@ -189,39 +353,33 @@ export default function Home() {
     });
   }, []);
 
+  // Handle window close for persistence cleanup (will be wired in Phase 5)
+  const handleWindowClose = useCallback((windowId: string, contentType?: WindowContentType) => {
+    // This will be implemented in Phase 5 (US3)
+    console.log(`Window closed: ${windowId} (type: ${contentType})`);
+  }, []);
+
+  // Show loading screen until hydration completes
+  if (!isHydrated) {
+    return <LoadingScreen />;
+  }
+
   // Render MainMenu at top, HeaderPanel at bottom when interactive mode
   // fullscreen mode = click-through (60% transparent, MainMenu hidden)
   // windowed mode = interactive (0% transparent, MainMenu visible)
   return (
-    <WindowsProvider>
-      <div className="flex flex-col justify-between h-full relative">
-        {/* MainMenu at top - only visible in interactive mode */}
-        <MainMenu
-          visible={state.visible}
-          mode={state.mode}
-          targetRect={state.targetRect}
-        />
-
-        {/* Header at bottom when interactive, top otherwise */}
-        <HeaderPanel
-          visible={state.visible}
-          mode={state.mode}
-          targetRect={state.targetRect}
-          position={state.mode === "windowed" ? "bottom" : "top"}
-        />
-
-        {/* Windows container - renders all windows */}
-        <WindowsContainer mode={state.mode} />
-
-        {/* Error modal rendering */}
-        <ErrorModal
-          visible={errorModal.visible}
-          targetName={errorModal.targetName}
-          message={errorModal.message}
-          autoDismissMs={errorModal.autoDismissMs}
-          onDismiss={handleDismissError}
-        />
-      </div>
+    <WindowsProvider
+      initialPersistedState={hydratedState}
+      initialWindowContents={hydratedContents}
+      onWindowClose={handleWindowClose}
+    >
+      <OverlayContent
+        state={state}
+        errorModal={errorModal}
+        onDismissError={handleDismissError}
+        hydratedWindows={hydratedState.windows}
+        hydratedContents={hydratedContents}
+      />
     </WindowsProvider>
   );
 }
