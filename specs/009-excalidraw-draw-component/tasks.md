@@ -83,8 +83,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T008 [US3] Ensure viewModeEnabled prop correctly syncs with isInteractive in src/components/windows/DrawContent.tsx
-- [ ] T009 [US3] Verify mode toggle updates all open Draw windows via props in src/components/windows/DrawContent.tsx
+- [X] T008 [US3] Ensure viewModeEnabled prop correctly syncs with isInteractive in src/components/windows/DrawContent.tsx
+- [X] T009 [US3] Verify mode toggle updates all open Draw windows via props in src/components/windows/DrawContent.tsx
 
 **Checkpoint**: User Story 3 complete - mode-aware toolbar visibility working
 
