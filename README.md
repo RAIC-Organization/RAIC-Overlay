@@ -146,7 +146,7 @@ RAICOverlay/
 │   │   ├── ui/                   # shadcn/ui components
 │   │   ├── windows/              # Window components (Notes, Draw)
 │   │   ├── MainMenu.tsx          # Main button menu
-│   │   ├── HeaderPanel.tsx       # Header status panel
+│   │   ├── AppIcon.tsx           # App icon branding
 │   │   └── ErrorModal.tsx        # Error modal
 │   ├── contexts/                 # React contexts
 │   ├── hooks/                    # Custom React hooks

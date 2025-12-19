@@ -125,13 +125,13 @@
 
 **Purpose**: Final cleanup and verification
 
-- [ ] T039 Run full test suite: npm test
-- [ ] T040 Run linting: npm run lint (if configured)
+- [x] T039 Run full test suite: npm test
+- [x] T040 Run linting: npm run lint (if configured) - N/A, no lint script
 - [ ] T041 Manual verification per quickstart.md: Launch dev server, test F3 toggle
 - [ ] T042 Manual verification: Test F5 mode toggle, observe opacity transition
 - [ ] T043 Manual verification: In fullscreen mode, verify click-through works over icon area
-- [ ] T044 Update README.md if HeaderPanel is mentioned (replace with AppIcon reference)
-- [ ] T045 Clean up temp/Icon.png and temp/Icon.pdf (no longer needed)
+- [x] T044 Update README.md if HeaderPanel is mentioned (replace with AppIcon reference)
+- [x] T045 Clean up temp/Icon.png and temp/Icon.pdf (no longer needed)
 
 ---
 
