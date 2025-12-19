@@ -2,14 +2,21 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MainMenu } from "../../src/components/MainMenu";
 
+// Mock window events
+vi.mock("../../src/lib/windowEvents", () => ({
+  windowEvents: {
+    emit: vi.fn(),
+  },
+}));
+
 describe("MainMenu", () => {
   it("renders when mode is 'windowed'", () => {
     render(<MainMenu visible={true} mode="windowed" />);
     const groups = screen.getAllByRole("group");
-    expect(groups.length).toBe(2);
-    expect(screen.getByText("Option 1")).toBeInTheDocument();
-    expect(screen.getByText("Option 2")).toBeInTheDocument();
-    expect(screen.getByText("Option 3")).toBeInTheDocument();
+    expect(groups.length).toBe(1);
+    expect(screen.getByText("Notes")).toBeInTheDocument();
+    expect(screen.getByText("Draw")).toBeInTheDocument();
+    expect(screen.getByText("Test Windows")).toBeInTheDocument();
   });
 
   it("renders nothing when mode is 'fullscreen'", () => {
@@ -21,48 +28,22 @@ describe("MainMenu", () => {
     const { container } = render(<MainMenu visible={false} mode="windowed" />);
     expect(container.querySelector('[role="group"]')).toBeNull();
   });
-
-  it("logs button name to console when button is clicked", () => {
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-
-    render(<MainMenu visible={true} mode="windowed" />);
-
-    // Click Option 1
-    fireEvent.click(screen.getByText("Option 1"));
-    expect(consoleSpy).toHaveBeenCalledWith("Button clicked: Option 1");
-
-    // Click Option 2
-    fireEvent.click(screen.getByText("Option 2"));
-    expect(consoleSpy).toHaveBeenCalledWith("Button clicked: Option 2");
-
-    // Click Option 3
-    fireEvent.click(screen.getByText("Option 3"));
-    expect(consoleSpy).toHaveBeenCalledWith("Button clicked: Option 3");
-
-    consoleSpy.mockRestore();
-  });
 });
 
 describe("MainMenu button groups", () => {
-  it("has two button groups", () => {
+  it("has one button group", () => {
     render(<MainMenu visible={true} mode="windowed" />);
     const groups = screen.getAllByRole("group");
-    expect(groups.length).toBe(2);
+    expect(groups.length).toBe(1);
   });
 
-  it("Group 1 contains Option 1 and Option 2", () => {
+  it("button group contains Notes, Draw, and Test Windows", () => {
     render(<MainMenu visible={true} mode="windowed" />);
     const groups = screen.getAllByRole("group");
-    const group1 = groups[0];
-    expect(group1).toContainElement(screen.getByText("Option 1"));
-    expect(group1).toContainElement(screen.getByText("Option 2"));
-  });
-
-  it("Group 2 contains Option 3", () => {
-    render(<MainMenu visible={true} mode="windowed" />);
-    const groups = screen.getAllByRole("group");
-    const group2 = groups[1];
-    expect(group2).toContainElement(screen.getByText("Option 3"));
+    const group = groups[0];
+    expect(group).toContainElement(screen.getByText("Notes"));
+    expect(group).toContainElement(screen.getByText("Draw"));
+    expect(group).toContainElement(screen.getByText("Test Windows"));
   });
 });
 
@@ -75,7 +56,7 @@ describe("MainMenu accessibility", () => {
 
   it("buttons are focusable", () => {
     render(<MainMenu visible={true} mode="windowed" />);
-    const button1 = screen.getByText("Option 1");
-    expect(button1).not.toHaveAttribute("tabindex", "-1");
+    const button = screen.getByText("Notes");
+    expect(button).not.toHaveAttribute("tabindex", "-1");
   });
 });

@@ -8,6 +8,7 @@ import { WindowRect } from "@/types/ipc";
 import { windowEvents } from "@/lib/windowEvents";
 import { TestWindowContent } from "@/components/windows/TestWindowContent";
 import { NotesContent } from "@/components/windows/NotesContent";
+import { DrawContent } from "@/components/windows/DrawContent";
 
 interface MainMenuProps {
   visible?: boolean;
@@ -34,6 +35,14 @@ export function MainMenu({
     });
   };
 
+  const handleOpenDraw = () => {
+    windowEvents.emit("window:open", {
+      component: DrawContent,
+      title: "Draw",
+      componentProps: { isInteractive: mode === "windowed" },
+    });
+  };
+
   const handleTestWindows = () => {
     windowEvents.emit("window:open", {
       component: TestWindowContent,
@@ -56,6 +65,9 @@ export function MainMenu({
           <ButtonGroup>
             <Button variant="secondary" onClick={handleOpenNotes}>
               Notes
+            </Button>
+            <Button variant="secondary" onClick={handleOpenDraw}>
+              Draw
             </Button>
             <Button variant="secondary" onClick={handleTestWindows}>
               Test Windows
