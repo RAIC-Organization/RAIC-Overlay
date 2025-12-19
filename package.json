@@ -13,6 +13,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@excalidraw/excalidraw": "^0.18.0",
     "@radix-ui/react-separator": "^1.1.8",
     "@radix-ui/react-slot": "^1.2.4",
     "@tauri-apps/api": "^2.0.0",
