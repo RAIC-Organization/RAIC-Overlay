@@ -79,16 +79,16 @@
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Create usePersistence hook in `src/hooks/usePersistence.ts` with debounced save logic
-- [ ] T023 [US2] Add state serialization helper in `src/lib/serialization.ts` to convert WindowsState to PersistedState
-- [ ] T024 [US2] Wire usePersistence into WindowsContext to trigger saves on state changes
-- [ ] T025 [US2] Implement immediate persistence trigger for window creation in WindowsContext
-- [ ] T026 [US2] Implement debounced persistence trigger (500ms) for drag/resize end in Window component
-- [ ] T027 [US2] Implement debounced persistence trigger (500ms) for content changes in NotesContent
-- [ ] T028 [US2] Implement debounced persistence trigger (500ms) for content changes in DrawContent
-- [ ] T029 [US2] Implement immediate persistence trigger for overlay mode changes in `app/page.tsx`
-- [ ] T030 [US2] Add content extraction callbacks to NotesContent for TipTap JSON serialization
-- [ ] T031 [US2] Add content extraction callbacks to DrawContent for Excalidraw elements serialization
+- [x] T022 [US2] Create usePersistence hook in `src/hooks/usePersistence.ts` with debounced save logic
+- [x] T023 [US2] Add state serialization helper in `src/lib/serialization.ts` to convert WindowsState to PersistedState
+- [x] T024 [US2] Wire usePersistence into WindowsContext to trigger saves on state changes
+- [x] T025 [US2] Implement immediate persistence trigger for window creation in WindowsContext
+- [x] T026 [US2] Implement debounced persistence trigger (500ms) for drag/resize end in Window component
+- [x] T027 [US2] Implement debounced persistence trigger (500ms) for content changes in NotesContent
+- [x] T028 [US2] Implement debounced persistence trigger (500ms) for content changes in DrawContent
+- [x] T029 [US2] Implement immediate persistence trigger for overlay mode changes in `app/page.tsx`
+- [x] T030 [US2] Add content extraction callbacks to NotesContent for TipTap JSON serialization
+- [x] T031 [US2] Add content extraction callbacks to DrawContent for Excalidraw elements serialization
 
 **Checkpoint**: User Story 2 complete - all changes auto-persist with appropriate debouncing
 

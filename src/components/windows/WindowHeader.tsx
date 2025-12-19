@@ -6,14 +6,17 @@
  * Displays the window title with drag-to-move functionality and close button.
  * Drag functionality uses pointer events for unified mouse/touch support.
  * Only renders/functions in interactive mode.
+ * Triggers persistence on drag completion.
  *
  * @feature 007-windows-system
+ * @feature 010-state-persistence-system
  */
 
 import { useRef, useCallback } from 'react';
 import { X } from 'lucide-react';
 import { WINDOW_CONSTANTS } from '@/types/windows';
 import { useWindows } from '@/contexts/WindowsContext';
+import { usePersistenceContext } from '@/contexts/PersistenceContext';
 
 interface WindowHeaderProps {
   windowId: string;
@@ -25,6 +28,7 @@ interface WindowHeaderProps {
 
 export function WindowHeader({ windowId, title, x, y, isInteractive = true }: WindowHeaderProps) {
   const { moveWindow, closeWindow } = useWindows();
+  const persistence = usePersistenceContext();
   const dragStartRef = useRef<{ startX: number; startY: number; windowX: number; windowY: number } | null>(null);
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
@@ -60,8 +64,12 @@ export function WindowHeader({ windowId, title, x, y, isInteractive = true }: Wi
 
   const handlePointerUp = useCallback((e: React.PointerEvent) => {
     e.currentTarget.releasePointerCapture(e.pointerId);
+    // Trigger persistence save on drag end
+    if (dragStartRef.current) {
+      persistence?.onWindowMoved();
+    }
     dragStartRef.current = null;
-  }, []);
+  }, [persistence]);
 
   const handleClose = useCallback(() => {
     if (!isInteractive) return;

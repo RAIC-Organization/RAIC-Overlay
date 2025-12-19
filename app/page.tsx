@@ -22,6 +22,7 @@ import { ErrorModal } from "@/components/ErrorModal";
 import { MainMenu } from "@/components/MainMenu";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { WindowsProvider } from "@/contexts/WindowsContext";
+import { PersistenceProvider, usePersistenceContext } from "@/contexts/PersistenceContext";
 import { WindowsContainer } from "@/components/windows/WindowsContainer";
 import { useHydration } from "@/hooks/useHydration";
 import { useWindows } from "@/contexts/WindowsContext";
@@ -49,7 +50,7 @@ interface ErrorModalState {
 
 /**
  * Component that restores windows from hydrated state.
- * Must be inside WindowsProvider to access openWindow.
+ * Must be inside WindowsProvider and PersistenceProvider to access context.
  */
 function WindowRestorer({
   windows,
@@ -61,6 +62,7 @@ function WindowRestorer({
   mode: string;
 }) {
   const { openWindow } = useWindows();
+  const persistence = usePersistenceContext();
   const restoredRef = useRef(false);
 
   useEffect(() => {
@@ -72,6 +74,7 @@ function WindowRestorer({
     for (const win of windows) {
       const content = windowContents.get(win.id);
       const windowType = win.type;
+      const windowId = win.id;
 
       // Get the component and initial content based on type
       if (windowType === 'notes') {
@@ -80,7 +83,7 @@ function WindowRestorer({
           component: NotesContent,
           title: 'Notes',
           contentType: 'notes',
-          windowId: win.id,
+          windowId,
           initialX: win.position.x,
           initialY: win.position.y,
           initialWidth: win.size.width,
@@ -89,6 +92,8 @@ function WindowRestorer({
           componentProps: {
             isInteractive: mode === 'windowed',
             initialContent: notesContent,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onContentChange: (c: any) => persistence?.onNotesContentChange(windowId, c),
           },
         });
       } else if (windowType === 'draw') {
@@ -97,7 +102,7 @@ function WindowRestorer({
           component: DrawContent,
           title: 'Draw',
           contentType: 'draw',
-          windowId: win.id,
+          windowId,
           initialX: win.position.x,
           initialY: win.position.y,
           initialWidth: win.size.width,
@@ -107,12 +112,15 @@ function WindowRestorer({
             isInteractive: mode === 'windowed',
             initialElements: drawContent?.elements,
             initialAppState: drawContent?.appState,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onContentChange: (elements: any[], appState: any) =>
+              persistence?.onDrawContentChange(windowId, elements, appState),
           },
         });
       }
       // Note: 'test' windows are not persisted (ephemeral)
     }
-  }, [windows, windowContents, mode, openWindow]);
+  }, [windows, windowContents, mode, openWindow, persistence]);
 
   return null;
 }
@@ -373,13 +381,18 @@ export default function Home() {
       initialWindowContents={hydratedContents}
       onWindowClose={handleWindowClose}
     >
-      <OverlayContent
-        state={state}
-        errorModal={errorModal}
-        onDismissError={handleDismissError}
-        hydratedWindows={hydratedState.windows}
-        hydratedContents={hydratedContents}
-      />
+      <PersistenceProvider
+        overlayMode={state.mode as 'windowed' | 'fullscreen'}
+        overlayVisible={state.visible}
+      >
+        <OverlayContent
+          state={state}
+          errorModal={errorModal}
+          onDismissError={handleDismissError}
+          hydratedWindows={hydratedState.windows}
+          hydratedContents={hydratedContents}
+        />
+      </PersistenceProvider>
     </WindowsProvider>
   );
 }
