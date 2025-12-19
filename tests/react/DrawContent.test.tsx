@@ -2,24 +2,27 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { DrawContent } from "../../src/components/windows/DrawContent";
 
-// Mock Excalidraw since it requires browser APIs
-vi.mock("@excalidraw/excalidraw", () => ({
-  Excalidraw: ({
-    viewModeEnabled,
-    theme,
-  }: {
-    viewModeEnabled?: boolean;
-    theme?: string;
-    UIOptions?: Record<string, unknown>;
-  }) => (
-    <div data-testid="excalidraw-mock" data-viewmode={viewModeEnabled} data-theme={theme}>
-      {!viewModeEnabled && <div data-testid="excalidraw-toolbar">Toolbar</div>}
-      <div data-testid="excalidraw-canvas">Canvas</div>
-    </div>
-  ),
-  THEME: {
-    DARK: "dark",
-    LIGHT: "light",
+// Mock next/dynamic to immediately render the component
+vi.mock("next/dynamic", () => ({
+  default: (importFn: () => Promise<{ default: React.ComponentType }>) => {
+    // Return a component that renders the imported component
+    const Component = (props: Record<string, unknown>) => {
+      const MockExcalidraw = ({
+        viewModeEnabled,
+        theme,
+      }: {
+        viewModeEnabled?: boolean;
+        theme?: string;
+        UIOptions?: Record<string, unknown>;
+      }) => (
+        <div data-testid="excalidraw-mock" data-viewmode={viewModeEnabled} data-theme={theme}>
+          {!viewModeEnabled && <div data-testid="excalidraw-toolbar">Toolbar</div>}
+          <div data-testid="excalidraw-canvas">Canvas</div>
+        </div>
+      );
+      return <MockExcalidraw {...props} />;
+    };
+    return Component;
   },
 }));
 

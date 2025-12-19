@@ -111,9 +111,9 @@
 
 **Purpose**: Final verification and validation
 
-- [ ] T012 Apply THEME.DARK to Excalidraw with toggleTheme disabled in src/components/windows/DrawContent.tsx
-- [ ] T013 Run quickstart.md testing checklist to validate all acceptance scenarios
-- [ ] T014 Verify performance targets: <1s window open, <100ms mode toggle, <50ms drawing operations
+- [X] T012 Apply THEME.DARK to Excalidraw with toggleTheme disabled in src/components/windows/DrawContent.tsx
+- [X] T013 Run quickstart.md testing checklist to validate all acceptance scenarios
+- [X] T014 Verify performance targets: <1s window open, <100ms mode toggle, <50ms drawing operations
 
 ---
 
