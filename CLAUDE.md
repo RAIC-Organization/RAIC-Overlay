@@ -19,6 +19,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-12
 - N/A (ephemeral in-memory state only, no persistence) (009-excalidraw-draw-component)
 - TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend) + React 19.0.0, Next.js 16.x, Tauri 2.x, @tauri-apps/api 2.0.0, serde/serde_json (Rust), TipTap 3.13.0, Excalidraw 0.18.0 (010-state-persistence-system)
 - JSON files in Tauri app data directory (`state.json` + `window-{id}.json`) (010-state-persistence-system)
+- TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, motion 12.x, Tailwind CSS 4.x, shadcn/ui (011-app-icon-branding)
+- N/A (static asset only) (011-app-icon-branding)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -43,9 +45,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 011-app-icon-branding: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, motion 12.x, Tailwind CSS 4.x, shadcn/ui
 - 010-state-persistence-system: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend) + React 19.0.0, Next.js 16.x, Tauri 2.x, @tauri-apps/api 2.0.0, serde/serde_json (Rust), TipTap 3.13.0, Excalidraw 0.18.0
 - 009-excalidraw-draw-component: Added TypeScript 5.7.2, React 19.0.0, Next.js 16.x + @excalidraw/excalidraw 0.18.0 (new); motion 12.x, shadcn/ui, Tailwind CSS 4.x (existing)
-- 008-tiptap-notes-component: Added TypeScript 5.7.2, React 19.0.0, Next.js 16.x + @tiptap/react, @tiptap/pm, @tiptap/starter-kit, @tiptap/extension-text-align (new); motion 12.x, shadcn/ui, Tailwind CSS 4.x (existing)
 
 
 <!-- MANUAL ADDITIONS START -->
