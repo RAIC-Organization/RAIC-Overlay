@@ -17,7 +17,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow, currentMonitor, LogicalPosition } from "@tauri-apps/api/window";
-import { HeaderPanel } from "@/components/HeaderPanel";
+import { AppIcon } from "@/components/AppIcon";
 import { ErrorModal } from "@/components/ErrorModal";
 import { MainMenu } from "@/components/MainMenu";
 import { LoadingScreen } from "@/components/LoadingScreen";
@@ -158,13 +158,8 @@ function OverlayContent({
         targetRect={state.targetRect}
       />
 
-      {/* Header at bottom when interactive, top otherwise */}
-      <HeaderPanel
-        visible={state.visible}
-        mode={state.mode}
-        targetRect={state.targetRect}
-        position={state.mode === "windowed" ? "bottom" : "top"}
-      />
+      {/* App icon in top-left corner */}
+      <AppIcon visible={state.visible} mode={state.mode} />
 
       {/* Windows container - renders all windows */}
       <WindowsContainer mode={state.mode} />

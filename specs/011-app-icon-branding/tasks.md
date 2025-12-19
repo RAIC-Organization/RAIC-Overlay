@@ -46,28 +46,28 @@
 
 ### Tests for User Stories 1 & 2
 
-- [ ] T004 [P] [US1] Create test file tests/react/AppIcon.test.tsx with describe block for AppIcon component
-- [ ] T005 [P] [US1] Add test: "renders when visible is true" in tests/react/AppIcon.test.tsx
-- [ ] T006 [P] [US1] Add test: "does not render when visible is false" in tests/react/AppIcon.test.tsx
-- [ ] T007 [P] [US1] Add test: "displays at 50x50 pixels dimensions" in tests/react/AppIcon.test.tsx
-- [ ] T008 [P] [US1] Add test: "has correct positioning (fixed, top-50px, left-50px)" in tests/react/AppIcon.test.tsx
+- [x] T004 [P] [US1] Create test file tests/react/AppIcon.test.tsx with describe block for AppIcon component
+- [x] T005 [P] [US1] Add test: "renders when visible is true" in tests/react/AppIcon.test.tsx
+- [x] T006 [P] [US1] Add test: "does not render when visible is false" in tests/react/AppIcon.test.tsx
+- [x] T007 [P] [US1] Add test: "displays at 50x50 pixels dimensions" in tests/react/AppIcon.test.tsx
+- [x] T008 [P] [US1] Add test: "has correct positioning (fixed, top-50px, left-50px)" in tests/react/AppIcon.test.tsx
 
 ### Implementation for User Stories 1 & 2
 
-- [ ] T009 [US1] Create AppIcon component file at src/components/AppIcon.tsx with "use client" directive
-- [ ] T010 [US1] Define AppIconProps interface with visible and mode props in src/components/AppIcon.tsx
-- [ ] T011 [US1] Import motion, AnimatePresence, useReducedMotion from "motion/react" in src/components/AppIcon.tsx
-- [ ] T012 [US1] Import Image from "next/image" in src/components/AppIcon.tsx
-- [ ] T013 [US1] Import icon asset from "@/assets/icon.png" in src/components/AppIcon.tsx
-- [ ] T014 [US1] Implement AppIcon function component with fixed positioning (top-[50px] left-[50px]) in src/components/AppIcon.tsx
-- [ ] T015 [US1] Add Next.js Image component with width=50, height=50, alt="RAIC Overlay", priority=true in src/components/AppIcon.tsx
-- [ ] T016 [US2] Remove HeaderPanel import from app/page.tsx
-- [ ] T017 [US2] Remove HeaderPanel JSX usage from app/page.tsx (line ~162-167)
-- [ ] T018 [US1] Import AppIcon component in app/page.tsx
-- [ ] T019 [US1] Add AppIcon to OverlayContent passing visible={state.visible} and mode={state.mode} in app/page.tsx
-- [ ] T020 [US2] Delete src/components/HeaderPanel.tsx file
-- [ ] T021 [US2] Delete tests/react/HeaderPanel.test.tsx file
-- [ ] T022 Run tests to verify US1/US2 implementation: npm test -- AppIcon
+- [x] T009 [US1] Create AppIcon component file at src/components/AppIcon.tsx with "use client" directive
+- [x] T010 [US1] Define AppIconProps interface with visible and mode props in src/components/AppIcon.tsx
+- [x] T011 [US1] Import motion, AnimatePresence, useReducedMotion from "motion/react" in src/components/AppIcon.tsx
+- [x] T012 [US1] Import Image from "next/image" in src/components/AppIcon.tsx
+- [x] T013 [US1] Import icon asset from "@/assets/icon.png" in src/components/AppIcon.tsx
+- [x] T014 [US1] Implement AppIcon function component with fixed positioning (top-[50px] left-[50px]) in src/components/AppIcon.tsx
+- [x] T015 [US1] Add Next.js Image component with width=50, height=50, alt="RAIC Overlay", priority=true in src/components/AppIcon.tsx
+- [x] T016 [US2] Remove HeaderPanel import from app/page.tsx
+- [x] T017 [US2] Remove HeaderPanel JSX usage from app/page.tsx (line ~162-167)
+- [x] T018 [US1] Import AppIcon component in app/page.tsx
+- [x] T019 [US1] Add AppIcon to OverlayContent passing visible={state.visible} and mode={state.mode} in app/page.tsx
+- [x] T020 [US2] Delete src/components/HeaderPanel.tsx file
+- [x] T021 [US2] Delete tests/react/HeaderPanel.test.tsx file
+- [x] T022 Run tests to verify US1/US2 implementation: npm test -- AppIcon
 
 **Checkpoint**: At this point, the icon should display in top-left corner and no header panel should be visible. Icon may not yet have correct opacity transitions.
 
