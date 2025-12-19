@@ -23,11 +23,11 @@
 
 **Purpose**: Project initialization, dependencies, and backend storage infrastructure
 
-- [ ] T001 Add `tauri-plugin-single-instance = "2.0.0"` dependency to `src-tauri/Cargo.toml`
-- [ ] T002 [P] Create persistence types file `src-tauri/src/persistence_types.rs` with Rust structs from data-model.md
-- [ ] T003 [P] Create TypeScript persistence types `src/types/persistence.ts` with interfaces from data-model.md
-- [ ] T004 [P] Create TypeScript IPC types `src/types/persistence-ipc.ts` with LoadStateResult, SaveResult, DeleteResult
-- [ ] T005 [P] Create debounce utility `src/lib/debounce.ts` with cancel and flush support
+- [x] T001 Add `tauri-plugin-single-instance = "2.0.0"` dependency to `src-tauri/Cargo.toml`
+- [x] T002 [P] Create persistence types file `src-tauri/src/persistence_types.rs` with Rust structs from data-model.md
+- [x] T003 [P] Create TypeScript persistence types `src/types/persistence.ts` with interfaces from data-model.md
+- [x] T004 [P] Create TypeScript IPC types `src/types/persistence-ipc.ts` with LoadStateResult, SaveResult, DeleteResult
+- [x] T005 [P] Create debounce utility `src/lib/debounce.ts` with cancel and flush support
 
 ---
 
