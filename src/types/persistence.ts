@@ -117,6 +117,53 @@ export interface BrowserPersistedContent {
   zoom: number;
 }
 
+// Browser defaults - aligned with BROWSER_DEFAULTS in BrowserContent.tsx
+const BROWSER_ZOOM_MIN = 10;
+const BROWSER_ZOOM_MAX = 200;
+const BROWSER_DEFAULT_URL = 'https://example.com';
+const BROWSER_DEFAULT_ZOOM = 50;
+
+/**
+ * Clamp zoom value to valid range (10-200)
+ * @feature 015-browser-persistence
+ */
+export function clampBrowserZoom(zoom: number): number {
+  return Math.max(BROWSER_ZOOM_MIN, Math.min(BROWSER_ZOOM_MAX, zoom));
+}
+
+/**
+ * Validate and normalize BrowserPersistedContent.
+ * Returns content with defaults for missing/invalid values.
+ * @feature 015-browser-persistence
+ */
+export function normalizeBrowserContent(
+  content: Partial<BrowserPersistedContent> | null | undefined
+): BrowserPersistedContent {
+  return {
+    url: content?.url || BROWSER_DEFAULT_URL,
+    zoom: clampBrowserZoom(content?.zoom ?? BROWSER_DEFAULT_ZOOM),
+  };
+}
+
+/**
+ * Default BrowserPersistedContent.
+ * @feature 015-browser-persistence
+ */
+export const DEFAULT_BROWSER_CONTENT: BrowserPersistedContent = {
+  url: BROWSER_DEFAULT_URL,
+  zoom: BROWSER_DEFAULT_ZOOM,
+};
+
+/**
+ * Type guard for BrowserPersistedContent.
+ * @feature 015-browser-persistence
+ */
+export function isBrowserContent(
+  content: NotesContent | DrawContent | BrowserPersistedContent
+): content is BrowserPersistedContent {
+  return 'url' in content && 'zoom' in content;
+}
+
 // ============================================================================
 // Default Values
 // ============================================================================

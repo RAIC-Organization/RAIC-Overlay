@@ -34,14 +34,14 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T005 [P] Add `clampBrowserZoom` helper function in src/types/persistence.ts
-- [ ] T006 [P] Add `normalizeBrowserContent` helper function in src/types/persistence.ts
-- [ ] T007 [P] Add `DEFAULT_BROWSER_CONTENT` constant in src/types/persistence.ts
-- [ ] T008 [P] Add `isBrowserContent` type guard function in src/types/persistence.ts
+- [X] T005 [P] Add `clampBrowserZoom` helper function in src/types/persistence.ts
+- [X] T006 [P] Add `normalizeBrowserContent` helper function in src/types/persistence.ts
+- [X] T007 [P] Add `DEFAULT_BROWSER_CONTENT` constant in src/types/persistence.ts
+- [X] T008 [P] Add `isBrowserContent` type guard function in src/types/persistence.ts
 
 > **Note**: T005-T008 marked [P] because they are independent functions within the same file - can be written in parallel then merged.
 
-- [ ] T009 Add 'browser' case handling in serialization logic in src/lib/serialization.ts
+- [X] T009 Add 'browser' case handling in serialization logic in src/lib/serialization.ts
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
