@@ -129,7 +129,7 @@
 
 ### Implementation for User Story 7
 
-- [ ] T029 [US7] Verify BrowserContent does NOT integrate with PersistenceContext in src/components/windows/BrowserContent.tsx (code review only)
+- [x] T029 [US7] Verify BrowserContent does NOT integrate with PersistenceContext in src/components/windows/BrowserContent.tsx (code review only)
 
 **Checkpoint**: State is correctly ephemeral - no persistence on close
 
