@@ -6,6 +6,7 @@
  *
  * @feature 010-state-persistence-system
  * @feature 015-browser-persistence
+ * @feature 016-file-viewer-window
  */
 
 import type { WindowInstance, WindowContentType } from '@/types/windows';
@@ -18,6 +19,8 @@ import type {
   NotesContent,
   DrawContent,
   BrowserPersistedContent,
+  FileViewerPersistedContent,
+  FileType,
 } from '@/types/persistence';
 import { CURRENT_STATE_VERSION, DEFAULT_WINDOW_FLAGS } from '@/types/persistence';
 
@@ -91,6 +94,8 @@ function contentTypeToWindowType(contentType?: WindowContentType): WindowType | 
       return 'draw';
     case 'browser':
       return 'browser';
+    case 'fileviewer':
+      return 'fileviewer';
     default:
       // 'test' and undefined are not persisted
       return null;
@@ -226,6 +231,30 @@ export function serializeBrowserContent(
   return {
     windowId,
     type: 'browser',
+    content,
+    lastModified: new Date().toISOString(),
+  };
+}
+
+/**
+ * Create a WindowContentFile for file viewer content.
+ * @feature 016-file-viewer-window
+ */
+export function serializeFileViewerContent(
+  windowId: string,
+  filePath: string,
+  fileType: FileType,
+  zoom: number
+): WindowContentFile {
+  const content: FileViewerPersistedContent = {
+    filePath,
+    fileType,
+    zoom,
+  };
+
+  return {
+    windowId,
+    type: 'fileviewer',
     content,
     lastModified: new Date().toISOString(),
   };

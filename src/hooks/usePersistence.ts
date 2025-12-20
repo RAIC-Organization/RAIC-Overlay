@@ -6,6 +6,7 @@
  *
  * @feature 010-state-persistence-system
  * @feature 015-browser-persistence
+ * @feature 016-file-viewer-window
  */
 
 import { useRef, useCallback, useEffect } from 'react';
@@ -16,9 +17,10 @@ import {
   serializeNotesContent,
   serializeDrawContent,
   serializeBrowserContent,
+  serializeFileViewerContent,
 } from '@/lib/serialization';
 import type { WindowInstance } from '@/types/windows';
-import type { WindowContentFile } from '@/types/persistence';
+import type { WindowContentFile, FileType } from '@/types/persistence';
 
 const DEBOUNCE_DELAY_MS = 500;
 
@@ -116,6 +118,12 @@ export interface UsePersistenceReturn {
    * @feature 015-browser-persistence
    */
   saveBrowserContentDebounced: (windowId: string, url: string, zoom: number) => void;
+
+  /**
+   * Save file viewer content with debounce (for file open/zoom changes).
+   * @feature 016-file-viewer-window
+   */
+  saveFileViewerContentDebounced: (windowId: string, filePath: string, fileType: FileType, zoom: number) => void;
 
   /**
    * Delete window content (for window close).
@@ -265,6 +273,17 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
     [getWindowContentDebounce]
   );
 
+  // Save file viewer content with debounce
+  const saveFileViewerContentDebounced = useCallback(
+    (windowId: string, filePath: string, fileType: FileType, zoom: number) => {
+      persistenceMetrics.recordContentChange();
+      const debounceFn = getWindowContentDebounce(windowId);
+      const contentFile = serializeFileViewerContent(windowId, filePath, fileType, zoom);
+      debounceFn(contentFile);
+    },
+    [getWindowContentDebounce]
+  );
+
   // Delete window content
   const deleteWindowContent = useCallback(async (windowId: string) => {
     // Clean up debounce first
@@ -324,6 +343,7 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
     saveNotesContentDebounced,
     saveDrawContentDebounced,
     saveBrowserContentDebounced,
+    saveFileViewerContentDebounced,
     deleteWindowContent,
     flushPendingSaves,
     cancelPendingSaves,

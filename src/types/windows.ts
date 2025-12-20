@@ -143,7 +143,7 @@ export interface IWindowEventEmitter {
  * Window type for persistence.
  * Maps to the component type for serialization.
  */
-export type WindowContentType = 'notes' | 'draw' | 'browser' | 'test';
+export type WindowContentType = 'notes' | 'draw' | 'browser' | 'fileviewer' | 'test';
 
 /**
  * Represents a single window instance in the system.

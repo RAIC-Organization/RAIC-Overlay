@@ -41,14 +41,14 @@ Based on plan.md project structure: Tauri + Next.js desktop application
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Add 'fileviewer' to WindowContentType union in src/types/windows.ts
-- [ ] T005 [P] Add 'fileviewer' to WindowType union in src/types/persistence.ts
-- [ ] T006 [P] Add FileType enum and FileViewerPersistedContent interface in src/types/persistence.ts
-- [ ] T007 [P] Add FILE_VIEWER_DEFAULTS constants in src/types/persistence.ts
-- [ ] T008 [P] Add clampFileViewerZoom helper function in src/types/persistence.ts
-- [ ] T009 [P] Add detectFileType helper function in src/types/persistence.ts
-- [ ] T010 [P] Add normalizeFileViewerContent helper function in src/types/persistence.ts
-- [ ] T011 [P] Add isFileViewerContent type guard in src/types/persistence.ts
+- [X] T004 Add 'fileviewer' to WindowContentType union in src/types/windows.ts
+- [X] T005 [P] Add 'fileviewer' to WindowType union in src/types/persistence.ts
+- [X] T006 [P] Add FileType enum and FileViewerPersistedContent interface in src/types/persistence.ts
+- [X] T007 [P] Add FILE_VIEWER_DEFAULTS constants in src/types/persistence.ts
+- [X] T008 [P] Add clampFileViewerZoom helper function in src/types/persistence.ts
+- [X] T009 [P] Add detectFileType helper function in src/types/persistence.ts
+- [X] T010 [P] Add normalizeFileViewerContent helper function in src/types/persistence.ts
+- [X] T011 [P] Add isFileViewerContent type guard in src/types/persistence.ts
 - [ ] T012 Add FileViewerPersistedContent to WindowContentFile content union in src/types/persistence.ts
 - [ ] T013 Add serializeFileViewerContent function in src/lib/serialization.ts
 - [ ] T014 Add saveFileViewerContentDebounced function in src/hooks/usePersistence.ts
