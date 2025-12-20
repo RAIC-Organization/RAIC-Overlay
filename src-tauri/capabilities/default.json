@@ -19,6 +19,17 @@
     "global-shortcut:allow-is-registered",
     "opener:default",
     "dialog:default",
-    "fs:default"
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [{ "path": "**" }]
+    },
+    {
+      "identifier": "fs:allow-read-file",
+      "allow": [{ "path": "**" }]
+    },
+    {
+      "identifier": "fs:allow-read-text-file",
+      "allow": [{ "path": "**" }]
+    }
   ]
 }
