@@ -90,6 +90,7 @@ function WindowRestorer({
           initialWidth: win.size.width,
           initialHeight: win.size.height,
           initialZIndex: win.zIndex,
+          initialOpacity: win.opacity,
           componentProps: {
             isInteractive: mode === 'windowed',
             initialContent: notesContent,
@@ -109,6 +110,7 @@ function WindowRestorer({
           initialWidth: win.size.width,
           initialHeight: win.size.height,
           initialZIndex: win.zIndex,
+          initialOpacity: win.opacity,
           componentProps: {
             isInteractive: mode === 'windowed',
             initialElements: drawContent?.elements,

@@ -75,10 +75,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Update serializeWindowToStructure to include opacity in `src/lib/serialization.ts`
-- [ ] T023 [US2] Update deserializeStructureToWindow to read opacity (with fallback to 0.6) in `src/lib/serialization.ts`
-- [ ] T024 [US2] Add clampOpacity helper function for validating loaded opacity values in `src/lib/serialization.ts`
-- [ ] T025 [US2] Ensure WindowOpenPayload includes initialOpacity when restoring windows in `src/hooks/useHydration.ts`
+- [x] T022 [US2] Update serializeWindowToStructure to include opacity in `src/lib/serialization.ts`
+- [x] T023 [US2] Update deserializeStructureToWindow to read opacity (with fallback to 0.6) in `src/lib/serialization.ts`
+- [x] T024 [US2] Add clampOpacity helper function for validating loaded opacity values in `src/lib/serialization.ts`
+- [x] T025 [US2] Ensure WindowOpenPayload includes initialOpacity when restoring windows in `app/page.tsx`
 
 **Checkpoint**: User Story 2 complete - opacity persists across sessions
 
