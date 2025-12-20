@@ -29,7 +29,7 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; frame-src https: http:; img-src 'self' data: https: http:"
     }
   },
   "bundle": {

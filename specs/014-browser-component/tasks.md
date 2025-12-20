@@ -19,7 +19,7 @@
 
 **Purpose**: Configure Tauri CSP to allow iframe loading of external websites
 
-- [ ] T001 Update CSP configuration in src-tauri/tauri.conf.json to add `frame-src https: http:` directive per research.md
+- [x] T001 Update CSP configuration in src-tauri/tauri.conf.json to add `frame-src https: http:` directive per research.md
 
 **Checkpoint**: CSP configured - iframes can now load external websites
 
