@@ -71,9 +71,9 @@
 
 **Purpose**: Final verification and cleanup
 
-- [ ] T014 Verify src/assets/icon.png was NOT modified (compare to original)
-- [ ] T015 Verify Next.js AppIcon component still works by running `npm run dev` and checking in-app icon
-- [ ] T016 Run quickstart.md validation steps
+- [X] T014 Verify src/assets/icon.png was NOT modified (compare to original)
+- [X] T015 Verify Next.js AppIcon component still works by running `npm run dev` and checking in-app icon
+- [X] T016 Run quickstart.md validation steps
 
 ---
 
