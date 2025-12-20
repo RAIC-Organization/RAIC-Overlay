@@ -212,11 +212,14 @@ export function FileViewerContent({
           onZoomOut={handleZoomOut}
         />
       )}
-      <div className="flex-1 overflow-hidden relative">
+      {/* Padding allows window resize handles to be grabbed */}
+      <div className="flex-1 overflow-hidden relative p-1">
         {!isInteractive && filePath && (
-          <div className="absolute inset-0 z-10 pointer-events-none" />
+          <div className="absolute inset-1 z-10 pointer-events-none" />
         )}
-        {renderContent()}
+        <div className="w-full h-full overflow-hidden">
+          {renderContent()}
+        </div>
       </div>
     </div>
   );
