@@ -150,11 +150,11 @@
 
 **Purpose**: Final validation and toolbar layout polish
 
-- [ ] T030 Verify toolbar layout order matches spec: [Back][Forward][Refresh][AddressBar][Zoom-][%][Zoom+] in src/components/windows/BrowserToolbar.tsx
-- [ ] T031 Style toolbar to match existing NotesToolbar visual patterns in src/components/windows/BrowserToolbar.tsx
-- [ ] T032 Test 10 concurrent Browser windows for performance
-- [ ] T032.1 Validate performance targets: window open <1s, toolbar toggle <100ms, zoom <100ms per SC-001 to SC-004
-- [ ] T033 Run quickstart.md validation checklist
+- [x] T030 Verify toolbar layout order matches spec: [Back][Forward][Refresh][AddressBar][Zoom-][%][Zoom+] in src/components/windows/BrowserToolbar.tsx
+- [x] T031 Style toolbar to match existing NotesToolbar visual patterns in src/components/windows/BrowserToolbar.tsx
+- [x] T032 Test 10 concurrent Browser windows for performance
+- [x] T032.1 Validate performance targets: window open <1s, toolbar toggle <100ms, zoom <100ms per SC-001 to SC-004
+- [x] T033 Run quickstart.md validation checklist
 
 ---
 
