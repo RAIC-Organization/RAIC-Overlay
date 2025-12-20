@@ -5,7 +5,7 @@ import { BrowserToolbar } from "./BrowserToolbar";
 
 // Browser constants
 export const BROWSER_DEFAULTS = {
-  DEFAULT_URL: "https://www.google.com",
+  DEFAULT_URL: "https://example.com",
   DEFAULT_ZOOM: 50,
   ZOOM_MIN: 10,
   ZOOM_MAX: 200,

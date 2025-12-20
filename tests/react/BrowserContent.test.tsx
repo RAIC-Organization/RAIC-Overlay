@@ -232,7 +232,7 @@ describe("BrowserContent ephemeral state", () => {
 
 describe("BrowserContent constants", () => {
   it("exports BROWSER_DEFAULTS with correct values", () => {
-    expect(BROWSER_DEFAULTS.DEFAULT_URL).toBe("https://www.google.com");
+    expect(BROWSER_DEFAULTS.DEFAULT_URL).toBe("https://example.com");
     expect(BROWSER_DEFAULTS.DEFAULT_ZOOM).toBe(50);
     expect(BROWSER_DEFAULTS.ZOOM_MIN).toBe(10);
     expect(BROWSER_DEFAULTS.ZOOM_MAX).toBe(200);

@@ -4,7 +4,7 @@ import { BrowserToolbar } from "../../src/components/windows/BrowserToolbar";
 
 describe("BrowserToolbar", () => {
   const defaultProps = {
-    url: "https://www.google.com",
+    url: "https://example.com",
     canGoBack: false,
     canGoForward: false,
     zoom: 50,
@@ -29,7 +29,7 @@ describe("BrowserToolbar", () => {
   it("displays current URL in address bar", () => {
     render(<BrowserToolbar {...defaultProps} />);
     const input = screen.getByPlaceholderText("Enter URL...") as HTMLInputElement;
-    expect(input.value).toBe("https://www.google.com");
+    expect(input.value).toBe("https://example.com");
   });
 
   it("displays zoom percentage", () => {
@@ -40,7 +40,7 @@ describe("BrowserToolbar", () => {
 
 describe("BrowserToolbar navigation buttons", () => {
   const defaultProps = {
-    url: "https://www.google.com",
+    url: "https://example.com",
     canGoBack: false,
     canGoForward: false,
     zoom: 50,
@@ -105,7 +105,7 @@ describe("BrowserToolbar navigation buttons", () => {
 
 describe("BrowserToolbar address bar", () => {
   const defaultProps = {
-    url: "https://www.google.com",
+    url: "https://example.com",
     canGoBack: false,
     canGoForward: false,
     zoom: 50,
@@ -149,7 +149,7 @@ describe("BrowserToolbar address bar", () => {
 
 describe("BrowserToolbar zoom controls", () => {
   const defaultProps = {
-    url: "https://www.google.com",
+    url: "https://example.com",
     canGoBack: false,
     canGoForward: false,
     zoom: 50,
@@ -203,7 +203,7 @@ describe("BrowserToolbar zoom controls", () => {
 
 describe("BrowserToolbar loading state", () => {
   const defaultProps = {
-    url: "https://www.google.com",
+    url: "https://example.com",
     canGoBack: false,
     canGoForward: false,
     zoom: 50,
@@ -236,7 +236,7 @@ describe("BrowserToolbar loading state", () => {
 
 describe("BrowserToolbar layout", () => {
   const defaultProps = {
-    url: "https://www.google.com",
+    url: "https://example.com",
     canGoBack: false,
     canGoForward: false,
     zoom: 50,
