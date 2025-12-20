@@ -5,6 +5,7 @@
  * Wraps the persistence service with appropriate debouncing.
  *
  * @feature 010-state-persistence-system
+ * @feature 015-browser-persistence
  */
 
 import { useRef, useCallback, useEffect } from 'react';
@@ -14,6 +15,7 @@ import {
   serializeState,
   serializeNotesContent,
   serializeDrawContent,
+  serializeBrowserContent,
 } from '@/lib/serialization';
 import type { WindowInstance } from '@/types/windows';
 import type { WindowContentFile } from '@/types/persistence';
@@ -108,6 +110,12 @@ export interface UsePersistenceReturn {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   saveDrawContentDebounced: (windowId: string, elements: any[], appState?: any) => void;
+
+  /**
+   * Save browser content with debounce (for URL/zoom changes).
+   * @feature 015-browser-persistence
+   */
+  saveBrowserContentDebounced: (windowId: string, url: string, zoom: number) => void;
 
   /**
    * Delete window content (for window close).
@@ -246,6 +254,17 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
     [getWindowContentDebounce]
   );
 
+  // Save browser content with debounce
+  const saveBrowserContentDebounced = useCallback(
+    (windowId: string, url: string, zoom: number) => {
+      persistenceMetrics.recordContentChange();
+      const debounceFn = getWindowContentDebounce(windowId);
+      const contentFile = serializeBrowserContent(windowId, url, zoom);
+      debounceFn(contentFile);
+    },
+    [getWindowContentDebounce]
+  );
+
   // Delete window content
   const deleteWindowContent = useCallback(async (windowId: string) => {
     // Clean up debounce first
@@ -304,6 +323,7 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
     saveWindowContentImmediate,
     saveNotesContentDebounced,
     saveDrawContentDebounced,
+    saveBrowserContentDebounced,
     deleteWindowContent,
     flushPendingSaves,
     cancelPendingSaves,

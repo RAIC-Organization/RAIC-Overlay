@@ -1,7 +1,18 @@
 "use client";
 
+/**
+ * Browser Content Component
+ *
+ * Renders an embedded browser (iframe) with navigation controls,
+ * zoom functionality, and persistence support.
+ *
+ * @feature 014-browser-component
+ * @feature 015-browser-persistence
+ */
+
 import { useState } from "react";
 import { BrowserToolbar } from "./BrowserToolbar";
+import { clampBrowserZoom } from "@/types/persistence";
 
 // Browser constants
 export const BROWSER_DEFAULTS = {
@@ -12,17 +23,44 @@ export const BROWSER_DEFAULTS = {
   ZOOM_STEP: 10,
 } as const;
 
+/**
+ * Props for BrowserContent component.
+ * Extended with persistence support in 015-browser-persistence.
+ */
 export interface BrowserContentProps {
+  /** Whether the window is in interactive mode */
   isInteractive: boolean;
+  /** Window ID for persistence (optional) */
+  windowId?: string;
+  /** Initial URL from persisted state */
+  initialUrl?: string;
+  /** Initial zoom level from persisted state (10-200) */
+  initialZoom?: number;
+  /** Callback when URL changes (for persistence) */
+  onUrlChange?: (url: string) => void;
+  /** Callback when zoom changes (for persistence) */
+  onZoomChange?: (zoom: number) => void;
 }
 
-export function BrowserContent({ isInteractive }: BrowserContentProps) {
-  const [url, setUrl] = useState(BROWSER_DEFAULTS.DEFAULT_URL);
-  const [historyStack, setHistoryStack] = useState([
-    BROWSER_DEFAULTS.DEFAULT_URL,
-  ]);
+export function BrowserContent({
+  isInteractive,
+  windowId,
+  initialUrl,
+  initialZoom,
+  onUrlChange,
+  onZoomChange,
+}: BrowserContentProps) {
+  // Initialize state with persisted values or defaults
+  // Clamp initialZoom to valid range (handles invalid persisted data)
+  const effectiveInitialUrl = initialUrl || BROWSER_DEFAULTS.DEFAULT_URL;
+  const effectiveInitialZoom = clampBrowserZoom(
+    initialZoom ?? BROWSER_DEFAULTS.DEFAULT_ZOOM
+  );
+
+  const [url, setUrl] = useState<string>(effectiveInitialUrl);
+  const [historyStack, setHistoryStack] = useState<string[]>([effectiveInitialUrl]);
   const [historyIndex, setHistoryIndex] = useState(0);
-  const [zoom, setZoom] = useState(BROWSER_DEFAULTS.DEFAULT_ZOOM);
+  const [zoom, setZoom] = useState<number>(effectiveInitialZoom);
   const [isLoading, setIsLoading] = useState(false);
   const [iframeKey, setIframeKey] = useState(0);
 
@@ -77,16 +115,29 @@ export function BrowserContent({ isInteractive }: BrowserContentProps) {
 
   // Zoom in
   const zoomIn = () => {
-    setZoom((prev) =>
-      Math.min(prev + BROWSER_DEFAULTS.ZOOM_STEP, BROWSER_DEFAULTS.ZOOM_MAX)
+    const newZoom = Math.min(
+      zoom + BROWSER_DEFAULTS.ZOOM_STEP,
+      BROWSER_DEFAULTS.ZOOM_MAX
     );
+    setZoom(newZoom);
+    onZoomChange?.(newZoom);
   };
 
   // Zoom out
   const zoomOut = () => {
-    setZoom((prev) =>
-      Math.max(prev - BROWSER_DEFAULTS.ZOOM_STEP, BROWSER_DEFAULTS.ZOOM_MIN)
+    const newZoom = Math.max(
+      zoom - BROWSER_DEFAULTS.ZOOM_STEP,
+      BROWSER_DEFAULTS.ZOOM_MIN
     );
+    setZoom(newZoom);
+    onZoomChange?.(newZoom);
+  };
+
+  // Handle iframe load - persist URL after page loads
+  const handleIframeLoad = () => {
+    setIsLoading(false);
+    // Persist the URL after the page loads (handles redirects)
+    onUrlChange?.(url);
   };
 
   // Computed navigation states
@@ -129,7 +180,7 @@ export function BrowserContent({ isInteractive }: BrowserContentProps) {
               transform: `scale(${scaleValue})`,
               transformOrigin: "0 0",
             }}
-            onLoad={() => setIsLoading(false)}
+            onLoad={handleIframeLoad}
           />
         </div>
       </div>

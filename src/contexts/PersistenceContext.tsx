@@ -7,6 +7,7 @@
  * Wraps the usePersistence hook and makes it available via context.
  *
  * @feature 010-state-persistence-system
+ * @feature 015-browser-persistence
  */
 
 import {
@@ -20,7 +21,7 @@ import {
 import { usePersistence } from '@/hooks/usePersistence';
 import { useWindows } from '@/contexts/WindowsContext';
 import type { WindowInstance, WindowContentType } from '@/types/windows';
-import { serializeNotesContent, serializeDrawContent } from '@/lib/serialization';
+import { serializeNotesContent, serializeDrawContent, serializeBrowserContent } from '@/lib/serialization';
 
 // ============================================================================
 // Context Value Interface
@@ -43,6 +44,12 @@ export interface PersistenceContextValue {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onDrawContentChange: (windowId: string, elements: any[], appState?: any) => void;
+
+  /**
+   * Trigger debounced save for browser content.
+   * @feature 015-browser-persistence
+   */
+  onBrowserContentChange: (windowId: string, url: string, zoom: number) => void;
 
   /**
    * Handle window close - delete content and save state.
@@ -91,6 +98,7 @@ export function PersistenceProvider({
     saveWindowContentImmediate,
     saveNotesContentDebounced,
     saveDrawContentDebounced,
+    saveBrowserContentDebounced,
     deleteWindowContent,
     flushPendingSaves,
   } = usePersistence({
@@ -124,6 +132,9 @@ export function PersistenceProvider({
           saveWindowContentImmediate(content);
         } else if (win.contentType === 'draw') {
           const content = serializeDrawContent(win.id, []);
+          saveWindowContentImmediate(content);
+        } else if (win.contentType === 'browser') {
+          const content = serializeBrowserContent(win.id, 'https://example.com', 50);
           saveWindowContentImmediate(content);
         }
       }
@@ -166,11 +177,19 @@ export function PersistenceProvider({
     [saveDrawContentDebounced]
   );
 
+  // Debounced save for browser content
+  const onBrowserContentChange = useCallback(
+    (windowId: string, url: string, zoom: number) => {
+      saveBrowserContentDebounced(windowId, url, zoom);
+    },
+    [saveBrowserContentDebounced]
+  );
+
   // Handle window close - delete content and save state
   const onWindowClosed = useCallback(
     async (windowId: string, contentType?: WindowContentType) => {
       // Only delete content for persistable windows
-      if (contentType === 'notes' || contentType === 'draw') {
+      if (contentType === 'notes' || contentType === 'draw' || contentType === 'browser') {
         await deleteWindowContent(windowId);
       }
 
@@ -186,6 +205,7 @@ export function PersistenceProvider({
     onWindowMoved,
     onNotesContentChange,
     onDrawContentChange,
+    onBrowserContentChange,
     onWindowClosed,
     flushPendingSaves,
   };

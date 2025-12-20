@@ -57,16 +57,16 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T010 [P] [US1] Integration test for browser state restoration (save/load cycle) in tests/integration/browser-persistence.test.ts
-- [ ] T011 [P] [US1] Integration test for invalid zoom clamping in tests/integration/browser-persistence.test.ts
+- [X] T010 [P] [US1] Integration test for browser state restoration (save/load cycle) in tests/integration/browser-persistence.test.ts
+- [X] T011 [P] [US1] Integration test for invalid zoom clamping in tests/integration/browser-persistence.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T012 [US1] Extend `BrowserContentProps` interface with persistence props (windowId, initialUrl, initialZoom, onUrlChange, onZoomChange) in src/components/windows/BrowserContent.tsx
-- [ ] T013 [US1] Update useState hooks to use initialUrl and initialZoom props as default values in src/components/windows/BrowserContent.tsx
-- [ ] T014 [US1] Add 'browser' case to window content rendering with initial state props in src/components/windows/WindowsContainer.tsx
-- [ ] T015 [US1] Handle missing content file by using defaults (example.com, 50% zoom) in src/components/windows/WindowsContainer.tsx
-- [ ] T016 [US1] Validate restored zoom is clamped to valid range (10-200%) in src/components/windows/BrowserContent.tsx
+- [X] T012 [US1] Extend `BrowserContentProps` interface with persistence props (windowId, initialUrl, initialZoom, onUrlChange, onZoomChange) in src/components/windows/BrowserContent.tsx
+- [X] T013 [US1] Update useState hooks to use initialUrl and initialZoom props as default values in src/components/windows/BrowserContent.tsx
+- [X] T014 [US1] Add 'browser' case to window content rendering with initial state props in src/components/windows/WindowsContainer.tsx
+- [X] T015 [US1] Handle missing content file by using defaults (example.com, 50% zoom) in src/components/windows/WindowsContainer.tsx
+- [X] T016 [US1] Validate restored zoom is clamped to valid range (10-200%) in src/components/windows/BrowserContent.tsx
 
 **Checkpoint**: User Story 1 complete - Browser windows restore correctly on app launch
 
