@@ -59,9 +59,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T011 [US2] Visual test: Verify icon clarity at 100% DPI (standard display)
-- [ ] T012 [US2] Visual test: Verify icon clarity at 200% DPI (high-DPI display)
-- [ ] T013 [US2] Verify 128x128@2x.png was generated for high-DPI scaling in src-tauri/icons/128x128@2x.png
+- [X] T011 [US2] Visual test: Verify icon clarity at 100% DPI (standard display)
+- [X] T012 [US2] Visual test: Verify icon clarity at 200% DPI (high-DPI display)
+- [X] T013 [US2] Verify 128x128@2x.png was generated for high-DPI scaling in src-tauri/icons/128x128@2x.png
 
 **Checkpoint**: At this point, User Story 2 is complete - icons are crisp at all resolutions
 
