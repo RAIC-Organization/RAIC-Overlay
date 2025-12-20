@@ -50,14 +50,14 @@
 
 ### Implementation for User Story 1
 
-- [ ] T005 [US1] Create ImageRenderer component scaffold with props interface in `src/components/windows/renderers/ImageRenderer.tsx`
-- [ ] T006 [US1] Implement image loading via Tauri fs plugin with base64 data URL conversion in `src/components/windows/renderers/ImageRenderer.tsx`
-- [ ] T007 [US1] Add MIME type mapping for all supported image extensions in `src/components/windows/renderers/ImageRenderer.tsx`
-- [ ] T008 [US1] Implement loading state with Loader2 spinner in `src/components/windows/renderers/ImageRenderer.tsx`
-- [ ] T009 [US1] Implement error state for failed image loads in `src/components/windows/renderers/ImageRenderer.tsx`
-- [ ] T010 [US1] Add TransformWrapper with centerOnInit and fit-to-container display in `src/components/windows/renderers/ImageRenderer.tsx`
-- [ ] T011 [US1] Add ImageRenderer case to renderContent switch statement in `src/components/windows/FileViewerContent.tsx`
-- [ ] T012 [US1] Add ImageRenderer import to FileViewerContent in `src/components/windows/FileViewerContent.tsx`
+- [x] T005 [US1] Create ImageRenderer component scaffold with props interface in `src/components/windows/renderers/ImageRenderer.tsx`
+- [x] T006 [US1] Implement image loading via Tauri fs plugin with base64 data URL conversion in `src/components/windows/renderers/ImageRenderer.tsx`
+- [x] T007 [US1] Add MIME type mapping for all supported image extensions in `src/components/windows/renderers/ImageRenderer.tsx`
+- [x] T008 [US1] Implement loading state with Loader2 spinner in `src/components/windows/renderers/ImageRenderer.tsx`
+- [x] T009 [US1] Implement error state for failed image loads in `src/components/windows/renderers/ImageRenderer.tsx`
+- [x] T010 [US1] Add TransformWrapper with centerOnInit and fit-to-container display in `src/components/windows/renderers/ImageRenderer.tsx`
+- [x] T011 [US1] Add ImageRenderer case to renderContent switch statement in `src/components/windows/FileViewerContent.tsx`
+- [x] T012 [US1] Add ImageRenderer import to FileViewerContent in `src/components/windows/FileViewerContent.tsx`
 
 **Checkpoint**: User Story 1 complete - Users can open and view image files with fit-to-container display
 
