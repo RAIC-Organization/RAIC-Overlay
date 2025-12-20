@@ -87,8 +87,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T016 [US3] Verify TransformWrapper panning is enabled (default behavior) in `src/components/windows/renderers/ImageRenderer.tsx`
-- [ ] T017 [US3] Configure panning bounds to prevent moving image out of view in `src/components/windows/renderers/ImageRenderer.tsx`
+- [x] T016 [US3] Verify TransformWrapper panning is enabled (default behavior) in `src/components/windows/renderers/ImageRenderer.tsx`
+- [x] T017 [US3] Configure panning bounds to prevent moving image out of view in `src/components/windows/renderers/ImageRenderer.tsx`
 
 **Checkpoint**: User Story 3 complete - Pan functionality works on zoomed images
 
