@@ -104,11 +104,11 @@
 
 **Purpose**: Final validation and edge case handling
 
-- [ ] T029 [P] Add aria-label to OpacitySlider for accessibility in `src/components/windows/OpacitySlider.tsx`
-- [ ] T030 [P] Ensure opacity slider has proper focus states and keyboard support (inherited from Radix)
+- [x] T029 [P] Add aria-label to OpacitySlider for accessibility in `src/components/windows/OpacitySlider.tsx`
+- [x] T030 [P] Ensure opacity slider has proper focus states and keyboard support (inherited from Radix)
 - [ ] T031 Run full manual test: create window, adjust opacity, toggle modes, restart app, verify all acceptance scenarios
-- [ ] T032 Verify TypeScript compilation passes with no errors
-- [ ] T033 Test edge case: corrupted opacity value in state.json clamps correctly
+- [x] T032 Verify TypeScript compilation passes with no errors
+- [x] T033 Test edge case: corrupted opacity value in state.json clamps correctly
 
 ---
 
