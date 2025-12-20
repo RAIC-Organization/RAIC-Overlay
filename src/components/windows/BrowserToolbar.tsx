@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, KeyboardEvent } from "react";
+import { useState, useEffect, useRef, KeyboardEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -41,11 +41,14 @@ export function BrowserToolbar({
   onZoomOut,
 }: BrowserToolbarProps) {
   const [inputValue, setInputValue] = useState(url);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  // Sync input when url prop changes from navigation
-  if (inputValue !== url && !document.activeElement?.matches("input")) {
-    setInputValue(url);
-  }
+  // Sync input when url prop changes from navigation (only when not focused)
+  useEffect(() => {
+    if (document.activeElement !== inputRef.current) {
+      setInputValue(url);
+    }
+  }, [url]);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -89,6 +92,7 @@ export function BrowserToolbar({
       {/* Address bar */}
       <div className="flex-1 relative">
         <Input
+          ref={inputRef}
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}

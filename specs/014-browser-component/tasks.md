@@ -139,8 +139,8 @@
 
 **Purpose**: Satisfy Constitution II requirement for integration/component tests
 
-- [ ] T029.1 [P] Create integration test for BrowserContent rendering and initial state in tests/integration/BrowserContent.test.tsx
-- [ ] T029.2 [P] Create integration test for BrowserToolbar controls and callbacks in tests/integration/BrowserToolbar.test.tsx
+- [x] T029.1 [P] Create integration test for BrowserContent rendering and initial state in tests/react/BrowserContent.test.tsx
+- [x] T029.2 [P] Create integration test for BrowserToolbar controls and callbacks in tests/react/BrowserToolbar.test.tsx
 
 **Checkpoint**: Component tests exist and pass
 
