@@ -65,20 +65,20 @@
 
 ### Implementation for User Story 2 (Address Bar)
 
-- [ ] T010 [US2] Implement address bar input with current URL display in src/components/windows/BrowserToolbar.tsx
-- [ ] T011 [US2] Implement URL submission handler (onKeyDown Enter) in src/components/windows/BrowserToolbar.tsx
-- [ ] T012 [US2] Implement normalizeUrl function to prepend https:// when missing in src/components/windows/BrowserContent.tsx
-- [ ] T013 [US2] Implement navigateTo function (update URL, truncate forward history, add to stack) in src/components/windows/BrowserContent.tsx
-- [ ] T014 [US2] Implement loading state with isLoading flag and iframe onLoad handler in src/components/windows/BrowserContent.tsx
-- [ ] T015 [US2] Add loading indicator (Loader2 spinner icon) to address bar in src/components/windows/BrowserToolbar.tsx
+- [x] T010 [US2] Implement address bar input with current URL display in src/components/windows/BrowserToolbar.tsx
+- [x] T011 [US2] Implement URL submission handler (onKeyDown Enter) in src/components/windows/BrowserToolbar.tsx
+- [x] T012 [US2] Implement normalizeUrl function to prepend https:// when missing in src/components/windows/BrowserContent.tsx
+- [x] T013 [US2] Implement navigateTo function (update URL, truncate forward history, add to stack) in src/components/windows/BrowserContent.tsx
+- [x] T014 [US2] Implement loading state with isLoading flag and iframe onLoad handler in src/components/windows/BrowserContent.tsx
+- [x] T015 [US2] Add loading indicator (Loader2 spinner icon) to address bar in src/components/windows/BrowserToolbar.tsx
 
 ### Implementation for User Story 3 (History Navigation)
 
-- [ ] T016 [US3] Add back and forward button icons (ArrowLeft, ArrowRight from lucide-react) in src/components/windows/BrowserToolbar.tsx
-- [ ] T017 [US3] Implement goBack function (decrement historyIndex, load URL from stack) in src/components/windows/BrowserContent.tsx
-- [ ] T018 [US3] Implement goForward function (increment historyIndex, load URL from stack) in src/components/windows/BrowserContent.tsx
-- [ ] T019 [US3] Implement canGoBack and canGoForward computed values in src/components/windows/BrowserContent.tsx
-- [ ] T020 [US3] Pass canGoBack/canGoForward props and disable buttons when history unavailable in src/components/windows/BrowserToolbar.tsx
+- [x] T016 [US3] Add back and forward button icons (ArrowLeft, ArrowRight from lucide-react) in src/components/windows/BrowserToolbar.tsx
+- [x] T017 [US3] Implement goBack function (decrement historyIndex, load URL from stack) in src/components/windows/BrowserContent.tsx
+- [x] T018 [US3] Implement goForward function (increment historyIndex, load URL from stack) in src/components/windows/BrowserContent.tsx
+- [x] T019 [US3] Implement canGoBack and canGoForward computed values in src/components/windows/BrowserContent.tsx
+- [x] T020 [US3] Pass canGoBack/canGoForward props and disable buttons when history unavailable in src/components/windows/BrowserToolbar.tsx
 
 **Checkpoint**: Address bar and history navigation fully functional
 
