@@ -68,14 +68,14 @@ Based on plan.md project structure: Tauri + Next.js desktop application
 
 ### Tests for User Story 1
 
-- [ ] T018a [P] [US1] Create integration test for PDF file opening and rendering in tests/integration/file-viewer-pdf.test.ts
+- [X] T018a [P] [US1] Create integration test for PDF file opening and rendering in tests/integration/file-viewer-pdf.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T018 [P] [US1] Create ErrorRenderer component in src/components/windows/renderers/ErrorRenderer.tsx
-- [ ] T019 [P] [US1] Create PlaceholderRenderer component in src/components/windows/renderers/PlaceholderRenderer.tsx
-- [ ] T020 [US1] Create PDFRenderer component with PDF.js canvas rendering in src/components/windows/renderers/PDFRenderer.tsx
-- [ ] T021 [US1] Implement continuous scroll multi-page rendering in PDFRenderer
+- [X] T018 [P] [US1] Create ErrorRenderer component in src/components/windows/renderers/ErrorRenderer.tsx
+- [X] T019 [P] [US1] Create PlaceholderRenderer component in src/components/windows/renderers/PlaceholderRenderer.tsx
+- [X] T020 [US1] Create PDFRenderer component with PDF.js canvas rendering in src/components/windows/renderers/PDFRenderer.tsx
+- [X] T021 [US1] Implement continuous scroll multi-page rendering in PDFRenderer
 - [ ] T022 [US1] Add zoom scaling via CSS transform to PDFRenderer
 - [ ] T023 [US1] Create FileViewerToolbar component in src/components/windows/FileViewerToolbar.tsx
 - [ ] T024 [US1] Implement Open File button with Tauri file dialog in FileViewerToolbar

@@ -13,6 +13,7 @@ import { useState, useCallback } from "react";
 import { open } from "@tauri-apps/plugin-dialog";
 import { FileViewerToolbar } from "./FileViewerToolbar";
 import { PDFRenderer } from "./renderers/PDFRenderer";
+import { MarkdownRenderer } from "./renderers/MarkdownRenderer";
 import {
   clampFileViewerZoom,
   detectFileType,
@@ -139,12 +140,7 @@ export function FileViewerContent({
       case "pdf":
         return <PDFRenderer filePath={filePath} zoom={zoom} />;
       case "markdown":
-        // Markdown renderer will be added in Phase 4
-        return (
-          <div className="flex items-center justify-center h-full text-muted-foreground">
-            <p className="text-sm">Markdown support coming soon</p>
-          </div>
-        );
+        return <MarkdownRenderer filePath={filePath} zoom={zoom} />;
       case "unknown":
       default:
         return (
