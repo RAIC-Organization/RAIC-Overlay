@@ -71,9 +71,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T013 [US2] Configure minScale (0.1) and maxScale (2.0) on TransformWrapper in `src/components/windows/renderers/ImageRenderer.tsx`
-- [ ] T014 [US2] Add onTransformed callback to sync zoom state with parent in `src/components/windows/renderers/ImageRenderer.tsx`
-- [ ] T015 [US2] Implement zoom percentage conversion (scale * 100) for toolbar display in `src/components/windows/renderers/ImageRenderer.tsx`
+- [x] T013 [US2] Configure minScale (0.1) and maxScale (2.0) on TransformWrapper in `src/components/windows/renderers/ImageRenderer.tsx`
+- [x] T014 [US2] Add onTransformed callback to sync zoom state with parent in `src/components/windows/renderers/ImageRenderer.tsx`
+- [x] T015 [US2] Implement zoom percentage conversion (scale * 100) for toolbar display in `src/components/windows/renderers/ImageRenderer.tsx`
 
 **Checkpoint**: User Story 2 complete - Mouse wheel zoom works with toolbar sync
 
