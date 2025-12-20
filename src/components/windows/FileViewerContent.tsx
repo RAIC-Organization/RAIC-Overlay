@@ -9,8 +9,9 @@
  * @feature 016-file-viewer-window
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { open } from "@tauri-apps/plugin-dialog";
+import { exists } from "@tauri-apps/plugin-fs";
 import { FileViewerToolbar } from "./FileViewerToolbar";
 import { PDFRenderer } from "./renderers/PDFRenderer";
 import { MarkdownRenderer } from "./renderers/MarkdownRenderer";
@@ -21,7 +22,7 @@ import {
   type FileType,
 } from "@/types/persistence";
 import { usePersistenceContext } from "@/contexts/PersistenceContext";
-import { FileQuestion } from "lucide-react";
+import { FileQuestion, FileX2 } from "lucide-react";
 
 /**
  * Props for FileViewerContent component.
@@ -58,6 +59,31 @@ export function FileViewerContent({
   const [zoom, setZoom] = useState<number>(
     clampFileViewerZoom(initialZoom ?? FILE_VIEWER_DEFAULTS.DEFAULT_ZOOM)
   );
+  const [fileError, setFileError] = useState<string | null>(null);
+
+  // Check if persisted file exists on mount
+  useEffect(() => {
+    if (!initialFilePath) return;
+
+    const checkFileExists = async () => {
+      try {
+        const fileExists = await exists(initialFilePath);
+        if (!fileExists) {
+          setFileError(`File not found: ${initialFilePath}`);
+          // Clear the file path since file doesn't exist
+          setFilePath("");
+          setFileType("unknown");
+        }
+      } catch (err) {
+        console.error("Failed to check file existence:", err);
+        setFileError(`Cannot access file: ${initialFilePath}`);
+        setFilePath("");
+        setFileType("unknown");
+      }
+    };
+
+    checkFileExists();
+  }, [initialFilePath]);
 
   // Unified content change handler
   const handleContentChange = useCallback(
@@ -96,6 +122,7 @@ export function FileViewerContent({
         const detectedType = detectFileType(selected);
         setFilePath(selected);
         setFileType(detectedType);
+        setFileError(null); // Clear any previous error
         handleContentChange(selected, detectedType, zoom);
       }
     } catch (err) {
@@ -124,6 +151,24 @@ export function FileViewerContent({
 
   // Render appropriate content based on file type
   const renderContent = () => {
+    // Show error state if file was missing on restore
+    if (fileError) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full text-destructive gap-4">
+          <FileX2 className="h-16 w-16 opacity-70" />
+          <p className="text-sm font-medium">File Not Found</p>
+          <p className="text-xs text-muted-foreground text-center px-4 max-w-md">
+            {fileError}
+          </p>
+          {isInteractive && (
+            <p className="text-xs text-muted-foreground">
+              Click the folder icon to open a different file
+            </p>
+          )}
+        </div>
+      );
+    }
+
     if (!filePath) {
       return (
         <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-4">

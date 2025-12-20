@@ -120,17 +120,17 @@ Based on plan.md project structure: Tauri + Next.js desktop application
 
 ### Tests for User Story 3
 
-- [ ] T036a [P] [US3] Create integration test for persistence save/restore in tests/integration/file-viewer-persistence.test.ts
+- [X] T036a [P] [US3] Create integration test for persistence save/restore in tests/integration/file-viewer-persistence.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T036 [US3] Implement file existence check on component mount in FileViewerContent
-- [ ] T037 [US3] Display "File not found" error via ErrorRenderer when persisted file missing
-- [ ] T038 [US3] Wire persistence callback to onContentChange in FileViewerContent
-- [ ] T039 [US3] Persist state on file open in FileViewerContent
-- [ ] T040 [US3] Persist state on zoom change in FileViewerContent
-- [ ] T041 [US3] Handle 'fileviewer' in window restoration logic (pass initial props) in app initialization
-- [ ] T042 [US3] Add file viewer content cleanup on window close in PersistenceContext
+- [X] T036 [US3] Implement file existence check on component mount in FileViewerContent
+- [X] T037 [US3] Display "File not found" error via ErrorRenderer when persisted file missing
+- [X] T038 [US3] Wire persistence callback to onContentChange in FileViewerContent
+- [X] T039 [US3] Persist state on file open in FileViewerContent
+- [X] T040 [US3] Persist state on zoom change in FileViewerContent
+- [X] T041 [US3] Handle 'fileviewer' in window restoration logic (pass initial props) in app initialization
+- [X] T042 [US3] Add file viewer content cleanup on window close in PersistenceContext
 
 **Checkpoint**: At this point, File Viewer state persists across restarts and handles missing files gracefully
 
