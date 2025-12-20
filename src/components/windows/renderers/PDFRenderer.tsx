@@ -10,14 +10,9 @@
  */
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import * as pdfjs from "pdfjs-dist";
+import type { PDFDocumentProxy, RenderTask } from "pdfjs-dist";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
-
-// Configure PDF.js worker
-if (typeof window !== "undefined") {
-  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-}
 
 export interface PDFRendererProps {
   /** File path to the PDF file */
@@ -29,14 +24,14 @@ export interface PDFRendererProps {
 export function PDFRenderer({ filePath, zoom }: PDFRendererProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [pdfDoc, setPdfDoc] = useState<pdfjs.PDFDocumentProxy | null>(null);
+  const [pdfDoc, setPdfDoc] = useState<PDFDocumentProxy | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const renderTaskRef = useRef<pdfjs.RenderTask | null>(null);
+  const renderTaskRef = useRef<RenderTask | null>(null);
 
-  // Load PDF document
+  // Load PDF document (dynamically import pdfjs-dist to avoid SSR issues)
   useEffect(() => {
     if (!filePath) return;
 
@@ -46,6 +41,12 @@ export function PDFRenderer({ filePath, zoom }: PDFRendererProps) {
 
     const loadPdf = async () => {
       try {
+        // Dynamically import pdfjs-dist only on client side
+        const pdfjs = await import("pdfjs-dist");
+
+        // Configure worker path
+        pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+
         // Convert file path to a URL that can be loaded
         // For Tauri, we need to use the tauri asset protocol
         const url = filePath.startsWith("file://")
