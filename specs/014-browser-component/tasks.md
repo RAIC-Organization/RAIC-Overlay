@@ -31,9 +31,9 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T002 [P] Create BrowserContent component skeleton with props interface in src/components/windows/BrowserContent.tsx
-- [ ] T003 [P] Create BrowserToolbar component skeleton with props interface in src/components/windows/BrowserToolbar.tsx
-- [ ] T004 Define BROWSER_DEFAULTS constants (DEFAULT_URL, DEFAULT_ZOOM, ZOOM_MIN, ZOOM_MAX, ZOOM_STEP) in src/components/windows/BrowserContent.tsx
+- [x] T002 [P] Create BrowserContent component skeleton with props interface in src/components/windows/BrowserContent.tsx
+- [x] T003 [P] Create BrowserToolbar component skeleton with props interface in src/components/windows/BrowserToolbar.tsx
+- [x] T004 Define BROWSER_DEFAULTS constants (DEFAULT_URL, DEFAULT_ZOOM, ZOOM_MIN, ZOOM_MAX, ZOOM_STEP) in src/components/windows/BrowserContent.tsx
 
 **Checkpoint**: Foundation ready - component files exist with correct interfaces
 
