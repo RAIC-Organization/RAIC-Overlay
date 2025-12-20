@@ -114,9 +114,9 @@ export function BrowserContent({ isInteractive }: BrowserContentProps) {
           onZoomOut={zoomOut}
         />
       )}
-      {/* Padding allows window resize handles (8px edges) to be grabbed */}
-      <div className="flex-1 overflow-hidden relative p-2">
-        {!isInteractive && <div className="absolute inset-2 z-10" />}
+      {/* Padding allows window resize handles to be grabbed */}
+      <div className="flex-1 overflow-hidden relative p-1">
+        {!isInteractive && <div className="absolute inset-1 z-10" />}
         <div className="w-full h-full overflow-hidden">
           <iframe
             key={iframeKey}

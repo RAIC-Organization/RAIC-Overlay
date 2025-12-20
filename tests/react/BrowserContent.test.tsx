@@ -208,13 +208,13 @@ describe("BrowserContent non-interactive mode", () => {
   it("renders blocking overlay when not interactive", () => {
     const { container } = render(<BrowserContent isInteractive={false} />);
     // Look for the overlay div that blocks iframe interaction
-    const overlay = container.querySelector(".absolute.inset-2.z-10");
+    const overlay = container.querySelector(".absolute.inset-1.z-10");
     expect(overlay).toBeInTheDocument();
   });
 
   it("does not render blocking overlay when interactive", () => {
     const { container } = render(<BrowserContent isInteractive={true} />);
-    const overlay = container.querySelector(".absolute.inset-2.z-10");
+    const overlay = container.querySelector(".absolute.inset-1.z-10");
     expect(overlay).not.toBeInTheDocument();
   });
 });
