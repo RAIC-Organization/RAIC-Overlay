@@ -10,9 +10,10 @@
  * @feature 015-browser-persistence
  */
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { BrowserToolbar } from "./BrowserToolbar";
 import { clampBrowserZoom } from "@/types/persistence";
+import { usePersistenceContext } from "@/contexts/PersistenceContext";
 
 // Browser constants
 export const BROWSER_DEFAULTS = {
@@ -36,10 +37,8 @@ export interface BrowserContentProps {
   initialUrl?: string;
   /** Initial zoom level from persisted state (10-200) */
   initialZoom?: number;
-  /** Callback when URL changes (for persistence) */
-  onUrlChange?: (url: string) => void;
-  /** Callback when zoom changes (for persistence) */
-  onZoomChange?: (zoom: number) => void;
+  /** Callback when browser content changes (for persistence) - passes both url and zoom */
+  onContentChange?: (url: string, zoom: number) => void;
 }
 
 export function BrowserContent({
@@ -47,9 +46,11 @@ export function BrowserContent({
   windowId,
   initialUrl,
   initialZoom,
-  onUrlChange,
-  onZoomChange,
+  onContentChange,
 }: BrowserContentProps) {
+  // Get persistence context for fallback when no callback is provided
+  const persistence = usePersistenceContext();
+
   // Initialize state with persisted values or defaults
   // Clamp initialZoom to valid range (handles invalid persisted data)
   const effectiveInitialUrl = initialUrl || BROWSER_DEFAULTS.DEFAULT_URL;
@@ -63,6 +64,15 @@ export function BrowserContent({
   const [zoom, setZoom] = useState<number>(effectiveInitialZoom);
   const [isLoading, setIsLoading] = useState(false);
   const [iframeKey, setIframeKey] = useState(0);
+
+  // Unified content change handler - uses prop callback or falls back to persistence context
+  const handleContentChange = useCallback((newUrl: string, newZoom: number) => {
+    if (onContentChange) {
+      onContentChange(newUrl, newZoom);
+    } else if (windowId && persistence?.onBrowserContentChange) {
+      persistence.onBrowserContentChange(windowId, newUrl, newZoom);
+    }
+  }, [windowId, onContentChange, persistence]);
 
   // Normalize URL by adding https:// if no protocol
   const normalizeUrl = (input: string): string => {
@@ -120,7 +130,7 @@ export function BrowserContent({
       BROWSER_DEFAULTS.ZOOM_MAX
     );
     setZoom(newZoom);
-    onZoomChange?.(newZoom);
+    handleContentChange(url, newZoom);
   };
 
   // Zoom out
@@ -130,14 +140,14 @@ export function BrowserContent({
       BROWSER_DEFAULTS.ZOOM_MIN
     );
     setZoom(newZoom);
-    onZoomChange?.(newZoom);
+    handleContentChange(url, newZoom);
   };
 
   // Handle iframe load - persist URL after page loads
   const handleIframeLoad = () => {
     setIsLoading(false);
     // Persist the URL after the page loads (handles redirects)
-    onUrlChange?.(url);
+    handleContentChange(url, zoom);
   };
 
   // Computed navigation states

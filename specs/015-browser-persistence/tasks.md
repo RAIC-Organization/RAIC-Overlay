@@ -80,11 +80,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T017 [US2] Add onUrlChange callback invocation after iframe onLoad event in src/components/windows/BrowserContent.tsx
-- [ ] T018 [US2] Add onZoomChange callback invocation in zoomIn function in src/components/windows/BrowserContent.tsx
-- [ ] T019 [US2] Add onZoomChange callback invocation in zoomOut function in src/components/windows/BrowserContent.tsx
-- [ ] T020 [US2] Wire onUrlChange and onZoomChange callbacks to handleContentChange in src/components/windows/WindowsContainer.tsx
-- [ ] T021 [US2] Ensure handleContentChange triggers persistence with 500ms debounce for browser content in src/components/windows/WindowsContainer.tsx
+- [X] T017 [US2] Add onUrlChange callback invocation after iframe onLoad event in src/components/windows/BrowserContent.tsx
+- [X] T018 [US2] Add onZoomChange callback invocation in zoomIn function in src/components/windows/BrowserContent.tsx
+- [X] T019 [US2] Add onZoomChange callback invocation in zoomOut function in src/components/windows/BrowserContent.tsx
+- [X] T020 [US2] Wire onUrlChange and onZoomChange callbacks to handleContentChange in src/components/windows/WindowsContainer.tsx
+- [X] T021 [US2] Ensure handleContentChange triggers persistence with 500ms debounce for browser content in src/components/windows/WindowsContainer.tsx
 
 **Checkpoint**: User Story 2 complete - URL and zoom changes auto-persist
 

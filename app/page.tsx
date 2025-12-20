@@ -141,8 +141,7 @@ function WindowRestorer({
             windowId,
             initialUrl: normalizedContent.url,
             initialZoom: normalizedContent.zoom,
-            onUrlChange: (url: string) => persistence?.onBrowserContentChange?.(windowId, url, normalizedContent.zoom),
-            onZoomChange: (zoom: number) => persistence?.onBrowserContentChange?.(windowId, normalizedContent.url, zoom),
+            onContentChange: (url: string, zoom: number) => persistence?.onBrowserContentChange?.(windowId, url, zoom),
           },
         });
       }
