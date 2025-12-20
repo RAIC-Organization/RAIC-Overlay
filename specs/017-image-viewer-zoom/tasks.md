@@ -102,7 +102,7 @@
 
 ### Implementation for User Story 4
 
-- [ ] T018 [US4] Configure doubleClick mode to 'reset' on TransformWrapper in `src/components/windows/renderers/ImageRenderer.tsx`
+- [x] T018 [US4] Configure doubleClick mode to 'reset' on TransformWrapper in `src/components/windows/renderers/ImageRenderer.tsx`
 
 **Checkpoint**: User Story 4 complete - Double-click reset works
 
