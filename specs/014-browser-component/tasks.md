@@ -92,15 +92,15 @@
 
 ### Implementation for User Story 4 (Refresh)
 
-- [ ] T021 [US4] Add refresh button icon (RotateCw from lucide-react) in src/components/windows/BrowserToolbar.tsx
-- [ ] T022 [US4] Implement refresh function (set isLoading true, force iframe reload via key prop) in src/components/windows/BrowserContent.tsx
+- [x] T021 [US4] Add refresh button icon (RotateCw from lucide-react) in src/components/windows/BrowserToolbar.tsx
+- [x] T022 [US4] Implement refresh function (set isLoading true, force iframe reload via key prop) in src/components/windows/BrowserContent.tsx
 
 ### Implementation for User Story 5 (Zoom Controls)
 
-- [ ] T023 [US5] Add zoom controls layout (-button, percentage label, +button) using Minus and Plus icons in src/components/windows/BrowserToolbar.tsx
-- [ ] T024 [US5] Implement zoomIn function (increment by ZOOM_STEP, cap at ZOOM_MAX) in src/components/windows/BrowserContent.tsx
-- [ ] T025 [US5] Implement zoomOut function (decrement by ZOOM_STEP, cap at ZOOM_MIN) in src/components/windows/BrowserContent.tsx
-- [ ] T026 [US5] Connect zoom state to iframe CSS transform scale with dimension compensation in src/components/windows/BrowserContent.tsx
+- [x] T023 [US5] Add zoom controls layout (-button, percentage label, +button) using Minus and Plus icons in src/components/windows/BrowserToolbar.tsx
+- [x] T024 [US5] Implement zoomIn function (increment by ZOOM_STEP, cap at ZOOM_MAX) in src/components/windows/BrowserContent.tsx
+- [x] T025 [US5] Implement zoomOut function (decrement by ZOOM_STEP, cap at ZOOM_MIN) in src/components/windows/BrowserContent.tsx
+- [x] T026 [US5] Connect zoom state to iframe CSS transform scale with dimension compensation in src/components/windows/BrowserContent.tsx
 
 **Checkpoint**: Refresh and zoom controls fully functional
 
