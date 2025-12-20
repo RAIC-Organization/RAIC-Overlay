@@ -34,9 +34,9 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T002 Extend FileType union to include 'image' in `src/types/persistence.ts`
-- [ ] T003 Add image extension cases to detectFileType function in `src/types/persistence.ts`
-- [ ] T004 Update file dialog filters to include image extensions in `src/components/windows/FileViewerContent.tsx`
+- [x] T002 Extend FileType union to include 'image' in `src/types/persistence.ts`
+- [x] T003 Add image extension cases to detectFileType function in `src/types/persistence.ts`
+- [x] T004 Update file dialog filters to include image extensions in `src/components/windows/FileViewerContent.tsx`
 
 **Checkpoint**: Foundation ready - ImageRenderer can now be implemented
 

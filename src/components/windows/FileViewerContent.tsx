@@ -105,7 +105,7 @@ export function FileViewerContent({
         filters: [
           {
             name: "Supported Files",
-            extensions: ["pdf", "md", "markdown"],
+            extensions: ["pdf", "md", "markdown", "png", "jpg", "jpeg", "gif", "webp", "bmp", "svg", "ico"],
           },
           {
             name: "PDF Documents",
@@ -114,6 +114,10 @@ export function FileViewerContent({
           {
             name: "Markdown Files",
             extensions: ["md", "markdown"],
+          },
+          {
+            name: "Image Files",
+            extensions: ["png", "jpg", "jpeg", "gif", "webp", "bmp", "svg", "ico"],
           },
         ],
       });

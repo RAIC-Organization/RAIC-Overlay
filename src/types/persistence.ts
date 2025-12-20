@@ -173,7 +173,7 @@ export function isBrowserContent(
  * File type enum for file viewer.
  * @feature 016-file-viewer-window
  */
-export type FileType = 'pdf' | 'markdown' | 'unknown';
+export type FileType = 'pdf' | 'markdown' | 'image' | 'unknown';
 
 /**
  * Persisted content for File Viewer windows.
@@ -213,6 +213,7 @@ export function clampFileViewerZoom(zoom: number): number {
 /**
  * Detect file type from file path extension.
  * @feature 016-file-viewer-window
+ * @feature 017-image-viewer-zoom
  */
 export function detectFileType(filePath: string): FileType {
   const ext = filePath.split('.').pop()?.toLowerCase();
@@ -222,6 +223,15 @@ export function detectFileType(filePath: string): FileType {
     case 'md':
     case 'markdown':
       return 'markdown';
+    case 'png':
+    case 'jpg':
+    case 'jpeg':
+    case 'gif':
+    case 'webp':
+    case 'bmp':
+    case 'svg':
+    case 'ico':
+      return 'image';
     default:
       return 'unknown';
   }
