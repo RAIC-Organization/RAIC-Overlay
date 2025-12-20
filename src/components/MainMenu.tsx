@@ -9,6 +9,7 @@ import { windowEvents } from "@/lib/windowEvents";
 import { TestWindowContent } from "@/components/windows/TestWindowContent";
 import { NotesContent } from "@/components/windows/NotesContent";
 import { DrawContent } from "@/components/windows/DrawContent";
+import { BrowserContent } from "@/components/windows/BrowserContent";
 
 interface MainMenuProps {
   visible?: boolean;
@@ -46,6 +47,15 @@ export function MainMenu({
     });
   };
 
+  const handleOpenBrowser = () => {
+    windowEvents.emit("window:open", {
+      component: BrowserContent,
+      title: "Browser",
+      contentType: "browser",
+      componentProps: { isInteractive: mode === "windowed" },
+    });
+  };
+
   const handleTestWindows = () => {
     windowEvents.emit("window:open", {
       component: TestWindowContent,
@@ -72,6 +82,9 @@ export function MainMenu({
             </Button>
             <Button variant="secondary" onClick={handleOpenDraw}>
               Draw
+            </Button>
+            <Button variant="secondary" onClick={handleOpenBrowser}>
+              Browser
             </Button>
             <Button variant="secondary" onClick={handleTestWindows}>
               Test Windows

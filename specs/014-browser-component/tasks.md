@@ -47,11 +47,11 @@
 
 ### Implementation for User Story 1
 
-- [ ] T005 [US1] Add BrowserContent import and handleOpenBrowser handler function in src/components/MainMenu.tsx
-- [ ] T006 [US1] Add Browser button to ButtonGroup after Draw button in src/components/MainMenu.tsx (order: Notes, Draw, Browser, Test Windows)
-- [ ] T007 [US1] Implement iframe container with CSS transform zoom in src/components/windows/BrowserContent.tsx
-- [ ] T008 [US1] Implement initial state (url: google.com, zoom: 50, historyStack, historyIndex, isLoading) in src/components/windows/BrowserContent.tsx
-- [ ] T009 [US1] Style iframe container with overflow:hidden and transform-origin:0 0 in src/components/windows/BrowserContent.tsx
+- [x] T005 [US1] Add BrowserContent import and handleOpenBrowser handler function in src/components/MainMenu.tsx
+- [x] T006 [US1] Add Browser button to ButtonGroup after Draw button in src/components/MainMenu.tsx (order: Notes, Draw, Browser, Test Windows)
+- [x] T007 [US1] Implement iframe container with CSS transform zoom in src/components/windows/BrowserContent.tsx
+- [x] T008 [US1] Implement initial state (url: google.com, zoom: 50, historyStack, historyIndex, isLoading) in src/components/windows/BrowserContent.tsx
+- [x] T009 [US1] Style iframe container with overflow:hidden and transform-origin:0 0 in src/components/windows/BrowserContent.tsx
 
 **Checkpoint**: Browser window opens from menu showing google.com at 50% zoom - MVP complete
 
