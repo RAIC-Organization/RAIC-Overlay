@@ -156,10 +156,10 @@ Based on plan.md project structure: Tauri + Next.js desktop application
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T046 [P] Add loading spinner/state indicator during file loading in FileViewerContent
-- [ ] T047 [P] Add error handling for file read failures in FileViewerContent
-- [ ] T048 [P] Add JSDoc comments to all exported components and functions
-- [ ] T049 Verify zoom limits (10-200%) are enforced across all renderers
+- [X] T046 [P] Add loading spinner/state indicator during file loading in FileViewerContent
+- [X] T047 [P] Add error handling for file read failures in FileViewerContent
+- [X] T048 [P] Add JSDoc comments to all exported components and functions
+- [X] T049 Verify zoom limits (10-200%) are enforced across all renderers
 - [ ] T050 Test performance against SC-001 (PDF < 3s) and SC-002 (Markdown < 2s)
 - [ ] T051 Run manual validation of all acceptance scenarios from spec.md
 
