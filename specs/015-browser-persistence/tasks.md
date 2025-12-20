@@ -110,13 +110,13 @@
 
 **Purpose**: Final validation and edge case handling
 
-- [ ] T025 Run manual testing checklist from quickstart.md
-- [ ] T026 Verify edge case: persisted URL no longer accessible (should show error page)
-- [ ] T027 Verify edge case: multiple Browser windows with same URL work independently
-- [ ] T028 Verify edge case: invalid opacity in persisted data is clamped (30-100%)
-- [ ] T029 Run linting and type checking (npm run lint, tsc --noEmit)
-- [ ] T030 Verify cargo test passes for Rust changes
-- [ ] T031 Test app build and startup (npm run tauri build)
+- [X] T025 Run manual testing checklist from quickstart.md
+- [X] T026 Verify edge case: persisted URL no longer accessible (should show error page)
+- [X] T027 Verify edge case: multiple Browser windows with same URL work independently
+- [X] T028 Verify edge case: invalid opacity in persisted data is clamped (30-100%)
+- [X] T029 Run linting and type checking (npm run lint, tsc --noEmit)
+- [X] T030 Verify cargo test passes for Rust changes
+- [X] T031 Test app build and startup (npm run tauri build)
 
 ---
 
