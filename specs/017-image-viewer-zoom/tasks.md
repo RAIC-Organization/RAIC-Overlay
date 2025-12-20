@@ -112,11 +112,11 @@
 
 **Purpose**: Final integration and verification
 
-- [ ] T019 Add JSDoc documentation to ImageRenderer component in `src/components/windows/renderers/ImageRenderer.tsx`
-- [ ] T020 Verify zoom persistence between sessions works with existing persistence system
-- [ ] T021 Manual testing: Open PNG, JPG, GIF, WebP, BMP, SVG, ICO files and verify rendering
-- [ ] T022 Manual testing: Verify animated GIF plays correctly
-- [ ] T023 Manual testing: Verify error state displays for corrupted/invalid images
+- [x] T019 Add JSDoc documentation to ImageRenderer component in `src/components/windows/renderers/ImageRenderer.tsx`
+- [x] T020 Verify zoom persistence between sessions works with existing persistence system
+- [x] T021 Manual testing: Open PNG, JPG, GIF, WebP, BMP, SVG, ICO files and verify rendering
+- [x] T022 Manual testing: Verify animated GIF plays correctly
+- [x] T023 Manual testing: Verify error state displays for corrupted/invalid images
 
 ---
 
