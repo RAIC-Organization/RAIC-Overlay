@@ -8,11 +8,13 @@
  * Includes open/close animations and mode-aware styling.
  * Triggers persistence on resize completion.
  *
- * In interactive mode (windowed): Header visible, border, fully opaque, drag/resize enabled
- * In passive mode (fullscreen): Header hidden, no border, 60% transparent, drag/resize disabled
+ * In interactive mode (windowed): Header visible with opacity slider, border, drag/resize enabled
+ * In passive mode (fullscreen): Header hidden, subtle border, drag/resize disabled
+ * Opacity is consistent across both modes (controlled via slider in interactive mode)
  *
  * @feature 007-windows-system
  * @feature 010-state-persistence-system
+ * @feature 013-window-opacity-control
  */
 
 import { useRef, useCallback, useState } from "react";
@@ -192,8 +194,9 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
   }, []);
 
   // Mode-aware styles
-  // Interactive: Full border, shadow, opaque
+  // Interactive: Full border, shadow
   // Passive: Subtle border, backdrop blur for readability over game backgrounds
+  // Opacity is same in both modes (user-controlled via slider)
   const modeClasses = isInteractive
     ? 'border border-border rounded-lg shadow-lg'
     : 'border border-white/20 rounded-lg shadow-md backdrop-blur-sm';

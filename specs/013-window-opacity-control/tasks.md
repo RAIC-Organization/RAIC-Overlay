@@ -92,9 +92,9 @@
 
 ### Implementation for User Story 3
 
-- [ ] T026 [US3] Ensure Window.tsx uses windowInstance.opacity for both interactive and non-interactive modes in `src/components/windows/Window.tsx`
-- [ ] T027 [US3] Remove any mode-conditional opacity logic (previously 60% in non-interactive) in `src/components/windows/Window.tsx`
-- [ ] T028 [US3] Verify header opacity handling: fully visible in interactive mode, uses window opacity in non-interactive mode in `src/components/windows/Window.tsx`
+- [x] T026 [US3] Ensure Window.tsx uses windowInstance.opacity for both interactive and non-interactive modes in `src/components/windows/Window.tsx`
+- [x] T027 [US3] Remove any mode-conditional opacity logic (previously 60% in non-interactive) in `src/components/windows/Window.tsx`
+- [x] T028 [US3] Verify header opacity handling: fully visible in interactive mode, uses window opacity in non-interactive mode in `src/components/windows/Window.tsx`
 
 **Checkpoint**: User Story 3 complete - opacity consistent across mode toggles
 
