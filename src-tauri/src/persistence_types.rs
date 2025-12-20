@@ -46,6 +46,12 @@ pub struct WindowStructure {
     pub size: Size,
     pub z_index: u32,
     pub flags: WindowFlags,
+    #[serde(default = "default_opacity")]
+    pub opacity: f32,
+}
+
+fn default_opacity() -> f32 {
+    0.6
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

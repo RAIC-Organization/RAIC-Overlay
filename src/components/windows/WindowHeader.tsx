@@ -17,6 +17,7 @@ import { X } from 'lucide-react';
 import { WINDOW_CONSTANTS } from '@/types/windows';
 import { useWindows } from '@/contexts/WindowsContext';
 import { usePersistenceContext } from '@/contexts/PersistenceContext';
+import { OpacitySlider } from './OpacitySlider';
 
 interface WindowHeaderProps {
   windowId: string;
@@ -24,9 +25,24 @@ interface WindowHeaderProps {
   x: number;
   y: number;
   isInteractive?: boolean;
+  /** Current window opacity for slider */
+  opacity: number;
+  /** Callback when opacity changes */
+  onOpacityChange: (opacity: number) => void;
+  /** Callback when opacity adjustment completes */
+  onOpacityCommit: () => void;
 }
 
-export function WindowHeader({ windowId, title, x, y, isInteractive = true }: WindowHeaderProps) {
+export function WindowHeader({
+  windowId,
+  title,
+  x,
+  y,
+  isInteractive = true,
+  opacity,
+  onOpacityChange,
+  onOpacityCommit,
+}: WindowHeaderProps) {
   const { moveWindow, closeWindow } = useWindows();
   const persistence = usePersistenceContext();
   const dragStartRef = useRef<{ startX: number; startY: number; windowX: number; windowY: number } | null>(null);
@@ -90,13 +106,23 @@ export function WindowHeader({ windowId, title, x, y, isInteractive = true }: Wi
       onPointerUp={handlePointerUp}
     >
       <span className="text-sm font-medium truncate flex-1">{title}</span>
-      <button
-        onClick={handleClose}
-        className="ml-2 p-1 rounded hover:bg-muted transition-colors cursor-pointer"
-        aria-label="Close window"
+      <div
+        className="flex items-center gap-2 cursor-default"
+        onPointerDown={(e) => e.stopPropagation()}
       >
-        <X className="h-4 w-4" />
-      </button>
+        <OpacitySlider
+          value={opacity}
+          onChange={onOpacityChange}
+          onCommit={onOpacityCommit}
+        />
+        <button
+          onClick={handleClose}
+          className="p-1 rounded hover:bg-muted transition-colors cursor-pointer"
+          aria-label="Close window"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
     </div>
   );
 }

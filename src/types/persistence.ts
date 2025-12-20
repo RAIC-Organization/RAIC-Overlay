@@ -34,6 +34,7 @@ export interface WindowStructure {
   size: Size;
   zIndex: number;
   flags: WindowFlags;
+  opacity: number;
 }
 
 export type WindowType = 'notes' | 'draw';
