@@ -144,9 +144,9 @@ Based on plan.md project structure: Tauri + Next.js desktop application
 
 ### Implementation for User Story 4
 
-- [ ] T043 [US4] Wire detectFileType helper to file open flow in FileViewerContent
-- [ ] T044 [US4] Display "Unsupported file type" error via ErrorRenderer for unknown extensions
-- [ ] T045 [US4] Add file filter to dialog (pdf, md, markdown) with descriptive label in FileViewerContent
+- [X] T043 [US4] Wire detectFileType helper to file open flow in FileViewerContent
+- [X] T044 [US4] Display "Unsupported file type" error via ErrorRenderer for unknown extensions
+- [X] T045 [US4] Add file filter to dialog (pdf, md, markdown) with descriptive label in FileViewerContent
 
 **Checkpoint**: All user stories complete - full file viewer functionality with automatic type detection
 
