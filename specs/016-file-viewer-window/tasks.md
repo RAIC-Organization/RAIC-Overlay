@@ -49,12 +49,12 @@ Based on plan.md project structure: Tauri + Next.js desktop application
 - [X] T009 [P] Add detectFileType helper function in src/types/persistence.ts
 - [X] T010 [P] Add normalizeFileViewerContent helper function in src/types/persistence.ts
 - [X] T011 [P] Add isFileViewerContent type guard in src/types/persistence.ts
-- [ ] T012 Add FileViewerPersistedContent to WindowContentFile content union in src/types/persistence.ts
-- [ ] T013 Add serializeFileViewerContent function in src/lib/serialization.ts
-- [ ] T014 Add saveFileViewerContentDebounced function in src/hooks/usePersistence.ts
-- [ ] T015 Add onFileViewerContentChange to PersistenceContextValue interface in src/contexts/PersistenceContext.tsx
-- [ ] T016 Implement onFileViewerContentChange callback in PersistenceProvider in src/contexts/PersistenceContext.tsx
-- [ ] T017 Handle 'fileviewer' case in window creation effect in src/contexts/PersistenceContext.tsx
+- [X] T012 Add FileViewerPersistedContent to WindowContentFile content union in src/types/persistence.ts
+- [X] T013 Add serializeFileViewerContent function in src/lib/serialization.ts
+- [X] T014 Add saveFileViewerContentDebounced function in src/hooks/usePersistence.ts
+- [X] T015 Add onFileViewerContentChange to PersistenceContextValue interface in src/contexts/PersistenceContext.tsx
+- [X] T016 Implement onFileViewerContentChange callback in PersistenceProvider in src/contexts/PersistenceContext.tsx
+- [X] T017 Handle 'fileviewer' case in window creation effect in src/contexts/PersistenceContext.tsx
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 

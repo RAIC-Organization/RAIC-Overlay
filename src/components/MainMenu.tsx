@@ -10,6 +10,7 @@ import { TestWindowContent } from "@/components/windows/TestWindowContent";
 import { NotesContent } from "@/components/windows/NotesContent";
 import { DrawContent } from "@/components/windows/DrawContent";
 import { BrowserContent } from "@/components/windows/BrowserContent";
+import { FileViewerContent } from "@/components/windows/FileViewerContent";
 
 interface MainMenuProps {
   visible?: boolean;
@@ -56,6 +57,15 @@ export function MainMenu({
     });
   };
 
+  const handleOpenFileViewer = () => {
+    windowEvents.emit("window:open", {
+      component: FileViewerContent,
+      title: "File Viewer",
+      contentType: "fileviewer",
+      componentProps: { isInteractive: mode === "windowed" },
+    });
+  };
+
   const handleTestWindows = () => {
     windowEvents.emit("window:open", {
       component: TestWindowContent,
@@ -85,6 +95,9 @@ export function MainMenu({
             </Button>
             <Button variant="secondary" onClick={handleOpenBrowser}>
               Browser
+            </Button>
+            <Button variant="secondary" onClick={handleOpenFileViewer}>
+              File Viewer
             </Button>
             <Button variant="secondary" onClick={handleTestWindows}>
               Test Windows
