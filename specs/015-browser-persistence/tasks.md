@@ -98,9 +98,9 @@
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] Verify Browser window closure triggers window-{id}.json deletion via existing persistence system
-- [ ] T023 [US3] Verify Browser window removal from state.json windows array via existing persistence system
-- [ ] T024 [US3] Test orphaned file cleanup for browser content files on app startup
+- [X] T022 [US3] Verify Browser window closure triggers window-{id}.json deletion via existing persistence system
+- [X] T023 [US3] Verify Browser window removal from state.json windows array via existing persistence system
+- [X] T024 [US3] Test orphaned file cleanup for browser content files on app startup
 
 **Checkpoint**: User Story 3 complete - Browser window closure permanently deletes data
 
