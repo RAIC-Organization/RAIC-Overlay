@@ -25,6 +25,7 @@ Auto-generated from all feature plans. Last updated: 2025-12-12
 - N/A (static asset generation only) (012-tauri-app-icon)
 - TypeScript 5.7.2 (frontend), Rust 2021 Edition (Tauri backend) + React 19.0.0, Next.js 16.x, motion 12.x, shadcn/ui, Tailwind CSS 4.x, Tauri 2.x (013-window-opacity-control)
 - JSON files in Tauri app data directory (extends state.json for window structure) (013-window-opacity-control)
+- TypeScript 5.7.2 (frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, motion 12.x, shadcn/ui, Tailwind CSS 4.x, Tauri 2.x, lucide-react (icons) (014-browser-component)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -49,9 +50,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 014-browser-component: Added TypeScript 5.7.2 (frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, motion 12.x, shadcn/ui, Tailwind CSS 4.x, Tauri 2.x, lucide-react (icons)
 - 013-window-opacity-control: Added TypeScript 5.7.2 (frontend), Rust 2021 Edition (Tauri backend) + React 19.0.0, Next.js 16.x, motion 12.x, shadcn/ui, Tailwind CSS 4.x, Tauri 2.x
 - 012-tauri-app-icon: Added TypeScript 5.7.2 (frontend), Rust 2021 Edition (Tauri backend) + Tauri CLI 2.x (`@tauri-apps/cli`), Next.js 16.x, React 19.0.0
-- 011-app-icon-branding: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, motion 12.x, Tailwind CSS 4.x, shadcn/ui
 
 
 <!-- MANUAL ADDITIONS START -->
