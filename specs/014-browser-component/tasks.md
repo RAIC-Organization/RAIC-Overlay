@@ -114,8 +114,8 @@
 
 ### Implementation for User Story 6
 
-- [ ] T027 [US6] Conditionally render BrowserToolbar based on isInteractive prop in src/components/windows/BrowserContent.tsx
-- [ ] T028 [US6] Add pointer-events blocking overlay or CSS when isInteractive is false in src/components/windows/BrowserContent.tsx
+- [x] T027 [US6] Conditionally render BrowserToolbar based on isInteractive prop in src/components/windows/BrowserContent.tsx
+- [x] T028 [US6] Add pointer-events blocking overlay or CSS when isInteractive is false in src/components/windows/BrowserContent.tsx
 
 **Checkpoint**: Non-interaction mode working - toolbar hides, iframe is view-only
 
