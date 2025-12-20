@@ -54,14 +54,14 @@
 
 ### Implementation for User Story 1
 
-- [ ] T014 [US1] Create OpacitySlider component with Slider, percentage label, onChange, and onCommit props in `src/components/windows/OpacitySlider.tsx`
-- [ ] T015 [US1] Add opacity, onOpacityChange, onOpacityCommit props to WindowHeaderProps interface in `src/components/windows/WindowHeader.tsx`
-- [ ] T016 [US1] Import and render OpacitySlider in WindowHeader between title and close button in `src/components/windows/WindowHeader.tsx`
-- [ ] T017 [US1] Pass opacity prop from windowInstance to WindowHeader in `src/components/windows/Window.tsx`
-- [ ] T018 [US1] Implement onOpacityChange callback using setWindowOpacity from context in `src/components/windows/Window.tsx`
-- [ ] T019 [US1] Implement onOpacityCommit callback to trigger persistence via onWindowMoved() in `src/components/windows/Window.tsx`
-- [ ] T020 [US1] Apply window opacity to motion.div animate prop in `src/components/windows/Window.tsx`
-- [ ] T021 [US1] Remove hardcoded 0.85 opacity from non-interactive mode animation in `src/components/windows/Window.tsx`
+- [x] T014 [US1] Create OpacitySlider component with Slider, percentage label, onChange, and onCommit props in `src/components/windows/OpacitySlider.tsx`
+- [x] T015 [US1] Add opacity, onOpacityChange, onOpacityCommit props to WindowHeaderProps interface in `src/components/windows/WindowHeader.tsx`
+- [x] T016 [US1] Import and render OpacitySlider in WindowHeader between title and close button in `src/components/windows/WindowHeader.tsx`
+- [x] T017 [US1] Pass opacity prop from windowInstance to WindowHeader in `src/components/windows/Window.tsx`
+- [x] T018 [US1] Implement onOpacityChange callback using setWindowOpacity from context in `src/components/windows/Window.tsx`
+- [x] T019 [US1] Implement onOpacityCommit callback to trigger persistence via onWindowMoved() in `src/components/windows/Window.tsx`
+- [x] T020 [US1] Apply window opacity to motion.div animate prop in `src/components/windows/Window.tsx`
+- [x] T021 [US1] Remove hardcoded 0.85 opacity from non-interactive mode animation in `src/components/windows/Window.tsx`
 
 **Checkpoint**: User Story 1 complete - slider visible in header, opacity changes in real-time
 

@@ -34,10 +34,10 @@ type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw' | null;
 const RESIZE_HANDLE_SIZE = 8;
 
 export function Window({ window: windowInstance, isInteractive = true, onExitComplete }: WindowProps) {
-  const { id, title, component: Component, componentProps, x, y, width, height, zIndex } =
+  const { id, title, component: Component, componentProps, x, y, width, height, zIndex, opacity } =
     windowInstance;
 
-  const { focusWindow, resizeWindow, moveWindow } = useWindows();
+  const { focusWindow, resizeWindow, moveWindow, setWindowOpacity } = useWindows();
   const persistence = usePersistenceContext();
   const resizeRef = useRef<{
     direction: ResizeDirection;
@@ -214,7 +214,7 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
         zIndex,
       }}
       initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: isInteractive ? 1 : 0.85, scale: 1 }}
+      animate={{ opacity: opacity, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: isInteractive ? 0.15 : 0.1, ease: "easeOut" }}
       onPointerDown={handleWindowClick}
@@ -241,6 +241,9 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
               x={x}
               y={y}
               isInteractive={isInteractive}
+              opacity={opacity}
+              onOpacityChange={(newOpacity) => setWindowOpacity(id, newOpacity)}
+              onOpacityCommit={() => persistence?.onWindowMoved()}
             />
           </div>
         )}
