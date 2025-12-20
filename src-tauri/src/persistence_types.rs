@@ -4,6 +4,7 @@
 //! interfaces defined in data-model.md.
 //!
 //! @feature 010-state-persistence-system
+//! @feature 015-browser-persistence
 
 use serde::{Deserialize, Serialize};
 
@@ -59,6 +60,7 @@ fn default_opacity() -> f32 {
 pub enum WindowType {
     Notes,
     Draw,
+    Browser,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -89,7 +91,7 @@ pub struct WindowContentFile {
     pub window_id: String,
     #[serde(rename = "type")]
     pub window_type: WindowType,
-    pub content: serde_json::Value, // Flexible JSON for TipTap/Excalidraw
+    pub content: serde_json::Value, // Flexible JSON for TipTap/Excalidraw/Browser
     pub last_modified: String,
 }
 

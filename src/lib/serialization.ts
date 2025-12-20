@@ -5,6 +5,7 @@
  * persisted state formats.
  *
  * @feature 010-state-persistence-system
+ * @feature 015-browser-persistence
  */
 
 import type { WindowInstance, WindowContentType } from '@/types/windows';
@@ -16,6 +17,7 @@ import type {
   WindowContentFile,
   NotesContent,
   DrawContent,
+  BrowserPersistedContent,
 } from '@/types/persistence';
 import { CURRENT_STATE_VERSION, DEFAULT_WINDOW_FLAGS } from '@/types/persistence';
 
@@ -87,6 +89,8 @@ function contentTypeToWindowType(contentType?: WindowContentType): WindowType | 
       return 'notes';
     case 'draw':
       return 'draw';
+    case 'browser':
+      return 'browser';
     default:
       // 'test' and undefined are not persisted
       return null;
@@ -200,6 +204,28 @@ export function serializeDrawContent(
   return {
     windowId,
     type: 'draw',
+    content,
+    lastModified: new Date().toISOString(),
+  };
+}
+
+/**
+ * Create a WindowContentFile for browser content.
+ * @feature 015-browser-persistence
+ */
+export function serializeBrowserContent(
+  windowId: string,
+  url: string,
+  zoom: number
+): WindowContentFile {
+  const content: BrowserPersistedContent = {
+    url,
+    zoom,
+  };
+
+  return {
+    windowId,
+    type: 'browser',
     content,
     lastModified: new Date().toISOString(),
   };

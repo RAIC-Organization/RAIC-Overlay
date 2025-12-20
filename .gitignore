@@ -8,6 +8,7 @@ target/
 out/
 .next/
 *.tsbuildinfo
+next-env.d.ts
 
 # Rust specific
 *.rs.bk

@@ -28,8 +28,10 @@ import { useHydration } from "@/hooks/useHydration";
 import { useWindows } from "@/contexts/WindowsContext";
 import { NotesContent } from "@/components/windows/NotesContent";
 import { DrawContent } from "@/components/windows/DrawContent";
+import { BrowserContent } from "@/components/windows/BrowserContent";
 import { OverlayState, initialState } from "@/types/overlay";
-import type { WindowStructure, WindowContentFile, NotesContent as NotesContentType, DrawContent as DrawContentType } from "@/types/persistence";
+import type { WindowStructure, WindowContentFile, NotesContent as NotesContentType, DrawContent as DrawContentType, BrowserPersistedContent } from "@/types/persistence";
+import { normalizeBrowserContent } from "@/types/persistence";
 import type { WindowContentType } from "@/types/windows";
 import { persistenceService } from "@/stores/persistenceService";
 import {
@@ -118,6 +120,28 @@ function WindowRestorer({
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             onContentChange: (elements: any[], appState: any) =>
               persistence?.onDrawContentChange(windowId, elements, appState),
+          },
+        });
+      } else if (windowType === 'browser') {
+        const browserContent = content?.content as BrowserPersistedContent | undefined;
+        const normalizedContent = normalizeBrowserContent(browserContent);
+        openWindow({
+          component: BrowserContent,
+          title: 'Browser',
+          contentType: 'browser',
+          windowId,
+          initialX: win.position.x,
+          initialY: win.position.y,
+          initialWidth: win.size.width,
+          initialHeight: win.size.height,
+          initialZIndex: win.zIndex,
+          initialOpacity: win.opacity,
+          componentProps: {
+            isInteractive: mode === 'windowed',
+            windowId,
+            initialUrl: normalizedContent.url,
+            initialZoom: normalizedContent.zoom,
+            onContentChange: (url: string, zoom: number) => persistence?.onBrowserContentChange?.(windowId, url, zoom),
           },
         });
       }
@@ -365,7 +389,7 @@ export default function Home() {
     console.log(`Window closed: ${windowId} (type: ${contentType})`);
 
     // Delete the window content file if it's a persistable window
-    if (contentType === 'notes' || contentType === 'draw') {
+    if (contentType === 'notes' || contentType === 'draw' || contentType === 'browser') {
       const deleteResult = await persistenceService.deleteWindowContent(windowId);
       if (!deleteResult.success) {
         console.error('Failed to delete window content:', deleteResult.error);
