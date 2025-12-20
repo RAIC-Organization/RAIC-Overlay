@@ -5,6 +5,7 @@
  * types in persistence_types.rs and the data model specification.
  *
  * @feature 010-state-persistence-system
+ * @feature 015-browser-persistence
  */
 
 export const CURRENT_STATE_VERSION = 1;
@@ -37,7 +38,7 @@ export interface WindowStructure {
   opacity: number;
 }
 
-export type WindowType = 'notes' | 'draw';
+export type WindowType = 'notes' | 'draw' | 'browser';
 
 export interface Position {
   x: number;
@@ -61,7 +62,7 @@ export interface WindowFlags {
 export interface WindowContentFile {
   windowId: string;
   type: WindowType;
-  content: NotesContent | DrawContent;
+  content: NotesContent | DrawContent | BrowserPersistedContent;
   lastModified: string;
 }
 
@@ -98,6 +99,22 @@ export interface ExcalidrawElement {
 export interface ExcalidrawAppState {
   viewBackgroundColor: string;
   [key: string]: unknown;
+}
+
+// ============================================================================
+// Browser Content (NEW - 015-browser-persistence)
+// ============================================================================
+
+/**
+ * Persisted content for Browser windows.
+ * Navigation history is NOT persisted (only final URL).
+ * @feature 015-browser-persistence
+ */
+export interface BrowserPersistedContent {
+  /** Current URL displayed in the iframe */
+  url: string;
+  /** Zoom level percentage (10-200) */
+  zoom: number;
 }
 
 // ============================================================================
