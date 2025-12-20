@@ -52,6 +52,9 @@ export interface WindowOpenPayload {
 
   /** Optional: Initial z-index (for restored windows) */
   initialZIndex?: number;
+
+  /** Optional: Initial opacity (for restored windows) */
+  initialOpacity?: number;
 }
 
 /**
@@ -178,6 +181,9 @@ export interface WindowInstance {
 
   /** Creation timestamp */
   createdAt: number;
+
+  /** Window opacity (0.1 to 1.0) */
+  opacity: number;
 }
 
 // ============================================================================
@@ -241,4 +247,7 @@ export const WINDOW_CONSTANTS = {
   MIN_VISIBLE_EDGE: 50,
   BASE_Z_INDEX: 100,
   HEADER_HEIGHT: 32,
+  MIN_OPACITY: 0.1,
+  MAX_OPACITY: 1.0,
+  DEFAULT_OPACITY: 0.6,
 } as const;

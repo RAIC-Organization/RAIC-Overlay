@@ -30,17 +30,17 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 [P] Add opacity constants (MIN_OPACITY, MAX_OPACITY, DEFAULT_OPACITY) to `src/types/windows.ts`
-- [ ] T004 [P] Add `opacity: number` property to WindowInstance interface in `src/types/windows.ts`
-- [ ] T005 [P] Add `initialOpacity?: number` property to WindowOpenPayload interface in `src/types/windows.ts`
-- [ ] T006 [P] Add `opacity: number` property to WindowStructure interface in `src/types/persistence.ts`
-- [ ] T007 [P] Add `opacity: f32` field with `#[serde(default)]` to WindowStructure in `src-tauri/src/persistence_types.rs`
-- [ ] T008 [P] Add `default_opacity()` function returning 0.6 in `src-tauri/src/persistence_types.rs`
-- [ ] T009 Add SET_WINDOW_OPACITY action type to WindowsAction union in `src/contexts/WindowsContext.tsx`
-- [ ] T010 Implement SET_WINDOW_OPACITY reducer case with opacity clamping in `src/contexts/WindowsContext.tsx`
-- [ ] T011 Add `setWindowOpacity` method to ExtendedWindowsContextValue interface in `src/contexts/WindowsContext.tsx`
-- [ ] T012 Implement `setWindowOpacity` callback in WindowsProvider in `src/contexts/WindowsContext.tsx`
-- [ ] T013 Update OPEN_WINDOW reducer case to set initial opacity (default 0.6) in `src/contexts/WindowsContext.tsx`
+- [x] T003 [P] Add opacity constants (MIN_OPACITY, MAX_OPACITY, DEFAULT_OPACITY) to `src/types/windows.ts`
+- [x] T004 [P] Add `opacity: number` property to WindowInstance interface in `src/types/windows.ts`
+- [x] T005 [P] Add `initialOpacity?: number` property to WindowOpenPayload interface in `src/types/windows.ts`
+- [x] T006 [P] Add `opacity: number` property to WindowStructure interface in `src/types/persistence.ts`
+- [x] T007 [P] Add `opacity: f32` field with `#[serde(default)]` to WindowStructure in `src-tauri/src/persistence_types.rs`
+- [x] T008 [P] Add `default_opacity()` function returning 0.6 in `src-tauri/src/persistence_types.rs`
+- [x] T009 Add SET_WINDOW_OPACITY action type to WindowsAction union in `src/contexts/WindowsContext.tsx`
+- [x] T010 Implement SET_WINDOW_OPACITY reducer case with opacity clamping in `src/contexts/WindowsContext.tsx`
+- [x] T011 Add `setWindowOpacity` method to ExtendedWindowsContextValue interface in `src/contexts/WindowsContext.tsx`
+- [x] T012 Implement `setWindowOpacity` callback in WindowsProvider in `src/contexts/WindowsContext.tsx`
+- [x] T013 Update OPEN_WINDOW reducer case to set initial opacity (default 0.6) in `src/contexts/WindowsContext.tsx`
 
 **Checkpoint**: Foundation ready - type system and state management support opacity
 

@@ -57,6 +57,8 @@ export interface ExtendedWindowsContextValue extends WindowsContextValue {
     activeWindowId: string | null;
     nextZIndex: number;
   };
+  /** Set opacity for a specific window */
+  setWindowOpacity: (windowId: string, opacity: number) => void;
 }
 
 // ============================================================================
@@ -70,7 +72,8 @@ type WindowsAction =
   | { type: 'MOVE_WINDOW'; windowId: string; x: number; y: number }
   | { type: 'RESIZE_WINDOW'; windowId: string; width: number; height: number }
   | { type: 'SET_WINDOW_CONTENT'; windowId: string; content: WindowContentFile }
-  | { type: 'REMOVE_WINDOW_CONTENT'; windowId: string };
+  | { type: 'REMOVE_WINDOW_CONTENT'; windowId: string }
+  | { type: 'SET_WINDOW_OPACITY'; windowId: string; opacity: number };
 
 // ============================================================================
 // Initial State
@@ -108,6 +111,15 @@ function windowsReducer(state: ExtendedWindowsState, action: WindowsAction): Ext
         y = Math.max(0, (viewportHeight - height) / 2);
       }
 
+      // Clamp initial opacity to valid range
+      const opacity = Math.max(
+        WINDOW_CONSTANTS.MIN_OPACITY,
+        Math.min(
+          WINDOW_CONSTANTS.MAX_OPACITY,
+          payload.initialOpacity ?? WINDOW_CONSTANTS.DEFAULT_OPACITY
+        )
+      );
+
       const newWindow: WindowInstance = {
         id,
         title: payload.title,
@@ -120,6 +132,7 @@ function windowsReducer(state: ExtendedWindowsState, action: WindowsAction): Ext
         height,
         zIndex: payload.initialZIndex ?? state.nextZIndex,
         createdAt: Date.now(),
+        opacity,
       };
 
       return {
@@ -236,6 +249,23 @@ function windowsReducer(state: ExtendedWindowsState, action: WindowsAction): Ext
       return {
         ...state,
         windowContents: newContents,
+      };
+    }
+
+    case 'SET_WINDOW_OPACITY': {
+      const { windowId, opacity } = action;
+      const clampedOpacity = Math.max(
+        WINDOW_CONSTANTS.MIN_OPACITY,
+        Math.min(WINDOW_CONSTANTS.MAX_OPACITY, opacity)
+      );
+
+      const updatedWindows = state.windows.map((w) =>
+        w.id === windowId ? { ...w, opacity: clampedOpacity } : w
+      );
+
+      return {
+        ...state,
+        windows: updatedWindows,
       };
     }
 
@@ -391,6 +421,10 @@ export function WindowsProvider({
     };
   }, [state.windows, state.activeWindowId, state.nextZIndex]);
 
+  const setWindowOpacity = useCallback((windowId: string, opacity: number): void => {
+    dispatch({ type: 'SET_WINDOW_OPACITY', windowId, opacity });
+  }, []);
+
   const value: ExtendedWindowsContextValue = {
     windows: state.windows,
     activeWindowId: state.activeWindowId,
@@ -403,6 +437,7 @@ export function WindowsProvider({
     setWindowContent,
     getAllWindowContents,
     getStateForPersistence,
+    setWindowOpacity,
   };
 
   return (
