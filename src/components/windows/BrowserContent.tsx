@@ -114,21 +114,24 @@ export function BrowserContent({ isInteractive }: BrowserContentProps) {
           onZoomOut={zoomOut}
         />
       )}
-      <div className="flex-1 overflow-hidden relative">
-        {!isInteractive && <div className="absolute inset-0 z-10" />}
-        <iframe
-          key={iframeKey}
-          src={url}
-          title="Browser Content"
-          className="border-0"
-          style={{
-            width: `${inverseScale * 100}%`,
-            height: `${inverseScale * 100}%`,
-            transform: `scale(${scaleValue})`,
-            transformOrigin: "0 0",
-          }}
-          onLoad={() => setIsLoading(false)}
-        />
+      {/* Padding allows window resize handles (8px edges) to be grabbed */}
+      <div className="flex-1 overflow-hidden relative p-2">
+        {!isInteractive && <div className="absolute inset-2 z-10" />}
+        <div className="w-full h-full overflow-hidden">
+          <iframe
+            key={iframeKey}
+            src={url}
+            title="Browser Content"
+            className="border-0"
+            style={{
+              width: `${inverseScale * 100}%`,
+              height: `${inverseScale * 100}%`,
+              transform: `scale(${scaleValue})`,
+              transformOrigin: "0 0",
+            }}
+            onLoad={() => setIsLoading(false)}
+          />
+        </div>
       </div>
     </div>
   );
