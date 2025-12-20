@@ -29,9 +29,10 @@ import { useWindows } from "@/contexts/WindowsContext";
 import { NotesContent } from "@/components/windows/NotesContent";
 import { DrawContent } from "@/components/windows/DrawContent";
 import { BrowserContent } from "@/components/windows/BrowserContent";
+import { FileViewerContent } from "@/components/windows/FileViewerContent";
 import { OverlayState, initialState } from "@/types/overlay";
-import type { WindowStructure, WindowContentFile, NotesContent as NotesContentType, DrawContent as DrawContentType, BrowserPersistedContent } from "@/types/persistence";
-import { normalizeBrowserContent } from "@/types/persistence";
+import type { WindowStructure, WindowContentFile, NotesContent as NotesContentType, DrawContent as DrawContentType, BrowserPersistedContent, FileViewerPersistedContent } from "@/types/persistence";
+import { normalizeBrowserContent, normalizeFileViewerContent } from "@/types/persistence";
 import type { WindowContentType } from "@/types/windows";
 import { persistenceService } from "@/stores/persistenceService";
 import {
@@ -142,6 +143,30 @@ function WindowRestorer({
             initialUrl: normalizedContent.url,
             initialZoom: normalizedContent.zoom,
             onContentChange: (url: string, zoom: number) => persistence?.onBrowserContentChange?.(windowId, url, zoom),
+          },
+        });
+      } else if (windowType === 'fileviewer') {
+        const fileViewerContent = content?.content as FileViewerPersistedContent | undefined;
+        const normalizedContent = normalizeFileViewerContent(fileViewerContent);
+        openWindow({
+          component: FileViewerContent,
+          title: 'File Viewer',
+          contentType: 'fileviewer',
+          windowId,
+          initialX: win.position.x,
+          initialY: win.position.y,
+          initialWidth: win.size.width,
+          initialHeight: win.size.height,
+          initialZIndex: win.zIndex,
+          initialOpacity: win.opacity,
+          componentProps: {
+            isInteractive: mode === 'windowed',
+            windowId,
+            initialFilePath: normalizedContent.filePath,
+            initialFileType: normalizedContent.fileType,
+            initialZoom: normalizedContent.zoom,
+            onContentChange: (filePath: string, fileType: string, zoom: number) =>
+              persistence?.onFileViewerContentChange?.(windowId, filePath, fileType as 'pdf' | 'markdown' | 'unknown', zoom),
           },
         });
       }
@@ -389,7 +414,7 @@ export default function Home() {
     console.log(`Window closed: ${windowId} (type: ${contentType})`);
 
     // Delete the window content file if it's a persistable window
-    if (contentType === 'notes' || contentType === 'draw' || contentType === 'browser') {
+    if (contentType === 'notes' || contentType === 'draw' || contentType === 'browser' || contentType === 'fileviewer') {
       const deleteResult = await persistenceService.deleteWindowContent(windowId);
       if (!deleteResult.success) {
         console.error('Failed to delete window content:', deleteResult.error);

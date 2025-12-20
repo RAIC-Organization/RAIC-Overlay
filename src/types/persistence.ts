@@ -6,6 +6,7 @@
  *
  * @feature 010-state-persistence-system
  * @feature 015-browser-persistence
+ * @feature 016-file-viewer-window
  */
 
 export const CURRENT_STATE_VERSION = 1;
@@ -38,7 +39,7 @@ export interface WindowStructure {
   opacity: number;
 }
 
-export type WindowType = 'notes' | 'draw' | 'browser';
+export type WindowType = 'notes' | 'draw' | 'browser' | 'fileviewer';
 
 export interface Position {
   x: number;
@@ -62,7 +63,7 @@ export interface WindowFlags {
 export interface WindowContentFile {
   windowId: string;
   type: WindowType;
-  content: NotesContent | DrawContent | BrowserPersistedContent;
+  content: NotesContent | DrawContent | BrowserPersistedContent | FileViewerPersistedContent;
   lastModified: string;
 }
 
@@ -159,9 +160,106 @@ export const DEFAULT_BROWSER_CONTENT: BrowserPersistedContent = {
  * @feature 015-browser-persistence
  */
 export function isBrowserContent(
-  content: NotesContent | DrawContent | BrowserPersistedContent
+  content: NotesContent | DrawContent | BrowserPersistedContent | FileViewerPersistedContent
 ): content is BrowserPersistedContent {
   return 'url' in content && 'zoom' in content;
+}
+
+// ============================================================================
+// File Viewer Content (NEW - 016-file-viewer-window)
+// ============================================================================
+
+/**
+ * File type enum for file viewer.
+ * @feature 016-file-viewer-window
+ */
+export type FileType = 'pdf' | 'markdown' | 'unknown';
+
+/**
+ * Persisted content for File Viewer windows.
+ * @feature 016-file-viewer-window
+ */
+export interface FileViewerPersistedContent {
+  /** Absolute path to the opened file */
+  filePath: string;
+  /** Detected file type for renderer selection */
+  fileType: FileType;
+  /** Zoom level percentage (10-200) */
+  zoom: number;
+}
+
+/**
+ * File viewer defaults.
+ * @feature 016-file-viewer-window
+ */
+export const FILE_VIEWER_DEFAULTS = {
+  DEFAULT_ZOOM: 100,
+  ZOOM_MIN: 10,
+  ZOOM_MAX: 200,
+  ZOOM_STEP: 10,
+} as const;
+
+/**
+ * Clamp file viewer zoom value to valid range (10-200)
+ * @feature 016-file-viewer-window
+ */
+export function clampFileViewerZoom(zoom: number): number {
+  return Math.max(
+    FILE_VIEWER_DEFAULTS.ZOOM_MIN,
+    Math.min(FILE_VIEWER_DEFAULTS.ZOOM_MAX, zoom)
+  );
+}
+
+/**
+ * Detect file type from file path extension.
+ * @feature 016-file-viewer-window
+ */
+export function detectFileType(filePath: string): FileType {
+  const ext = filePath.split('.').pop()?.toLowerCase();
+  switch (ext) {
+    case 'pdf':
+      return 'pdf';
+    case 'md':
+    case 'markdown':
+      return 'markdown';
+    default:
+      return 'unknown';
+  }
+}
+
+/**
+ * Validate and normalize FileViewerPersistedContent.
+ * Returns content with defaults for missing/invalid values.
+ * @feature 016-file-viewer-window
+ */
+export function normalizeFileViewerContent(
+  content: Partial<FileViewerPersistedContent> | null | undefined
+): FileViewerPersistedContent {
+  return {
+    filePath: content?.filePath || '',
+    fileType: content?.fileType || 'unknown',
+    zoom: clampFileViewerZoom(content?.zoom ?? FILE_VIEWER_DEFAULTS.DEFAULT_ZOOM),
+  };
+}
+
+/**
+ * Default FileViewerPersistedContent.
+ * @feature 016-file-viewer-window
+ */
+export const DEFAULT_FILE_VIEWER_CONTENT: FileViewerPersistedContent = {
+  filePath: '',
+  fileType: 'unknown',
+  zoom: FILE_VIEWER_DEFAULTS.DEFAULT_ZOOM,
+};
+
+/**
+ * Type guard for FileViewerPersistedContent.
+ * @feature 016-file-viewer-window
+ */
+export function isFileViewerContent(
+  content: NotesContent | DrawContent | BrowserPersistedContent | FileViewerPersistedContent
+): content is FileViewerPersistedContent {
+  return 'filePath' in content && 'fileType' in content && 'zoom' in content;
 }
 
 // ============================================================================

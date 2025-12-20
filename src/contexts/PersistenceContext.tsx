@@ -8,6 +8,7 @@
  *
  * @feature 010-state-persistence-system
  * @feature 015-browser-persistence
+ * @feature 016-file-viewer-window
  */
 
 import {
@@ -21,7 +22,8 @@ import {
 import { usePersistence } from '@/hooks/usePersistence';
 import { useWindows } from '@/contexts/WindowsContext';
 import type { WindowInstance, WindowContentType } from '@/types/windows';
-import { serializeNotesContent, serializeDrawContent, serializeBrowserContent } from '@/lib/serialization';
+import type { FileType } from '@/types/persistence';
+import { serializeNotesContent, serializeDrawContent, serializeBrowserContent, serializeFileViewerContent } from '@/lib/serialization';
 
 // ============================================================================
 // Context Value Interface
@@ -50,6 +52,12 @@ export interface PersistenceContextValue {
    * @feature 015-browser-persistence
    */
   onBrowserContentChange: (windowId: string, url: string, zoom: number) => void;
+
+  /**
+   * Trigger debounced save for file viewer content.
+   * @feature 016-file-viewer-window
+   */
+  onFileViewerContentChange: (windowId: string, filePath: string, fileType: FileType, zoom: number) => void;
 
   /**
    * Handle window close - delete content and save state.
@@ -99,6 +107,7 @@ export function PersistenceProvider({
     saveNotesContentDebounced,
     saveDrawContentDebounced,
     saveBrowserContentDebounced,
+    saveFileViewerContentDebounced,
     deleteWindowContent,
     flushPendingSaves,
   } = usePersistence({
@@ -185,11 +194,19 @@ export function PersistenceProvider({
     [saveBrowserContentDebounced]
   );
 
+  // Debounced save for file viewer content
+  const onFileViewerContentChange = useCallback(
+    (windowId: string, filePath: string, fileType: FileType, zoom: number) => {
+      saveFileViewerContentDebounced(windowId, filePath, fileType, zoom);
+    },
+    [saveFileViewerContentDebounced]
+  );
+
   // Handle window close - delete content and save state
   const onWindowClosed = useCallback(
     async (windowId: string, contentType?: WindowContentType) => {
       // Only delete content for persistable windows
-      if (contentType === 'notes' || contentType === 'draw' || contentType === 'browser') {
+      if (contentType === 'notes' || contentType === 'draw' || contentType === 'browser' || contentType === 'fileviewer') {
         await deleteWindowContent(windowId);
       }
 
@@ -206,6 +223,7 @@ export function PersistenceProvider({
     onNotesContentChange,
     onDrawContentChange,
     onBrowserContentChange,
+    onFileViewerContentChange,
     onWindowClosed,
     flushPendingSaves,
   };
