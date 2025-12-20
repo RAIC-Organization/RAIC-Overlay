@@ -25,8 +25,8 @@
 
 **Purpose**: Verify environment and source icon requirements
 
-- [ ] T001 Verify source icon exists and meets requirements at src/assets/icon.png (1024x1024, PNG with alpha)
-- [ ] T002 Verify Tauri CLI is available by running `npm run tauri --version`
+- [X] T001 Verify source icon exists and meets requirements at src/assets/icon.png (1024x1024, PNG with alpha)
+- [X] T002 Verify Tauri CLI is available by running `npm run tauri --version`
 
 ---
 
@@ -38,14 +38,14 @@
 
 ### Implementation for User Story 1
 
-- [ ] T003 [US1] Generate all icon formats using `npm run tauri icon src/assets/icon.png` to src-tauri/icons/
-- [ ] T004 [US1] Verify icon.ico was generated with correct multi-layer format in src-tauri/icons/icon.ico
-- [ ] T005 [US1] Verify icon.icns was generated for macOS compatibility in src-tauri/icons/icon.icns
-- [ ] T006 [US1] Verify all PNG sizes were generated (32x32, 64x64, 128x128, 128x128@2x, icon.png) in src-tauri/icons/
-- [ ] T007 [US1] Verify all Windows Store icons were generated (Square*.png, StoreLogo.png) in src-tauri/icons/
-- [ ] T008 [US1] Build application with `npm run tauri build` to verify icons are included
-- [ ] T009 [US1] Visual test: Run built executable and verify taskbar icon shows branded RAIC icon
-- [ ] T010 [US1] Visual test: Verify window title bar icon matches branded RAIC icon
+- [X] T003 [US1] Generate all icon formats using `npm run tauri icon src/assets/icon.png` to src-tauri/icons/
+- [X] T004 [US1] Verify icon.ico was generated with correct multi-layer format in src-tauri/icons/icon.ico
+- [X] T005 [US1] Verify icon.icns was generated for macOS compatibility in src-tauri/icons/icon.icns
+- [X] T006 [US1] Verify all PNG sizes were generated (32x32, 64x64, 128x128, 128x128@2x, icon.png) in src-tauri/icons/
+- [X] T007 [US1] Verify all Windows Store icons were generated (Square*.png, StoreLogo.png) in src-tauri/icons/
+- [X] T008 [US1] Build application with `npm run tauri build` to verify icons are included
+- [X] T009 [US1] Visual test: Run built executable and verify taskbar icon shows branded RAIC icon
+- [X] T010 [US1] Visual test: Verify window title bar icon matches branded RAIC icon
 
 **Checkpoint**: At this point, User Story 1 is complete - branded icon appears in all system contexts
 
