@@ -19,8 +19,8 @@
 
 **Purpose**: Install dependencies and add base UI component
 
-- [ ] T001 Install shadcn/ui Slider component via `npx shadcn@latest add slider`
-- [ ] T002 Verify slider component created at `src/components/ui/slider.tsx`
+- [x] T001 Install shadcn/ui Slider component via `npx shadcn@latest add slider`
+- [x] T002 Verify slider component created at `src/components/ui/slider.tsx`
 
 ---
 
