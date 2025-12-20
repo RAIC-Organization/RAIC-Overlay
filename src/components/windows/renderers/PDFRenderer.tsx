@@ -43,21 +43,15 @@ export function PDFRenderer({ filePath, zoom }: PDFRendererProps) {
       try {
         // Dynamically import pdfjs-dist only on client side
         const pdfjs = await import("pdfjs-dist");
+        const { readFile } = await import("@tauri-apps/plugin-fs");
 
         // Configure worker path
         pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 
-        // Convert file path to a URL that can be loaded
-        // For Tauri, we need to use the tauri asset protocol
-        const url = filePath.startsWith("file://")
-          ? filePath
-          : `file://${filePath}`;
+        // Use Tauri's fs plugin to read the file
+        const fileData = await readFile(filePath);
 
-        // Use fetch to load the file via Tauri's asset protocol
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-
-        const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
+        const loadingTask = pdfjs.getDocument({ data: fileData });
         const pdf = await loadingTask.promise;
 
         setPdfDoc(pdf);

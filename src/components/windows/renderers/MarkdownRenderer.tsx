@@ -34,18 +34,9 @@ export function MarkdownRenderer({ filePath, zoom }: MarkdownRendererProps) {
 
     const loadMarkdown = async () => {
       try {
-        // Convert file path to a URL that can be loaded
-        const url = filePath.startsWith("file://")
-          ? filePath
-          : `file://${filePath}`;
-
-        // Use fetch to load the file
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`Failed to load file: ${response.status}`);
-        }
-
-        const text = await response.text();
+        // Use Tauri's fs plugin to read the file
+        const { readTextFile } = await import("@tauri-apps/plugin-fs");
+        const text = await readTextFile(filePath);
         setContent(text);
         setIsLoading(false);
       } catch (err) {

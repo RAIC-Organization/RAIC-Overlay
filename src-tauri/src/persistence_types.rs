@@ -61,6 +61,7 @@ pub enum WindowType {
     Notes,
     Draw,
     Browser,
+    Fileviewer,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
