@@ -88,8 +88,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] Verify Window.tsx applies backgroundTransparent to content area regardless of isInteractive prop in src/components/windows/Window.tsx
-- [ ] T023 [US3] Verify no mode-specific background overrides exist in Window.tsx styling in src/components/windows/Window.tsx
+- [X] T022 [US3] Verify Window.tsx applies backgroundTransparent to content area regardless of isInteractive prop in src/components/windows/Window.tsx
+- [X] T023 [US3] Verify no mode-specific background overrides exist in Window.tsx styling in src/components/windows/Window.tsx
 
 **Checkpoint**: User Story 3 complete - background mode is consistent across interaction modes
 
