@@ -134,17 +134,6 @@ export function serializeWindow(win: WindowInstance): WindowStructure | null {
 }
 
 /**
- * Clamp opacity value to valid range.
- */
-function clampOpacity(opacity: number | undefined): number {
-  if (opacity === undefined) return WINDOW_CONSTANTS.DEFAULT_OPACITY;
-  return Math.max(
-    WINDOW_CONSTANTS.MIN_OPACITY,
-    Math.min(WINDOW_CONSTANTS.MAX_OPACITY, opacity)
-  );
-}
-
-/**
  * Serialize current state to PersistedState format.
  */
 export function serializeState(

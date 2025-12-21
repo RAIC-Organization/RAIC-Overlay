@@ -99,11 +99,11 @@
 
 **Purpose**: Final validation and cleanup
 
-- [ ] T024 Verify default solid background (false) is applied to newly created windows
-- [ ] T025 Verify invalid/missing backgroundTransparent values default to false (solid)
-- [ ] T026 Run TypeScript type check to ensure no type errors
-- [ ] T027 Run ESLint to ensure code quality
-- [ ] T028 Manual testing: verify all acceptance scenarios from spec.md (include performance check: background change must be visually instant, <50ms per SC-002)
+- [X] T024 Verify default solid background (false) is applied to newly created windows
+- [X] T025 Verify invalid/missing backgroundTransparent values default to false (solid)
+- [X] T026 Run TypeScript type check to ensure no type errors
+- [X] T027 Run ESLint to ensure code quality
+- [X] T028 Manual testing: verify all acceptance scenarios from spec.md (include performance check: background change must be visually instant, <50ms per SC-002)
 
 ---
 
