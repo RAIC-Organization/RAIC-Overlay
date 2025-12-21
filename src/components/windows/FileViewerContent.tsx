@@ -15,6 +15,7 @@ import { exists } from "@tauri-apps/plugin-fs";
 import { FileViewerToolbar } from "./FileViewerToolbar";
 import { PDFRenderer } from "./renderers/PDFRenderer";
 import { MarkdownRenderer } from "./renderers/MarkdownRenderer";
+import { ImageRenderer } from "./renderers/ImageRenderer";
 import {
   clampFileViewerZoom,
   detectFileType,
@@ -105,7 +106,7 @@ export function FileViewerContent({
         filters: [
           {
             name: "Supported Files",
-            extensions: ["pdf", "md", "markdown"],
+            extensions: ["pdf", "md", "markdown", "png", "jpg", "jpeg", "gif", "webp", "bmp", "svg", "ico"],
           },
           {
             name: "PDF Documents",
@@ -114,6 +115,10 @@ export function FileViewerContent({
           {
             name: "Markdown Files",
             extensions: ["md", "markdown"],
+          },
+          {
+            name: "Image Files",
+            extensions: ["png", "jpg", "jpeg", "gif", "webp", "bmp", "svg", "ico"],
           },
         ],
       });
@@ -186,6 +191,8 @@ export function FileViewerContent({
         return <PDFRenderer filePath={filePath} zoom={zoom} />;
       case "markdown":
         return <MarkdownRenderer filePath={filePath} zoom={zoom} />;
+      case "image":
+        return <ImageRenderer filePath={filePath} zoom={zoom} />;
       case "unknown":
       default:
         return (
@@ -193,7 +200,7 @@ export function FileViewerContent({
             <FileQuestion className="h-12 w-12" />
             <p className="text-sm">Unsupported file type</p>
             <p className="text-xs text-muted-foreground">
-              Only PDF and Markdown files are supported
+              Only PDF, Markdown, and Image files are supported
             </p>
           </div>
         );
