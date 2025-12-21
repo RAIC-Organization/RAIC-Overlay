@@ -11,10 +11,12 @@
  * In interactive mode (windowed): Header visible with opacity slider, border, drag/resize enabled
  * In passive mode (fullscreen): Header hidden, subtle border, drag/resize disabled
  * Opacity is consistent across both modes (controlled via slider in interactive mode)
+ * Background transparency applies to content area only (header remains solid)
  *
  * @feature 007-windows-system
  * @feature 010-state-persistence-system
  * @feature 013-window-opacity-control
+ * @feature 018-window-background-toggle
  */
 
 import { useRef, useCallback, useState } from "react";
@@ -36,10 +38,10 @@ type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw' | null;
 const RESIZE_HANDLE_SIZE = 8;
 
 export function Window({ window: windowInstance, isInteractive = true, onExitComplete }: WindowProps) {
-  const { id, title, component: Component, componentProps, x, y, width, height, zIndex, opacity } =
+  const { id, title, component: Component, componentProps, x, y, width, height, zIndex, opacity, backgroundTransparent } =
     windowInstance;
 
-  const { focusWindow, resizeWindow, moveWindow, setWindowOpacity } = useWindows();
+  const { focusWindow, resizeWindow, moveWindow, setWindowOpacity, setWindowBackgroundTransparent } = useWindows();
   const persistence = usePersistenceContext();
   const resizeRef = useRef<{
     direction: ResizeDirection;
@@ -206,6 +208,10 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
     ? `calc(100% - ${WINDOW_CONSTANTS.HEADER_HEIGHT}px)`
     : '100%';
 
+  // Content background class based on backgroundTransparent setting
+  // Applies to content area only - header remains solid
+  const contentBackgroundClass = backgroundTransparent ? 'bg-transparent' : 'bg-background';
+
   return (
     <motion.div
       className={`absolute bg-background overflow-hidden ${modeClasses} ${getCursorStyle(resizeDirection)}`}
@@ -247,13 +253,16 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
               opacity={opacity}
               onOpacityChange={(newOpacity) => setWindowOpacity(id, newOpacity)}
               onOpacityCommit={() => persistence?.onWindowMoved()}
+              backgroundTransparent={backgroundTransparent}
+              onBackgroundTransparentChange={(transparent) => setWindowBackgroundTransparent(id, transparent)}
+              onBackgroundTransparentCommit={() => persistence?.onWindowMoved()}
             />
           </div>
         )}
 
-        {/* Content */}
+        {/* Content - background transparency applies here */}
         <div
-          className="overflow-auto pointer-events-auto"
+          className={`overflow-auto pointer-events-auto ${contentBackgroundClass}`}
           style={{ height: contentHeight }}
         >
           <Component {...(componentProps ?? {})} isInteractive={isInteractive} />

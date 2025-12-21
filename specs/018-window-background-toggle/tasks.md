@@ -49,16 +49,16 @@
 
 ### Implementation for User Story 1
 
-- [ ] T009 [US1] Create BackgroundToggle component with PanelTop icon in src/components/windows/BackgroundToggle.tsx
-- [ ] T010 [US1] Add BackgroundToggle props: value (boolean), onChange, onCommit in src/components/windows/BackgroundToggle.tsx
-- [ ] T011 [US1] Implement toggle click handler that inverts value and calls onChange + onCommit in src/components/windows/BackgroundToggle.tsx
-- [ ] T012 [US1] Add visual state styling (full opacity = solid, reduced = transparent) in src/components/windows/BackgroundToggle.tsx
-- [ ] T013 [US1] Add backgroundTransparent prop to WindowHeaderProps interface in src/components/windows/WindowHeader.tsx
-- [ ] T014 [US1] Add onBackgroundTransparentChange and onBackgroundTransparentCommit callbacks to WindowHeaderProps in src/components/windows/WindowHeader.tsx
-- [ ] T015 [US1] Import and render BackgroundToggle next to OpacitySlider in src/components/windows/WindowHeader.tsx
-- [ ] T016 [US1] Pass backgroundTransparent prop from Window to WindowHeader in src/components/windows/Window.tsx
-- [ ] T017 [US1] Add setWindowBackgroundTransparent handler passed to WindowHeader in src/components/windows/Window.tsx
-- [ ] T018 [US1] Apply conditional bg-transparent class to content area div based on backgroundTransparent prop in src/components/windows/Window.tsx
+- [X] T009 [US1] Create BackgroundToggle component with PanelTop icon in src/components/windows/BackgroundToggle.tsx
+- [X] T010 [US1] Add BackgroundToggle props: value (boolean), onChange, onCommit in src/components/windows/BackgroundToggle.tsx
+- [X] T011 [US1] Implement toggle click handler that inverts value and calls onChange + onCommit in src/components/windows/BackgroundToggle.tsx
+- [X] T012 [US1] Add visual state styling (full opacity = solid, reduced = transparent) in src/components/windows/BackgroundToggle.tsx
+- [X] T013 [US1] Add backgroundTransparent prop to WindowHeaderProps interface in src/components/windows/WindowHeader.tsx
+- [X] T014 [US1] Add onBackgroundTransparentChange and onBackgroundTransparentCommit callbacks to WindowHeaderProps in src/components/windows/WindowHeader.tsx
+- [X] T015 [US1] Import and render BackgroundToggle next to OpacitySlider in src/components/windows/WindowHeader.tsx
+- [X] T016 [US1] Pass backgroundTransparent prop from Window to WindowHeader in src/components/windows/Window.tsx
+- [X] T017 [US1] Add setWindowBackgroundTransparent handler passed to WindowHeader in src/components/windows/Window.tsx
+- [X] T018 [US1] Apply conditional bg-transparent class to content area div based on backgroundTransparent prop in src/components/windows/Window.tsx
 
 **Checkpoint**: User Story 1 complete - background toggle is functional in interaction mode
 
