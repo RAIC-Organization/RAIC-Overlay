@@ -7,6 +7,7 @@
  * @feature 010-state-persistence-system
  * @feature 015-browser-persistence
  * @feature 016-file-viewer-window
+ * @feature 018-window-background-toggle
  */
 
 export const CURRENT_STATE_VERSION = 1;
@@ -37,6 +38,8 @@ export interface WindowStructure {
   zIndex: number;
   flags: WindowFlags;
   opacity: number;
+  /** Background transparency (true = transparent content area, false = solid) */
+  backgroundTransparent: boolean;
 }
 
 export type WindowType = 'notes' | 'draw' | 'browser' | 'fileviewer';
