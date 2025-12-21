@@ -196,25 +196,33 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
   }, []);
 
   // Mode-aware styles
-  // Interactive: Full border, shadow
-  // Passive: Subtle border, backdrop blur for readability over game backgrounds
+  // Interactive: Full border, shadow (regardless of background transparency)
+  // Passive: Subtle border, backdrop blur - but hide shadow/border when transparent
   // Opacity is same in both modes (user-controlled via slider)
   const modeClasses = isInteractive
     ? 'border border-border rounded-lg shadow-lg'
-    : 'border border-white/20 rounded-lg shadow-md backdrop-blur-sm';
+    : backgroundTransparent
+      ? 'rounded-lg' // No border, shadow, or backdrop blur when transparent in passive mode
+      : 'border border-white/20 rounded-lg shadow-md backdrop-blur-sm';
 
   // Content height based on header visibility
   const contentHeight = isInteractive
     ? `calc(100% - ${WINDOW_CONSTANTS.HEADER_HEIGHT}px)`
     : '100%';
 
-  // Content background class based on backgroundTransparent setting
-  // Applies to content area only - header remains solid
-  const contentBackgroundClass = backgroundTransparent ? 'bg-transparent' : 'bg-background';
+  // Window background class based on backgroundTransparent setting
+  // Transparency only applies in non-interactive (passive) mode
+  // In interactive mode, background is always solid regardless of setting
+  // Setting still persists so it applies when switching back to passive mode
+  const isEffectivelyTransparent = !isInteractive && backgroundTransparent;
+  const windowBackgroundClass = isEffectivelyTransparent ? '' : 'bg-background';
+
+  // Content background class - only needed when solid to ensure content area is opaque
+  const contentBackgroundClass = isEffectivelyTransparent ? '' : 'bg-background';
 
   return (
     <motion.div
-      className={`absolute bg-background overflow-hidden ${modeClasses} ${getCursorStyle(resizeDirection)}`}
+      className={`absolute ${windowBackgroundClass} overflow-hidden ${modeClasses} ${getCursorStyle(resizeDirection)}`}
       style={{
         left: x,
         top: y,
