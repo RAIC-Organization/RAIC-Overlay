@@ -72,9 +72,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] Add `backgroundTransparent` field to serializeWindow output in src/lib/serialization.ts
-- [ ] T020 [US2] Update app restoration logic to pass initialBackgroundTransparent when opening restored windows in src/app/page.tsx
-- [ ] T021 [US2] Connect onBackgroundTransparentCommit to persistence?.onWindowMoved() in src/components/windows/Window.tsx
+- [X] T019 [US2] Add `backgroundTransparent` field to serializeWindow output in src/lib/serialization.ts
+- [X] T020 [US2] Update app restoration logic to pass initialBackgroundTransparent when opening restored windows in src/app/page.tsx
+- [X] T021 [US2] Connect onBackgroundTransparentCommit to persistence?.onWindowMoved() in src/components/windows/Window.tsx
 
 **Checkpoint**: User Story 2 complete - background settings persist across sessions
 

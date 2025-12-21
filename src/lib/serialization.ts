@@ -7,6 +7,7 @@
  * @feature 010-state-persistence-system
  * @feature 015-browser-persistence
  * @feature 016-file-viewer-window
+ * @feature 018-window-background-toggle
  */
 
 import type { WindowInstance, WindowContentType } from '@/types/windows';
@@ -128,6 +129,7 @@ export function serializeWindow(win: WindowInstance): WindowStructure | null {
     zIndex: win.zIndex,
     flags: DEFAULT_WINDOW_FLAGS, // Currently not tracking minimized/maximized
     opacity: win.opacity ?? WINDOW_CONSTANTS.DEFAULT_OPACITY,
+    backgroundTransparent: win.backgroundTransparent ?? false,
   };
 }
 

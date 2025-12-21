@@ -11,6 +11,7 @@
  *
  * @feature 003-f3-fullscreen-overlay
  * @feature 010-state-persistence-system
+ * @feature 018-window-background-toggle
  */
 
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -94,6 +95,7 @@ function WindowRestorer({
           initialHeight: win.size.height,
           initialZIndex: win.zIndex,
           initialOpacity: win.opacity,
+          initialBackgroundTransparent: win.backgroundTransparent ?? false,
           componentProps: {
             isInteractive: mode === 'windowed',
             initialContent: notesContent,
@@ -114,6 +116,7 @@ function WindowRestorer({
           initialHeight: win.size.height,
           initialZIndex: win.zIndex,
           initialOpacity: win.opacity,
+          initialBackgroundTransparent: win.backgroundTransparent ?? false,
           componentProps: {
             isInteractive: mode === 'windowed',
             initialElements: drawContent?.elements,
@@ -137,6 +140,7 @@ function WindowRestorer({
           initialHeight: win.size.height,
           initialZIndex: win.zIndex,
           initialOpacity: win.opacity,
+          initialBackgroundTransparent: win.backgroundTransparent ?? false,
           componentProps: {
             isInteractive: mode === 'windowed',
             windowId,
@@ -159,6 +163,7 @@ function WindowRestorer({
           initialHeight: win.size.height,
           initialZIndex: win.zIndex,
           initialOpacity: win.opacity,
+          initialBackgroundTransparent: win.backgroundTransparent ?? false,
           componentProps: {
             isInteractive: mode === 'windowed',
             windowId,
