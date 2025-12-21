@@ -31,11 +31,11 @@
 
 **⚠️ CRITICAL**: User Story 1 cannot function until this phase is complete
 
-- [ ] T004 Add `SET_WINDOW_BACKGROUND_TRANSPARENT` to `WindowsAction` union type in src/contexts/WindowsContext.tsx
-- [ ] T005 Add reducer case for `SET_WINDOW_BACKGROUND_TRANSPARENT` action in src/contexts/WindowsContext.tsx
-- [ ] T006 Update `OPEN_WINDOW` reducer case to handle `initialBackgroundTransparent` in src/contexts/WindowsContext.tsx
-- [ ] T007 Add `setWindowBackgroundTransparent` method to `ExtendedWindowsContextValue` interface in src/contexts/WindowsContext.tsx
-- [ ] T008 Implement `setWindowBackgroundTransparent` callback in WindowsProvider in src/contexts/WindowsContext.tsx
+- [X] T004 Add `SET_WINDOW_BACKGROUND_TRANSPARENT` to `WindowsAction` union type in src/contexts/WindowsContext.tsx
+- [X] T005 Add reducer case for `SET_WINDOW_BACKGROUND_TRANSPARENT` action in src/contexts/WindowsContext.tsx
+- [X] T006 Update `OPEN_WINDOW` reducer case to handle `initialBackgroundTransparent` in src/contexts/WindowsContext.tsx
+- [X] T007 Add `setWindowBackgroundTransparent` method to `ExtendedWindowsContextValue` interface in src/contexts/WindowsContext.tsx
+- [X] T008 Implement `setWindowBackgroundTransparent` callback in WindowsProvider in src/contexts/WindowsContext.tsx
 
 **Checkpoint**: State management ready - UI implementation can now begin
 
