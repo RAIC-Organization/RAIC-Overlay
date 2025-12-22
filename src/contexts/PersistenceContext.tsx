@@ -8,6 +8,7 @@
  *
  * @feature 010-state-persistence-system
  * @feature 015-browser-persistence
+ * @feature 020-background-transparency-persistence
  * @feature 016-file-viewer-window
  */
 
@@ -100,9 +101,17 @@ export function PersistenceProvider({
   const onWindowDeleteRef = useRef(onWindowDelete);
   onWindowDeleteRef.current = onWindowDelete;
 
+  // Create a getter function that returns current windows from ref-based state
+  // This is called at debounce EXECUTION time, not at call time
+  // @feature 020-background-transparency-persistence
+  const getWindowsForPersistence = useCallback(() => {
+    return getStateForPersistence().windows;
+  }, [getStateForPersistence]);
+
   const {
     saveStateImmediate,
     saveStateDebounced,
+    triggerDebouncedStateSave,
     saveWindowContentImmediate,
     saveNotesContentDebounced,
     saveDrawContentDebounced,
@@ -113,6 +122,7 @@ export function PersistenceProvider({
   } = usePersistence({
     overlayMode,
     overlayVisible,
+    getWindowsForPersistence,
   });
 
   // Track previous windows to detect added/removed windows
@@ -167,9 +177,14 @@ export function PersistenceProvider({
   }, [overlayMode, windows, saveStateImmediate]);
 
   // Debounced save for position/size changes
+  // Uses triggerDebouncedStateSave which calls getWindowsForPersistence at
+  // debounce EXECUTION time (500ms later), not at call time.
+  // This ensures the latest state is saved even for quick state changes
+  // where React hasn't processed updates yet.
+  // @feature 020-background-transparency-persistence
   const onWindowMoved = useCallback(() => {
-    saveStateDebounced(windows);
-  }, [windows, saveStateDebounced]);
+    triggerDebouncedStateSave();
+  }, [triggerDebouncedStateSave]);
 
   // Debounced save for notes content
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

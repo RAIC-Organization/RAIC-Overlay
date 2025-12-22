@@ -7,11 +7,13 @@
  * @feature 010-state-persistence-system
  * @feature 015-browser-persistence
  * @feature 016-file-viewer-window
+ * @feature 020-background-transparency-persistence
  */
 
 import { useRef, useCallback, useEffect } from 'react';
 import { debounce } from '@/lib/debounce';
 import { persistenceService } from '@/stores/persistenceService';
+import { debug as logDebug, info as logInfo, warn as logWarn, error as logError } from '@/lib/logger';
 import {
   serializeState,
   serializeNotesContent,
@@ -83,6 +85,12 @@ export interface UsePersistenceOptions {
   overlayMode: 'windowed' | 'fullscreen';
   /** Overlay visibility for state serialization */
   overlayVisible: boolean;
+  /**
+   * Getter function to retrieve current windows state at save time.
+   * This is called at debounce EXECUTION time (not call time) to avoid stale closures.
+   * @feature 020-background-transparency-persistence
+   */
+  getWindowsForPersistence?: () => WindowInstance[];
 }
 
 export interface UsePersistenceReturn {
@@ -93,8 +101,18 @@ export interface UsePersistenceReturn {
 
   /**
    * Save state with debounce (for position/size changes).
+   * Note: This captures windows at CALL time. For changes that need fresh state
+   * at EXECUTION time (like background toggle), use triggerDebouncedStateSave instead.
    */
   saveStateDebounced: (windows: WindowInstance[]) => void;
+
+  /**
+   * Trigger debounced state save using the getter function.
+   * This reads state at debounce EXECUTION time to avoid stale closures.
+   * Use this for quick state changes where React hasn't processed updates yet.
+   * @feature 020-background-transparency-persistence
+   */
+  triggerDebouncedStateSave: () => void;
 
   /**
    * Save window content immediately (for window creation).
@@ -153,13 +171,56 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
     debounce(async (windows: WindowInstance[], mode: string, visible: boolean) => {
       const startTime = performance.now();
       persistenceMetrics.recordStateSave();
+
+      // Debug log: what we're about to save
+      logDebug('[Persistence] Debounce executing - saving ' + windows.length + ' windows');
+      for (const win of windows) {
+        logDebug('[Persistence]   Window ' + win.id + ': backgroundTransparent=' + win.backgroundTransparent + ', opacity=' + win.opacity);
+      }
+
       const state = serializeState(windows, mode as 'windowed' | 'fullscreen', visible);
       const result = await persistenceService.saveState(state);
       const elapsed = performance.now() - startTime;
       if (!result.success) {
-        console.error('Failed to save state:', result.error);
+        logError('Failed to save state: ' + result.error);
       } else {
-        console.log(`State saved in ${elapsed.toFixed(0)}ms (${windows.length} windows)`);
+        logInfo('State saved in ' + elapsed.toFixed(0) + 'ms (' + windows.length + ' windows)');
+      }
+    }, DEBOUNCE_DELAY_MS)
+  );
+
+  // Debounced function that calls the getter at execution time
+  // This solves the stale closure problem by reading current state when debounce fires
+  // @feature 020-background-transparency-persistence
+  const debouncedStateSaveWithGetterRef = useRef(
+    debounce(async () => {
+      const getter = optionsRef.current.getWindowsForPersistence;
+      if (!getter) {
+        logWarn('[Persistence] triggerDebouncedStateSave called but no getter provided');
+        return;
+      }
+
+      // Call the getter NOW (at debounce execution time) to get fresh state
+      const windows = getter();
+      const mode = optionsRef.current.overlayMode;
+      const visible = optionsRef.current.overlayVisible;
+
+      const startTime = performance.now();
+      persistenceMetrics.recordStateSave();
+
+      // Debug log: what we're about to save
+      logDebug('[Persistence] Getter-based debounce executing - saving ' + windows.length + ' windows');
+      for (const win of windows) {
+        logDebug('[Persistence]   Window ' + win.id + ': backgroundTransparent=' + win.backgroundTransparent + ', opacity=' + win.opacity);
+      }
+
+      const state = serializeState(windows, mode, visible);
+      const result = await persistenceService.saveState(state);
+      const elapsed = performance.now() - startTime;
+      if (!result.success) {
+        logError('Failed to save state (getter): ' + result.error);
+      } else {
+        logInfo('State saved (getter) in ' + elapsed.toFixed(0) + 'ms (' + windows.length + ' windows)');
       }
     }, DEBOUNCE_DELAY_MS)
   );
@@ -182,9 +243,9 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
         const result = await persistenceService.saveWindowContent(windowId, content);
         const elapsed = performance.now() - startTime;
         if (!result.success) {
-          console.error(`Failed to save window content ${windowId}:`, result.error);
+          logError('Failed to save window content ' + windowId + ': ' + result.error);
         } else {
-          console.log(`Window content ${windowId} saved in ${elapsed.toFixed(0)}ms`);
+          logDebug('Window content ' + windowId + ' saved in ' + elapsed.toFixed(0) + 'ms');
         }
       }, DEBOUNCE_DELAY_MS);
       windowContentDebounceMap.current.set(windowId, debounceFn);
@@ -205,6 +266,12 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
   const saveStateImmediate = useCallback(async (windows: WindowInstance[]) => {
     // Cancel any pending debounced save first
     debouncedStateSaveRef.current.cancel();
+    debouncedStateSaveWithGetterRef.current.cancel();
+
+    logDebug('[Persistence] Immediate save - ' + windows.length + ' windows');
+    for (const win of windows) {
+      logDebug('[Persistence]   Window ' + win.id + ': backgroundTransparent=' + win.backgroundTransparent + ', opacity=' + win.opacity);
+    }
 
     const state = serializeState(
       windows,
@@ -213,18 +280,27 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
     );
     const result = await persistenceService.saveState(state);
     if (!result.success) {
-      console.error('Failed to save state (immediate):', result.error);
+      logError('Failed to save state (immediate): ' + result.error);
     }
   }, []);
 
-  // Save state with debounce
+  // Save state with debounce (legacy - passes windows at call time)
   const saveStateDebounced = useCallback((windows: WindowInstance[]) => {
     persistenceMetrics.recordStateChange();
+    logDebug('[Persistence] saveStateDebounced called - ' + windows.length + ' windows (state captured at call time)');
     debouncedStateSaveRef.current(
       windows,
       optionsRef.current.overlayMode,
       optionsRef.current.overlayVisible
     );
+  }, []);
+
+  // Trigger debounced save using getter (solves stale closure problem)
+  // @feature 020-background-transparency-persistence
+  const triggerDebouncedStateSave = useCallback(() => {
+    persistenceMetrics.recordStateChange();
+    logDebug('[Persistence] triggerDebouncedStateSave called - will read state at execution time');
+    debouncedStateSaveWithGetterRef.current();
   }, []);
 
   // Save window content immediately
@@ -237,7 +313,7 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
 
     const result = await persistenceService.saveWindowContent(content.windowId, content);
     if (!result.success) {
-      console.error('Failed to save window content (immediate):', result.error);
+      logError('Failed to save window content (immediate): ' + result.error);
     }
   }, []);
 
@@ -291,18 +367,19 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
 
     const result = await persistenceService.deleteWindowContent(windowId);
     if (!result.success) {
-      console.error('Failed to delete window content:', result.error);
+      logError('Failed to delete window content: ' + result.error);
     }
   }, [cleanupWindowDebounce]);
 
   // Flush all pending saves
   const flushPendingSaves = useCallback(() => {
     const stats = persistenceMetrics.getStats();
-    console.log(
-      `Flushing persistence - Debounce efficiency: state ${stats.stateReductionPercent}% reduction (${stats.rawStateChanges} raw → ${stats.actualStateSaves} saves), ` +
-      `content ${stats.contentReductionPercent}% reduction (${stats.rawContentChanges} raw → ${stats.actualContentSaves} saves)`
+    logInfo(
+      'Flushing persistence - Debounce efficiency: state ' + stats.stateReductionPercent + '% reduction (' + stats.rawStateChanges + ' raw -> ' + stats.actualStateSaves + ' saves), ' +
+      'content ' + stats.contentReductionPercent + '% reduction (' + stats.rawContentChanges + ' raw -> ' + stats.actualContentSaves + ' saves)'
     );
     debouncedStateSaveRef.current.flush();
+    debouncedStateSaveWithGetterRef.current.flush();
     for (const debounceFn of windowContentDebounceMap.current.values()) {
       debounceFn.flush();
     }
@@ -311,6 +388,7 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
   // Cancel all pending saves
   const cancelPendingSaves = useCallback(() => {
     debouncedStateSaveRef.current.cancel();
+    debouncedStateSaveWithGetterRef.current.cancel();
     for (const debounceFn of windowContentDebounceMap.current.values()) {
       debounceFn.cancel();
     }
@@ -320,16 +398,18 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
   useEffect(() => {
     // Capture refs for cleanup
     const stateSaveDebounce = debouncedStateSaveRef.current;
+    const stateSaveWithGetterDebounce = debouncedStateSaveWithGetterRef.current;
     const contentDebounceMap = windowContentDebounceMap.current;
 
     return () => {
       // Log metrics and flush pending saves on unmount (app close)
       const stats = persistenceMetrics.getStats();
-      console.log(
-        `Persistence session stats - Debounce efficiency: state ${stats.stateReductionPercent}% reduction (${stats.rawStateChanges} raw → ${stats.actualStateSaves} saves), ` +
-        `content ${stats.contentReductionPercent}% reduction (${stats.rawContentChanges} raw → ${stats.actualContentSaves} saves)`
+      logInfo(
+        'Persistence session stats - Debounce efficiency: state ' + stats.stateReductionPercent + '% reduction (' + stats.rawStateChanges + ' raw -> ' + stats.actualStateSaves + ' saves), ' +
+        'content ' + stats.contentReductionPercent + '% reduction (' + stats.rawContentChanges + ' raw -> ' + stats.actualContentSaves + ' saves)'
       );
       stateSaveDebounce.flush();
+      stateSaveWithGetterDebounce.flush();
       for (const debounceFn of contentDebounceMap.values()) {
         debounceFn.flush();
       }
@@ -339,6 +419,7 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
   return {
     saveStateImmediate,
     saveStateDebounced,
+    triggerDebouncedStateSave,
     saveWindowContentImmediate,
     saveNotesContentDebounced,
     saveDrawContentDebounced,
