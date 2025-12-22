@@ -1,4 +1,6 @@
 pub mod hotkey;
+pub mod logging;
+pub mod logging_types;
 pub mod persistence;
 pub mod persistence_types;
 pub mod state;
@@ -289,7 +291,15 @@ fn dismiss_error_modal(window: tauri::WebviewWindow) -> Result<(), String> {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    // Initialize logging with configured log level
+    let log_level = logging::get_log_level();
+
     tauri::Builder::default()
+        .plugin(
+            tauri_plugin_log::Builder::new()
+                .level(log_level)
+                .build(),
+        )
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
