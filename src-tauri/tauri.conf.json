@@ -32,6 +32,9 @@
       "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; frame-src https: http:; img-src 'self' data: https: http:"
     }
   },
+  "plugins": {
+    "log": {}
+  },
   "bundle": {
     "active": true,
     "targets": "all",
