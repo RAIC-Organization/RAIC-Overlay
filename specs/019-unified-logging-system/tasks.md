@@ -90,12 +90,12 @@
 
 ### Implementation for User Story 3
 
-- [ ] T018 [US3] Configure max_file_size(10_000_000) for 10MB rotation threshold in src-tauri/src/logging.rs
-- [ ] T019 [US3] Set rotation_strategy(RotationStrategy::KeepAll) in src-tauri/src/logging.rs
-- [ ] T020 [US3] Implement cleanup_old_logs Tauri command in src-tauri/src/logging.rs
-- [ ] T021 [US3] Implement get_log_file_path Tauri command in src-tauri/src/logging.rs
-- [ ] T022 [US3] Register cleanup_old_logs and get_log_file_path in invoke_handler in src-tauri/src/lib.rs
-- [ ] T023 [US3] Call cleanup_old_logs on app startup in setup() in src-tauri/src/lib.rs
+- [x] T018 [US3] Configure max_file_size(10_000_000) for 10MB rotation threshold in src-tauri/src/logging.rs
+- [x] T019 [US3] Set rotation_strategy(RotationStrategy::KeepAll) in src-tauri/src/logging.rs
+- [x] T020 [US3] Implement cleanup_old_logs Tauri command in src-tauri/src/logging.rs
+- [x] T021 [US3] Implement get_log_file_path Tauri command in src-tauri/src/logging.rs
+- [x] T022 [US3] Register cleanup_old_logs and get_log_file_path in invoke_handler in src-tauri/src/lib.rs
+- [x] T023 [US3] Call cleanup_old_logs on app startup in setup() in src-tauri/src/lib.rs
 
 **Checkpoint**: US3 complete - logs auto-rotate at 10MB, old logs cleaned on startup
 

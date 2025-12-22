@@ -321,7 +321,9 @@ pub fn run() {
             load_state,
             save_state,
             save_window_content,
-            delete_window_content
+            delete_window_content,
+            logging::cleanup_old_logs,
+            logging::get_log_file_path
         ])
         .setup(|app| {
             let handle = app.handle().clone();
@@ -329,6 +331,11 @@ pub fn run() {
             // Log application startup
             log::info!("RAIC Overlay starting up");
             log::debug!("Log level: {:?}", logging::get_log_level());
+
+            // Clean up old log files on startup
+            if let Err(e) = logging::cleanup_old_logs(handle.clone()) {
+                log::warn!("Failed to cleanup old logs: {}", e);
+            }
 
             // Register F3 and F5 global shortcuts
             if let Err(e) = hotkey::register_shortcuts(&handle) {
