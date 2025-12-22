@@ -1,4 +1,5 @@
 use log::LevelFilter;
+use tauri_plugin_log::{Target, TargetKind};
 
 /// Parse log level from RAIC_LOG_LEVEL environment variable.
 /// Defaults to Warn if not set or invalid.
@@ -14,4 +15,17 @@ pub fn get_log_level() -> LevelFilter {
             _ => None,
         })
         .unwrap_or(LevelFilter::Warn)
+}
+
+/// Build the logging plugin with configured targets.
+/// Adds Stdout target when log level is DEBUG or INFO for development visibility.
+pub fn build_log_plugin(log_level: LevelFilter) -> tauri::plugin::TauriPlugin<tauri::Wry> {
+    let mut builder = tauri_plugin_log::Builder::new().level(log_level);
+
+    // Add Stdout target for development (DEBUG or INFO levels)
+    if log_level <= LevelFilter::Info {
+        builder = builder.target(Target::new(TargetKind::Stdout));
+    }
+
+    builder.build()
 }

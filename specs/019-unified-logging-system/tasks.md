@@ -55,11 +55,11 @@
 
 ### Implementation for User Story 1
 
-- [ ] T009 [US1] Implement environment variable parsing for RAIC_LOG_LEVEL in src-tauri/src/logging.rs
-- [ ] T010 [US1] Configure tauri-plugin-log Builder with dynamic log level from get_log_level() in src-tauri/src/lib.rs
-- [ ] T011 [US1] Add Stdout target conditionally when log level is DEBUG or INFO in src-tauri/src/logging.rs
-- [ ] T012 [US1] Add sample log statements using log::info!, log::debug! in src-tauri/src/lib.rs setup() to verify logging works
-- [ ] T013 [US1] Verify log level filtering: set RAIC_LOG_LEVEL=INFO and confirm DEBUG messages are suppressed
+- [x] T009 [US1] Implement environment variable parsing for RAIC_LOG_LEVEL in src-tauri/src/logging.rs
+- [x] T010 [US1] Configure tauri-plugin-log Builder with dynamic log level from get_log_level() in src-tauri/src/lib.rs
+- [x] T011 [US1] Add Stdout target conditionally when log level is DEBUG or INFO in src-tauri/src/logging.rs
+- [x] T012 [US1] Add sample log statements using log::info!, log::debug! in src-tauri/src/lib.rs setup() to verify logging works
+- [x] T013 [US1] Verify log level filtering: set RAIC_LOG_LEVEL=INFO and confirm DEBUG messages are suppressed
 
 **Checkpoint**: US1 complete - developer can enable DEBUG logging via env var
 

@@ -294,12 +294,11 @@ pub fn run() {
     // Initialize logging with configured log level
     let log_level = logging::get_log_level();
 
+    // Build logging plugin with optional Stdout target for development
+    let log_builder = logging::build_log_plugin(log_level);
+
     tauri::Builder::default()
-        .plugin(
-            tauri_plugin_log::Builder::new()
-                .level(log_level)
-                .build(),
-        )
+        .plugin(log_builder)
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
@@ -327,9 +326,13 @@ pub fn run() {
         .setup(|app| {
             let handle = app.handle().clone();
 
+            // Log application startup
+            log::info!("RAIC Overlay starting up");
+            log::debug!("Log level: {:?}", logging::get_log_level());
+
             // Register F3 and F5 global shortcuts
             if let Err(e) = hotkey::register_shortcuts(&handle) {
-                eprintln!("Warning: {}", e);
+                log::warn!("Failed to register shortcuts: {}", e);
             }
 
             // Get main window
@@ -339,7 +342,7 @@ pub fn run() {
 
             // Position window at top center
             if let Err(e) = window::set_window_top_center(&window) {
-                eprintln!("Warning: Failed to position window: {}", e);
+                log::warn!("Failed to position window: {}", e);
             }
 
             // Set initial click-through state (hidden = click-through)
@@ -360,8 +363,10 @@ pub fn run() {
             };
 
             if let Err(e) = app.emit("overlay-ready", payload) {
-                eprintln!("Failed to emit overlay-ready: {}", e);
+                log::error!("Failed to emit overlay-ready: {}", e);
             }
+
+            log::info!("RAIC Overlay initialized successfully");
 
             // T026: Start focus monitor (Windows only)
             #[cfg(windows)]
