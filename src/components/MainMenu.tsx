@@ -11,6 +11,7 @@ import { NotesContent } from "@/components/windows/NotesContent";
 import { DrawContent } from "@/components/windows/DrawContent";
 import { BrowserContent } from "@/components/windows/BrowserContent";
 import { FileViewerContent } from "@/components/windows/FileViewerContent";
+import { ClockContent } from "@/components/windows/ClockContent";
 import { useLogger } from "@/hooks/useLogger";
 
 interface MainMenuProps {
@@ -70,6 +71,21 @@ export function MainMenu({
     });
   };
 
+  // T013-T014: Open clock window with transparent background
+  const handleOpenClock = () => {
+    log.info("Opening Clock window");
+    windowEvents.emit("window:open", {
+      component: ClockContent,
+      title: "Clock",
+      contentType: "clock",
+      initialWidth: 200,
+      initialHeight: 80,
+      initialOpacity: 0.8,
+      initialBackgroundTransparent: true,
+      componentProps: { isInteractive: mode === "windowed" },
+    });
+  };
+
   const handleTestWindows = () => {
     windowEvents.emit("window:open", {
       component: TestWindowContent,
@@ -102,6 +118,9 @@ export function MainMenu({
             </Button>
             <Button variant="secondary" onClick={handleOpenFileViewer}>
               File Viewer
+            </Button>
+            <Button variant="secondary" onClick={handleOpenClock}>
+              Clock
             </Button>
             <Button variant="secondary" onClick={handleTestWindows}>
               Test Windows

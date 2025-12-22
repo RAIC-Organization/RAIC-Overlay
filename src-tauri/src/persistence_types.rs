@@ -67,6 +67,7 @@ pub enum WindowType {
     Draw,
     Browser,
     Fileviewer,
+    Clock,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
