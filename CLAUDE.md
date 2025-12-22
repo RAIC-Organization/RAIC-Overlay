@@ -38,6 +38,7 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - N/A (font files are self-hosted at build time) (021-orbitron-font)
 - Rust 2021 Edition (backend), TypeScript 5.7.2 (frontend - unchanged) + Tauri 2.x with `tray-icon` feature, existing tauri dependencies (022-tray-icon-menu)
 - N/A (uses existing state persistence system for exit cleanup) (022-tray-icon-menu)
+- TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, Tailwind CSS 4.x, motion 12.x, shadcn/ui, Tauri 2.x (023-system-clock-window)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -62,9 +63,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 023-system-clock-window: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, Tailwind CSS 4.x, motion 12.x, shadcn/ui, Tauri 2.x
 - 022-tray-icon-menu: Added Rust 2021 Edition (backend), TypeScript 5.7.2 (frontend - unchanged) + Tauri 2.x with `tray-icon` feature, existing tauri dependencies
 - 021-orbitron-font: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + Next.js 16.x, React 19.0.0, Tailwind CSS 4.x, next/font/google (built-in)
-- 020-background-transparency-persistence: Added TypeScript 5.7.2 (frontend), Rust 2021 Edition (backend - unchanged) + React 19.0.0, Next.js 16.x, Tauri 2.x, @tauri-apps/api 2.0.0
 
 
 <!-- MANUAL ADDITIONS START -->
