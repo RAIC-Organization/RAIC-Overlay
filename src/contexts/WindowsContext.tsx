@@ -11,6 +11,7 @@
  *
  * @feature 007-windows-system
  * @feature 010-state-persistence-system
+ * @feature 018-window-background-toggle
  */
 
 import {
@@ -59,6 +60,8 @@ export interface ExtendedWindowsContextValue extends WindowsContextValue {
   };
   /** Set opacity for a specific window */
   setWindowOpacity: (windowId: string, opacity: number) => void;
+  /** Set background transparency for a specific window */
+  setWindowBackgroundTransparent: (windowId: string, transparent: boolean) => void;
 }
 
 // ============================================================================
@@ -73,7 +76,8 @@ type WindowsAction =
   | { type: 'RESIZE_WINDOW'; windowId: string; width: number; height: number }
   | { type: 'SET_WINDOW_CONTENT'; windowId: string; content: WindowContentFile }
   | { type: 'REMOVE_WINDOW_CONTENT'; windowId: string }
-  | { type: 'SET_WINDOW_OPACITY'; windowId: string; opacity: number };
+  | { type: 'SET_WINDOW_OPACITY'; windowId: string; opacity: number }
+  | { type: 'SET_WINDOW_BACKGROUND_TRANSPARENT'; windowId: string; transparent: boolean };
 
 // ============================================================================
 // Initial State
@@ -120,6 +124,9 @@ function windowsReducer(state: ExtendedWindowsState, action: WindowsAction): Ext
         )
       );
 
+      // Default to solid background (false), or use provided value
+      const backgroundTransparent = payload.initialBackgroundTransparent ?? false;
+
       const newWindow: WindowInstance = {
         id,
         title: payload.title,
@@ -133,6 +140,7 @@ function windowsReducer(state: ExtendedWindowsState, action: WindowsAction): Ext
         zIndex: payload.initialZIndex ?? state.nextZIndex,
         createdAt: Date.now(),
         opacity,
+        backgroundTransparent,
       };
 
       return {
@@ -261,6 +269,19 @@ function windowsReducer(state: ExtendedWindowsState, action: WindowsAction): Ext
 
       const updatedWindows = state.windows.map((w) =>
         w.id === windowId ? { ...w, opacity: clampedOpacity } : w
+      );
+
+      return {
+        ...state,
+        windows: updatedWindows,
+      };
+    }
+
+    case 'SET_WINDOW_BACKGROUND_TRANSPARENT': {
+      const { windowId, transparent } = action;
+
+      const updatedWindows = state.windows.map((w) =>
+        w.id === windowId ? { ...w, backgroundTransparent: transparent } : w
       );
 
       return {
@@ -425,6 +446,10 @@ export function WindowsProvider({
     dispatch({ type: 'SET_WINDOW_OPACITY', windowId, opacity });
   }, []);
 
+  const setWindowBackgroundTransparent = useCallback((windowId: string, transparent: boolean): void => {
+    dispatch({ type: 'SET_WINDOW_BACKGROUND_TRANSPARENT', windowId, transparent });
+  }, []);
+
   const value: ExtendedWindowsContextValue = {
     windows: state.windows,
     activeWindowId: state.activeWindowId,
@@ -438,6 +463,7 @@ export function WindowsProvider({
     getAllWindowContents,
     getStateForPersistence,
     setWindowOpacity,
+    setWindowBackgroundTransparent,
   };
 
   return (

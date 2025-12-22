@@ -55,6 +55,9 @@ export interface WindowOpenPayload {
 
   /** Optional: Initial opacity (for restored windows) */
   initialOpacity?: number;
+
+  /** Optional: Initial background transparency (for restored windows) */
+  initialBackgroundTransparent?: boolean;
 }
 
 /**
@@ -184,6 +187,9 @@ export interface WindowInstance {
 
   /** Window opacity (0.1 to 1.0) */
   opacity: number;
+
+  /** Background transparency (true = transparent content area, false = solid) */
+  backgroundTransparent: boolean;
 }
 
 // ============================================================================

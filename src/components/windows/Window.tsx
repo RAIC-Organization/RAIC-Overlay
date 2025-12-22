@@ -11,10 +11,12 @@
  * In interactive mode (windowed): Header visible with opacity slider, border, drag/resize enabled
  * In passive mode (fullscreen): Header hidden, subtle border, drag/resize disabled
  * Opacity is consistent across both modes (controlled via slider in interactive mode)
+ * Background transparency applies to content area only (header remains solid)
  *
  * @feature 007-windows-system
  * @feature 010-state-persistence-system
  * @feature 013-window-opacity-control
+ * @feature 018-window-background-toggle
  */
 
 import { useRef, useCallback, useState } from "react";
@@ -36,10 +38,10 @@ type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw' | null;
 const RESIZE_HANDLE_SIZE = 8;
 
 export function Window({ window: windowInstance, isInteractive = true, onExitComplete }: WindowProps) {
-  const { id, title, component: Component, componentProps, x, y, width, height, zIndex, opacity } =
+  const { id, title, component: Component, componentProps, x, y, width, height, zIndex, opacity, backgroundTransparent } =
     windowInstance;
 
-  const { focusWindow, resizeWindow, moveWindow, setWindowOpacity } = useWindows();
+  const { focusWindow, resizeWindow, moveWindow, setWindowOpacity, setWindowBackgroundTransparent } = useWindows();
   const persistence = usePersistenceContext();
   const resizeRef = useRef<{
     direction: ResizeDirection;
@@ -194,21 +196,33 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
   }, []);
 
   // Mode-aware styles
-  // Interactive: Full border, shadow
-  // Passive: Subtle border, backdrop blur for readability over game backgrounds
+  // Interactive: Full border, shadow (regardless of background transparency)
+  // Passive: Subtle border, backdrop blur - but hide shadow/border when transparent
   // Opacity is same in both modes (user-controlled via slider)
   const modeClasses = isInteractive
     ? 'border border-border rounded-lg shadow-lg'
-    : 'border border-white/20 rounded-lg shadow-md backdrop-blur-sm';
+    : backgroundTransparent
+      ? 'rounded-lg' // No border, shadow, or backdrop blur when transparent in passive mode
+      : 'border border-white/20 rounded-lg shadow-md backdrop-blur-sm';
 
   // Content height based on header visibility
   const contentHeight = isInteractive
     ? `calc(100% - ${WINDOW_CONSTANTS.HEADER_HEIGHT}px)`
     : '100%';
 
+  // Window background class based on backgroundTransparent setting
+  // Transparency only applies in non-interactive (passive) mode
+  // In interactive mode, background is always solid regardless of setting
+  // Setting still persists so it applies when switching back to passive mode
+  const isEffectivelyTransparent = !isInteractive && backgroundTransparent;
+  const windowBackgroundClass = isEffectivelyTransparent ? '' : 'bg-background';
+
+  // Content background class - only needed when solid to ensure content area is opaque
+  const contentBackgroundClass = isEffectivelyTransparent ? '' : 'bg-background';
+
   return (
     <motion.div
-      className={`absolute bg-background overflow-hidden ${modeClasses} ${getCursorStyle(resizeDirection)}`}
+      className={`absolute ${windowBackgroundClass} overflow-hidden ${modeClasses} ${getCursorStyle(resizeDirection)}`}
       style={{
         left: x,
         top: y,
@@ -247,13 +261,16 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
               opacity={opacity}
               onOpacityChange={(newOpacity) => setWindowOpacity(id, newOpacity)}
               onOpacityCommit={() => persistence?.onWindowMoved()}
+              backgroundTransparent={backgroundTransparent}
+              onBackgroundTransparentChange={(transparent) => setWindowBackgroundTransparent(id, transparent)}
+              onBackgroundTransparentCommit={() => persistence?.onWindowMoved()}
             />
           </div>
         )}
 
-        {/* Content */}
+        {/* Content - background transparency applies here */}
         <div
-          className="overflow-auto pointer-events-auto"
+          className={`overflow-auto pointer-events-auto ${contentBackgroundClass}`}
           style={{ height: contentHeight }}
         >
           <Component {...(componentProps ?? {})} isInteractive={isInteractive} />

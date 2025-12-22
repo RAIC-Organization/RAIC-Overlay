@@ -10,6 +10,7 @@
  *
  * @feature 007-windows-system
  * @feature 010-state-persistence-system
+ * @feature 018-window-background-toggle
  */
 
 import { useRef, useCallback } from 'react';
@@ -18,6 +19,7 @@ import { WINDOW_CONSTANTS } from '@/types/windows';
 import { useWindows } from '@/contexts/WindowsContext';
 import { usePersistenceContext } from '@/contexts/PersistenceContext';
 import { OpacitySlider } from './OpacitySlider';
+import { BackgroundToggle } from './BackgroundToggle';
 
 interface WindowHeaderProps {
   windowId: string;
@@ -31,6 +33,12 @@ interface WindowHeaderProps {
   onOpacityChange: (opacity: number) => void;
   /** Callback when opacity adjustment completes */
   onOpacityCommit: () => void;
+  /** Current background transparency state */
+  backgroundTransparent: boolean;
+  /** Callback when background transparency changes */
+  onBackgroundTransparentChange: (transparent: boolean) => void;
+  /** Callback when background transparency change completes */
+  onBackgroundTransparentCommit: () => void;
 }
 
 export function WindowHeader({
@@ -42,6 +50,9 @@ export function WindowHeader({
   opacity,
   onOpacityChange,
   onOpacityCommit,
+  backgroundTransparent,
+  onBackgroundTransparentChange,
+  onBackgroundTransparentCommit,
 }: WindowHeaderProps) {
   const { moveWindow, closeWindow } = useWindows();
   const persistence = usePersistenceContext();
@@ -114,6 +125,11 @@ export function WindowHeader({
           value={opacity}
           onChange={onOpacityChange}
           onCommit={onOpacityCommit}
+        />
+        <BackgroundToggle
+          value={backgroundTransparent}
+          onChange={onBackgroundTransparentChange}
+          onCommit={onBackgroundTransparentCommit}
         />
         <button
           onClick={handleClose}
