@@ -70,8 +70,8 @@
 
 ### Implementation for User Story 2
 
-- [ ] T015 [US2] Verify cursor: move style on text span for drag affordance in src/components/windows/ClockContent.tsx
-- [ ] T016 [US2] Test window drag behavior (handled by existing Window wrapper) - no code changes needed
+- [x] T015 [US2] Verify cursor: move style on text span for drag affordance in src/components/windows/ClockContent.tsx
+- [x] T016 [US2] Test window drag behavior (handled by existing Window wrapper) - no code changes needed
 
 **Checkpoint**: Clock window can be dragged and positioned anywhere on screen
 
