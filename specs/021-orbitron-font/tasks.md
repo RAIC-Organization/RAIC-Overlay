@@ -49,10 +49,10 @@
 
 ### Implementation for User Story 1
 
-- [ ] T004 [P] [US1] Add `font-display` class to window title in `src/components/windows/WindowHeader.tsx`
-- [ ] T005 [P] [US1] Add `font-display` class to button base styles in `src/components/ui/button.tsx`
-- [ ] T006 [US1] Verify font renders correctly across all window types (Notes, Draw, Browser, FileViewer)
-- [ ] T007 [US1] Visual verification: Run `npm run dev` and confirm Orbitron appears on all UI chrome elements
+- [x] T004 [P] [US1] Add `font-display` class to window title in `src/components/windows/WindowHeader.tsx`
+- [x] T005 [P] [US1] Add `font-display` class to button base styles in `src/components/ui/button.tsx`
+- [x] T006 [US1] Verify font renders correctly across all window types (Notes, Draw, Browser, FileViewer)
+- [x] T007 [US1] Visual verification: Run `npm run dev` and confirm Orbitron appears on all UI chrome elements
 
 **Checkpoint**: User Story 1 complete - All UI chrome displays Orbitron font. MVP is functional.
 

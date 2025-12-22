@@ -116,7 +116,7 @@ export function WindowHeader({
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
     >
-      <span className="text-sm font-medium truncate flex-1">{title}</span>
+      <span className="font-display text-sm font-medium truncate flex-1">{title}</span>
       <div
         className="flex items-center gap-2 cursor-default"
         onPointerDown={(e) => e.stopPropagation()}
