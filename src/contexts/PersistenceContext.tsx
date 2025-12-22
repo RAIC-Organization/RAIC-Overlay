@@ -8,6 +8,7 @@
  *
  * @feature 010-state-persistence-system
  * @feature 015-browser-persistence
+ * @feature 020-background-transparency-persistence
  * @feature 016-file-viewer-window
  */
 
@@ -167,9 +168,13 @@ export function PersistenceProvider({
   }, [overlayMode, windows, saveStateImmediate]);
 
   // Debounced save for position/size changes
+  // Uses getStateForPersistence() to read current state at execution time,
+  // avoiding stale closure issues when state updates are pending
+  // @feature 020-background-transparency-persistence
   const onWindowMoved = useCallback(() => {
-    saveStateDebounced(windows);
-  }, [windows, saveStateDebounced]);
+    const currentState = getStateForPersistence();
+    saveStateDebounced(currentState.windows);
+  }, [getStateForPersistence, saveStateDebounced]);
 
   // Debounced save for notes content
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
