@@ -99,9 +99,9 @@
 
 **Purpose**: Enable clock window state persistence across app restarts
 
-- [ ] T022 Import ClockContent in app/page.tsx for window restoration
-- [ ] T023 Add 'clock' case to WindowRestorer switch statement in app/page.tsx
-- [ ] T024 [P] Optional: Add serializeClockContent function in src/lib/serialization.ts for consistency
+- [x] T022 Import ClockContent in app/page.tsx for window restoration
+- [x] T023 Add 'clock' case to WindowRestorer switch statement in app/page.tsx
+- [x] T024 [P] Optional: Add serializeClockContent function in src/lib/serialization.ts for consistency (SKIPPED - clock has no content state)
 
 **Checkpoint**: Clock window position/size persists across app restarts
 
