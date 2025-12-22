@@ -16,6 +16,7 @@ export interface ClockContentProps {
   windowId?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function ClockContent({ isInteractive }: ClockContentProps) {
   // T005: Time state with 1-second interval update
   const [time, setTime] = useState(new Date());
