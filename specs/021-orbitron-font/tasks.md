@@ -78,9 +78,9 @@
 
 **Purpose**: Final validation and documentation
 
-- [ ] T011 Run full application in Tauri: `npm run tauri:dev` and verify font rendering in desktop app
-- [ ] T012 Verify body text, TipTap editor, and browser content retain system fonts (not Orbitron)
-- [ ] T013 Run quickstart.md verification steps to confirm all acceptance criteria met
+- [x] T011 Run full application in Tauri: `npm run tauri:dev` and verify font rendering in desktop app
+- [x] T012 Verify body text, TipTap editor, and browser content retain system fonts (not Orbitron)
+- [x] T013 Run quickstart.md verification steps to confirm all acceptance criteria met
 
 ---
 
