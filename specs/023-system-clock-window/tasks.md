@@ -33,10 +33,10 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Create ClockContent component skeleton in src/components/windows/ClockContent.tsx
-- [ ] T005 Implement time state with useState and 1-second interval update in src/components/windows/ClockContent.tsx
-- [ ] T006 Implement 24-hour time formatting (HH:MM:SS) using toLocaleTimeString in src/components/windows/ClockContent.tsx
-- [ ] T007 Add interval cleanup in useEffect return function in src/components/windows/ClockContent.tsx
+- [x] T004 Create ClockContent component skeleton in src/components/windows/ClockContent.tsx
+- [x] T005 Implement time state with useState and 1-second interval update in src/components/windows/ClockContent.tsx
+- [x] T006 Implement 24-hour time formatting (HH:MM:SS) using toLocaleTimeString in src/components/windows/ClockContent.tsx
+- [x] T007 Add interval cleanup in useEffect return function in src/components/windows/ClockContent.tsx
 
 **Checkpoint**: Foundation ready - ClockContent displays and updates time every second
 
