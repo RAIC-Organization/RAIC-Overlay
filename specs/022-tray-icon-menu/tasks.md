@@ -57,14 +57,14 @@
 
 ### Implementation for User Story 2
 
-- [ ] T010 [US2] Create MenuItem with id "quit" and text "Exit" in src-tauri/src/tray.rs
-- [ ] T011 [US2] Create Menu with quit_item using `Menu::with_items` in src-tauri/src/tray.rs
-- [ ] T012 [US2] Add `.menu(&menu)` to TrayIconBuilder in src-tauri/src/tray.rs
-- [ ] T013 [US2] Implement `on_menu_event` handler matching "quit" id in src-tauri/src/tray.rs
-- [ ] T014 [US2] Emit "app-exit-requested" event to frontend window in on_menu_event handler in src-tauri/src/tray.rs
-- [ ] T015 [US2] Add delayed app.exit(0) after 500ms for state persistence in src-tauri/src/tray.rs
-- [ ] T016 [US2] Add logging for exit request in on_menu_event handler in src-tauri/src/tray.rs
-- [ ] T017 [P] [US2] Add `app-exit-requested` event listener to trigger saveState in src/contexts/PersistenceContext.tsx
+- [x] T010 [US2] Create MenuItem with id "quit" and text "Exit" in src-tauri/src/tray.rs
+- [x] T011 [US2] Create Menu with quit_item using `Menu::with_items` in src-tauri/src/tray.rs
+- [x] T012 [US2] Add `.menu(&menu)` to TrayIconBuilder in src-tauri/src/tray.rs
+- [x] T013 [US2] Implement `on_menu_event` handler matching "quit" id in src-tauri/src/tray.rs
+- [x] T014 [US2] Emit "app-exit-requested" event to frontend window in on_menu_event handler in src-tauri/src/tray.rs
+- [x] T015 [US2] Add delayed app.exit(0) after 500ms for state persistence in src-tauri/src/tray.rs
+- [x] T016 [US2] Add logging for exit request in on_menu_event handler in src-tauri/src/tray.rs
+- [x] T017 [P] [US2] Add `app-exit-requested` event listener to trigger saveState in src/contexts/PersistenceContext.tsx
 
 **Checkpoint**: User Story 2 complete - Exit menu works, state persists before termination
 
