@@ -6,6 +6,7 @@
 //! @feature 010-state-persistence-system
 
 use crate::persistence_types::*;
+use log::{error, info};
 use std::fs::{self, File};
 use std::io::{Read, Write};
 use std::path::PathBuf;
@@ -67,6 +68,7 @@ pub async fn load_state(app: tauri::AppHandle) -> Result<LoadStateResult, String
     let mut file = match File::open(&state_path) {
         Ok(f) => f,
         Err(e) => {
+            error!("Failed to open state file: {}", e);
             return Ok(LoadStateResult {
                 success: false,
                 state: None,
@@ -78,6 +80,7 @@ pub async fn load_state(app: tauri::AppHandle) -> Result<LoadStateResult, String
 
     let mut contents = String::new();
     if let Err(e) = file.read_to_string(&mut contents) {
+        error!("Failed to read state file: {}", e);
         return Ok(LoadStateResult {
             success: false,
             state: None,
@@ -89,6 +92,7 @@ pub async fn load_state(app: tauri::AppHandle) -> Result<LoadStateResult, String
     let state: PersistedState = match serde_json::from_str(&contents) {
         Ok(s) => s,
         Err(e) => {
+            error!("Invalid state JSON: {}", e);
             return Ok(LoadStateResult {
                 success: false,
                 state: None,
@@ -172,6 +176,7 @@ pub async fn save_state(
 
     // Ensure directory exists
     if let Err(e) = fs::create_dir_all(&data_dir) {
+        error!("Failed to create state directory: {}", e);
         return Ok(SaveResult {
             success: false,
             error: Some(format!("Failed to create directory: {}", e)),
@@ -183,6 +188,7 @@ pub async fn save_state(
     let json = match serde_json::to_string_pretty(&state) {
         Ok(j) => j,
         Err(e) => {
+            error!("Failed to serialize state: {}", e);
             return Ok(SaveResult {
                 success: false,
                 error: Some(format!("Serialization failed: {}", e)),
@@ -191,12 +197,14 @@ pub async fn save_state(
     };
 
     if let Err(e) = atomic_write(&state_path, json.as_bytes()) {
+        error!("Failed to write state file: {}", e);
         return Ok(SaveResult {
             success: false,
             error: Some(e),
         });
     }
 
+    info!("State saved successfully");
     Ok(SaveResult {
         success: true,
         error: None,

@@ -73,10 +73,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T014 [US2] Ensure get_log_level() defaults to LevelFilter::Warn when env var is not set in src-tauri/src/logging.rs
-- [ ] T015 [US2] Configure LogDir target with file_name "app" in src-tauri/src/logging.rs
-- [ ] T016 [US2] Add log::warn! and log::error! calls in existing error handlers in src-tauri/src/lib.rs
-- [ ] T017 [US2] Verify production default: start without env var, confirm only WARN/ERROR in log file
+- [x] T014 [US2] Ensure get_log_level() defaults to LevelFilter::Warn when env var is not set in src-tauri/src/logging.rs
+- [x] T015 [US2] Configure LogDir target with file_name "app" in src-tauri/src/logging.rs
+- [x] T016 [US2] Add log::warn! and log::error! calls in existing error handlers in src-tauri/src/lib.rs
+- [x] T017 [US2] Verify production default: start without env var, confirm only WARN/ERROR in log file
 
 **Checkpoint**: US2 complete - production deployments auto-capture WARN/ERROR
 

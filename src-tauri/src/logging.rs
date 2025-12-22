@@ -18,9 +18,15 @@ pub fn get_log_level() -> LevelFilter {
 }
 
 /// Build the logging plugin with configured targets.
-/// Adds Stdout target when log level is DEBUG or INFO for development visibility.
+/// - Always logs to file in app log directory
+/// - Adds Stdout target when log level is DEBUG or INFO for development visibility
 pub fn build_log_plugin(log_level: LevelFilter) -> tauri::plugin::TauriPlugin<tauri::Wry> {
-    let mut builder = tauri_plugin_log::Builder::new().level(log_level);
+    let mut builder = tauri_plugin_log::Builder::new()
+        .level(log_level)
+        // Always log to file in app log directory
+        .target(Target::new(TargetKind::LogDir {
+            file_name: Some("app".to_string()),
+        }));
 
     // Add Stdout target for development (DEBUG or INFO levels)
     if log_level <= LevelFilter::Info {
