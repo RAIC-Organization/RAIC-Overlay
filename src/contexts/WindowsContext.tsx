@@ -391,6 +391,12 @@ export function WindowsProvider({
 
   const [state, dispatch] = useReducer(windowsReducer, undefined, getInitialState);
 
+  // Ref to always have access to current state (avoids stale closures)
+  // This is essential for getStateForPersistence to work correctly
+  // @feature 020-background-transparency-persistence
+  const stateRef = useRef(state);
+  stateRef.current = state;
+
   const openWindow = useCallback((payload: WindowOpenPayload): string => {
     const id = payload.windowId ?? generateWindowId();
     dispatch({ type: 'OPEN_WINDOW', payload, id });
@@ -434,13 +440,16 @@ export function WindowsProvider({
     return state.windowContents;
   }, [state.windowContents]);
 
+  // Use stateRef to always get current state, avoiding stale closure issues
+  // This is critical for persistence when React state updates are pending
+  // @feature 020-background-transparency-persistence
   const getStateForPersistence = useCallback(() => {
     return {
-      windows: state.windows,
-      activeWindowId: state.activeWindowId,
-      nextZIndex: state.nextZIndex,
+      windows: stateRef.current.windows,
+      activeWindowId: stateRef.current.activeWindowId,
+      nextZIndex: stateRef.current.nextZIndex,
     };
-  }, [state.windows, state.activeWindowId, state.nextZIndex]);
+  }, []); // Empty deps - always reads from ref
 
   const setWindowOpacity = useCallback((windowId: string, opacity: number): void => {
     dispatch({ type: 'SET_WINDOW_OPACITY', windowId, opacity });
