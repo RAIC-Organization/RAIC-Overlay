@@ -5,6 +5,7 @@
 //!
 //! @feature 010-state-persistence-system
 //! @feature 015-browser-persistence
+//! @feature 020-background-transparency-persistence
 
 use serde::{Deserialize, Serialize};
 
@@ -49,6 +50,10 @@ pub struct WindowStructure {
     pub flags: WindowFlags,
     #[serde(default = "default_opacity")]
     pub opacity: f32,
+    /// Background transparency for content area (true = transparent, false = solid)
+    /// @feature 020-background-transparency-persistence
+    #[serde(default)]
+    pub background_transparent: bool,
 }
 
 fn default_opacity() -> f32 {
