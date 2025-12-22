@@ -39,8 +39,23 @@ export function ClockContent({ isInteractive }: ClockContentProps) {
   });
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
-      <span>
+    // T011: pointer-events: none on container for click-through on transparent areas
+    <div className="w-full h-full flex items-center justify-center pointer-events-none">
+      {/* T008-T010, T012: Styled text with white color, blue stroke, system font, and pointer-events for drag */}
+      <span
+        className="pointer-events-auto cursor-move select-none"
+        style={{
+          // T010: System font stack
+          fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+          // T008: White text color
+          color: 'white',
+          // T009: Blue border with -webkit-text-stroke and paint-order
+          WebkitTextStroke: '2px #3b82f6',
+          paintOrder: 'stroke fill',
+          // Base font size (will be made dynamic in Phase 5)
+          fontSize: '48px',
+        }}
+      >
         {formattedTime}
       </span>
     </div>

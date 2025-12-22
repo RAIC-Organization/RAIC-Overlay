@@ -50,13 +50,13 @@
 
 ### Implementation for User Story 1 + 4
 
-- [ ] T008 [US1] Add white text color styling to time display in src/components/windows/ClockContent.tsx
-- [ ] T009 [US1] Add -webkit-text-stroke blue border (2px #3b82f6) with paint-order in src/components/windows/ClockContent.tsx
-- [ ] T010 [US1] Add system-ui font-family stack to time display in src/components/windows/ClockContent.tsx
-- [ ] T011 [US4] Add pointer-events: none to container div for click-through in src/components/windows/ClockContent.tsx
-- [ ] T012 [US4] Add pointer-events: auto to text span for drag interaction in src/components/windows/ClockContent.tsx
-- [ ] T013 Import ClockContent and add handleOpenClock function in src/components/MainMenu.tsx
-- [ ] T014 Add Clock button to MainMenu JSX with initialBackgroundTransparent: true in src/components/MainMenu.tsx
+- [x] T008 [US1] Add white text color styling to time display in src/components/windows/ClockContent.tsx
+- [x] T009 [US1] Add -webkit-text-stroke blue border (2px #3b82f6) with paint-order in src/components/windows/ClockContent.tsx
+- [x] T010 [US1] Add system-ui font-family stack to time display in src/components/windows/ClockContent.tsx
+- [x] T011 [US4] Add pointer-events: none to container div for click-through in src/components/windows/ClockContent.tsx
+- [x] T012 [US4] Add pointer-events: auto to text span for drag interaction in src/components/windows/ClockContent.tsx
+- [x] T013 Import ClockContent and add handleOpenClock function in src/components/MainMenu.tsx
+- [x] T014 Add Clock button to MainMenu JSX with initialBackgroundTransparent: true in src/components/MainMenu.tsx
 
 **Checkpoint**: Clock window can be created from menu with correct visual styling and transparent background
 
