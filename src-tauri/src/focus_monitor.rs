@@ -125,7 +125,7 @@ fn handle_focus_check(app: &AppHandle) {
         // T047: SC-004 validation - focus change response should be <100ms
         let elapsed = start.elapsed();
         if elapsed.as_millis() > 100 {
-            eprintln!(
+            log::warn!(
                 "Warning: handle_focus_lost took {}ms (target: <100ms)",
                 elapsed.as_millis()
             );
@@ -137,7 +137,7 @@ fn handle_focus_check(app: &AppHandle) {
         // T047: SC-004 validation - focus change response should be <100ms
         let elapsed = start.elapsed();
         if elapsed.as_millis() > 100 {
-            eprintln!(
+            log::warn!(
                 "Warning: handle_focus_gained took {}ms (target: <100ms)",
                 elapsed.as_millis()
             );

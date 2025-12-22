@@ -38,7 +38,7 @@ pub fn build_shortcut_plugin<R: tauri::Runtime>() -> tauri_plugin_global_shortcu
                 LAST_PRESS_F3.store(now, Ordering::SeqCst);
 
                 if let Err(e) = app.emit("toggle-visibility", ()) {
-                    eprintln!("Failed to emit toggle-visibility event: {}", e);
+                    log::error!("Failed to emit toggle-visibility event: {}", e);
                 }
                 return;
             }
@@ -52,7 +52,7 @@ pub fn build_shortcut_plugin<R: tauri::Runtime>() -> tauri_plugin_global_shortcu
                 LAST_PRESS_F5.store(now, Ordering::SeqCst);
 
                 if let Err(e) = app.emit("toggle-mode", ()) {
-                    eprintln!("Failed to emit toggle-mode event: {}", e);
+                    log::error!("Failed to emit toggle-mode event: {}", e);
                 }
             }
         },

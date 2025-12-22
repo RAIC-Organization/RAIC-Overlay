@@ -113,7 +113,7 @@ pub async fn load_state(app: tauri::AppHandle) -> Result<LoadStateResult, String
                     if let Ok(content) = serde_json::from_str::<WindowContentFile>(&content_str) {
                         window_contents.push(content);
                     } else {
-                        eprintln!("Warning: Failed to parse window content file: {}", content_path.display());
+                        log::warn!("Failed to parse window content file: {}", content_path.display());
                     }
                 }
             }
@@ -140,7 +140,7 @@ pub async fn load_state(app: tauri::AppHandle) -> Result<LoadStateResult, String
                         // Orphaned file - delete it
                         let orphan_path = entry.path();
                         if let Err(e) = fs::remove_file(&orphan_path) {
-                            eprintln!("Warning: Failed to delete orphaned file {}: {}", orphan_path.display(), e);
+                            log::warn!("Failed to delete orphaned file {}: {}", orphan_path.display(), e);
                         }
                     }
                 }
@@ -150,7 +150,7 @@ pub async fn load_state(app: tauri::AppHandle) -> Result<LoadStateResult, String
             if file_name_str.ends_with(".json.tmp") {
                 let temp_path = entry.path();
                 if let Err(e) = fs::remove_file(&temp_path) {
-                    eprintln!("Warning: Failed to delete temp file {}: {}", temp_path.display(), e);
+                    log::warn!("Failed to delete temp file {}: {}", temp_path.display(), e);
                 }
             }
         }

@@ -177,7 +177,7 @@ pub fn sync_overlay_to_target(window: &WebviewWindow, rect: &WindowRect) -> Resu
     // T046: SC-001 validation - position update should be <50ms
     let elapsed = start.elapsed();
     if elapsed.as_millis() > 50 {
-        eprintln!(
+        log::warn!(
             "Warning: sync_overlay_to_target took {}ms (target: <50ms)",
             elapsed.as_millis()
         );

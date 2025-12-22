@@ -125,12 +125,12 @@
 
 **Purpose**: Final cleanup and validation
 
-- [ ] T031 [P] Add JSDoc comments to exported functions in src/lib/logger.ts
-- [ ] T032 [P] Add Rust doc comments to public functions in src-tauri/src/logging.rs
-- [ ] T033 Replace existing eprintln! calls with log::warn! or log::error! throughout src-tauri/src/
-- [ ] T034 Run `cargo clippy` and fix any warnings in src-tauri/
-- [ ] T035 Run `npm run build` and verify no TypeScript errors
-- [ ] T036 Validate quickstart.md instructions work end-to-end
+- [x] T031 [P] Add JSDoc comments to exported functions in src/lib/logger.ts
+- [x] T032 [P] Add Rust doc comments to public functions in src-tauri/src/logging.rs
+- [x] T033 Replace existing eprintln! calls with log::warn! or log::error! throughout src-tauri/src/
+- [x] T034 Run `cargo clippy` and fix any warnings in src-tauri/
+- [x] T035 Run `npm run build` and verify no TypeScript errors
+- [x] T036 Validate quickstart.md instructions work end-to-end
 
 ---
 
