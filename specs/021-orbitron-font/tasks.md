@@ -66,9 +66,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T008 [US2] Verify fallback font stack includes system sans-serif in `app/globals.css` (`--font-display` definition)
-- [ ] T009 [US2] Test offline behavior: Build app with `npm run build`, disconnect network, verify font renders (self-hosted)
-- [ ] T010 [US2] Verify `display: 'swap'` is configured in Orbitron font options in `app/layout.tsx`
+- [x] T008 [US2] Verify fallback font stack includes system sans-serif in `app/globals.css` (`--font-display` definition)
+- [x] T009 [US2] Test offline behavior: Build app with `npm run build`, disconnect network, verify font renders (self-hosted)
+- [x] T010 [US2] Verify `display: 'swap'` is configured in Orbitron font options in `app/layout.tsx`
 
 **Checkpoint**: User Story 2 complete - Fallback strategy verified, application usable without Orbitron.
 
