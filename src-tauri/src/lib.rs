@@ -4,6 +4,7 @@ pub mod logging_types;
 pub mod persistence;
 pub mod persistence_types;
 pub mod state;
+pub mod tray;
 #[cfg(windows)]
 pub mod focus_monitor;
 #[cfg(windows)]
@@ -341,6 +342,11 @@ pub fn run() {
             // Register F3 and F5 global shortcuts
             if let Err(e) = hotkey::register_shortcuts(&handle) {
                 log::warn!("Failed to register shortcuts: {}", e);
+            }
+
+            // T008: Setup system tray icon
+            if let Err(e) = tray::setup_tray(&handle) {
+                log::error!("Failed to setup tray icon: {}", e);
             }
 
             // Get main window
