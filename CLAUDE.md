@@ -1,6 +1,6 @@
-﻿# RAICOverlay Development Guidelines
+# RAICOverlay Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2025-12-12
+Auto-generated from all feature plans. Last updated: 2025-12-22
 
 ## Active Technologies
 - TypeScript 5.7 (React 19.2 frontend), Rust 1.92 (Tauri backend - unchanged) + shadcn/ui, Tailwind CSS 4.x, @tailwindcss/vite, clsx, tailwind-merge (002-shadcn-dark-theme)
@@ -36,6 +36,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-12
 - JSON files in Tauri app data directory (state.json) (020-background-transparency-persistence)
 - TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + Next.js 16.x, React 19.0.0, Tailwind CSS 4.x, next/font/google (built-in) (021-orbitron-font)
 - N/A (font files are self-hosted at build time) (021-orbitron-font)
+- Rust 2021 Edition (backend), TypeScript 5.7.2 (frontend - unchanged) + Tauri 2.x with `tray-icon` feature, existing tauri dependencies (022-tray-icon-menu)
+- N/A (uses existing state persistence system for exit cleanup) (022-tray-icon-menu)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -60,9 +62,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 022-tray-icon-menu: Added Rust 2021 Edition (backend), TypeScript 5.7.2 (frontend - unchanged) + Tauri 2.x with `tray-icon` feature, existing tauri dependencies
 - 021-orbitron-font: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + Next.js 16.x, React 19.0.0, Tailwind CSS 4.x, next/font/google (built-in)
 - 020-background-transparency-persistence: Added TypeScript 5.7.2 (frontend), Rust 2021 Edition (backend - unchanged) + React 19.0.0, Next.js 16.x, Tauri 2.x, @tauri-apps/api 2.0.0
-- 019-unified-logging-system: Added Rust 2021 Edition (backend), TypeScript 5.7.2 (frontend) + Tauri 2.x, React 19.0.0, Next.js 16.x, serde/serde_json (Rust), @tauri-apps/api 2.0.0
 
 
 <!-- MANUAL ADDITIONS START -->

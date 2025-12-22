@@ -10,6 +10,7 @@
  * @feature 015-browser-persistence
  * @feature 020-background-transparency-persistence
  * @feature 016-file-viewer-window
+ * @feature 022-tray-icon-menu
  */
 
 import {
@@ -20,6 +21,7 @@ import {
   useRef,
   type ReactNode,
 } from 'react';
+import { listen } from '@tauri-apps/api/event';
 import { usePersistence } from '@/hooks/usePersistence';
 import { useWindows } from '@/contexts/WindowsContext';
 import type { WindowInstance, WindowContentType } from '@/types/windows';
@@ -175,6 +177,18 @@ export function PersistenceProvider({
       saveStateImmediate(windows);
     }
   }, [overlayMode, windows, saveStateImmediate]);
+
+  // T017: Listen for app-exit-requested event from tray menu
+  // @feature 022-tray-icon-menu
+  useEffect(() => {
+    const unlisten = listen('app-exit-requested', async () => {
+      // Flush all pending saves before app terminates
+      flushPendingSaves();
+    });
+    return () => {
+      unlisten.then(fn => fn());
+    };
+  }, [flushPendingSaves]);
 
   // Debounced save for position/size changes
   // Uses triggerDebouncedStateSave which calls getWindowsForPersistence at
