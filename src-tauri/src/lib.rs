@@ -323,7 +323,8 @@ pub fn run() {
             save_window_content,
             delete_window_content,
             logging::cleanup_old_logs,
-            logging::get_log_file_path
+            logging::get_log_file_path,
+            logging::get_log_config
         ])
         .setup(|app| {
             let handle = app.handle().clone();

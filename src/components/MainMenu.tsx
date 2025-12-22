@@ -11,6 +11,7 @@ import { NotesContent } from "@/components/windows/NotesContent";
 import { DrawContent } from "@/components/windows/DrawContent";
 import { BrowserContent } from "@/components/windows/BrowserContent";
 import { FileViewerContent } from "@/components/windows/FileViewerContent";
+import { useLogger } from "@/hooks/useLogger";
 
 interface MainMenuProps {
   visible?: boolean;
@@ -26,11 +27,13 @@ export function MainMenu({
 }: MainMenuProps) {
   const prefersReducedMotion = useReducedMotion();
   const showHideDuration = prefersReducedMotion ? 0 : 0.3;
+  const log = useLogger("MainMenu");
 
   // Only show in windowed (interactive) mode
   const shouldShow = visible && mode === "windowed";
 
   const handleOpenNotes = () => {
+    log.info("Opening Notes window");
     windowEvents.emit("window:open", {
       component: NotesContent,
       title: "Notes",
@@ -40,6 +43,7 @@ export function MainMenu({
   };
 
   const handleOpenDraw = () => {
+    log.info("Opening Draw window");
     windowEvents.emit("window:open", {
       component: DrawContent,
       title: "Draw",

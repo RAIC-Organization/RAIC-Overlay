@@ -109,13 +109,13 @@
 
 ### Implementation for User Story 4
 
-- [ ] T024 [P] [US4] Implement custom JSON formatter with chrono timestamps in src-tauri/src/logging.rs
-- [ ] T025 [P] [US4] Create frontend logger service with forwardConsole() in src/lib/logger.ts
-- [ ] T026 [P] [US4] Create useLogger React hook for component logging in src/hooks/useLogger.ts
-- [ ] T027 [US4] Initialize console forwarding in app startup in app/layout.tsx or app/page.tsx
-- [ ] T028 [US4] Implement get_log_config Tauri command in src-tauri/src/logging.rs
-- [ ] T029 [US4] Register get_log_config in invoke_handler in src-tauri/src/lib.rs
-- [ ] T030 [US4] Add info! log on frontend action (e.g., window open) to verify frontend→backend→file flow
+- [x] T024 [P] [US4] Implement custom JSON formatter with chrono timestamps in src-tauri/src/logging.rs
+- [x] T025 [P] [US4] Create frontend logger service with forwardConsole() in src/lib/logger.ts
+- [x] T026 [P] [US4] Create useLogger React hook for component logging in src/hooks/useLogger.ts
+- [x] T027 [US4] Initialize console forwarding in app startup in app/layout.tsx or app/page.tsx
+- [x] T028 [US4] Implement get_log_config Tauri command in src-tauri/src/logging.rs
+- [x] T029 [US4] Register get_log_config in invoke_handler in src-tauri/src/lib.rs
+- [x] T030 [US4] Add info! log on frontend action (e.g., window open) to verify frontend→backend→file flow
 
 **Checkpoint**: US4 complete - frontend and backend logs unified in JSONL format
 

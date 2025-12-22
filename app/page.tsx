@@ -44,6 +44,15 @@ import {
   ShowErrorModalPayload,
   AutoHideChangedPayload,
 } from "@/types/ipc";
+import { forwardConsole, info } from "@/lib/logger";
+
+// Initialize console forwarding on module load
+let consoleForwarded = false;
+if (typeof window !== 'undefined' && !consoleForwarded) {
+  forwardConsole();
+  consoleForwarded = true;
+  info('Console forwarding initialized');
+}
 
 // Error modal state
 interface ErrorModalState {

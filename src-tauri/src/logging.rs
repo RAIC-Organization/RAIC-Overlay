@@ -30,12 +30,25 @@ pub fn get_log_level() -> LevelFilter {
 /// Build the logging plugin with configured targets.
 /// - Always logs to file in app log directory
 /// - 10MB max file size with KeepAll rotation strategy
+/// - Custom JSON formatter for structured logs
 /// - Adds Stdout target when log level is DEBUG or INFO for development visibility
 pub fn build_log_plugin(log_level: LevelFilter) -> tauri::plugin::TauriPlugin<tauri::Wry> {
     let mut builder = tauri_plugin_log::Builder::new()
         .level(log_level)
         .max_file_size(MAX_FILE_SIZE)
         .rotation_strategy(RotationStrategy::KeepAll)
+        // Custom JSON formatter for structured output
+        .format(|out, message, record| {
+            let ts = chrono::Utc::now().to_rfc3339();
+            let level = record.level().to_string();
+            let target = record.target();
+            // Escape quotes in message for valid JSON
+            let msg = message.to_string().replace('"', "\\\"");
+            out.finish(format_args!(
+                r#"{{"ts":"{}","level":"{}","target":"{}","message":"{}"}}"#,
+                ts, level, target, msg
+            ))
+        })
         // Always log to file in app log directory
         .target(Target::new(TargetKind::LogDir {
             file_name: Some("app".to_string()),
@@ -59,6 +72,27 @@ pub fn get_log_file_path(app: tauri::AppHandle) -> Result<String, String> {
 
     let log_path = log_dir.join("app.log");
     Ok(log_path.to_string_lossy().to_string())
+}
+
+/// Get the current log configuration.
+#[tauri::command]
+pub fn get_log_config(app: tauri::AppHandle) -> Result<crate::logging_types::LogConfig, String> {
+    use crate::logging_types::{LogConfig, LogLevelName};
+
+    let log_dir = app
+        .path()
+        .app_log_dir()
+        .map_err(|e| format!("Failed to get log directory: {}", e))?;
+
+    let log_level = get_log_level();
+    let console_output = log_level <= LevelFilter::Info;
+
+    Ok(LogConfig {
+        min_level: LogLevelName::from(log_level),
+        max_file_size: MAX_FILE_SIZE as u64,
+        log_dir: log_dir.to_string_lossy().to_string(),
+        console_output,
+    })
 }
 
 /// Delete log files older than the retention period (7 days).
