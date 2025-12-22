@@ -34,6 +34,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-12
 - JSON log files in Tauri app data directory (`logs/` subdirectory) (019-unified-logging-system)
 - TypeScript 5.7.2 (frontend), Rust 2021 Edition (backend - unchanged) + React 19.0.0, Next.js 16.x, Tauri 2.x, @tauri-apps/api 2.0.0 (020-background-transparency-persistence)
 - JSON files in Tauri app data directory (state.json) (020-background-transparency-persistence)
+- TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + Next.js 16.x, React 19.0.0, Tailwind CSS 4.x, next/font/google (built-in) (021-orbitron-font)
+- N/A (font files are self-hosted at build time) (021-orbitron-font)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -58,9 +60,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 021-orbitron-font: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + Next.js 16.x, React 19.0.0, Tailwind CSS 4.x, next/font/google (built-in)
 - 020-background-transparency-persistence: Added TypeScript 5.7.2 (frontend), Rust 2021 Edition (backend - unchanged) + React 19.0.0, Next.js 16.x, Tauri 2.x, @tauri-apps/api 2.0.0
 - 019-unified-logging-system: Added Rust 2021 Edition (backend), TypeScript 5.7.2 (frontend) + Tauri 2.x, React 19.0.0, Next.js 16.x, serde/serde_json (Rust), @tauri-apps/api 2.0.0
-- 017-image-viewer-zoom: Added TypeScript 5.7.2, React 19.0.0 + react-zoom-pan-pinch (new), @tauri-apps/plugin-fs (existing), lucide-react (existing)
 
 
 <!-- MANUAL ADDITIONS START -->
