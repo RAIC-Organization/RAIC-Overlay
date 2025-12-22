@@ -38,12 +38,12 @@
 
 ### Implementation for User Story 1
 
-- [ ] T004 [US1] Import required Tauri tray and menu types in src-tauri/src/tray.rs
-- [ ] T005 [US1] Implement `setup_tray` function signature accepting `&AppHandle` in src-tauri/src/tray.rs
-- [ ] T006 [US1] Add TrayIconBuilder with `.icon(app.default_window_icon())` to use existing app icon in src-tauri/src/tray.rs
-- [ ] T007 [US1] Add `.tooltip("RAICOverlay")` to TrayIconBuilder in src-tauri/src/tray.rs
-- [ ] T008 [US1] Call `tray::setup_tray(&handle)` from setup closure in src-tauri/src/lib.rs
-- [ ] T009 [US1] Add logging for tray icon initialization in src-tauri/src/tray.rs
+- [x] T004 [US1] Import required Tauri tray and menu types in src-tauri/src/tray.rs
+- [x] T005 [US1] Implement `setup_tray` function signature accepting `&AppHandle` in src-tauri/src/tray.rs
+- [x] T006 [US1] Add TrayIconBuilder with `.icon(app.default_window_icon())` to use existing app icon in src-tauri/src/tray.rs
+- [x] T007 [US1] Add `.tooltip("RAICOverlay")` to TrayIconBuilder in src-tauri/src/tray.rs
+- [x] T008 [US1] Call `tray::setup_tray(&handle)` from setup closure in src-tauri/src/lib.rs
+- [x] T009 [US1] Add logging for tray icon initialization in src-tauri/src/tray.rs
 
 **Checkpoint**: User Story 1 complete - tray icon visible with tooltip, no menu yet
 
