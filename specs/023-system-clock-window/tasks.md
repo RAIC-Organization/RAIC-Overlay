@@ -85,11 +85,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T017 [US3] Add containerRef useRef for ResizeObserver in src/components/windows/ClockContent.tsx
-- [ ] T018 [US3] Add fontSize state with initial value in src/components/windows/ClockContent.tsx
-- [ ] T019 [US3] Implement ResizeObserver to calculate fontSize from container dimensions in src/components/windows/ClockContent.tsx
-- [ ] T020 [US3] Apply dynamic fontSize to text span style in src/components/windows/ClockContent.tsx
-- [ ] T021 [US3] Add minimum font size constraint (12px) to prevent illegibility in src/components/windows/ClockContent.tsx
+- [x] T017 [US3] Add containerRef useRef for ResizeObserver in src/components/windows/ClockContent.tsx
+- [x] T018 [US3] Add fontSize state with initial value in src/components/windows/ClockContent.tsx
+- [x] T019 [US3] Implement ResizeObserver to calculate fontSize from container dimensions in src/components/windows/ClockContent.tsx
+- [x] T020 [US3] Apply dynamic fontSize to text span style in src/components/windows/ClockContent.tsx
+- [x] T021 [US3] Add minimum font size constraint (12px) to prevent illegibility in src/components/windows/ClockContent.tsx
 
 **Checkpoint**: Clock text scales automatically when window is resized
 
