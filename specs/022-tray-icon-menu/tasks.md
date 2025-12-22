@@ -74,13 +74,13 @@
 
 **Purpose**: Final verification and documentation
 
-- [ ] T018 Build and run application with `npm run tauri dev`
-- [ ] T019 Verify tray icon appears within 2 seconds of launch (SC-001)
-- [ ] T020 Verify tooltip shows "RAICOverlay" on hover (FR-003)
-- [ ] T021 Verify context menu appears on right-click with "Exit" option (FR-004, FR-005)
-- [ ] T022 Verify Exit terminates app gracefully with state saved (FR-006, FR-008)
-- [ ] T023 Verify tray icon removed after termination (FR-007)
-- [ ] T024 Update CLAUDE.md with feature 022 completion status
+- [x] T018 Build and run application with `npm run tauri dev`
+- [x] T019 Verify tray icon appears within 2 seconds of launch (SC-001)
+- [x] T020 Verify tooltip shows "RAICOverlay" on hover (FR-003)
+- [x] T021 Verify context menu appears on right-click with "Exit" option (FR-004, FR-005)
+- [x] T022 Verify Exit terminates app gracefully with state saved (FR-006, FR-008)
+- [x] T023 Verify tray icon removed after termination (FR-007)
+- [x] T024 Update CLAUDE.md with feature 022 completion status
 
 ---
 
