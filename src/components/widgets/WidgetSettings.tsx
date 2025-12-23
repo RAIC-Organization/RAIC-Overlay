@@ -10,7 +10,7 @@
  */
 
 import { useCallback } from 'react';
-import { X } from 'lucide-react';
+import { X, Trash2 } from 'lucide-react';
 
 // ============================================================================
 // Types
@@ -21,6 +21,7 @@ interface WidgetSettingsProps {
   opacity: number;
   onOpacityChange: (opacity: number) => void;
   onClose: () => void;
+  onCloseWidget: () => void;
 }
 
 // ============================================================================
@@ -29,12 +30,13 @@ interface WidgetSettingsProps {
 
 /**
  * Widget settings panel - displayed on the back of the widget flip.
- * Provides opacity control and a close button.
+ * Provides opacity control, flip-back button, and widget close button.
  */
 export function WidgetSettings({
   opacity,
   onOpacityChange,
   onClose,
+  onCloseWidget,
 }: WidgetSettingsProps) {
   // Convert 0-1 opacity to 10-100 percentage for display
   const opacityPercent = Math.round(opacity * 100);
@@ -106,6 +108,17 @@ export function WidgetSettings({
             aria-hidden="true"
           />
         </div>
+
+        {/* Close widget button */}
+        <button
+          type="button"
+          onClick={onCloseWidget}
+          className="flex items-center justify-center gap-2 w-full px-3 py-2 rounded bg-red-500/20 hover:bg-red-500/40 transition-colors text-red-400 hover:text-red-300 text-xs font-medium"
+          aria-label="Close widget"
+        >
+          <Trash2 size={14} />
+          Remove Widget
+        </button>
       </div>
     </div>
   );

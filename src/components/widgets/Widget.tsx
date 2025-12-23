@@ -120,6 +120,10 @@ export function Widget({
     onOpacityChange?.(widget.id, opacity);
   }, [widget.id, onOpacityChange]);
 
+  const handleCloseWidget = useCallback(() => {
+    onClose?.(widget.id);
+  }, [widget.id, onClose]);
+
   // ============================================================================
   // Drag Handlers (with 175ms hold threshold)
   // ============================================================================
@@ -382,6 +386,7 @@ export function Widget({
             opacity={widget.opacity}
             onOpacityChange={handleOpacityChange}
             onClose={handleCloseSettings}
+            onCloseWidget={handleCloseWidget}
           />
         </div>
       </motion.div>

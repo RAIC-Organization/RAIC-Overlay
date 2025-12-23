@@ -155,13 +155,13 @@
 
 **Purpose**: Final validation and cleanup
 
-- [ ] T046 Verify all edge cases: minimum size, visibility constraints, animation during drag in src/components/widgets/Widget.tsx
-- [ ] T047 Ensure widgets respect interaction mode toggle (F5) throughout in src/components/widgets/WidgetsContainer.tsx
-- [ ] T048 Add widget close functionality (close button on settings panel) in src/components/widgets/WidgetSettings.tsx
-- [ ] T049 Add CLOSE_WIDGET action to WidgetsContext and wire to settings close in src/contexts/WidgetsContext.tsx
-- [ ] T050 Run quickstart.md validation checklist (verify clock widget button in menu per FR-018)
-- [ ] T051 Verify no TypeScript errors with cargo clippy and npm run lint
-- [ ] T052 Final visual testing of all user stories (verify 500ms backflip timing per SC-004)
+- [x] T046 Verify all edge cases: minimum size, visibility constraints, animation during drag in src/components/widgets/Widget.tsx
+- [x] T047 Ensure widgets respect interaction mode toggle (F5) throughout in src/components/widgets/WidgetsContainer.tsx
+- [x] T048 Add widget close functionality (close button on settings panel) in src/components/widgets/WidgetSettings.tsx
+- [x] T049 Add CLOSE_WIDGET action to WidgetsContext and wire to settings close in src/contexts/WidgetsContext.tsx
+- [x] T050 Run quickstart.md validation checklist (verify clock widget button in menu per FR-018)
+- [x] T051 Verify no TypeScript errors with cargo clippy and npm run lint
+- [x] T052 Final visual testing of all user stories (verify 500ms backflip timing per SC-004)
 
 ---
 
