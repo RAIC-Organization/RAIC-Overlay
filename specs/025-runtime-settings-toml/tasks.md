@@ -112,12 +112,12 @@
 
 ### Implementation for User Story 4
 
-- [ ] T027 [US4] Implement parse_log_level() function with validation in src-tauri/src/settings.rs
-- [ ] T028 [US4] Add warning log for invalid log_level values with fallback in src-tauri/src/settings.rs
-- [ ] T029 [US4] Modify get_log_level() in logging.rs to use settings::get_settings() in src-tauri/src/logging.rs
-- [ ] T030 [US4] Call settings initialization before logging plugin in run() in src-tauri/src/lib.rs
-- [ ] T031 [US4] Add unit test for valid log level parsing in src-tauri/src/settings.rs
-- [ ] T032 [US4] Add unit test for invalid log level fallback in src-tauri/src/settings.rs
+- [X] T027 [US4] Implement parse_log_level() function with validation in src-tauri/src/settings.rs
+- [X] T028 [US4] Add warning log for invalid log_level values with fallback in src-tauri/src/settings.rs
+- [X] T029 [US4] Modify get_log_level() in logging.rs to use settings::get_settings() in src-tauri/src/logging.rs
+- [X] T030 [US4] Call settings initialization before logging plugin in run() in src-tauri/src/lib.rs
+- [X] T031 [US4] Add unit test for valid log level parsing in src-tauri/src/settings.rs
+- [X] T032 [US4] Add unit test for invalid log level fallback in src-tauri/src/settings.rs
 
 **Checkpoint**: User Story 4 complete - log level configurable at runtime
 

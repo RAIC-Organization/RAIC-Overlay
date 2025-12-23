@@ -294,7 +294,11 @@ fn dismiss_error_modal(window: tauri::WebviewWindow) -> Result<(), String> {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    // Initialize logging with configured log level
+    // T030: Initialize settings before logging plugin
+    // Settings are loaded from settings.toml (or defaults) and cached
+    settings::init_settings();
+
+    // Initialize logging with configured log level from settings
     let log_level = logging::get_log_level();
 
     // Build logging plugin with optional Stdout target for development

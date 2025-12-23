@@ -1,4 +1,5 @@
 use crate::logging_types::CleanupResult;
+use crate::settings;
 use log::LevelFilter;
 use std::fs;
 use std::time::{Duration, SystemTime};
@@ -11,20 +12,10 @@ const MAX_FILE_SIZE: u128 = 10_000_000;
 /// 7 days retention period
 const RETENTION_DAYS: u64 = 7;
 
-/// Parse log level from RAIC_LOG_LEVEL environment variable.
-/// Defaults to Warn if not set or invalid.
+/// T029: Get log level from runtime settings.
+/// Uses settings::get_settings() which reads from settings.toml or falls back to defaults.
 pub fn get_log_level() -> LevelFilter {
-    std::env::var("RAIC_LOG_LEVEL")
-        .ok()
-        .and_then(|s| match s.to_uppercase().as_str() {
-            "TRACE" => Some(LevelFilter::Trace),
-            "DEBUG" => Some(LevelFilter::Debug),
-            "INFO" => Some(LevelFilter::Info),
-            "WARN" => Some(LevelFilter::Warn),
-            "ERROR" => Some(LevelFilter::Error),
-            _ => None,
-        })
-        .unwrap_or(LevelFilter::Warn)
+    settings::get_settings().log_level
 }
 
 /// Build the logging plugin with configured targets.
