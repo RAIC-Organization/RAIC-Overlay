@@ -43,6 +43,7 @@ export function WidgetSettings({
 
   const handleSliderChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
+      e.stopPropagation();
       const percent = parseInt(e.target.value, 10);
       // Convert percentage (10-100) back to 0.1-1.0 range
       const newOpacity = percent / 100;
@@ -51,16 +52,38 @@ export function WidgetSettings({
     [onOpacityChange]
   );
 
+  const handleCloseClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      e.preventDefault();
+      onClose();
+    },
+    [onClose]
+  );
+
+  const handleRemoveClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      e.preventDefault();
+      onCloseWidget();
+    },
+    [onCloseWidget]
+  );
+
   return (
-    <div className="absolute inset-0 flex flex-col rounded-lg bg-black/90 border border-blue-500/40 overflow-hidden">
-      {/* Header with close button */}
+    <div
+      className="absolute inset-0 rounded-lg bg-black/90 border border-blue-500/40"
+      onPointerDown={(e) => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Header */}
       <div className="flex items-center justify-between px-3 py-2 border-b border-blue-500/30 bg-blue-950/50">
         <span className="text-xs font-medium text-blue-300 uppercase tracking-wider">
           Settings
         </span>
         <button
           type="button"
-          onClick={onClose}
+          onClick={handleCloseClick}
           className="p-1 rounded hover:bg-blue-500/30 transition-colors text-blue-400 hover:text-blue-200"
           aria-label="Close settings"
         >
@@ -68,10 +91,10 @@ export function WidgetSettings({
         </button>
       </div>
 
-      {/* Settings content */}
-      <div className="flex-1 flex flex-col justify-center p-3 space-y-4">
+      {/* Content */}
+      <div className="p-3 space-y-3">
         {/* Opacity control */}
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <div className="flex items-center justify-between">
             <label
               htmlFor="widget-opacity-slider"
@@ -91,6 +114,7 @@ export function WidgetSettings({
             step="5"
             value={opacityPercent}
             onChange={handleSliderChange}
+            onPointerDown={(e) => e.stopPropagation()}
             className="w-full h-1.5 bg-blue-900/60 rounded-full appearance-none cursor-pointer
               [&::-webkit-slider-thumb]:appearance-none
               [&::-webkit-slider-thumb]:w-3
@@ -100,7 +124,6 @@ export function WidgetSettings({
               [&::-webkit-slider-thumb]:cursor-pointer
               [&::-webkit-slider-thumb]:hover:bg-blue-300
               [&::-webkit-slider-thumb]:transition-colors
-              [&::-webkit-slider-thumb]:shadow-sm
               [&::-moz-range-thumb]:w-3
               [&::-moz-range-thumb]:h-3
               [&::-moz-range-thumb]:bg-blue-400
@@ -110,18 +133,16 @@ export function WidgetSettings({
               [&::-moz-range-thumb]:hover:bg-blue-300"
           />
         </div>
-      </div>
 
-      {/* Footer with remove button */}
-      <div className="px-3 py-2 border-t border-blue-500/30">
+        {/* Remove button */}
         <button
           type="button"
-          onClick={onCloseWidget}
+          onClick={handleRemoveClick}
           className="flex items-center justify-center gap-1.5 w-full px-2 py-1.5 rounded bg-red-900/40 hover:bg-red-800/50 border border-red-500/30 hover:border-red-500/50 transition-colors text-red-400 hover:text-red-300 text-xs font-medium"
           aria-label="Remove widget"
         >
           <Trash2 size={12} />
-          Remove Widget
+          Remove
         </button>
       </div>
     </div>

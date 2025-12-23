@@ -133,7 +133,8 @@ export function Widget({
   // ============================================================================
 
   const handleDragPointerDown = useCallback((e: React.PointerEvent) => {
-    if (!isInteractive || isResizing || isAnimating) return;
+    // Don't start drag when flipped (settings panel is shown)
+    if (!isInteractive || isResizing || isAnimating || widget.isFlipped) return;
 
     // Don't start drag from corner resize areas
     const rect = e.currentTarget.getBoundingClientRect();
@@ -159,7 +160,7 @@ export function Widget({
       widgetY: widget.y,
     };
     setIsDragging(true);
-  }, [isInteractive, isResizing, isAnimating, widget.x, widget.y]);
+  }, [isInteractive, isResizing, isAnimating, widget.isFlipped, widget.x, widget.y]);
 
   const handleDragPointerMove = useCallback((e: React.PointerEvent) => {
     if (!dragRef.current) return;
