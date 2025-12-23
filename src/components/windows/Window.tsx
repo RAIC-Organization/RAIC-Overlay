@@ -224,9 +224,12 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
   // Content background class - only needed when solid to ensure content area is opaque
   const contentBackgroundClass = isEffectivelyTransparent ? '' : 'bg-background';
 
+  // Pointer events class - needed because parent container is pointer-events-none
+  const pointerEventsClass = isInteractive ? 'pointer-events-auto' : 'pointer-events-none';
+
   return (
     <motion.div
-      className={`absolute ${windowBackgroundClass} overflow-hidden ${modeClasses} ${getCursorStyle(resizeDirection)}`}
+      className={`absolute ${windowBackgroundClass} overflow-hidden ${modeClasses} ${getCursorStyle(resizeDirection)} ${pointerEventsClass}`}
       style={{
         left: x,
         top: y,
