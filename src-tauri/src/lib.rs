@@ -1,4 +1,7 @@
 pub mod hotkey;
+// T008 (029): Low-level keyboard hook module
+#[cfg(windows)]
+pub mod keyboard_hook;
 pub mod logging;
 pub mod logging_types;
 pub mod persistence;

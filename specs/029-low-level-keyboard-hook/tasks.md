@@ -24,8 +24,8 @@
 
 **Purpose**: Project configuration and dependency setup
 
-- [ ] T001 Add `Win32_UI_Input_KeyboardAndMouse` and `Win32_System_LibraryLoader` features to `src-tauri/Cargo.toml`
-- [ ] T002 Add `lazy_static` crate dependency to `src-tauri/Cargo.toml`
+- [x] T001 Add `Win32_UI_Input_KeyboardAndMouse` and `Win32_System_LibraryLoader` features to `src-tauri/Cargo.toml`
+- [x] T002 Add `lazy_static` crate dependency to `src-tauri/Cargo.toml`
 
 ---
 
@@ -35,12 +35,12 @@
 
 **Warning**: No user story work can begin until this phase is complete
 
-- [ ] T003 Create new module file `src-tauri/src/keyboard_hook.rs` with module structure and imports
-- [ ] T004 [P] Define `KeyboardHookState` struct with atomic fields (`is_active`, `hook_handle`, `thread_id`, `use_fallback`) in `src-tauri/src/keyboard_hook.rs`
-- [ ] T005 [P] Define `HotkeyAction` enum with `ToggleVisibility` and `ToggleMode` variants in `src-tauri/src/keyboard_hook.rs`
-- [ ] T006 [P] Define constants for virtual key codes (`VK_F3`, `VK_F5`), Windows messages, and debounce in `src-tauri/src/keyboard_hook.rs`
-- [ ] T007 Initialize global static `KEYBOARD_HOOK_STATE` using `lazy_static` in `src-tauri/src/keyboard_hook.rs`
-- [ ] T008 Add `mod keyboard_hook;` declaration to `src-tauri/src/lib.rs`
+- [x] T003 Create new module file `src-tauri/src/keyboard_hook.rs` with module structure and imports
+- [x] T004 [P] Define `KeyboardHookState` struct with atomic fields (`is_active`, `hook_handle`, `thread_id`, `use_fallback`) in `src-tauri/src/keyboard_hook.rs`
+- [x] T005 [P] Define `HotkeyAction` enum with `ToggleVisibility` and `ToggleMode` variants in `src-tauri/src/keyboard_hook.rs`
+- [x] T006 [P] Define constants for virtual key codes (`VK_F3`, `VK_F5`), Windows messages, and debounce in `src-tauri/src/keyboard_hook.rs`
+- [x] T007 Initialize global static `KEYBOARD_HOOK_STATE` using `lazy_static` in `src-tauri/src/keyboard_hook.rs`
+- [x] T008 Add `mod keyboard_hook;` declaration to `src-tauri/src/lib.rs`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -54,15 +54,15 @@
 
 ### Implementation for User Story 1
 
-- [ ] T009 [US1] Implement `keyboard_hook_callback` extern function with `WM_KEYDOWN` detection for F3/F5 keys using `GetAsyncKeyState` in `src-tauri/src/keyboard_hook.rs`
-- [ ] T010 [US1] Implement debounce logic using timestamp comparison (200ms) in callback in `src-tauri/src/keyboard_hook.rs`
-- [ ] T011 [US1] Implement `CallNextHookEx` call to pass events to other hooks (non-blocking) in `src-tauri/src/keyboard_hook.rs`
-- [ ] T012 [US1] Implement `start_keyboard_hook()` function that spawns dedicated thread in `src-tauri/src/keyboard_hook.rs`
-- [ ] T013 [US1] Implement Windows message loop (`GetMessageW`/`TranslateMessage`/`DispatchMessageW`) in hook thread in `src-tauri/src/keyboard_hook.rs`
-- [ ] T014 [US1] Implement `SetWindowsHookExW` call with `WH_KEYBOARD_LL` in hook thread in `src-tauri/src/keyboard_hook.rs`
-- [ ] T015 [US1] Implement Tauri event emission for hotkey actions (reuse pattern from existing `hotkey.rs`) in `src-tauri/src/keyboard_hook.rs`
-- [ ] T016 [US1] Store `AppHandle` in thread-safe global state for event emission in `src-tauri/src/keyboard_hook.rs`
-- [ ] T017 [US1] Implement `stop_keyboard_hook()` function with `PostQuitMessage` and `UnhookWindowsHookEx` in `src-tauri/src/keyboard_hook.rs`
+- [x] T009 [US1] Implement `keyboard_hook_callback` extern function with `WM_KEYDOWN` detection for F3/F5 keys using `GetAsyncKeyState` in `src-tauri/src/keyboard_hook.rs`
+- [x] T010 [US1] Implement debounce logic using timestamp comparison (200ms) in callback in `src-tauri/src/keyboard_hook.rs`
+- [x] T011 [US1] Implement `CallNextHookEx` call to pass events to other hooks (non-blocking) in `src-tauri/src/keyboard_hook.rs`
+- [x] T012 [US1] Implement `start_keyboard_hook()` function that spawns dedicated thread in `src-tauri/src/keyboard_hook.rs`
+- [x] T013 [US1] Implement Windows message loop (`GetMessageW`/`TranslateMessage`/`DispatchMessageW`) in hook thread in `src-tauri/src/keyboard_hook.rs`
+- [x] T014 [US1] Implement `SetWindowsHookExW` call with `WH_KEYBOARD_LL` in hook thread in `src-tauri/src/keyboard_hook.rs`
+- [x] T015 [US1] Implement Tauri event emission for hotkey actions (reuse pattern from existing `hotkey.rs`) in `src-tauri/src/keyboard_hook.rs`
+- [x] T016 [US1] Store `AppHandle` in thread-safe global state for event emission in `src-tauri/src/keyboard_hook.rs`
+- [x] T017 [US1] Implement `stop_keyboard_hook()` function with `PostQuitMessage` and `UnhookWindowsHookEx` in `src-tauri/src/keyboard_hook.rs`
 - [ ] T018 [US1] Modify `src-tauri/src/lib.rs` to call `start_keyboard_hook()` at application startup instead of global shortcut registration
 - [ ] T019 [US1] Modify `src-tauri/src/lib.rs` to call `stop_keyboard_hook()` at application shutdown
 
