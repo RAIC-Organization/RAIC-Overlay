@@ -3,6 +3,9 @@ pub mod logging;
 pub mod logging_types;
 pub mod persistence;
 pub mod persistence_types;
+// T047 (028): Process monitor module for automatic game detection
+#[cfg(windows)]
+pub mod process_monitor;
 pub mod settings;
 pub mod state;
 pub mod tray;
@@ -74,8 +77,11 @@ async fn toggle_visibility(
         // Clear target binding
         state.target_binding.clear();
 
+        // T050 (028): Set user_manually_hidden flag to prevent auto-show
+        process_monitor::PROCESS_MONITOR_STATE.set_user_manually_hidden(true);
+
         // T027 (028): Log outcome
-        log::info!("F3 outcome: hidden overlay");
+        log::info!("F3 outcome: hidden overlay (user manually hidden)");
     } else {
         // T019, T020 (028): Check target window using three-point verification
         let detection_result = target_window::find_target_window_verified();
@@ -421,6 +427,10 @@ pub fn run() {
             if let Err(e) = tray::setup_tray(&handle) {
                 log::error!("Failed to setup tray icon: {}", e);
             }
+
+            // T048 (028): Start process monitor for automatic game detection
+            #[cfg(windows)]
+            process_monitor::start_process_monitor(handle.clone());
 
             // Get main window
             let window = app

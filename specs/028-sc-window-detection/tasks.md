@@ -135,20 +135,20 @@
 
 ### Implementation for User Story 5
 
-- [ ] T038 [US5] Create new module `src-tauri/src/process_monitor.rs` with module declaration
-- [ ] T039 [US5] Add `ProcessMonitorState` struct in `src-tauri/src/process_monitor.rs` with fields: is_monitoring, target_process_found, target_hwnd, last_check_time, user_manually_hidden, polling_interval_ms
-- [ ] T040 [US5] Implement `is_process_running(target_process: &str) -> bool` function in `src-tauri/src/process_monitor.rs` using EnumProcesses or window enumeration
-- [ ] T041 [US5] Implement `start_process_monitor(app_handle: AppHandle)` function in `src-tauri/src/process_monitor.rs` that spawns monitoring thread
-- [ ] T042 [US5] Implement polling loop in process monitor that checks for target process every `polling_interval_ms` in `src-tauri/src/process_monitor.rs`
-- [ ] T043 [US5] Add `log::info!()` when target process detected: "Target process detected: {}" in `src-tauri/src/process_monitor.rs`
-- [ ] T044 [US5] Add `log::info!()` when target process terminated: "Target process terminated" in `src-tauri/src/process_monitor.rs`
-- [ ] T045 [US5] Emit Tauri event "target-process-detected" when process starts in `src-tauri/src/process_monitor.rs`
-- [ ] T046 [US5] Emit Tauri event "target-process-terminated" when process exits in `src-tauri/src/process_monitor.rs`
-- [ ] T047 [US5] Add `mod process_monitor;` to `src-tauri/src/lib.rs`
-- [ ] T048 [US5] Call `process_monitor::start_process_monitor()` from app setup in `src-tauri/src/lib.rs`
-- [ ] T049 [US5] Add logic to auto-show overlay when game window detected and focused (unless user_manually_hidden) in `src-tauri/src/process_monitor.rs`
-- [ ] T050 [US5] Update `toggle_visibility()` to set `user_manually_hidden` flag when user presses F3 to hide in `src-tauri/src/lib.rs`
-- [ ] T051 [US5] Reset `user_manually_hidden` flag on fresh game launch (process was not running, now detected) in `src-tauri/src/process_monitor.rs`
+- [X] T038 [US5] Create new module `src-tauri/src/process_monitor.rs` with module declaration
+- [X] T039 [US5] Add `ProcessMonitorState` struct in `src-tauri/src/process_monitor.rs` with fields: is_monitoring, target_process_found, target_hwnd, last_check_time, user_manually_hidden, polling_interval_ms
+- [X] T040 [US5] Implement `is_process_running(target_process: &str) -> bool` function in `src-tauri/src/process_monitor.rs` using EnumProcesses or window enumeration
+- [X] T041 [US5] Implement `start_process_monitor(app_handle: AppHandle)` function in `src-tauri/src/process_monitor.rs` that spawns monitoring thread
+- [X] T042 [US5] Implement polling loop in process monitor that checks for target process every `polling_interval_ms` in `src-tauri/src/process_monitor.rs`
+- [X] T043 [US5] Add `log::info!()` when target process detected: "Target process detected: {}" in `src-tauri/src/process_monitor.rs`
+- [X] T044 [US5] Add `log::info!()` when target process terminated: "Target process terminated" in `src-tauri/src/process_monitor.rs`
+- [X] T045 [US5] Emit Tauri event "target-process-detected" when process starts in `src-tauri/src/process_monitor.rs`
+- [X] T046 [US5] Emit Tauri event "target-process-terminated" when process exits in `src-tauri/src/process_monitor.rs`
+- [X] T047 [US5] Add `mod process_monitor;` to `src-tauri/src/lib.rs`
+- [X] T048 [US5] Call `process_monitor::start_process_monitor()` from app setup in `src-tauri/src/lib.rs`
+- [X] T049 [US5] Add logic to auto-show overlay when game window detected and focused (unless user_manually_hidden) in `src-tauri/src/process_monitor.rs`
+- [X] T050 [US5] Update `toggle_visibility()` to set `user_manually_hidden` flag when user presses F3 to hide in `src-tauri/src/lib.rs`
+- [X] T051 [US5] Reset `user_manually_hidden` flag on fresh game launch (process was not running, now detected) in `src-tauri/src/process_monitor.rs`
 
 **Checkpoint**: User Story 5 complete - Overlay automatically detects game launch/exit.
 
