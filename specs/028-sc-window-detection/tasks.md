@@ -118,10 +118,10 @@
 
 ### Implementation for User Story 4
 
-- [ ] T034 [US4] Add `get_foreground_window_info() -> (String, String)` function in `src-tauri/src/target_window.rs` returning (process_name, window_title) of current foreground window
-- [ ] T035 [US4] Modify `is_target_focused()` to also log focus state in `src-tauri/src/target_window.rs`
-- [ ] T036 [US4] Add `log::warn!()` in `toggle_visibility()` when target found but not focused: "Target detected but not focused - overlay not shown. Foreground: process={}, title={}" in `src-tauri/src/lib.rs`
-- [ ] T037 [US4] Add `log::info!()` when target is focused and showing overlay: "Target focused - showing overlay" in `src-tauri/src/lib.rs`
+- [X] T034 [US4] Add `get_foreground_window_info() -> (String, String)` function in `src-tauri/src/target_window.rs` returning (process_name, window_title) of current foreground window
+- [X] T035 [US4] Modify `is_target_focused()` to also log focus state in `src-tauri/src/target_window.rs`
+- [X] T036 [US4] Add `log::warn!()` in `toggle_visibility()` when target found but not focused: "Target detected but not focused - overlay not shown. Foreground: process={}, title={}" in `src-tauri/src/lib.rs`
+- [X] T037 [US4] Add `log::info!()` when target is focused and showing overlay: "Target focused - showing overlay" in `src-tauri/src/lib.rs`
 
 **Checkpoint**: User Story 4 complete - Users can diagnose focus issues from logs.
 

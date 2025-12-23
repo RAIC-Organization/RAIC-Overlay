@@ -146,10 +146,17 @@ async fn toggle_visibility(
         // Check if target is focused
         if !target_window::is_target_focused(target_hwnd) {
             // Target exists but not focused - don't show overlay
-            // T027 (028): Log outcome
-            log::info!("F3 outcome: target found but not focused - overlay not shown");
+            // T036 (028): Log focus issue with foreground window info
+            let (fg_process, fg_title) = target_window::get_foreground_window_info();
+            log::warn!(
+                "Target detected but not focused - overlay not shown. Foreground: process={}, title={}",
+                fg_process, fg_title
+            );
             return Ok(state.to_response());
         }
+
+        // T037 (028): Log that target is focused and showing overlay
+        log::info!("Target focused - showing overlay");
 
         // Get target window rect
         let rect = match target_window::get_window_rect(target_hwnd) {

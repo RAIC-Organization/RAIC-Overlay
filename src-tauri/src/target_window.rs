@@ -337,12 +337,39 @@ pub fn get_window_rect(hwnd: HWND) -> Result<WindowRect, TargetWindowError> {
     }
 }
 
-// T017: Check if target window is focused
+// T034 (028): Get foreground window info for focus logging
+#[cfg(windows)]
+pub fn get_foreground_window_info() -> (String, String) {
+    unsafe {
+        let foreground = GetForegroundWindow();
+        if foreground.0.is_null() {
+            return ("(none)".to_string(), "(none)".to_string());
+        }
+        let process_name = get_process_name(foreground).unwrap_or_else(|| "(unknown)".to_string());
+        let window_title = get_window_title(foreground);
+        (process_name, window_title)
+    }
+}
+
+// T017, T035 (028): Check if target window is focused with logging
 #[cfg(windows)]
 pub fn is_target_focused(hwnd: HWND) -> bool {
     unsafe {
         let foreground = GetForegroundWindow();
-        hwnd == foreground
+        let is_focused = hwnd == foreground;
+
+        // T035: Log focus state
+        if is_focused {
+            log::debug!("Target window is focused (hwnd={})", hwnd.0 as isize);
+        } else {
+            let (fg_process, fg_title) = get_foreground_window_info();
+            log::debug!(
+                "Target window not focused. Foreground: process={}, title={}",
+                fg_process, fg_title
+            );
+        }
+
+        is_focused
     }
 }
 
