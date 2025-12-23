@@ -28,7 +28,7 @@ pub fn get_log_level() -> LevelFilter {
 }
 
 /// Build the logging plugin with configured targets.
-/// - Always logs to file in app log directory
+/// - Logs to file in app log directory (uses default "RAIC Overlay.log" from productName)
 /// - 10MB max file size with KeepAll rotation strategy
 /// - Custom JSON formatter for structured logs
 /// - Adds Stdout target when log level is DEBUG or INFO for development visibility
@@ -48,11 +48,7 @@ pub fn build_log_plugin(log_level: LevelFilter) -> tauri::plugin::TauriPlugin<ta
                 r#"{{"ts":"{}","level":"{}","target":"{}","message":"{}"}}"#,
                 ts, level, target, msg
             ))
-        })
-        // Always log to file in app log directory
-        .target(Target::new(TargetKind::LogDir {
-            file_name: Some("app".to_string()),
-        }));
+        });
 
     // Add Stdout target for development (DEBUG or INFO levels)
     if log_level <= LevelFilter::Info {
@@ -70,7 +66,7 @@ pub fn get_log_file_path(app: tauri::AppHandle) -> Result<String, String> {
         .app_log_dir()
         .map_err(|e| format!("Failed to get log directory: {}", e))?;
 
-    let log_path = log_dir.join("app.log");
+    let log_path = log_dir.join("RAIC Overlay.log");
     Ok(log_path.to_string_lossy().to_string())
 }
 
@@ -130,14 +126,14 @@ pub fn cleanup_old_logs(app: tauri::AppHandle) -> Result<CleanupResult, String> 
     for entry in entries.flatten() {
         let path = entry.path();
 
-        // Only process log files (app.log, app.log.1, etc.)
+        // Only process log files (RAIC Overlay.log, RAIC Overlay.log.1, etc.)
         let file_name = path.file_name().and_then(|n| n.to_str()).unwrap_or("");
-        if !file_name.starts_with("app.log") {
+        if !file_name.starts_with("RAIC Overlay.log") {
             continue;
         }
 
         // Skip the current active log file
-        if file_name == "app.log" {
+        if file_name == "RAIC Overlay.log" {
             continue;
         }
 
