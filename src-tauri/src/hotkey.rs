@@ -33,9 +33,13 @@ pub fn build_shortcut_plugin<R: tauri::Runtime>() -> tauri_plugin_global_shortcu
             if shortcut.matches(Modifiers::empty(), Code::F3) {
                 let last = LAST_PRESS_F3.load(Ordering::SeqCst);
                 if now - last < DEBOUNCE_MS {
+                    log::debug!("F3 pressed: debounced ({}ms since last)", now - last);
                     return;
                 }
                 LAST_PRESS_F3.store(now, Ordering::SeqCst);
+
+                // T025 (028): Log F3 hotkey press
+                log::info!("F3 pressed: toggle visibility requested");
 
                 if let Err(e) = app.emit("toggle-visibility", ()) {
                     log::error!("Failed to emit toggle-visibility event: {}", e);
@@ -47,9 +51,13 @@ pub fn build_shortcut_plugin<R: tauri::Runtime>() -> tauri_plugin_global_shortcu
             if shortcut.matches(Modifiers::empty(), Code::F5) {
                 let last = LAST_PRESS_F5.load(Ordering::SeqCst);
                 if now - last < DEBOUNCE_MS {
+                    log::debug!("F5 pressed: debounced ({}ms since last)", now - last);
                     return;
                 }
                 LAST_PRESS_F5.store(now, Ordering::SeqCst);
+
+                // T026 (028): Log F5 hotkey press
+                log::info!("F5 pressed: toggle mode requested");
 
                 if let Err(e) = app.emit("toggle-mode", ()) {
                     log::error!("Failed to emit toggle-mode event: {}", e);

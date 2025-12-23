@@ -57,6 +57,10 @@ async fn toggle_visibility(
     state: tauri::State<'_, OverlayState>,
 ) -> Result<types::OverlayStateResponse, String> {
     let is_visible = state.is_visible();
+    let mode_before = state.get_mode();
+
+    // T027 (028): Log visibility toggle start
+    log::info!("F3 handler: visible_before={}, mode_before={:?}", is_visible, mode_before);
 
     if is_visible {
         // Hide the window
@@ -69,6 +73,9 @@ async fn toggle_visibility(
         state.set_mode(OverlayMode::Fullscreen);
         // Clear target binding
         state.target_binding.clear();
+
+        // T027 (028): Log outcome
+        log::info!("F3 outcome: hidden overlay");
     } else {
         // T019, T020 (028): Check target window using three-point verification
         let detection_result = target_window::find_target_window_verified();
@@ -88,6 +95,8 @@ async fn toggle_visibility(
                     message: "Detection succeeded but no window found".to_string(),
                     auto_dismiss_ms: 5000,
                 });
+                // T027 (028): Log outcome
+                log::warn!("F3 outcome: detection anomaly - success but no matched window");
                 return Ok(state.to_response());
             }
         } else {
@@ -123,6 +132,9 @@ async fn toggle_visibility(
                 format!("Please start {} first", title_pattern)
             };
 
+            // T027 (028): Log outcome
+            log::warn!("F3 outcome: detection failed - {}", message);
+
             let _ = window.emit("show-error-modal", ShowErrorModalPayload {
                 target_name: title_pattern.clone(),
                 message,
@@ -134,6 +146,8 @@ async fn toggle_visibility(
         // Check if target is focused
         if !target_window::is_target_focused(target_hwnd) {
             // Target exists but not focused - don't show overlay
+            // T027 (028): Log outcome
+            log::info!("F3 outcome: target found but not focused - overlay not shown");
             return Ok(state.to_response());
         }
 
@@ -145,6 +159,9 @@ async fn toggle_visibility(
                 let _ = window::set_window_screen_center(&window, 420.0, 280.0);
                 let _ = window.show();
                 let _ = window.set_ignore_cursor_events(false);
+
+                // T027 (028): Log outcome
+                log::warn!("F3 outcome: failed to get target window position: {}", e);
 
                 let _ = window.emit("show-error-modal", ShowErrorModalPayload {
                     target_name: target_window::get_target_window_name().to_string(),
@@ -183,6 +200,10 @@ async fn toggle_visibility(
             rect: Some(rect),
         };
         let _ = window.emit("target-window-changed", payload);
+
+        // T027 (028): Log outcome
+        log::info!("F3 outcome: shown overlay, bound to target at ({}, {}) {}x{}",
+            rect.x, rect.y, rect.width, rect.height);
     }
 
     Ok(state.to_response())
@@ -224,12 +245,18 @@ async fn toggle_mode(
     window: tauri::WebviewWindow,
     state: tauri::State<'_, OverlayState>,
 ) -> Result<types::OverlayStateResponse, String> {
+    let current_mode = state.get_mode();
+
+    // T028 (028): Log mode toggle start
+    log::info!("F5 handler: visible={}, mode_before={:?}", state.is_visible(), current_mode);
+
     // Only toggle mode if window is visible
     if !state.is_visible() {
+        // T028 (028): Log outcome
+        log::info!("F5 outcome: ignored (overlay not visible)");
         return Ok(state.to_response());
     }
 
-    let current_mode = state.get_mode();
     let previous_mode_str = match current_mode {
         OverlayMode::Windowed => "windowed",
         OverlayMode::Fullscreen => "fullscreen",
@@ -268,6 +295,9 @@ async fn toggle_mode(
     window
         .emit("mode-changed", payload)
         .map_err(|e| format!("Failed to emit mode-changed event: {}", e))?;
+
+    // T028 (028): Log outcome
+    log::info!("F5 outcome: mode_after={:?}", new_mode);
 
     Ok(state.to_response())
 }

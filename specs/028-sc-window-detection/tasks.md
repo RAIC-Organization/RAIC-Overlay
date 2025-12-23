@@ -81,12 +81,12 @@
 
 ### Implementation for User Story 2
 
-- [ ] T023 [US2] Add `HotkeyEvent` struct to `src-tauri/src/types.rs` with fields: key_code, timestamp, overlay_visible_before, overlay_mode_before, action_taken, outcome
-- [ ] T024 [US2] Add `log_hotkey_event(event: &HotkeyEvent)` helper function in `src-tauri/src/hotkey.rs`
-- [ ] T025 [US2] Add `log::info!()` call at start of F3 handler in `src-tauri/src/hotkey.rs` with format: "F3 pressed: visible={}, mode={:?}"
-- [ ] T026 [US2] Add `log::info!()` call at start of F5 handler in `src-tauri/src/hotkey.rs` with format: "F5 pressed: mode_before={:?}"
-- [ ] T027 [US2] Add outcome logging at end of `toggle_visibility()` in `src-tauri/src/lib.rs` with format: "F3 outcome: {}"
-- [ ] T028 [US2] Add outcome logging at end of `toggle_mode()` in `src-tauri/src/lib.rs` with format: "F5 outcome: mode_after={:?}"
+- [X] T023 [US2] Add `HotkeyEvent` struct to `src-tauri/src/types.rs` with fields: key_code, timestamp, overlay_visible_before, overlay_mode_before, action_taken, outcome
+- [X] T024 [US2] Add `log_hotkey_event(event: &HotkeyEvent)` helper function in `src-tauri/src/hotkey.rs`
+- [X] T025 [US2] Add `log::info!()` call at start of F3 handler in `src-tauri/src/hotkey.rs` with format: "F3 pressed: visible={}, mode={:?}"
+- [X] T026 [US2] Add `log::info!()` call at start of F5 handler in `src-tauri/src/hotkey.rs` with format: "F5 pressed: mode_before={:?}"
+- [X] T027 [US2] Add outcome logging at end of `toggle_visibility()` in `src-tauri/src/lib.rs` with format: "F3 outcome: {}"
+- [X] T028 [US2] Add outcome logging at end of `toggle_mode()` in `src-tauri/src/lib.rs` with format: "F5 outcome: mode_after={:?}"
 
 **Checkpoint**: User Story 2 complete - All hotkey presses logged with timestamps and outcomes.
 
