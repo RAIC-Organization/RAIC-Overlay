@@ -142,10 +142,11 @@ pub fn validate_candidate(candidate: &WindowCandidate, criteria: &SearchCriteria
     process_match && class_match && title_match && top_level
 }
 
-// T017, T019, T022 (028): Find target window using three-point verification
+// T017, T019, T022, T029-T033 (028): Find target window using three-point verification
 // Returns DetectionResult with detailed information about the search
 #[cfg(windows)]
 pub fn find_target_window_verified() -> DetectionResult {
+    // T030: Start timing measurement
     let start_time = Instant::now();
 
     // Build search criteria from settings
@@ -154,6 +155,12 @@ pub fn find_target_window_verified() -> DetectionResult {
         window_class: settings::get_target_window_class().to_string(),
         window_title: get_target_window_name().to_string(),
     };
+
+    // T033: Log search criteria at start
+    log::debug!(
+        "Starting window detection: process={}, class={}, title={}",
+        criteria.process_name, criteria.window_class, criteria.window_title
+    );
 
     let mut candidates: Vec<WindowCandidate> = Vec::new();
     let mut matched_window: Option<WindowCandidate> = None;
@@ -193,6 +200,16 @@ pub fn find_target_window_verified() -> DetectionResult {
     SEARCH_CLASS.with(|c| c.set(None));
     SEARCH_PATTERN.with(|p| p.set(None));
 
+    // T029: Log each candidate at debug level
+    for candidate in &candidates {
+        let valid = validate_candidate(candidate, &criteria);
+        log::debug!(
+            "Window candidate: process={}, class={}, title={}, top_level={}, valid={}",
+            candidate.process_name, candidate.window_class, candidate.window_title,
+            candidate.is_top_level, valid
+        );
+    }
+
     // T022: Find matching candidates, prioritizing CryENGINE class
     let mut cryengine_matches: Vec<&WindowCandidate> = Vec::new();
     let mut other_matches: Vec<&WindowCandidate> = Vec::new();
@@ -212,7 +229,23 @@ pub fn find_target_window_verified() -> DetectionResult {
         matched_window = Some((*best_match).clone());
     }
 
+    // T030: Calculate detection time
     let detection_time_ms = start_time.elapsed().as_millis() as u64;
+
+    // T031: Log detection summary
+    let match_count = cryengine_matches.len() + other_matches.len();
+    log::info!(
+        "Detection complete: {} candidates evaluated, {} matched, time={}ms",
+        candidates.len(), match_count, detection_time_ms
+    );
+
+    // T032: Warn if no match found
+    if matched_window.is_none() {
+        log::warn!(
+            "No matching window found for pattern: {} (process={}, class={})",
+            criteria.window_title, criteria.process_name, criteria.window_class
+        );
+    }
 
     DetectionResult {
         success: matched_window.is_some(),

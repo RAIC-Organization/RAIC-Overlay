@@ -100,11 +100,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T029 [US3] Add `log::debug!()` calls in `find_target_window()` enum callback to log each candidate: "Window candidate: process={}, class={}, title={}, valid={}" in `src-tauri/src/target_window.rs`
-- [ ] T030 [US3] Add timing measurement using `std::time::Instant` at start/end of `find_target_window()` in `src-tauri/src/target_window.rs`
-- [ ] T031 [US3] Add `log::info!()` at end of detection with summary: "Detection complete: {} candidates evaluated, matched={}, time={}ms" in `src-tauri/src/target_window.rs`
-- [ ] T032 [US3] Add `log::warn!()` when no matching window found: "No matching window found for pattern: {}" in `src-tauri/src/target_window.rs`
-- [ ] T033 [US3] Add `log::debug!()` at start of detection with search criteria: "Starting window detection: process={}, class={}, title={}" in `src-tauri/src/target_window.rs`
+- [X] T029 [US3] Add `log::debug!()` calls in `find_target_window()` enum callback to log each candidate: "Window candidate: process={}, class={}, title={}, valid={}" in `src-tauri/src/target_window.rs`
+- [X] T030 [US3] Add timing measurement using `std::time::Instant` at start/end of `find_target_window()` in `src-tauri/src/target_window.rs`
+- [X] T031 [US3] Add `log::info!()` at end of detection with summary: "Detection complete: {} candidates evaluated, matched={}, time={}ms" in `src-tauri/src/target_window.rs`
+- [X] T032 [US3] Add `log::warn!()` when no matching window found: "No matching window found for pattern: {}" in `src-tauri/src/target_window.rs`
+- [X] T033 [US3] Add `log::debug!()` at start of detection with search criteria: "Starting window detection: process={}, class={}, title={}" in `src-tauri/src/target_window.rs`
 
 **Checkpoint**: User Story 3 complete - Window detection provides detailed diagnostic logs.
 
