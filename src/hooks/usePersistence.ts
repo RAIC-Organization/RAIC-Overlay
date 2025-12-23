@@ -174,24 +174,32 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
   optionsRef.current = options;
 
   // Create stable debounced functions
+  // @feature 027-widget-container - Updated to include widgets
   const debouncedStateSaveRef = useRef(
     debounce(async (windows: WindowInstance[], mode: string, visible: boolean) => {
       const startTime = performance.now();
       persistenceMetrics.recordStateSave();
 
+      // Get widgets from getter (if available) to include in save
+      const widgetsGetter = optionsRef.current.getWidgetsForPersistence;
+      const widgets = widgetsGetter?.() ?? [];
+
       // Debug log: what we're about to save
-      logDebug('[Persistence] Debounce executing - saving ' + windows.length + ' windows');
+      logDebug('[Persistence] Debounce executing - saving ' + windows.length + ' windows, ' + widgets.length + ' widgets');
       for (const win of windows) {
         logDebug('[Persistence]   Window ' + win.id + ': backgroundTransparent=' + win.backgroundTransparent + ', opacity=' + win.opacity);
       }
+      for (const widget of widgets) {
+        logDebug('[Persistence]   Widget ' + widget.id + ': type=' + widget.type + ', opacity=' + widget.opacity);
+      }
 
-      const state = serializeState(windows, mode as 'windowed' | 'fullscreen', visible);
+      const state = serializeState(windows, mode as 'windowed' | 'fullscreen', visible, widgets);
       const result = await persistenceService.saveState(state);
       const elapsed = performance.now() - startTime;
       if (!result.success) {
         logError('Failed to save state: ' + result.error);
       } else {
-        logInfo('State saved in ' + elapsed.toFixed(0) + 'ms (' + windows.length + ' windows)');
+        logInfo('State saved in ' + elapsed.toFixed(0) + 'ms (' + windows.length + ' windows, ' + widgets.length + ' widgets)');
       }
     }, DEBOUNCE_DELAY_MS)
   );
@@ -276,20 +284,29 @@ export function usePersistence(options: UsePersistenceOptions): UsePersistenceRe
   }, []);
 
   // Save state immediately
+  // @feature 027-widget-container - Now includes widgets from getter
   const saveStateImmediate = useCallback(async (windows: WindowInstance[]) => {
     // Cancel any pending debounced save first
     debouncedStateSaveRef.current.cancel();
     debouncedStateSaveWithGetterRef.current.cancel();
 
-    logDebug('[Persistence] Immediate save - ' + windows.length + ' windows');
+    // Get widgets from getter (if available) to include in save
+    const widgetsGetter = optionsRef.current.getWidgetsForPersistence;
+    const widgets = widgetsGetter?.() ?? [];
+
+    logDebug('[Persistence] Immediate save - ' + windows.length + ' windows, ' + widgets.length + ' widgets');
     for (const win of windows) {
       logDebug('[Persistence]   Window ' + win.id + ': backgroundTransparent=' + win.backgroundTransparent + ', opacity=' + win.opacity);
+    }
+    for (const widget of widgets) {
+      logDebug('[Persistence]   Widget ' + widget.id + ': type=' + widget.type + ', opacity=' + widget.opacity);
     }
 
     const state = serializeState(
       windows,
       optionsRef.current.overlayMode,
-      optionsRef.current.overlayVisible
+      optionsRef.current.overlayVisible,
+      widgets
     );
     const result = await persistenceService.saveState(state);
     if (!result.success) {
