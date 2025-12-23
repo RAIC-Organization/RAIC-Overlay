@@ -13,6 +13,7 @@
  * @feature 010-state-persistence-system
  * @feature 018-window-background-toggle
  * @feature 026-sc-hud-theme
+ * @feature 027-widget-container
  */
 
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -26,6 +27,8 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { WindowsProvider } from "@/contexts/WindowsContext";
 import { PersistenceProvider, usePersistenceContext } from "@/contexts/PersistenceContext";
 import { WindowsContainer } from "@/components/windows/WindowsContainer";
+import { WidgetsProvider } from "@/contexts/WidgetsContext";
+import { WidgetsContainer } from "@/components/widgets/WidgetsContainer";
 import { useHydration } from "@/hooks/useHydration";
 import { useWindows } from "@/contexts/WindowsContext";
 import { NotesContent } from "@/components/windows/NotesContent";
@@ -254,6 +257,9 @@ function OverlayContent({
 
       {/* Windows container - renders all windows */}
       <WindowsContainer mode={state.mode} />
+
+      {/* Widgets container - renders all widgets */}
+      <WidgetsContainer mode={state.mode} />
 
       {/* Error modal rendering */}
       <ErrorModal
@@ -518,20 +524,22 @@ export default function Home() {
       initialWindowContents={hydratedContents}
       onWindowClose={handleWindowClose}
     >
-      <PersistenceProvider
-        overlayMode={state.mode as 'windowed' | 'fullscreen'}
-        overlayVisible={state.visible}
-      >
-        <OverlayContent
-          state={state}
-          errorModal={errorModal}
-          onDismissError={handleDismissError}
-          hydratedWindows={hydratedState.windows}
-          hydratedContents={hydratedContents}
-          scanlinesEnabled={scanlinesEnabled}
-          onScanlinesChange={setScanlinesEnabled}
-        />
-      </PersistenceProvider>
+      <WidgetsProvider>
+        <PersistenceProvider
+          overlayMode={state.mode as 'windowed' | 'fullscreen'}
+          overlayVisible={state.visible}
+        >
+          <OverlayContent
+            state={state}
+            errorModal={errorModal}
+            onDismissError={handleDismissError}
+            hydratedWindows={hydratedState.windows}
+            hydratedContents={hydratedContents}
+            scanlinesEnabled={scanlinesEnabled}
+            onScanlinesChange={setScanlinesEnabled}
+          />
+        </PersistenceProvider>
+      </WidgetsProvider>
     </WindowsProvider>
   );
 }

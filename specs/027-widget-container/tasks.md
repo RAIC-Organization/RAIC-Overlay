@@ -38,12 +38,12 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T005 Create WidgetsContext with state management (reducer pattern) in src/contexts/WidgetsContext.tsx
-- [ ] T006 Create useWidgetEvents hook for widget event subscription in src/hooks/useWidgetEvents.ts
-- [ ] T007 Create WidgetsContainer component (orchestrator) in src/components/widgets/WidgetsContainer.tsx
-- [ ] T008 Create Widget base component shell (no flip animation yet) in src/components/widgets/Widget.tsx
-- [ ] T009 Create widget components index exports in src/components/widgets/index.ts
-- [ ] T010 Integrate WidgetsContainer into app layout in app/page.tsx
+- [x] T005 Create WidgetsContext with state management (reducer pattern) in src/contexts/WidgetsContext.tsx
+- [x] T006 Create useWidgetEvents hook for widget event subscription in src/hooks/useWidgetEvents.ts
+- [x] T007 Create WidgetsContainer component (orchestrator) in src/components/widgets/WidgetsContainer.tsx
+- [x] T008 Create Widget base component shell (no flip animation yet) in src/components/widgets/Widget.tsx
+- [x] T009 Create widget components index exports in src/components/widgets/index.ts
+- [x] T010 Integrate WidgetsContainer into app layout in app/page.tsx
 
 **Checkpoint**: Widget container infrastructure ready - user story implementation can now begin
 
