@@ -10,8 +10,10 @@
 
 /* === Corner Accent Utility === */
 /* Apply to elements that need SC-style corner decorations */
+/* Note: Do NOT set position here - the parent element must handle its own positioning */
+/* position:absolute and position:relative both work as containing blocks for pseudo-elements */
 .sc-corner-accents {
-  position: relative;
+  /* Intentionally no position set - parent manages positioning */
 }
 
 /* Top-left and top-right corner accents */

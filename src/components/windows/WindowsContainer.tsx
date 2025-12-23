@@ -35,8 +35,8 @@ export function WindowsContainer({ mode = 'windowed' }: WindowsContainerProps) {
     <div className="absolute inset-0 pointer-events-none">
       <AnimatePresence>
         {windows.map((windowInstance) => (
-          // Window component handles its own pointer-events internally
-          // Do NOT add pointer-events-auto here as it creates an invisible blocking layer
+          // Key directly on Window - AnimatePresence tracks keys on direct children
+          // Window's motion.div handles its own positioning and pointer-events
           <Window key={windowInstance.id} window={windowInstance} isInteractive={isInteractive} />
         ))}
       </AnimatePresence>
