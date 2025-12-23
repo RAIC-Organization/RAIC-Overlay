@@ -149,6 +149,7 @@ export function serializeState(
     version: CURRENT_STATE_VERSION,
     lastModified: new Date().toISOString(),
     global: {
+      scanlinesEnabled: false, // Default value, updated by page.tsx
       overlayMode,
       overlayVisible,
     },

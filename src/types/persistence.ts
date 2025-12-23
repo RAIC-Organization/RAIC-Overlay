@@ -8,6 +8,7 @@
  * @feature 015-browser-persistence
  * @feature 016-file-viewer-window
  * @feature 018-window-background-toggle
+ * @feature 026-sc-hud-theme
  */
 
 export const CURRENT_STATE_VERSION = 1;
@@ -24,6 +25,8 @@ export interface PersistedState {
 }
 
 export interface GlobalSettings {
+  /** Whether scanlines overlay effect is enabled @feature 026-sc-hud-theme */
+  scanlinesEnabled: boolean;
   overlayMode: OverlayMode;
   overlayVisible: boolean;
 }
@@ -280,6 +283,7 @@ export function isFileViewerContent(
 // ============================================================================
 
 export const DEFAULT_GLOBAL_SETTINGS: GlobalSettings = {
+  scanlinesEnabled: false,
   overlayMode: 'windowed',
   overlayVisible: false,
 };

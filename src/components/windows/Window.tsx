@@ -17,6 +17,7 @@
  * @feature 010-state-persistence-system
  * @feature 013-window-opacity-control
  * @feature 018-window-background-toggle
+ * @feature 026-sc-hud-theme
  */
 
 import { useRef, useCallback, useState } from "react";
@@ -199,11 +200,14 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
   // Interactive: Full border, shadow (regardless of background transparency)
   // Passive: Subtle border, backdrop blur - but hide shadow/border when transparent
   // Opacity is same in both modes (user-controlled via slider)
+  // Mode-aware styles with SC theming
+  // Interactive: SC border with glow, corner accents
+  // Passive: Subtle border, backdrop blur - but hide when transparent
   const modeClasses = isInteractive
-    ? 'border border-border rounded-lg shadow-lg'
+    ? 'border border-border rounded-lg sc-glow-transition sc-corner-accents shadow-glow-sm hover:shadow-glow-md'
     : backgroundTransparent
       ? 'rounded-lg' // No border, shadow, or backdrop blur when transparent in passive mode
-      : 'border border-white/20 rounded-lg shadow-md backdrop-blur-sm';
+      : 'border border-border/50 rounded-lg shadow-glow-sm backdrop-blur-sm';
 
   // Content height based on header visibility
   const contentHeight = isInteractive
@@ -220,9 +224,12 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
   // Content background class - only needed when solid to ensure content area is opaque
   const contentBackgroundClass = isEffectivelyTransparent ? '' : 'bg-background';
 
+  // Pointer events class - needed because parent container is pointer-events-none
+  const pointerEventsClass = isInteractive ? 'pointer-events-auto' : 'pointer-events-none';
+
   return (
     <motion.div
-      className={`absolute ${windowBackgroundClass} overflow-hidden ${modeClasses} ${getCursorStyle(resizeDirection)}`}
+      className={`absolute ${windowBackgroundClass} overflow-hidden ${modeClasses} ${getCursorStyle(resizeDirection)} ${pointerEventsClass}`}
       style={{
         left: x,
         top: y,

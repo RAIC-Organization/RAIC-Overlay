@@ -1,5 +1,14 @@
 "use client";
 
+/**
+ * Main Menu Component
+ *
+ * Displays the main menu bar with window creation buttons and settings.
+ *
+ * @feature 006-main-menu-component
+ * @feature 026-sc-hud-theme
+ */
+
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -12,12 +21,17 @@ import { DrawContent } from "@/components/windows/DrawContent";
 import { BrowserContent } from "@/components/windows/BrowserContent";
 import { FileViewerContent } from "@/components/windows/FileViewerContent";
 import { ClockContent } from "@/components/windows/ClockContent";
+import { ScanlineToggle } from "@/components/windows/ScanlineToggle";
 import { useLogger } from "@/hooks/useLogger";
 
 interface MainMenuProps {
   visible?: boolean;
   mode?: OverlayMode;
   targetRect?: WindowRect | null;
+  /** Scanlines toggle state - feature 026-sc-hud-theme */
+  scanlinesEnabled?: boolean;
+  /** Callback when scanlines toggle changes - feature 026-sc-hud-theme */
+  onScanlinesChange?: (enabled: boolean) => void;
 }
 
 export function MainMenu({
@@ -25,6 +39,8 @@ export function MainMenu({
   mode = "windowed",
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   targetRect = null,
+  scanlinesEnabled = false,
+  onScanlinesChange,
 }: MainMenuProps) {
   const prefersReducedMotion = useReducedMotion();
   const showHideDuration = prefersReducedMotion ? 0 : 0.3;
@@ -94,6 +110,13 @@ export function MainMenu({
     });
   };
 
+  // Handle scanlines toggle - feature 026-sc-hud-theme
+  const handleScanlinesChange = (enabled: boolean) => {
+    if (onScanlinesChange) {
+      onScanlinesChange(enabled);
+    }
+  };
+
   return (
     <AnimatePresence>
       {shouldShow && (
@@ -103,7 +126,7 @@ export function MainMenu({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: showHideDuration, ease: "easeOut" }}
-          className="bg-transparent flex justify-center gap-2 p-2"
+          className="bg-transparent flex justify-center items-center gap-2 p-2"
         >
           {/* Windows: Notes & Test Windows */}
           <ButtonGroup>
@@ -126,6 +149,15 @@ export function MainMenu({
               Test Windows
             </Button>
           </ButtonGroup>
+
+          {/* Settings: Scanlines toggle - feature 026-sc-hud-theme */}
+          <div className="flex items-center gap-1 ml-2 border-l border-border pl-2">
+            <ScanlineToggle
+              value={scanlinesEnabled}
+              onChange={handleScanlinesChange}
+              onCommit={() => {/* Persistence handled by parent */}}
+            />
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

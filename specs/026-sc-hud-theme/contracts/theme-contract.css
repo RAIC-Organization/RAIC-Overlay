@@ -1,0 +1,222 @@
+/**
+ * Star Citizen HUD Theme Contract
+ *
+ * This file defines the CSS custom properties (design tokens) contract
+ * for the Star Citizen-inspired theme. All components must use these
+ * tokens for styling to ensure consistency.
+ *
+ * @feature 026-sc-hud-theme
+ */
+
+/* ============================================
+ * CORE COLOR PALETTE
+ * ============================================ */
+
+:root {
+  /* === Primary Cyan/Teal (Star Citizen signature color) === */
+  --sc-cyan: 190 100% 50%;           /* #00D4FF - Primary accent */
+  --sc-cyan-dim: 190 80% 40%;        /* Dimmed/inactive state */
+  --sc-cyan-glow: 190 100% 60%;      /* Bright glow highlight */
+  --sc-cyan-muted: 190 50% 30%;      /* Very subtle accent */
+
+  /* === Background Scale (Deep space blacks) === */
+  --sc-bg-deep: 220 30% 4%;          /* #030508 - Deepest */
+  --sc-bg: 220 25% 6%;               /* #0A0E14 - Main background */
+  --sc-bg-elevated: 220 20% 10%;     /* #121820 - Cards, panels */
+  --sc-bg-muted: 215 25% 14%;        /* #151C26 - Muted surfaces */
+  --sc-bg-overlay: 220 20% 8%;       /* Semi-transparent overlays */
+
+  /* === Semantic Colors === */
+  --sc-warning: 30 100% 50%;         /* #FF9900 - Orange/amber */
+  --sc-danger: 0 70% 50%;            /* #D93636 - Red alerts */
+  --sc-success: 150 80% 45%;         /* #17CC70 - Green confirmations */
+
+  /* === Text Colors === */
+  --sc-text-primary: 190 60% 90%;    /* Near-white with cyan tint */
+  --sc-text-secondary: 210 20% 70%;  /* Muted text */
+  --sc-text-muted: 210 15% 50%;      /* Very muted text */
+  --sc-text-inverse: 220 30% 10%;    /* Dark text on light bg */
+
+  /* === Border Colors === */
+  --sc-border: 190 40% 25%;          /* Default border */
+  --sc-border-dim: 210 20% 20%;      /* Subtle border */
+  --sc-border-glow: 190 60% 35%;     /* Glowing border */
+  --sc-border-focus: 190 100% 50%;   /* Focus ring color */
+}
+
+/* ============================================
+ * SHADOW/GLOW DEFINITIONS
+ * ============================================ */
+
+:root {
+  /* === Glow Shadows (Cyan-tinted) === */
+  --sc-shadow-glow-xs: 0 0 2px rgba(0, 212, 255, 0.2);
+  --sc-shadow-glow-sm: 0 0 4px rgba(0, 212, 255, 0.3);
+  --sc-shadow-glow-md: 0 0 8px rgba(0, 212, 255, 0.4);
+  --sc-shadow-glow-lg: 0 0 16px rgba(0, 212, 255, 0.5);
+  --sc-shadow-glow-xl: 0 0 24px rgba(0, 212, 255, 0.6);
+
+  /* === Combined Glow + Inset === */
+  --sc-shadow-glow-inset:
+    0 0 8px rgba(0, 212, 255, 0.4),
+    inset 0 0 4px rgba(0, 212, 255, 0.1);
+
+  /* === Elevation Shadows (Depth) === */
+  --sc-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --sc-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --sc-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+
+  /* === Focus Ring === */
+  --sc-ring-focus: 0 0 0 2px hsl(var(--sc-border-focus));
+  --sc-ring-focus-glow:
+    0 0 0 2px hsl(var(--sc-border-focus)),
+    0 0 8px rgba(0, 212, 255, 0.4);
+}
+
+/* ============================================
+ * TYPOGRAPHY
+ * ============================================ */
+
+:root {
+  /* === Font Families === */
+  --sc-font-display: var(--font-orbitron), 'Orbitron', ui-sans-serif, system-ui, sans-serif;
+  --sc-font-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --sc-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+
+  /* === Font Sizes (use Tailwind scale) === */
+  /* text-xs, text-sm, text-base, text-lg, text-xl, text-2xl... */
+
+  /* === Letter Spacing for Headers === */
+  --sc-tracking-wide: 0.05em;
+  --sc-tracking-wider: 0.1em;
+}
+
+/* ============================================
+ * ANIMATION & TRANSITIONS
+ * ============================================ */
+
+:root {
+  /* === Durations === */
+  --sc-duration-fast: 100ms;
+  --sc-duration-normal: 150ms;
+  --sc-duration-slow: 300ms;
+
+  /* === Easings === */
+  --sc-ease-out: cubic-bezier(0.0, 0.0, 0.2, 1);
+  --sc-ease-in-out: cubic-bezier(0.4, 0.0, 0.2, 1);
+
+  /* === Common Transitions === */
+  --sc-transition-colors: color var(--sc-duration-normal) var(--sc-ease-out),
+                          background-color var(--sc-duration-normal) var(--sc-ease-out),
+                          border-color var(--sc-duration-normal) var(--sc-ease-out);
+  --sc-transition-shadow: box-shadow var(--sc-duration-normal) var(--sc-ease-out);
+  --sc-transition-all: all var(--sc-duration-normal) var(--sc-ease-out);
+}
+
+/* ============================================
+ * COMPONENT-SPECIFIC TOKENS
+ * ============================================ */
+
+:root {
+  /* === Button === */
+  --sc-btn-radius: 0.375rem;         /* rounded-md */
+  --sc-btn-border-width: 1px;
+  --sc-btn-glow-hover: var(--sc-shadow-glow-md);
+
+  /* === Window === */
+  --sc-window-radius: 0.5rem;        /* rounded-lg */
+  --sc-window-border-width: 1px;
+  --sc-window-corner-size: 16px;     /* Corner accent size */
+  --sc-window-corner-border: 2px;    /* Corner accent border width */
+
+  /* === Input === */
+  --sc-input-radius: 0.375rem;
+  --sc-input-border-width: 1px;
+  --sc-input-focus-glow: var(--sc-shadow-glow-sm);
+
+  /* === Card === */
+  --sc-card-radius: 0.5rem;
+  --sc-card-border-width: 1px;
+}
+
+/* ============================================
+ * SCANLINE EFFECT
+ * ============================================ */
+
+:root {
+  /* === Scanline Configuration === */
+  --sc-scanline-size: 4px;           /* Height of each scanline pair */
+  --sc-scanline-opacity: 0.5;        /* Overall opacity of effect */
+  --sc-scanline-dark: rgba(0, 0, 0, 0.03); /* Dark line color */
+}
+
+/* Scanline overlay - apply to #root when enabled */
+.scanlines-enabled::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent calc(var(--sc-scanline-size) / 2),
+    var(--sc-scanline-dark) calc(var(--sc-scanline-size) / 2),
+    var(--sc-scanline-dark) var(--sc-scanline-size)
+  );
+  opacity: var(--sc-scanline-opacity);
+}
+
+/* Disable scanlines for reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .scanlines-enabled::after {
+    display: none;
+  }
+}
+
+/* ============================================
+ * CORNER ACCENT UTILITY
+ * ============================================ */
+
+/* Apply to panels/windows for Star Citizen corner effect */
+.sc-corner-accents {
+  position: relative;
+}
+
+.sc-corner-accents::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--sc-window-corner-size);
+  height: var(--sc-window-corner-size);
+  border-top: var(--sc-window-corner-border) solid hsl(var(--sc-cyan) / 0.6);
+  border-left: var(--sc-window-corner-border) solid hsl(var(--sc-cyan) / 0.6);
+  pointer-events: none;
+  border-top-left-radius: inherit;
+}
+
+.sc-corner-accents::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: var(--sc-window-corner-size);
+  height: var(--sc-window-corner-size);
+  border-bottom: var(--sc-window-corner-border) solid hsl(var(--sc-cyan) / 0.6);
+  border-right: var(--sc-window-corner-border) solid hsl(var(--sc-cyan) / 0.6);
+  pointer-events: none;
+  border-bottom-right-radius: inherit;
+}
+
+/* ============================================
+ * REDUCED MOTION SUPPORT
+ * ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --sc-duration-fast: 0ms;
+    --sc-duration-normal: 0ms;
+    --sc-duration-slow: 0ms;
+  }
+}

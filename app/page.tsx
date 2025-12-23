@@ -12,6 +12,7 @@
  * @feature 003-f3-fullscreen-overlay
  * @feature 010-state-persistence-system
  * @feature 018-window-background-toggle
+ * @feature 026-sc-hud-theme
  */
 
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -219,12 +220,16 @@ function OverlayContent({
   onDismissError,
   hydratedWindows,
   hydratedContents,
+  scanlinesEnabled,
+  onScanlinesChange,
 }: {
   state: OverlayState;
   errorModal: ErrorModalState;
   onDismissError: () => void;
   hydratedWindows: WindowStructure[];
   hydratedContents: Map<string, WindowContentFile>;
+  scanlinesEnabled: boolean;
+  onScanlinesChange: (enabled: boolean) => void;
 }) {
   return (
     <div className="flex flex-col justify-between h-full relative">
@@ -240,6 +245,8 @@ function OverlayContent({
         visible={state.visible}
         mode={state.mode}
         targetRect={state.targetRect}
+        scanlinesEnabled={scanlinesEnabled}
+        onScanlinesChange={onScanlinesChange}
       />
 
       {/* App icon in top-left corner */}
@@ -278,6 +285,8 @@ export default function Home() {
     message: "",
     autoDismissMs: 5000,
   });
+  // Scanlines toggle state - feature 026-sc-hud-theme
+  const [scanlinesEnabled, setScanlinesEnabled] = useState(false);
 
   // Log hydration warnings/resets
   useEffect(() => {
@@ -288,6 +297,25 @@ export default function Home() {
       console.warn('State was reset to defaults due to version mismatch');
     }
   }, [hydrationError, wasReset]);
+
+  // Initialize scanlines from hydrated state - feature 026-sc-hud-theme
+  useEffect(() => {
+    if (isHydrated && hydratedState.global.scanlinesEnabled !== undefined) {
+      setScanlinesEnabled(hydratedState.global.scanlinesEnabled);
+    }
+  }, [isHydrated, hydratedState.global.scanlinesEnabled]);
+
+  // Apply scanlines class to root element - feature 026-sc-hud-theme
+  useEffect(() => {
+    const root = document.getElementById("root");
+    if (root) {
+      if (scanlinesEnabled) {
+        root.classList.add("scanlines-enabled");
+      } else {
+        root.classList.remove("scanlines-enabled");
+      }
+    }
+  }, [scanlinesEnabled]);
 
   // T025-T026: Apply debug border from runtime settings
   useEffect(() => {
@@ -500,6 +528,8 @@ export default function Home() {
           onDismissError={handleDismissError}
           hydratedWindows={hydratedState.windows}
           hydratedContents={hydratedContents}
+          scanlinesEnabled={scanlinesEnabled}
+          onScanlinesChange={setScanlinesEnabled}
         />
       </PersistenceProvider>
     </WindowsProvider>
