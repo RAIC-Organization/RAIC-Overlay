@@ -11,7 +11,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use std::ffi::c_void;
 
 use tauri::{AppHandle, Emitter, Runtime};
-use windows::Win32::Foundation::{LPARAM, LRESULT, WPARAM};
+use windows::Win32::Foundation::{GetLastError, LPARAM, LRESULT, WPARAM};
 use windows::Win32::UI::WindowsAndMessaging::{
     CallNextHookEx, DispatchMessageW, GetMessageW, PostThreadMessageW, SetWindowsHookExW,
     TranslateMessage, UnhookWindowsHookEx, HC_ACTION, HHOOK, KBDLLHOOKSTRUCT, MSG,
@@ -164,32 +164,42 @@ unsafe extern "system" fn keyboard_hook_callback(
             let vk_code = kb_struct.vkCode;
             let now = current_time_ms();
 
-            // T009, T010: Check for F3 (toggle visibility) with debounce
+            // T009, T010, T024: Check for F3 (toggle visibility) with debounce and logging
             if vk_code == VK_F3 {
                 let last_press = KEYBOARD_HOOK_STATE.get_last_f3_press();
                 if now - last_press >= DEBOUNCE_MS {
                     KEYBOARD_HOOK_STATE.set_last_f3_press(now);
-                    log::info!("F3 pressed: toggle visibility requested (low-level hook)");
+                    // T024: Log with timestamp
+                    log::info!(
+                        "F3 pressed: toggle visibility requested (low-level hook, timestamp={})",
+                        now
+                    );
                     KEYBOARD_HOOK_STATE.emit_action(HotkeyAction::ToggleVisibility);
                 } else {
                     log::debug!(
-                        "F3 pressed: debounced ({}ms since last)",
-                        now - last_press
+                        "F3 pressed: debounced ({}ms since last, threshold={}ms)",
+                        now - last_press,
+                        DEBOUNCE_MS
                     );
                 }
             }
 
-            // T009, T010: Check for F5 (toggle mode) with debounce
+            // T009, T010, T024: Check for F5 (toggle mode) with debounce and logging
             if vk_code == VK_F5 {
                 let last_press = KEYBOARD_HOOK_STATE.get_last_f5_press();
                 if now - last_press >= DEBOUNCE_MS {
                     KEYBOARD_HOOK_STATE.set_last_f5_press(now);
-                    log::info!("F5 pressed: toggle mode requested (low-level hook)");
+                    // T024: Log with timestamp
+                    log::info!(
+                        "F5 pressed: toggle mode requested (low-level hook, timestamp={})",
+                        now
+                    );
                     KEYBOARD_HOOK_STATE.emit_action(HotkeyAction::ToggleMode);
                 } else {
                     log::debug!(
-                        "F5 pressed: debounced ({}ms since last)",
-                        now - last_press
+                        "F5 pressed: debounced ({}ms since last, threshold={}ms)",
+                        now - last_press,
+                        DEBOUNCE_MS
                     );
                 }
             }
@@ -239,7 +249,11 @@ pub fn start_keyboard_hook<R: Runtime>(app_handle: AppHandle<R>) -> bool {
         let thread_id = unsafe { windows::Win32::System::Threading::GetCurrentThreadId() };
         KEYBOARD_HOOK_STATE.set_thread_id(thread_id);
 
-        log::debug!("Hook thread started with ID: {}", thread_id);
+        // T020: Detailed logging for hook installation attempt with thread ID
+        log::info!(
+            "Hook thread started (thread_id={}), attempting to install WH_KEYBOARD_LL hook...",
+            thread_id
+        );
 
         // T014: Install the hook
         let hook_result = unsafe {
@@ -255,7 +269,12 @@ pub fn start_keyboard_hook<R: Runtime>(app_handle: AppHandle<R>) -> bool {
             Ok(hook) => {
                 KEYBOARD_HOOK_STATE.set_hook_handle(hook.0 as *mut c_void);
                 KEYBOARD_HOOK_STATE.set_active(true);
-                log::info!("Low-level keyboard hook installed successfully");
+                // T021: Success logging with handle info
+                log::info!(
+                    "Low-level keyboard hook installed successfully (handle={:?}, thread_id={})",
+                    hook.0,
+                    thread_id
+                );
                 let _ = tx.send(true);
 
                 // T013: Run Windows message loop
@@ -283,13 +302,20 @@ pub fn start_keyboard_hook<R: Runtime>(app_handle: AppHandle<R>) -> bool {
                     }
                 }
 
-                // Unhook when loop exits
+                // T023: Unhook when loop exits with logging
                 let hook_handle = KEYBOARD_HOOK_STATE.get_hook_handle();
                 if !hook_handle.is_null() {
-                    unsafe {
-                        let _ = UnhookWindowsHookEx(HHOOK(hook_handle));
+                    log::debug!("Uninstalling keyboard hook (handle={:?})...", hook_handle);
+                    let unhook_result = unsafe { UnhookWindowsHookEx(HHOOK(hook_handle)) };
+                    if unhook_result.is_ok() {
+                        log::info!("Low-level keyboard hook uninstalled successfully");
+                    } else {
+                        let error_code = unsafe { GetLastError() };
+                        log::warn!(
+                            "UnhookWindowsHookEx returned error (code: {:?})",
+                            error_code
+                        );
                     }
-                    log::info!("Low-level keyboard hook uninstalled");
                 }
 
                 KEYBOARD_HOOK_STATE.set_hook_handle(std::ptr::null_mut());
@@ -297,7 +323,13 @@ pub fn start_keyboard_hook<R: Runtime>(app_handle: AppHandle<R>) -> bool {
                 KEYBOARD_HOOK_STATE.set_thread_id(0);
             }
             Err(e) => {
-                log::error!("Failed to install keyboard hook: {:?}", e);
+                // T022: Failure logging with Windows error code and description
+                let error_code = unsafe { GetLastError() };
+                log::error!(
+                    "Failed to install keyboard hook: {:?} (Windows error code: {:?})",
+                    e,
+                    error_code
+                );
                 let _ = tx.send(false);
                 KEYBOARD_HOOK_STATE.set_use_fallback(true);
             }

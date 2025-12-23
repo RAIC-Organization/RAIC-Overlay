@@ -78,11 +78,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T020 [US2] Add detailed logging for hook installation attempt with thread ID in `src-tauri/src/keyboard_hook.rs`
-- [ ] T021 [US2] Add success logging when `SetWindowsHookExW` returns valid handle in `src-tauri/src/keyboard_hook.rs`
-- [ ] T022 [US2] Add failure logging with Windows error code and human-readable description using `GetLastError` in `src-tauri/src/keyboard_hook.rs`
-- [ ] T023 [US2] Add logging for hook uninstallation during shutdown in `src-tauri/src/keyboard_hook.rs`
-- [ ] T024 [US2] Add logging for each F3/F5 key detection event (with timestamp) in `src-tauri/src/keyboard_hook.rs`
+- [x] T020 [US2] Add detailed logging for hook installation attempt with thread ID in `src-tauri/src/keyboard_hook.rs`
+- [x] T021 [US2] Add success logging when `SetWindowsHookExW` returns valid handle in `src-tauri/src/keyboard_hook.rs`
+- [x] T022 [US2] Add failure logging with Windows error code and human-readable description using `GetLastError` in `src-tauri/src/keyboard_hook.rs`
+- [x] T023 [US2] Add logging for hook uninstallation during shutdown in `src-tauri/src/keyboard_hook.rs`
+- [x] T024 [US2] Add logging for each F3/F5 key detection event (with timestamp) in `src-tauri/src/keyboard_hook.rs`
 
 **Checkpoint**: User Story 2 complete - All hook lifecycle events are logged
 
