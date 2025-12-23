@@ -11,6 +11,7 @@
  * @feature 007-windows-system
  * @feature 010-state-persistence-system
  * @feature 018-window-background-toggle
+ * @feature 026-sc-hud-theme
  */
 
 import { useRef, useCallback } from 'react';
@@ -116,7 +117,7 @@ export function WindowHeader({
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
     >
-      <span className="font-display text-sm font-medium truncate flex-1">{title}</span>
+      <span className="font-display text-sm font-medium uppercase tracking-wide truncate flex-1">{title}</span>
       <div
         className="flex items-center gap-2 cursor-default"
         onPointerDown={(e) => e.stopPropagation()}
@@ -133,7 +134,7 @@ export function WindowHeader({
         />
         <button
           onClick={handleClose}
-          className="p-1 rounded hover:bg-muted transition-colors cursor-pointer"
+          className="p-1 rounded sc-glow-transition hover:bg-muted/50 hover:shadow-glow-sm cursor-pointer"
           aria-label="Close window"
         >
           <X className="h-4 w-4" />
