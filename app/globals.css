@@ -1,60 +1,75 @@
 @import "tailwindcss";
+@import "../src/styles/sc-theme.css";
 
 /*
- * Dark Theme CSS Variables
- * From contracts/theme-contract.css
+ * Star Citizen HUD Theme CSS Variables
+ * Feature: 026-sc-hud-theme
  * All values use HSL format for shadcn/ui compatibility
  */
 :root {
-  /* === Core Colors === */
-  --background: 220 20% 14%;
-  --foreground: 210 20% 98%;
+  /* === Star Citizen Color Palette === */
+  --sc-cyan: 190 100% 50%;
+  --sc-cyan-dim: 190 80% 40%;
+  --sc-cyan-glow: 190 100% 60%;
+  --sc-bg-deep: 220 30% 4%;
+  --sc-bg: 220 25% 6%;
+  --sc-bg-elevated: 220 20% 10%;
+  --sc-bg-muted: 215 25% 14%;
+  --sc-warning: 30 100% 50%;
+  --sc-danger: 0 70% 50%;
+  --sc-success: 150 80% 45%;
+  --sc-border: 190 40% 25%;
+  --sc-border-glow: 190 60% 35%;
+
+  /* === Core Colors (mapped to SC palette) === */
+  --background: var(--sc-bg);
+  --foreground: 190 60% 90%;
 
   /* === Card === */
-  --card: 220 20% 14%;
-  --card-foreground: 210 20% 98%;
+  --card: var(--sc-bg-elevated);
+  --card-foreground: 190 60% 90%;
 
   /* === Popover === */
-  --popover: 220 20% 14%;
-  --popover-foreground: 210 20% 98%;
+  --popover: var(--sc-bg-elevated);
+  --popover-foreground: 190 60% 90%;
 
   /* === Primary === */
-  --primary: 210 20% 98%;
-  --primary-foreground: 220.9 39.3% 11%;
+  --primary: var(--sc-cyan);
+  --primary-foreground: 220 30% 10%;
 
   /* === Secondary === */
-  --secondary: 215 27.9% 16.9%;
-  --secondary-foreground: 210 20% 98%;
+  --secondary: var(--sc-bg-muted);
+  --secondary-foreground: 190 60% 90%;
 
   /* === Muted === */
-  --muted: 215 27.9% 16.9%;
-  --muted-foreground: 217.9 10.6% 64.9%;
+  --muted: var(--sc-bg-muted);
+  --muted-foreground: 210 20% 60%;
 
   /* === Accent === */
-  --accent: 215 27.9% 16.9%;
-  --accent-foreground: 210 20% 98%;
+  --accent: var(--sc-bg-elevated);
+  --accent-foreground: 190 60% 90%;
 
   /* === Destructive === */
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 20% 98%;
+  --destructive: var(--sc-danger);
+  --destructive-foreground: 0 0% 100%;
 
   /* === Form Elements === */
-  --border: 215 20% 28%;
-  --input: 215 27.9% 16.9%;
-  --ring: 216 12.2% 83.9%;
+  --border: var(--sc-border);
+  --input: var(--sc-bg-elevated);
+  --ring: var(--sc-cyan);
 
   /* === Geometry === */
   --radius: 0.5rem;
 
   /* === Sidebar (for future shadcn sidebar component) === */
-  --sidebar-background: 220 20% 14%;
-  --sidebar-foreground: 210 20% 98%;
-  --sidebar-primary: 210 20% 98%;
-  --sidebar-primary-foreground: 220.9 39.3% 11%;
-  --sidebar-accent: 215 27.9% 16.9%;
-  --sidebar-accent-foreground: 210 20% 98%;
-  --sidebar-border: 215 27.9% 16.9%;
-  --sidebar-ring: 216 12.2% 83.9%;
+  --sidebar-background: var(--sc-bg);
+  --sidebar-foreground: 190 60% 90%;
+  --sidebar-primary: var(--sc-cyan);
+  --sidebar-primary-foreground: 220 30% 10%;
+  --sidebar-accent: var(--sc-bg-elevated);
+  --sidebar-accent-foreground: 190 60% 90%;
+  --sidebar-border: var(--sc-border);
+  --sidebar-ring: var(--sc-cyan);
 }
 
 /* Tailwind theme integration */
@@ -83,6 +98,12 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* === Glow Shadow Tokens === */
+  --shadow-glow-sm: 0 0 4px rgba(0, 212, 255, 0.3);
+  --shadow-glow-md: 0 0 8px rgba(0, 212, 255, 0.4);
+  --shadow-glow-lg: 0 0 16px rgba(0, 212, 255, 0.5);
+  --shadow-glow-hover: 0 0 12px rgba(0, 212, 255, 0.6);
 }
 
 /*
@@ -152,4 +173,11 @@ body {
 /* Window transitions for mode changes */
 .window-mode-transition {
   transition: opacity 100ms ease-out, border 100ms ease-out;
+}
+
+/* === Reduced Motion Preferences === */
+@media (prefers-reduced-motion: reduce) {
+  .window-mode-transition {
+    transition: none;
+  }
 }

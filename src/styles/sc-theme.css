@@ -1,0 +1,81 @@
+/*
+ * Star Citizen HUD Theme Utilities
+ * Feature: 026-sc-hud-theme
+ *
+ * This file contains CSS utilities for SC aesthetic effects:
+ * - Corner accent decorations
+ * - Scanline overlay
+ * - Glow transition utilities
+ */
+
+/* === Corner Accent Utility === */
+/* Apply to elements that need SC-style corner decorations */
+.sc-corner-accents {
+  position: relative;
+}
+
+/* Top-left and top-right corner accents */
+.sc-corner-accents::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  border-top: 2px solid hsl(var(--sc-border-glow));
+  border-left: 2px solid hsl(var(--sc-border-glow));
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Bottom-right corner accent */
+.sc-corner-accents::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  border-bottom: 2px solid hsl(var(--sc-border-glow));
+  border-right: 2px solid hsl(var(--sc-border-glow));
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* === Scanline Overlay === */
+/* Applied to root element when scanlines are enabled */
+.scanlines-enabled::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  opacity: 0.5;
+}
+
+/* === Glow Transition Utility === */
+/* Apply to elements that need smooth glow transitions */
+.sc-glow-transition {
+  transition:
+    box-shadow 150ms ease-out,
+    border-color 150ms ease-out,
+    background-color 150ms ease-out;
+}
+
+/* === Reduced Motion Preferences === */
+@media (prefers-reduced-motion: reduce) {
+  .sc-glow-transition {
+    transition: none;
+  }
+
+  .scanlines-enabled::after {
+    display: none;
+  }
+}
