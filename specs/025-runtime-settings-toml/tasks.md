@@ -59,9 +59,9 @@
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Modify TARGET_WINDOW_NAME in target_window.rs to use settings::get_settings() instead of env! macro in src-tauri/src/target_window.rs
-- [ ] T014 [US1] Update find_target_window() to use runtime target_window_name in src-tauri/src/target_window.rs
-- [ ] T015 [US1] Update error messages in lib.rs to use runtime target_window_name in src-tauri/src/lib.rs
+- [X] T013 [US1] Modify TARGET_WINDOW_NAME in target_window.rs to use settings::get_settings() instead of env! macro in src-tauri/src/target_window.rs
+- [X] T014 [US1] Update find_target_window() to use runtime target_window_name in src-tauri/src/target_window.rs
+- [X] T015 [US1] Update error messages in lib.rs to use runtime target_window_name in src-tauri/src/lib.rs
 
 **Checkpoint**: User Story 1 complete - target window can be configured at runtime
 

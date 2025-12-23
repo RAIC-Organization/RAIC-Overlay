@@ -95,7 +95,7 @@ async fn toggle_visibility(
                 let _ = window.set_ignore_cursor_events(false);
 
                 let _ = window.emit("show-error-modal", ShowErrorModalPayload {
-                    target_name: target_window::TARGET_WINDOW_NAME.to_string(),
+                    target_name: target_window::get_target_window_name().to_string(),
                     message: format!("Target window error: {}", e),
                     auto_dismiss_ms: 5000,
                 });
@@ -119,7 +119,7 @@ async fn toggle_visibility(
                 let _ = window.set_ignore_cursor_events(false);
 
                 let _ = window.emit("show-error-modal", ShowErrorModalPayload {
-                    target_name: target_window::TARGET_WINDOW_NAME.to_string(),
+                    target_name: target_window::get_target_window_name().to_string(),
                     message: format!("Failed to get target window position: {}", e),
                     auto_dismiss_ms: 5000,
                 });
@@ -245,10 +245,11 @@ async fn toggle_mode(
 }
 
 // T054: Get target window info command
+// T015: Updated to use runtime settings for target window name
 #[cfg(windows)]
 #[tauri::command]
 fn get_target_window_info(_state: tauri::State<'_, OverlayState>) -> TargetWindowInfo {
-    use target_window::TARGET_WINDOW_NAME;
+    let target_name = target_window::get_target_window_name();
 
     // Try to find target window
     match target_window::find_target_window() {
@@ -257,14 +258,14 @@ fn get_target_window_info(_state: tauri::State<'_, OverlayState>) -> TargetWindo
             let rect = target_window::get_window_rect(hwnd).ok();
 
             TargetWindowInfo {
-                pattern: TARGET_WINDOW_NAME.to_string(),
+                pattern: target_name.to_string(),
                 found: true,
                 focused,
                 rect,
             }
         }
         Err(_) => TargetWindowInfo {
-            pattern: TARGET_WINDOW_NAME.to_string(),
+            pattern: target_name.to_string(),
             found: false,
             focused: false,
             rect: None,
