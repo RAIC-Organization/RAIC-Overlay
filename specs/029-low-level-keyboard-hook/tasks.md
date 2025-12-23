@@ -110,9 +110,9 @@
 
 **Purpose**: Code quality, validation, and cross-story improvements
 
-- [ ] T030 [P] Run `cargo clippy` and fix all warnings in `src-tauri/`
-- [ ] T031 [P] Run `cargo test` to ensure no regressions in `src-tauri/`
-- [ ] T031a [P] Add unit test for debounce logic verifying 200ms threshold prevents duplicate triggers in `src-tauri/src/keyboard_hook.rs`
+- [x] T030 [P] Run `cargo clippy` and fix all warnings in `src-tauri/`
+- [x] T031 [P] Run `cargo test` to ensure no regressions in `src-tauri/`
+- [x] T031a [P] Add unit test for debounce logic verifying 200ms threshold prevents duplicate triggers in `src-tauri/src/keyboard_hook.rs`
 - [ ] T032 Verify hook thread memory usage is under 1MB budget
 - [ ] T033 Verify hotkey response time is under 100ms
 - [ ] T034 Execute manual testing scenarios from `specs/029-low-level-keyboard-hook/quickstart.md`

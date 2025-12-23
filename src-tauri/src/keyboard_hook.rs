@@ -2,7 +2,7 @@
 // Intercepts keyboard events at the OS kernel level before any application can consume them
 // Follows the same pattern as process_monitor.rs (dedicated thread, global state, start/stop functions)
 
-#![cfg(windows)]
+// Note: This module is cfg(windows) in lib.rs, no need for #![cfg(windows)] here
 
 use std::sync::atomic::{AtomicBool, AtomicU32, AtomicU64, AtomicPtr, Ordering};
 use std::sync::Mutex;
@@ -37,6 +37,9 @@ pub enum HotkeyAction {
     ToggleMode,
 }
 
+/// Type alias for the event emitter function
+type EventEmitter = Box<dyn Fn(HotkeyAction) + Send + Sync>;
+
 // T004: KeyboardHookState struct with atomic fields
 /// Represents the state of the low-level keyboard hook system
 pub struct KeyboardHookState {
@@ -53,7 +56,13 @@ pub struct KeyboardHookState {
     /// Last F5 press timestamp for debouncing
     last_f5_press: AtomicU64,
     /// App handle for event emission (protected by mutex)
-    app_handle: Mutex<Option<Box<dyn Fn(HotkeyAction) + Send + Sync>>>,
+    app_handle: Mutex<Option<EventEmitter>>,
+}
+
+impl Default for KeyboardHookState {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl KeyboardHookState {
@@ -267,7 +276,7 @@ pub fn start_keyboard_hook<R: Runtime>(app_handle: AppHandle<R>) -> bool {
 
         match hook_result {
             Ok(hook) => {
-                KEYBOARD_HOOK_STATE.set_hook_handle(hook.0 as *mut c_void);
+                KEYBOARD_HOOK_STATE.set_hook_handle(hook.0);
                 KEYBOARD_HOOK_STATE.set_active(true);
                 // T021: Success logging with handle info
                 log::info!(
