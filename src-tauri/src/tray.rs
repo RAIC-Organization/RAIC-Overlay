@@ -10,6 +10,9 @@ use tauri::{
     AppHandle, Emitter, Manager,
 };
 
+#[cfg(windows)]
+use crate::keyboard_hook;
+
 /// Initialize the system tray icon with menu.
 ///
 /// Creates a tray icon using the app's default icon with:
@@ -34,6 +37,12 @@ pub fn setup_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
             if event.id.as_ref() == "quit" {
                 // T016: Log exit request
                 log::info!("Exit requested via tray menu");
+
+                // T019 (029): Stop keyboard hook before exit
+                #[cfg(windows)]
+                {
+                    keyboard_hook::stop_keyboard_hook();
+                }
 
                 // T014: Emit event to frontend to trigger state save
                 if let Some(window) = app.get_webview_window("main") {
