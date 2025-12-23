@@ -37,7 +37,7 @@
 
 ### Implementation for User Story 1
 
-- [X] T003 [US1] Remove unused `Target` and `TargetKind` imports from src-tauri/src/logging.rs line 6
+- [X] T003 [US1] Remove unused `Target` and `TargetKind` imports from src-tauri/src/logging.rs line 6 *(imports retained for Stdout target)*
 - [X] T004 [US1] Remove custom `.target()` call (lines 52-55) from `build_log_plugin()` in src-tauri/src/logging.rs
 - [X] T005 [US1] Update `get_log_file_path()` to return "RAIC Overlay.log" instead of "app.log" in src-tauri/src/logging.rs line 73
 - [X] T006 [US1] Update `cleanup_old_logs()` pattern matching from "app.log" to "RAIC Overlay.log" in src-tauri/src/logging.rs (two locations: starts_with check and equality check)
@@ -65,12 +65,12 @@
 
 **Purpose**: Final verification and cleanup
 
-- [ ] T007 Build project with `cargo build` and verify no compilation errors
-- [ ] T008 Delete existing log files from `%LOCALAPPDATA%\com.raicoverlay.app\logs\`
-- [ ] T009 Run application and verify only "RAIC Overlay.log" is created (no "app.log")
-- [ ] T010 Verify log entries are written to "RAIC Overlay.log" in JSON format
-- [ ] T010a Verify existing logging features preserved: JSON format, log level filtering (set RAIC_LOG_LEVEL=DEBUG), rotation config unchanged
-- [ ] T011 Run quickstart.md verification steps to confirm all acceptance criteria met
+- [X] T007 Build project with `cargo build` and verify no compilation errors
+- [X] T008 Delete existing log files from `%LOCALAPPDATA%\com.raicoverlay.app\logs\`
+- [ ] T009 Run application and verify only "RAIC Overlay.log" is created (no "app.log") *(requires manual verification)*
+- [ ] T010 Verify log entries are written to "RAIC Overlay.log" in JSON format *(requires manual verification)*
+- [ ] T010a Verify existing logging features preserved: JSON format, log level filtering (set RAIC_LOG_LEVEL=DEBUG), rotation config unchanged *(requires manual verification)*
+- [ ] T011 Run quickstart.md verification steps to confirm all acceptance criteria met *(requires manual verification)*
 
 ---
 
