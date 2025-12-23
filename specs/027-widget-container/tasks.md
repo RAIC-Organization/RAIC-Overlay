@@ -57,12 +57,12 @@
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Create ClockWidgetContent component with ResizeObserver font scaling in src/components/widgets/ClockWidgetContent.tsx
-- [ ] T012 [US1] Add clock widget opening action to MainMenu in src/components/MainMenu.tsx
-- [ ] T013 [US1] Implement widget creation via event in WidgetsContext (OPEN_WIDGET action) in src/contexts/WidgetsContext.tsx
-- [ ] T014 [US1] Render ClockWidgetContent inside Widget component based on type in src/components/widgets/Widget.tsx
-- [ ] T015 [US1] Style clock widget with Orbitron font, white text, blue stroke in src/components/widgets/ClockWidgetContent.tsx
-- [ ] T016 [US1] Ensure widget container has transparent background (no borders/header) in src/components/widgets/Widget.tsx
+- [x] T011 [US1] Create ClockWidgetContent component with ResizeObserver font scaling in src/components/widgets/ClockWidgetContent.tsx
+- [x] T012 [US1] Add clock widget opening action to MainMenu in src/components/MainMenu.tsx
+- [x] T013 [US1] Implement widget creation via event in WidgetsContext (OPEN_WIDGET action) in src/contexts/WidgetsContext.tsx
+- [x] T014 [US1] Render ClockWidgetContent inside Widget component based on type in src/components/widgets/Widget.tsx
+- [x] T015 [US1] Style clock widget with Orbitron font, white text, blue stroke in src/components/widgets/ClockWidgetContent.tsx
+- [x] T016 [US1] Ensure widget container has transparent background (no borders/header) in src/components/widgets/Widget.tsx
 
 **Checkpoint**: Clock widget displays and updates time every second in transparent container
 

@@ -12,6 +12,8 @@
 import { useWidgets } from '@/contexts/WidgetsContext';
 import { useWidgetEvents } from '@/hooks/useWidgetEvents';
 import { Widget } from './Widget';
+import { ClockWidgetContent } from './ClockWidgetContent';
+import type { WidgetInstance, WidgetType } from '@/types/widgets';
 
 // ============================================================================
 // Props
@@ -19,6 +21,35 @@ import { Widget } from './Widget';
 
 interface WidgetsContainerProps {
   mode: string; // 'windowed' (interactive) or 'fullscreen' (click-through)
+}
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
+/**
+ * Render widget content based on widget type.
+ */
+function renderWidgetContent(
+  widget: WidgetInstance,
+  isInteractive: boolean
+): React.ReactNode {
+  switch (widget.type as WidgetType) {
+    case 'clock':
+      return (
+        <ClockWidgetContent
+          isInteractive={isInteractive}
+          widgetId={widget.id}
+        />
+      );
+    default:
+      // Fallback for unknown widget types
+      return (
+        <div className="w-full h-full flex items-center justify-center text-white/50 text-sm">
+          Unknown widget: {widget.type}
+        </div>
+      );
+  }
 }
 
 // ============================================================================
@@ -59,10 +90,7 @@ export function WidgetsContainer({ mode }: WidgetsContainerProps) {
           onFlip={setWidgetFlipped}
           onClose={closeWidget}
         >
-          {/* Widget content will be rendered based on type in Phase 3 */}
-          <div className="w-full h-full flex items-center justify-center text-white/50 text-sm">
-            Widget: {widget.type}
-          </div>
+          {renderWidgetContent(widget, isInteractive)}
         </Widget>
       ))}
     </div>

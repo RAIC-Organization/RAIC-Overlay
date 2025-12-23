@@ -7,6 +7,7 @@
  *
  * @feature 006-main-menu-component
  * @feature 026-sc-hud-theme
+ * @feature 027-widget-container
  */
 
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
@@ -15,6 +16,7 @@ import { ButtonGroup } from "@/components/ui/button-group";
 import { OverlayMode } from "@/types/overlay";
 import { WindowRect } from "@/types/ipc";
 import { windowEvents } from "@/lib/windowEvents";
+import { widgetEvents } from "@/lib/widgetEvents";
 import { TestWindowContent } from "@/components/windows/TestWindowContent";
 import { NotesContent } from "@/components/windows/NotesContent";
 import { DrawContent } from "@/components/windows/DrawContent";
@@ -87,18 +89,12 @@ export function MainMenu({
     });
   };
 
-  // T013-T014: Open clock window with transparent background
-  const handleOpenClock = () => {
-    log.info("Opening Clock window");
-    windowEvents.emit("window:open", {
-      component: ClockContent,
-      title: "Clock",
-      contentType: "clock",
-      initialWidth: 200,
-      initialHeight: 80,
-      initialOpacity: 0.8,
-      initialBackgroundTransparent: true,
-      componentProps: { isInteractive: mode === "windowed" },
+  // T012: Open clock widget (replaces clock window)
+  // @feature 027-widget-container
+  const handleOpenClockWidget = () => {
+    log.info("Opening Clock widget");
+    widgetEvents.emit("widget:open", {
+      type: "clock",
     });
   };
 
@@ -142,7 +138,7 @@ export function MainMenu({
             <Button variant="secondary" onClick={handleOpenFileViewer}>
               File Viewer
             </Button>
-            <Button variant="secondary" onClick={handleOpenClock}>
+            <Button variant="secondary" onClick={handleOpenClockWidget}>
               Clock
             </Button>
             <Button variant="secondary" onClick={handleTestWindows}>
