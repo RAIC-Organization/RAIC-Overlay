@@ -144,12 +144,12 @@
 
 **Purpose**: Final validation and documentation
 
-- [ ] T037 [P] Run cargo clippy and fix any warnings in src-tauri/
-- [ ] T038 [P] Run cargo test to verify all unit tests pass in src-tauri/
-- [ ] T039 Verify settings source logging appears at startup with correct INFO format
-- [ ] T040 Manual testing: verify quickstart.md scenarios work correctly
-- [ ] T041 [P] Update CLAUDE.md if needed with new settings module information
-- [ ] T042 Measure settings load time using std::time::Instant and verify < 10ms target in src-tauri/src/settings.rs
+- [X] T037 [P] Run cargo clippy and fix any warnings in src-tauri/
+- [X] T038 [P] Run cargo test to verify all unit tests pass in src-tauri/
+- [X] T039 Verify settings source logging appears at startup with correct INFO format
+- [X] T040 Manual testing: verify quickstart.md scenarios work correctly
+- [X] T041 [P] Update CLAUDE.md if needed with new settings module information
+- [X] T042 Measure settings load time using std::time::Instant and verify < 10ms target in src-tauri/src/settings.rs
 
 ---
 

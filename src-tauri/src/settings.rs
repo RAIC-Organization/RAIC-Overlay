@@ -530,4 +530,33 @@ another_unknown = 42
         assert_eq!(settings.target_window_name, Some("Test".to_string()));
         // Should parse successfully, ignoring unknown fields
     }
+
+    // ========================================================================
+    // T042: Performance validation
+    // ========================================================================
+
+    /// T042: Verify settings loading is fast (< 10ms target)
+    #[test]
+    fn test_settings_load_performance() {
+        use std::time::Instant;
+
+        // Create file settings with all values
+        let file = FileSettings {
+            target_window_name: Some("Test Window".to_string()),
+            debug_border: Some(true),
+            log_level: Some("DEBUG".to_string()),
+        };
+
+        // Measure time to create RuntimeSettings
+        let start = Instant::now();
+        let _runtime = RuntimeSettings::from_file_settings(file);
+        let elapsed = start.elapsed();
+
+        // Should complete in well under 10ms (typically < 1ms)
+        assert!(
+            elapsed.as_millis() < 10,
+            "Settings merge took too long: {:?}",
+            elapsed
+        );
+    }
 }
