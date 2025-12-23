@@ -421,7 +421,23 @@ pub fn run() {
                 log::warn!("Failed to cleanup old logs: {}", e);
             }
 
-            // Register F3 and F5 global shortcuts
+            // T018 (029): Start low-level keyboard hook for F3/F5 hotkeys
+            // This replaces global shortcut registration which doesn't work with Star Citizen
+            #[cfg(windows)]
+            {
+                if keyboard_hook::start_keyboard_hook(handle.clone()) {
+                    log::info!("Low-level keyboard hook started successfully");
+                } else {
+                    // Fallback to global shortcuts if hook fails
+                    log::warn!("Low-level keyboard hook failed, falling back to global shortcuts");
+                    if let Err(e) = hotkey::register_shortcuts(&handle) {
+                        log::warn!("Failed to register fallback shortcuts: {}", e);
+                    }
+                }
+            }
+
+            // Non-Windows: use global shortcuts directly
+            #[cfg(not(windows))]
             if let Err(e) = hotkey::register_shortcuts(&handle) {
                 log::warn!("Failed to register shortcuts: {}", e);
             }

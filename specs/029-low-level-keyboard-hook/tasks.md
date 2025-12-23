@@ -63,8 +63,8 @@
 - [x] T015 [US1] Implement Tauri event emission for hotkey actions (reuse pattern from existing `hotkey.rs`) in `src-tauri/src/keyboard_hook.rs`
 - [x] T016 [US1] Store `AppHandle` in thread-safe global state for event emission in `src-tauri/src/keyboard_hook.rs`
 - [x] T017 [US1] Implement `stop_keyboard_hook()` function with `PostQuitMessage` and `UnhookWindowsHookEx` in `src-tauri/src/keyboard_hook.rs`
-- [ ] T018 [US1] Modify `src-tauri/src/lib.rs` to call `start_keyboard_hook()` at application startup instead of global shortcut registration
-- [ ] T019 [US1] Modify `src-tauri/src/lib.rs` to call `stop_keyboard_hook()` at application shutdown
+- [x] T018 [US1] Modify `src-tauri/src/lib.rs` to call `start_keyboard_hook()` at application startup instead of global shortcut registration
+- [x] T019 [US1] Modify `src-tauri/src/lib.rs` to call `stop_keyboard_hook()` at application shutdown
 
 **Checkpoint**: User Story 1 complete - F3/F5 hotkeys work with Star Citizen via low-level hook
 
