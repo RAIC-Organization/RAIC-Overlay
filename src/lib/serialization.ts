@@ -12,6 +12,7 @@
 
 import type { WindowInstance, WindowContentType } from '@/types/windows';
 import { WINDOW_CONSTANTS } from '@/types/windows';
+import type { WidgetInstance } from '@/types/widgets';
 import type {
   PersistedState,
   WindowStructure,
@@ -22,6 +23,7 @@ import type {
   BrowserPersistedContent,
   FileViewerPersistedContent,
   FileType,
+  WidgetStructure,
 } from '@/types/persistence';
 import { CURRENT_STATE_VERSION, DEFAULT_WINDOW_FLAGS } from '@/types/persistence';
 
@@ -134,16 +136,40 @@ export function serializeWindow(win: WindowInstance): WindowStructure | null {
 }
 
 /**
+ * Serialize a widget instance to WidgetStructure for persistence.
+ * @feature 027-widget-container
+ */
+export function serializeWidget(widget: WidgetInstance): WidgetStructure {
+  return {
+    id: widget.id,
+    type: widget.type,
+    position: {
+      x: Math.round(widget.x),
+      y: Math.round(widget.y),
+    },
+    size: {
+      width: Math.round(widget.width),
+      height: Math.round(widget.height),
+    },
+    opacity: widget.opacity,
+  };
+}
+
+/**
  * Serialize current state to PersistedState format.
+ * @feature 027-widget-container - Added widgets parameter
  */
 export function serializeState(
   windows: WindowInstance[],
   overlayMode: 'windowed' | 'fullscreen',
-  overlayVisible: boolean
+  overlayVisible: boolean,
+  widgets: WidgetInstance[] = []
 ): PersistedState {
   const persistableWindows = windows
     .map(serializeWindow)
     .filter((w): w is WindowStructure => w !== null);
+
+  const persistableWidgets = widgets.map(serializeWidget);
 
   return {
     version: CURRENT_STATE_VERSION,
@@ -154,7 +180,7 @@ export function serializeState(
       overlayVisible,
     },
     windows: persistableWindows,
-    widgets: [], // Empty by default, widget persistence handled separately
+    widgets: persistableWidgets,
   };
 }
 

@@ -139,13 +139,13 @@
 
 ### Implementation for User Story 4
 
-- [ ] T039 [US4] Add widgets array to PersistedState in Rust persistence in src-tauri/src/persistence.rs
-- [ ] T040 [US4] Implement widget state serialization in persistence context in src/contexts/PersistenceContext.tsx
-- [ ] T041 [US4] Add onWidgetMoved callback for debounced state save in src/contexts/PersistenceContext.tsx
-- [ ] T042 [US4] Trigger persistence on widget move/resize/opacity change in src/components/widgets/Widget.tsx
-- [ ] T043 [US4] Implement widget hydration in useHydration hook in src/hooks/useHydration.ts
-- [ ] T044 [US4] Create WidgetRestorer component to restore widgets on app startup in app/page.tsx
-- [ ] T045 [US4] Handle backward compatibility (empty widgets array) in persistence in src-tauri/src/persistence.rs
+- [x] T039 [US4] Add widgets array to PersistedState in Rust persistence in src-tauri/src/persistence.rs
+- [x] T040 [US4] Implement widget state serialization in persistence context in src/contexts/PersistenceContext.tsx
+- [x] T041 [US4] Add onWidgetMoved callback for debounced state save in src/contexts/PersistenceContext.tsx
+- [x] T042 [US4] Trigger persistence on widget move/resize/opacity change in src/components/widgets/WidgetsContainer.tsx
+- [x] T043 [US4] Implement widget hydration in useHydration hook in src/hooks/useHydration.ts
+- [x] T044 [US4] Create WidgetRestorer component to restore widgets on app startup in app/page.tsx
+- [x] T045 [US4] Handle backward compatibility (empty widgets array) in persistence in src-tauri/src/persistence.rs
 
 **Checkpoint**: Widget state persists across app restarts
 

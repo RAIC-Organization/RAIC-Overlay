@@ -9,8 +9,10 @@
  * @feature 027-widget-container
  */
 
+import { useCallback } from 'react';
 import { useWidgets } from '@/contexts/WidgetsContext';
 import { useWidgetEvents } from '@/hooks/useWidgetEvents';
+import { usePersistenceContext } from '@/contexts/PersistenceContext';
 import { Widget } from './Widget';
 import { ClockWidgetContent } from './ClockWidgetContent';
 import type { WidgetInstance, WidgetType } from '@/types/widgets';
@@ -72,7 +74,34 @@ export function WidgetsContainer({ mode }: WidgetsContainerProps) {
     closeWidget,
   } = useWidgets();
 
+  // Get persistence context (may be null if not in provider)
+  const persistence = usePersistenceContext();
+
   const isInteractive = mode === 'windowed';
+
+  // Wrap move callback to trigger persistence
+  const handleMove = useCallback((id: string, x: number, y: number) => {
+    moveWidget(id, x, y);
+    persistence?.onWidgetMoved();
+  }, [moveWidget, persistence]);
+
+  // Wrap resize callback to trigger persistence
+  const handleResize = useCallback((id: string, width: number, height: number) => {
+    resizeWidget(id, width, height);
+    persistence?.onWidgetMoved();
+  }, [resizeWidget, persistence]);
+
+  // Wrap opacity callback to trigger persistence
+  const handleOpacityChange = useCallback((id: string, opacity: number) => {
+    setWidgetOpacity(id, opacity);
+    persistence?.onWidgetMoved();
+  }, [setWidgetOpacity, persistence]);
+
+  // Wrap close callback to trigger persistence
+  const handleClose = useCallback((id: string) => {
+    closeWidget(id);
+    persistence?.onWidgetMoved();
+  }, [closeWidget, persistence]);
 
   return (
     <div
@@ -84,11 +113,11 @@ export function WidgetsContainer({ mode }: WidgetsContainerProps) {
           key={widget.id}
           widget={widget}
           isInteractive={isInteractive}
-          onMove={moveWidget}
-          onResize={resizeWidget}
-          onOpacityChange={setWidgetOpacity}
+          onMove={handleMove}
+          onResize={handleResize}
+          onOpacityChange={handleOpacityChange}
           onFlip={setWidgetFlipped}
-          onClose={closeWidget}
+          onClose={handleClose}
         >
           {renderWidgetContent(widget, isInteractive)}
         </Widget>

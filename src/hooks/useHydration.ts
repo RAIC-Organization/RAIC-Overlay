@@ -10,7 +10,7 @@
 
 import { useState, useEffect } from 'react';
 import { persistenceService } from '@/stores/persistenceService';
-import type { PersistedState, WindowContentFile, WindowStructure } from '@/types/persistence';
+import type { PersistedState, WindowContentFile, WindowStructure, WidgetStructure } from '@/types/persistence';
 import {
   CURRENT_STATE_VERSION,
   DEFAULT_PERSISTED_STATE,
@@ -39,6 +39,8 @@ export interface HydrationResult {
   state: PersistedState;
   /** Map of window ID to content */
   windowContents: Map<string, WindowContentFile>;
+  /** Hydrated widgets for restoration @feature 027-widget-container */
+  widgets: WidgetStructure[];
   /** Error message if hydration failed */
   error: string | null;
   /** Whether state was reset due to version mismatch */
@@ -56,6 +58,7 @@ export function useHydration(): HydrationResult {
     isHydrated: false,
     state: DEFAULT_PERSISTED_STATE,
     windowContents: new Map(),
+    widgets: [],
     error: null,
     wasReset: false,
   });
@@ -74,6 +77,7 @@ export function useHydration(): HydrationResult {
             isHydrated: true,
             state: DEFAULT_PERSISTED_STATE,
             windowContents: new Map(),
+            widgets: [],
             error: loadResult.error || 'Unknown error',
             wasReset: false,
           });
@@ -88,6 +92,7 @@ export function useHydration(): HydrationResult {
             isHydrated: true,
             state: DEFAULT_PERSISTED_STATE,
             windowContents: new Map(),
+            widgets: [],
             error: null,
             wasReset: false,
           });
@@ -103,6 +108,7 @@ export function useHydration(): HydrationResult {
             isHydrated: true,
             state: DEFAULT_PERSISTED_STATE,
             windowContents: new Map(),
+            widgets: [],
             error: null,
             wasReset: true,
           });
@@ -122,15 +128,20 @@ export function useHydration(): HydrationResult {
           windows: filterDeprecatedWindowTypes(loadResult.state.windows),
         };
 
+        // Extract widgets from persisted state (default to empty array for backward compatibility)
+        // @feature 027-widget-container
+        const hydratedWidgets = loadResult.state.widgets ?? [];
+
         const elapsed = performance.now() - startTime;
         console.log(
-          `Hydration complete in ${elapsed.toFixed(0)}ms: ${filteredState.windows.length} windows, ${contentMap.size} content files`
+          `Hydration complete in ${elapsed.toFixed(0)}ms: ${filteredState.windows.length} windows, ${hydratedWidgets.length} widgets, ${contentMap.size} content files`
         );
 
         setResult({
           isHydrated: true,
           state: filteredState,
           windowContents: contentMap,
+          widgets: hydratedWidgets,
           error: null,
           wasReset: false,
         });
@@ -140,6 +151,7 @@ export function useHydration(): HydrationResult {
           isHydrated: true,
           state: DEFAULT_PERSISTED_STATE,
           windowContents: new Map(),
+          widgets: [],
           error: String(err),
           wasReset: false,
         });

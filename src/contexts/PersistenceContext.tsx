@@ -24,6 +24,7 @@ import {
 import { listen } from '@tauri-apps/api/event';
 import { usePersistence } from '@/hooks/usePersistence';
 import { useWindows } from '@/contexts/WindowsContext';
+import { useWidgets } from '@/contexts/WidgetsContext';
 import type { WindowInstance, WindowContentType } from '@/types/windows';
 import type { FileType } from '@/types/persistence';
 import { serializeNotesContent, serializeDrawContent, serializeBrowserContent, serializeFileViewerContent } from '@/lib/serialization';
@@ -37,6 +38,12 @@ export interface PersistenceContextValue {
    * Trigger debounced save after window position/size change.
    */
   onWindowMoved: () => void;
+
+  /**
+   * Trigger debounced save after widget position/size/opacity change.
+   * @feature 027-widget-container
+   */
+  onWidgetMoved: () => void;
 
   /**
    * Trigger debounced save for notes content.
@@ -100,6 +107,7 @@ export function PersistenceProvider({
   onWindowDelete,
 }: PersistenceProviderProps) {
   const { windows, getStateForPersistence } = useWindows();
+  const { getStateForPersistence: getWidgetStateForPersistence } = useWidgets();
   const onWindowDeleteRef = useRef(onWindowDelete);
   onWindowDeleteRef.current = onWindowDelete;
 
@@ -109,6 +117,12 @@ export function PersistenceProvider({
   const getWindowsForPersistence = useCallback(() => {
     return getStateForPersistence().windows;
   }, [getStateForPersistence]);
+
+  // Create a getter function that returns current widgets from ref-based state
+  // @feature 027-widget-container
+  const getWidgetsForPersistence = useCallback(() => {
+    return getWidgetStateForPersistence().widgets;
+  }, [getWidgetStateForPersistence]);
 
   const {
     saveStateImmediate,
@@ -125,6 +139,7 @@ export function PersistenceProvider({
     overlayMode,
     overlayVisible,
     getWindowsForPersistence,
+    getWidgetsForPersistence,
   });
 
   // Track previous windows to detect added/removed windows
@@ -200,6 +215,13 @@ export function PersistenceProvider({
     triggerDebouncedStateSave();
   }, [triggerDebouncedStateSave]);
 
+  // Debounced save for widget position/size/opacity changes
+  // Uses the same mechanism as window persistence for consistency
+  // @feature 027-widget-container
+  const onWidgetMoved = useCallback(() => {
+    triggerDebouncedStateSave();
+  }, [triggerDebouncedStateSave]);
+
   // Debounced save for notes content
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onNotesContentChange = useCallback((windowId: string, content: any) => {
@@ -249,6 +271,7 @@ export function PersistenceProvider({
 
   const value: PersistenceContextValue = {
     onWindowMoved,
+    onWidgetMoved,
     onNotesContentChange,
     onDrawContentChange,
     onBrowserContentChange,

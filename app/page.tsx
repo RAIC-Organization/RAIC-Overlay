@@ -36,9 +36,10 @@ import { DrawContent } from "@/components/windows/DrawContent";
 import { BrowserContent } from "@/components/windows/BrowserContent";
 import { FileViewerContent } from "@/components/windows/FileViewerContent";
 import { OverlayState, initialState } from "@/types/overlay";
-import type { WindowStructure, WindowContentFile, NotesContent as NotesContentType, DrawContent as DrawContentType, BrowserPersistedContent, FileViewerPersistedContent } from "@/types/persistence";
+import type { WindowStructure, WindowContentFile, NotesContent as NotesContentType, DrawContent as DrawContentType, BrowserPersistedContent, FileViewerPersistedContent, WidgetStructure } from "@/types/persistence";
 import { normalizeBrowserContent, normalizeFileViewerContent } from "@/types/persistence";
 import type { WindowContentType } from "@/types/windows";
+import { useWidgets } from "@/contexts/WidgetsContext";
 import { persistenceService } from "@/stores/persistenceService";
 import {
   OverlayReadyPayload,
@@ -197,6 +198,43 @@ function WindowRestorer({
 }
 
 /**
+ * Component that restores widgets from hydrated state.
+ * Must be inside WidgetsProvider to access context.
+ * @feature 027-widget-container
+ */
+function WidgetRestorer({
+  widgets,
+}: {
+  widgets: WidgetStructure[];
+}) {
+  const { openWidget } = useWidgets();
+  const restoredRef = useRef(false);
+
+  useEffect(() => {
+    // Only restore once
+    if (restoredRef.current || widgets.length === 0) return;
+    restoredRef.current = true;
+
+    console.log(`Restoring ${widgets.length} widgets from persisted state`);
+
+    // Restore each widget
+    for (const widget of widgets) {
+      openWidget({
+        type: widget.type,
+        widgetId: widget.id,
+        initialX: widget.position.x,
+        initialY: widget.position.y,
+        initialWidth: widget.size.width,
+        initialHeight: widget.size.height,
+        initialOpacity: widget.opacity,
+      });
+    }
+  }, [widgets, openWidget]);
+
+  return null;
+}
+
+/**
  * Main content component that wraps the overlay UI.
  */
 function OverlayContent({
@@ -205,6 +243,7 @@ function OverlayContent({
   onDismissError,
   hydratedWindows,
   hydratedContents,
+  hydratedWidgets,
   scanlinesEnabled,
   onScanlinesChange,
 }: {
@@ -213,6 +252,7 @@ function OverlayContent({
   onDismissError: () => void;
   hydratedWindows: WindowStructure[];
   hydratedContents: Map<string, WindowContentFile>;
+  hydratedWidgets: WidgetStructure[];
   scanlinesEnabled: boolean;
   onScanlinesChange: (enabled: boolean) => void;
 }) {
@@ -224,6 +264,9 @@ function OverlayContent({
         windowContents={hydratedContents}
         mode={state.mode}
       />
+
+      {/* Widget restorer - runs once on mount @feature 027-widget-container */}
+      <WidgetRestorer widgets={hydratedWidgets} />
 
       {/* MainMenu at top - only visible in interactive mode */}
       <MainMenu
@@ -261,6 +304,7 @@ export default function Home() {
     isHydrated,
     state: hydratedState,
     windowContents: hydratedContents,
+    widgets: hydratedWidgets,
     error: hydrationError,
     wasReset,
   } = useHydration();
@@ -517,6 +561,7 @@ export default function Home() {
             onDismissError={handleDismissError}
             hydratedWindows={hydratedState.windows}
             hydratedContents={hydratedContents}
+            hydratedWidgets={hydratedWidgets}
             scanlinesEnabled={scanlinesEnabled}
             onScanlinesChange={setScanlinesEnabled}
           />
