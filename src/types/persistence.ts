@@ -9,7 +9,10 @@
  * @feature 016-file-viewer-window
  * @feature 018-window-background-toggle
  * @feature 026-sc-hud-theme
+ * @feature 027-widget-container
  */
+
+import type { WidgetType as WidgetTypeFromWidgets } from './widgets';
 
 export const CURRENT_STATE_VERSION = 1;
 
@@ -22,6 +25,7 @@ export interface PersistedState {
   lastModified: string;
   global: GlobalSettings;
   windows: WindowStructure[];
+  widgets: WidgetStructure[];
 }
 
 export interface GlobalSettings {
@@ -45,7 +49,7 @@ export interface WindowStructure {
   backgroundTransparent: boolean;
 }
 
-export type WindowType = 'notes' | 'draw' | 'browser' | 'fileviewer' | 'clock';
+export type WindowType = 'notes' | 'draw' | 'browser' | 'fileviewer';
 
 export interface Position {
   x: number;
@@ -298,4 +302,28 @@ export const DEFAULT_PERSISTED_STATE: PersistedState = {
   lastModified: new Date().toISOString(),
   global: DEFAULT_GLOBAL_SETTINGS,
   windows: [],
+  widgets: [],
 };
+
+// ============================================================================
+// Widget Persistence (NEW - 027-widget-container)
+// ============================================================================
+
+/**
+ * Re-export WidgetType for persistence.
+ * @feature 027-widget-container
+ */
+export type WidgetType = WidgetTypeFromWidgets;
+
+/**
+ * Persisted widget structure for storage.
+ * Excludes runtime-only fields (isFlipped, createdAt).
+ * @feature 027-widget-container
+ */
+export interface WidgetStructure {
+  id: string;
+  type: WidgetType;
+  position: Position;
+  size: Size;
+  opacity: number;
+}

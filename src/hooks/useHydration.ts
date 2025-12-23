@@ -5,15 +5,32 @@
  * hydration status for blocking UI render until complete.
  *
  * @feature 010-state-persistence-system
+ * @feature 027-widget-container
  */
 
 import { useState, useEffect } from 'react';
 import { persistenceService } from '@/stores/persistenceService';
-import type { PersistedState, WindowContentFile } from '@/types/persistence';
+import type { PersistedState, WindowContentFile, WindowStructure, WidgetStructure } from '@/types/persistence';
 import {
   CURRENT_STATE_VERSION,
   DEFAULT_PERSISTED_STATE,
 } from '@/types/persistence';
+
+/**
+ * Filter out deprecated clock windows from persisted state.
+ * Clock windows were migrated to widgets in 027-widget-container.
+ * @feature 027-widget-container
+ */
+function filterDeprecatedWindowTypes(windows: WindowStructure[]): WindowStructure[] {
+  return windows.filter((w) => {
+    // Filter out clock windows - they've been migrated to widgets
+    if ((w.type as string) === 'clock') {
+      console.log(`Skipping deprecated clock window: ${w.id}`);
+      return false;
+    }
+    return true;
+  });
+}
 
 export interface HydrationResult {
   /** Whether hydration is complete */
@@ -22,6 +39,8 @@ export interface HydrationResult {
   state: PersistedState;
   /** Map of window ID to content */
   windowContents: Map<string, WindowContentFile>;
+  /** Hydrated widgets for restoration @feature 027-widget-container */
+  widgets: WidgetStructure[];
   /** Error message if hydration failed */
   error: string | null;
   /** Whether state was reset due to version mismatch */
@@ -39,6 +58,7 @@ export function useHydration(): HydrationResult {
     isHydrated: false,
     state: DEFAULT_PERSISTED_STATE,
     windowContents: new Map(),
+    widgets: [],
     error: null,
     wasReset: false,
   });
@@ -57,6 +77,7 @@ export function useHydration(): HydrationResult {
             isHydrated: true,
             state: DEFAULT_PERSISTED_STATE,
             windowContents: new Map(),
+            widgets: [],
             error: loadResult.error || 'Unknown error',
             wasReset: false,
           });
@@ -71,6 +92,7 @@ export function useHydration(): HydrationResult {
             isHydrated: true,
             state: DEFAULT_PERSISTED_STATE,
             windowContents: new Map(),
+            widgets: [],
             error: null,
             wasReset: false,
           });
@@ -86,6 +108,7 @@ export function useHydration(): HydrationResult {
             isHydrated: true,
             state: DEFAULT_PERSISTED_STATE,
             windowContents: new Map(),
+            widgets: [],
             error: null,
             wasReset: true,
           });
@@ -98,15 +121,27 @@ export function useHydration(): HydrationResult {
           contentMap.set(content.windowId, content);
         }
 
+        // Filter out deprecated window types (e.g., clock windows migrated to widgets)
+        // @feature 027-widget-container
+        const filteredState: PersistedState = {
+          ...loadResult.state,
+          windows: filterDeprecatedWindowTypes(loadResult.state.windows),
+        };
+
+        // Extract widgets from persisted state (default to empty array for backward compatibility)
+        // @feature 027-widget-container
+        const hydratedWidgets = loadResult.state.widgets ?? [];
+
         const elapsed = performance.now() - startTime;
         console.log(
-          `Hydration complete in ${elapsed.toFixed(0)}ms: ${loadResult.state.windows.length} windows, ${contentMap.size} content files`
+          `Hydration complete in ${elapsed.toFixed(0)}ms: ${filteredState.windows.length} windows, ${hydratedWidgets.length} widgets, ${contentMap.size} content files`
         );
 
         setResult({
           isHydrated: true,
-          state: loadResult.state,
+          state: filteredState,
           windowContents: contentMap,
+          widgets: hydratedWidgets,
           error: null,
           wasReset: false,
         });
@@ -116,6 +151,7 @@ export function useHydration(): HydrationResult {
           isHydrated: true,
           state: DEFAULT_PERSISTED_STATE,
           windowContents: new Map(),
+          widgets: [],
           error: String(err),
           wasReset: false,
         });

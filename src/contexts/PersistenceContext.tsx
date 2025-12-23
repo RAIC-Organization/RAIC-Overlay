@@ -24,7 +24,9 @@ import {
 import { listen } from '@tauri-apps/api/event';
 import { usePersistence } from '@/hooks/usePersistence';
 import { useWindows } from '@/contexts/WindowsContext';
+import { useWidgets } from '@/contexts/WidgetsContext';
 import type { WindowInstance, WindowContentType } from '@/types/windows';
+import type { WidgetInstance } from '@/types/widgets';
 import type { FileType } from '@/types/persistence';
 import { serializeNotesContent, serializeDrawContent, serializeBrowserContent, serializeFileViewerContent } from '@/lib/serialization';
 
@@ -37,6 +39,12 @@ export interface PersistenceContextValue {
    * Trigger debounced save after window position/size change.
    */
   onWindowMoved: () => void;
+
+  /**
+   * Trigger debounced save after widget position/size/opacity change.
+   * @feature 027-widget-container
+   */
+  onWidgetMoved: () => void;
 
   /**
    * Trigger debounced save for notes content.
@@ -100,6 +108,7 @@ export function PersistenceProvider({
   onWindowDelete,
 }: PersistenceProviderProps) {
   const { windows, getStateForPersistence } = useWindows();
+  const { widgets, getStateForPersistence: getWidgetStateForPersistence } = useWidgets();
   const onWindowDeleteRef = useRef(onWindowDelete);
   onWindowDeleteRef.current = onWindowDelete;
 
@@ -109,6 +118,12 @@ export function PersistenceProvider({
   const getWindowsForPersistence = useCallback(() => {
     return getStateForPersistence().windows;
   }, [getStateForPersistence]);
+
+  // Create a getter function that returns current widgets from ref-based state
+  // @feature 027-widget-container
+  const getWidgetsForPersistence = useCallback(() => {
+    return getWidgetStateForPersistence().widgets;
+  }, [getWidgetStateForPersistence]);
 
   const {
     saveStateImmediate,
@@ -125,6 +140,7 @@ export function PersistenceProvider({
     overlayMode,
     overlayVisible,
     getWindowsForPersistence,
+    getWidgetsForPersistence,
   });
 
   // Track previous windows to detect added/removed windows
@@ -169,6 +185,39 @@ export function PersistenceProvider({
     prevWindowsRef.current = windows;
   }, [windows, saveStateImmediate, saveWindowContentImmediate]);
 
+  // Track previous widgets to detect added/removed widgets
+  // @feature 027-widget-container
+  const prevWidgetsRef = useRef<WidgetInstance[]>([]);
+
+  // Save state when widgets are added or removed
+  // @feature 027-widget-container
+  useEffect(() => {
+    const prevWidgetIds = new Set(prevWidgetsRef.current.map((w) => w.id));
+    const currentWidgetIds = new Set(widgets.map((w) => w.id));
+
+    // Find newly added widgets
+    const addedWidgets = widgets.filter((w) => !prevWidgetIds.has(w.id));
+
+    // Find removed widgets
+    const removedWidgetIds = Array.from(prevWidgetIds).filter(id => !currentWidgetIds.has(id));
+
+    // Handle added widgets - trigger immediate state save
+    if (addedWidgets.length > 0) {
+      console.log(`[Persistence] New widgets added: ${addedWidgets.map(w => w.id).join(', ')}`);
+      // Trigger the getter-based save which includes widgets
+      triggerDebouncedStateSave();
+    }
+
+    // Handle removed widgets - trigger immediate state save
+    if (removedWidgetIds.length > 0) {
+      console.log(`[Persistence] Widgets removed: ${removedWidgetIds.join(', ')}`);
+      // Trigger the getter-based save which includes widgets
+      triggerDebouncedStateSave();
+    }
+
+    prevWidgetsRef.current = widgets;
+  }, [widgets, triggerDebouncedStateSave]);
+
   // Save state immediately when overlay mode changes
   const prevModeRef = useRef(overlayMode);
   useEffect(() => {
@@ -197,6 +246,13 @@ export function PersistenceProvider({
   // where React hasn't processed updates yet.
   // @feature 020-background-transparency-persistence
   const onWindowMoved = useCallback(() => {
+    triggerDebouncedStateSave();
+  }, [triggerDebouncedStateSave]);
+
+  // Debounced save for widget position/size/opacity changes
+  // Uses the same mechanism as window persistence for consistency
+  // @feature 027-widget-container
+  const onWidgetMoved = useCallback(() => {
     triggerDebouncedStateSave();
   }, [triggerDebouncedStateSave]);
 
@@ -249,6 +305,7 @@ export function PersistenceProvider({
 
   const value: PersistenceContextValue = {
     onWindowMoved,
+    onWidgetMoved,
     onNotesContentChange,
     onDrawContentChange,
     onBrowserContentChange,

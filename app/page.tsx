@@ -13,6 +13,7 @@
  * @feature 010-state-persistence-system
  * @feature 018-window-background-toggle
  * @feature 026-sc-hud-theme
+ * @feature 027-widget-container
  */
 
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -26,17 +27,19 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { WindowsProvider } from "@/contexts/WindowsContext";
 import { PersistenceProvider, usePersistenceContext } from "@/contexts/PersistenceContext";
 import { WindowsContainer } from "@/components/windows/WindowsContainer";
+import { WidgetsProvider } from "@/contexts/WidgetsContext";
+import { WidgetsContainer } from "@/components/widgets/WidgetsContainer";
 import { useHydration } from "@/hooks/useHydration";
 import { useWindows } from "@/contexts/WindowsContext";
 import { NotesContent } from "@/components/windows/NotesContent";
 import { DrawContent } from "@/components/windows/DrawContent";
 import { BrowserContent } from "@/components/windows/BrowserContent";
 import { FileViewerContent } from "@/components/windows/FileViewerContent";
-import { ClockContent } from "@/components/windows/ClockContent";
 import { OverlayState, initialState } from "@/types/overlay";
-import type { WindowStructure, WindowContentFile, NotesContent as NotesContentType, DrawContent as DrawContentType, BrowserPersistedContent, FileViewerPersistedContent } from "@/types/persistence";
+import type { WindowStructure, WindowContentFile, NotesContent as NotesContentType, DrawContent as DrawContentType, BrowserPersistedContent, FileViewerPersistedContent, WidgetStructure } from "@/types/persistence";
 import { normalizeBrowserContent, normalizeFileViewerContent } from "@/types/persistence";
 import type { WindowContentType } from "@/types/windows";
+import { useWidgets } from "@/contexts/WidgetsContext";
 import { persistenceService } from "@/stores/persistenceService";
 import {
   OverlayReadyPayload,
@@ -185,28 +188,48 @@ function WindowRestorer({
               persistence?.onFileViewerContentChange?.(windowId, filePath, fileType as 'pdf' | 'markdown' | 'unknown', zoom),
           },
         });
-      } else if (windowType === 'clock') {
-        // T022-T023: Clock window restoration (no content state, just structure)
-        openWindow({
-          component: ClockContent,
-          title: 'Clock',
-          contentType: 'clock',
-          windowId,
-          initialX: win.position.x,
-          initialY: win.position.y,
-          initialWidth: win.size.width,
-          initialHeight: win.size.height,
-          initialZIndex: win.zIndex,
-          initialOpacity: win.opacity,
-          initialBackgroundTransparent: win.backgroundTransparent ?? true,
-          componentProps: {
-            isInteractive: mode === 'windowed',
-          },
-        });
       }
       // Note: 'test' windows are not persisted (ephemeral)
+      // Note: 'clock' windows removed in 027-widget-container (migrated to widgets)
     }
   }, [windows, windowContents, mode, openWindow, persistence]);
+
+  return null;
+}
+
+/**
+ * Component that restores widgets from hydrated state.
+ * Must be inside WidgetsProvider to access context.
+ * @feature 027-widget-container
+ */
+function WidgetRestorer({
+  widgets,
+}: {
+  widgets: WidgetStructure[];
+}) {
+  const { openWidget } = useWidgets();
+  const restoredRef = useRef(false);
+
+  useEffect(() => {
+    // Only restore once
+    if (restoredRef.current || widgets.length === 0) return;
+    restoredRef.current = true;
+
+    console.log(`Restoring ${widgets.length} widgets from persisted state`);
+
+    // Restore each widget
+    for (const widget of widgets) {
+      openWidget({
+        type: widget.type,
+        widgetId: widget.id,
+        initialX: widget.position.x,
+        initialY: widget.position.y,
+        initialWidth: widget.size.width,
+        initialHeight: widget.size.height,
+        initialOpacity: widget.opacity,
+      });
+    }
+  }, [widgets, openWidget]);
 
   return null;
 }
@@ -220,6 +243,7 @@ function OverlayContent({
   onDismissError,
   hydratedWindows,
   hydratedContents,
+  hydratedWidgets,
   scanlinesEnabled,
   onScanlinesChange,
 }: {
@@ -228,6 +252,7 @@ function OverlayContent({
   onDismissError: () => void;
   hydratedWindows: WindowStructure[];
   hydratedContents: Map<string, WindowContentFile>;
+  hydratedWidgets: WidgetStructure[];
   scanlinesEnabled: boolean;
   onScanlinesChange: (enabled: boolean) => void;
 }) {
@@ -239,6 +264,9 @@ function OverlayContent({
         windowContents={hydratedContents}
         mode={state.mode}
       />
+
+      {/* Widget restorer - runs once on mount @feature 027-widget-container */}
+      <WidgetRestorer widgets={hydratedWidgets} />
 
       {/* MainMenu at top - only visible in interactive mode */}
       <MainMenu
@@ -254,6 +282,9 @@ function OverlayContent({
 
       {/* Windows container - renders all windows */}
       <WindowsContainer mode={state.mode} />
+
+      {/* Widgets container - renders all widgets */}
+      <WidgetsContainer mode={state.mode} />
 
       {/* Error modal rendering */}
       <ErrorModal
@@ -273,6 +304,7 @@ export default function Home() {
     isHydrated,
     state: hydratedState,
     windowContents: hydratedContents,
+    widgets: hydratedWidgets,
     error: hydrationError,
     wasReset,
   } = useHydration();
@@ -518,20 +550,23 @@ export default function Home() {
       initialWindowContents={hydratedContents}
       onWindowClose={handleWindowClose}
     >
-      <PersistenceProvider
-        overlayMode={state.mode as 'windowed' | 'fullscreen'}
-        overlayVisible={state.visible}
-      >
-        <OverlayContent
-          state={state}
-          errorModal={errorModal}
-          onDismissError={handleDismissError}
-          hydratedWindows={hydratedState.windows}
-          hydratedContents={hydratedContents}
-          scanlinesEnabled={scanlinesEnabled}
-          onScanlinesChange={setScanlinesEnabled}
-        />
-      </PersistenceProvider>
+      <WidgetsProvider>
+        <PersistenceProvider
+          overlayMode={state.mode as 'windowed' | 'fullscreen'}
+          overlayVisible={state.visible}
+        >
+          <OverlayContent
+            state={state}
+            errorModal={errorModal}
+            onDismissError={handleDismissError}
+            hydratedWindows={hydratedState.windows}
+            hydratedContents={hydratedContents}
+            hydratedWidgets={hydratedWidgets}
+            scanlinesEnabled={scanlinesEnabled}
+            onScanlinesChange={setScanlinesEnabled}
+          />
+        </PersistenceProvider>
+      </WidgetsProvider>
     </WindowsProvider>
   );
 }

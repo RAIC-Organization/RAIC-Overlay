@@ -6,6 +6,7 @@
 //! @feature 010-state-persistence-system
 //! @feature 015-browser-persistence
 //! @feature 020-background-transparency-persistence
+//! @feature 027-widget-container
 
 use serde::{Deserialize, Serialize};
 
@@ -22,6 +23,10 @@ pub struct PersistedState {
     pub last_modified: String,
     pub global: GlobalSettings,
     pub windows: Vec<WindowStructure>,
+    /// Widget instances persisted to state.json
+    /// @feature 027-widget-container
+    #[serde(default)]
+    pub widgets: Vec<WidgetStructure>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -60,6 +65,7 @@ fn default_opacity() -> f32 {
     0.6
 }
 
+/// WindowType - 'clock' removed in 027-widget-container (migrated to widget system)
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum WindowType {
@@ -67,7 +73,6 @@ pub enum WindowType {
     Draw,
     Browser,
     Fileviewer,
-    Clock,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -86,6 +91,36 @@ pub struct Size {
 pub struct WindowFlags {
     pub minimized: bool,
     pub maximized: bool,
+}
+
+// ============================================================================
+// Widget Types (NEW - 027-widget-container)
+// ============================================================================
+
+/// Widget type enum - extensible for future widget types
+/// @feature 027-widget-container
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum WidgetType {
+    Clock,
+}
+
+/// Persisted widget structure for storage
+/// @feature 027-widget-container
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct WidgetStructure {
+    pub id: String,
+    #[serde(rename = "type")]
+    pub widget_type: WidgetType,
+    pub position: Position,
+    pub size: Size,
+    #[serde(default = "default_widget_opacity")]
+    pub opacity: f32,
+}
+
+fn default_widget_opacity() -> f32 {
+    0.6
 }
 
 // ============================================================================
@@ -154,6 +189,7 @@ impl Default for PersistedState {
             last_modified: String::new(), // Will be set by frontend
             global: GlobalSettings::default(),
             windows: Vec::new(),
+            widgets: Vec::new(),
         }
     }
 }

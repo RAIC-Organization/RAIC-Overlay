@@ -45,6 +45,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - TOML file (`settings.toml`) in executable directory (025-runtime-settings-toml)
 - TypeScript 5.7.2 (frontend), Rust 2021 Edition (backend - unchanged) + React 19.0.0, Next.js 16.x, Tailwind CSS 4.x, shadcn/ui, motion 12.x, class-variance-authority, lucide-react (026-sc-hud-theme)
 - N/A (CSS-only changes, settings stored via existing persistence system) (026-sc-hud-theme)
+- TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend) + React 19.0.0, Next.js 16.x, motion 12.x (for animations), shadcn/ui, Tailwind CSS 4.x, Tauri 2.x (027-widget-container)
+- JSON files in Tauri app data directory (extends existing state.json + widget-{id}.json pattern) (027-widget-container)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -69,9 +71,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 027-widget-container: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend) + React 19.0.0, Next.js 16.x, motion 12.x (for animations), shadcn/ui, Tailwind CSS 4.x, Tauri 2.x
 - 026-sc-hud-theme: Added TypeScript 5.7.2 (frontend), Rust 2021 Edition (backend - unchanged) + React 19.0.0, Next.js 16.x, Tailwind CSS 4.x, shadcn/ui, motion 12.x, class-variance-authority, lucide-react
 - 025-runtime-settings-toml: Added Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + `toml` crate (serde-compatible TOML parser), `serde` (existing), Tauri 2.x (existing)
-- 024-fix-duplicate-log: Added Rust 2021 Edition (Tauri backend) + tauri-plugin-log 2.x, tauri 2.x
 
 
 <!-- MANUAL ADDITIONS START -->
