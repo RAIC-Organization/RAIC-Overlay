@@ -3032,6 +3032,7 @@ dependencies = [
  "tauri-plugin-log",
  "tauri-plugin-opener",
  "tauri-plugin-single-instance",
+ "toml 0.8.2",
  "windows 0.62.2",
 ]
 

@@ -1,5 +1,6 @@
 // T011: Target window detection and tracking module
 // This module provides Windows API integration for finding and tracking target windows
+// T013-T014: Updated to use runtime settings instead of compile-time constants
 
 #[cfg(windows)]
 use std::cell::Cell;
@@ -12,22 +13,33 @@ use windows::Win32::UI::WindowsAndMessaging::{
     EnumWindows, GetForegroundWindow, GetWindowRect, GetWindowTextW, IsWindow,
 };
 
+use crate::settings;
 use crate::types::{TargetWindowError, WindowRect};
 
-// T011: Compile-time constant from build.rs
-pub const TARGET_WINDOW_NAME: &str = env!("TARGET_WINDOW_NAME");
+/// Get the target window name from runtime settings.
+/// This function provides a dynamic accessor that replaces the compile-time constant.
+pub fn get_target_window_name() -> &'static str {
+    &settings::get_settings().target_window_name
+}
 
-// Thread-local storage for found window handle (to avoid Send issues)
+// Thread-local storage for found window handle and search pattern (to avoid Send issues)
 #[cfg(windows)]
 thread_local! {
     static FOUND_HWND: Cell<Option<isize>> = const { Cell::new(None) };
+    static SEARCH_PATTERN: Cell<Option<*const String>> = const { Cell::new(None) };
 }
 
-// T015: Find target window by pattern matching window titles
+// T013-T014: Find target window by pattern matching window titles using runtime settings
 #[cfg(windows)]
 pub fn find_target_window() -> Result<HWND, TargetWindowError> {
+    // Get the target window name from settings
+    let target_name = get_target_window_name().to_string();
+    let target_name_lower = target_name.to_lowercase();
+
     // Reset the found handle
     FOUND_HWND.with(|f| f.set(None));
+    // Store pattern pointer for callback access
+    SEARCH_PATTERN.with(|p| p.set(Some(&target_name_lower as *const String)));
 
     // Callback for EnumWindows
     unsafe extern "system" fn enum_callback(hwnd: HWND, _lparam: LPARAM) -> BOOL {
@@ -38,14 +50,16 @@ pub fn find_target_window() -> Result<HWND, TargetWindowError> {
         if len > 0 {
             let title_str = String::from_utf16_lossy(&title[..len as usize]);
 
-            // Case-insensitive substring match
-            if title_str
-                .to_lowercase()
-                .contains(&TARGET_WINDOW_NAME.to_lowercase())
-            {
-                FOUND_HWND.with(|f| f.set(Some(hwnd.0 as isize)));
-                // Stop enumeration
-                return BOOL(0);
+            // Get pattern from thread-local storage
+            let pattern = SEARCH_PATTERN.with(|p| p.get());
+            if let Some(pattern_ptr) = pattern {
+                let pattern_str = &*pattern_ptr;
+                // Case-insensitive substring match
+                if title_str.to_lowercase().contains(pattern_str) {
+                    FOUND_HWND.with(|f| f.set(Some(hwnd.0 as isize)));
+                    // Stop enumeration
+                    return BOOL(0);
+                }
             }
         }
 
@@ -58,6 +72,9 @@ pub fn find_target_window() -> Result<HWND, TargetWindowError> {
         let _ = EnumWindows(Some(enum_callback), LPARAM(0));
     }
 
+    // Clear the pattern pointer
+    SEARCH_PATTERN.with(|p| p.set(None));
+
     // Return found handle or error
     let found = FOUND_HWND.with(|f| f.get());
     if let Some(hwnd_val) = found {
@@ -65,7 +82,7 @@ pub fn find_target_window() -> Result<HWND, TargetWindowError> {
     }
 
     Err(TargetWindowError::NotFound {
-        pattern: TARGET_WINDOW_NAME.to_string(),
+        pattern: target_name,
     })
 }
 
@@ -125,7 +142,7 @@ mod tests {
 
     #[test]
     fn test_target_window_name_is_set() {
-        // Verify the compile-time constant is available
-        assert!(!TARGET_WINDOW_NAME.is_empty());
+        // Verify the runtime settings return a non-empty target window name
+        assert!(!get_target_window_name().is_empty());
     }
 }

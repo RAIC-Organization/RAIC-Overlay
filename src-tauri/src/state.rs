@@ -94,9 +94,10 @@ impl OverlayState {
     }
 
     // T012: Convert state to response
+    // T015: Updated to use runtime settings for target window name
     #[cfg(windows)]
     pub fn to_response(&self) -> OverlayStateResponse {
-        use crate::target_window::TARGET_WINDOW_NAME;
+        use crate::target_window::get_target_window_name;
 
         let mode_str = match self.get_mode() {
             OverlayMode::Windowed => "windowed",
@@ -107,7 +108,7 @@ impl OverlayState {
             initialized: self.is_initialized(),
             mode: mode_str.to_string(),
             target_bound: self.target_binding.is_bound(),
-            target_name: TARGET_WINDOW_NAME.to_string(),
+            target_name: get_target_window_name().to_string(),
             target_rect: self.target_binding.get_rect(),
             auto_hidden: self.is_auto_hidden(),
         }
