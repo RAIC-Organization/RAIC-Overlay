@@ -18,7 +18,7 @@ use state::OverlayState;
 use tauri::{Emitter, Manager};
 use types::{ModeChangePayload, OverlayMode, OverlayReadyPayload, Position, TargetWindowInfo};
 #[cfg(windows)]
-use types::{ShowErrorModalPayload, TargetWindowChangedPayload, TargetWindowError};
+use types::{ShowErrorModalPayload, TargetWindowChangedPayload};
 
 #[tauri::command]
 async fn set_visibility(
@@ -70,37 +70,65 @@ async fn toggle_visibility(
         // Clear target binding
         state.target_binding.clear();
     } else {
-        // T019: Check target window before showing overlay
-        let target_hwnd = match target_window::find_target_window() {
-            Ok(hwnd) => hwnd,
-            Err(TargetWindowError::NotFound { pattern }) => {
-                // Show window temporarily for error modal - centered on screen
-                let _ = window::set_window_screen_center(&window, 420.0, 280.0);
-                let _ = window.show();
-                let _ = window.set_ignore_cursor_events(false);
+        // T019, T020 (028): Check target window using three-point verification
+        let detection_result = target_window::find_target_window_verified();
 
-                // Emit error modal event
-                let payload = ShowErrorModalPayload {
-                    target_name: pattern.clone(),
-                    message: format!("Please start {} first", pattern),
-                    auto_dismiss_ms: 5000,
-                };
-                let _ = window.emit("show-error-modal", payload);
-                return Ok(state.to_response());
-            }
-            Err(e) => {
-                // Show window temporarily for error modal - centered on screen
+        let target_hwnd = if detection_result.success {
+            // Extract the HWND from the matched window
+            if let Some(ref matched) = detection_result.matched_window {
+                target_window::u64_to_hwnd(matched.hwnd)
+            } else {
+                // Should not happen if success is true, but handle defensively
                 let _ = window::set_window_screen_center(&window, 420.0, 280.0);
                 let _ = window.show();
                 let _ = window.set_ignore_cursor_events(false);
 
                 let _ = window.emit("show-error-modal", ShowErrorModalPayload {
-                    target_name: target_window::get_target_window_name().to_string(),
-                    message: format!("Target window error: {}", e),
+                    target_name: detection_result.search_criteria.window_title.clone(),
+                    message: "Detection succeeded but no window found".to_string(),
                     auto_dismiss_ms: 5000,
                 });
                 return Ok(state.to_response());
             }
+        } else {
+            // Detection failed - determine error type
+            let _ = window::set_window_screen_center(&window, 420.0, 280.0);
+            let _ = window.show();
+            let _ = window.set_ignore_cursor_events(false);
+
+            // Check if we found any candidates at all
+            let process_name = &detection_result.search_criteria.process_name;
+            let class_name = &detection_result.search_criteria.window_class;
+            let title_pattern = &detection_result.search_criteria.window_title;
+
+            // Check if process is running but window not ready
+            let process_running = detection_result.candidates_evaluated.iter()
+                .any(|c| c.process_name.to_lowercase() == process_name.to_lowercase());
+
+            // Check if class mismatch (process running, but wrong class)
+            let class_mismatch = detection_result.candidates_evaluated.iter()
+                .any(|c| c.process_name.to_lowercase() == process_name.to_lowercase()
+                    && c.window_class.to_lowercase() != class_name.to_lowercase()
+                    && c.window_title.to_lowercase().contains(&title_pattern.to_lowercase()));
+
+            let message = if class_mismatch {
+                // FR-007: Class mismatch (e.g., RSI Launcher instead of game)
+                format!("Game process running but window not ready. Looking for {} with class {}",
+                    title_pattern, class_name)
+            } else if process_running {
+                // Process is running but window not found/ready
+"Game process running but main window not detected. Please wait for the game to fully load.".to_string()
+            } else {
+                // Process not running at all
+                format!("Please start {} first", title_pattern)
+            };
+
+            let _ = window.emit("show-error-modal", ShowErrorModalPayload {
+                target_name: title_pattern.clone(),
+                message,
+                auto_dismiss_ms: 5000,
+            });
+            return Ok(state.to_response());
         };
 
         // Check if target is focused

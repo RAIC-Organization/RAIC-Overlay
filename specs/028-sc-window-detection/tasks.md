@@ -58,16 +58,16 @@
 
 ### Implementation for User Story 1
 
-- [ ] T013 [US1] Add `get_window_class(hwnd: HWND) -> String` function in `src-tauri/src/target_window.rs` using `GetClassNameW`
-- [ ] T014 [US1] Add `get_process_name(hwnd: HWND) -> Option<String>` function in `src-tauri/src/target_window.rs` using `GetWindowThreadProcessId` + `OpenProcess` + `QueryFullProcessImageNameW`
-- [ ] T015 [US1] Add `is_top_level_window(hwnd: HWND) -> bool` function in `src-tauri/src/target_window.rs` using `GetAncestor(hwnd, GA_ROOT)`
-- [ ] T016 [US1] Create `build_window_candidate(hwnd: HWND) -> WindowCandidate` helper function in `src-tauri/src/target_window.rs` that populates all fields
-- [ ] T017 [US1] Modify `find_target_window()` in `src-tauri/src/target_window.rs` to use three-point verification: check process name matches, check window class matches, check title contains pattern
-- [ ] T018 [US1] Add `validate_candidate(candidate: &WindowCandidate, criteria: &SearchCriteria) -> bool` function in `src-tauri/src/target_window.rs`
-- [ ] T019 [US1] Modify `find_target_window()` to return `DetectionResult` instead of just `Result<HWND, TargetWindowError>` in `src-tauri/src/target_window.rs`
-- [ ] T020 [US1] Update `toggle_visibility()` in `src-tauri/src/lib.rs` to handle new `DetectionResult` return type and show appropriate error modals for ClassMismatch and WindowNotReady (FR-007: "Game process running but window not ready")
-- [ ] T021 [US1] Add case-insensitive matching for window title (FR-008) in `validate_candidate()` function in `src-tauri/src/target_window.rs`
-- [ ] T022 [US1] Add prioritization logic for CryENGINE class matches (FR-009) when multiple candidates exist in `src-tauri/src/target_window.rs`
+- [X] T013 [US1] Add `get_window_class(hwnd: HWND) -> String` function in `src-tauri/src/target_window.rs` using `GetClassNameW`
+- [X] T014 [US1] Add `get_process_name(hwnd: HWND) -> Option<String>` function in `src-tauri/src/target_window.rs` using `GetWindowThreadProcessId` + `OpenProcess` + `QueryFullProcessImageNameW`
+- [X] T015 [US1] Add `is_top_level_window(hwnd: HWND) -> bool` function in `src-tauri/src/target_window.rs` using `GetAncestor(hwnd, GA_ROOT)`
+- [X] T016 [US1] Create `build_window_candidate(hwnd: HWND) -> WindowCandidate` helper function in `src-tauri/src/target_window.rs` that populates all fields
+- [X] T017 [US1] Modify `find_target_window()` in `src-tauri/src/target_window.rs` to use three-point verification: check process name matches, check window class matches, check title contains pattern
+- [X] T018 [US1] Add `validate_candidate(candidate: &WindowCandidate, criteria: &SearchCriteria) -> bool` function in `src-tauri/src/target_window.rs`
+- [X] T019 [US1] Modify `find_target_window()` to return `DetectionResult` instead of just `Result<HWND, TargetWindowError>` in `src-tauri/src/target_window.rs`
+- [X] T020 [US1] Update `toggle_visibility()` in `src-tauri/src/lib.rs` to handle new `DetectionResult` return type and show appropriate error modals for ClassMismatch and WindowNotReady (FR-007: "Game process running but window not ready")
+- [X] T021 [US1] Add case-insensitive matching for window title (FR-008) in `validate_candidate()` function in `src-tauri/src/target_window.rs`
+- [X] T022 [US1] Add prioritization logic for CryENGINE class matches (FR-009) when multiple candidates exist in `src-tauri/src/target_window.rs`
 
 **Checkpoint**: User Story 1 complete - Three-point verification working. Overlay correctly identifies Star Citizen vs RSI Launcher.
 
