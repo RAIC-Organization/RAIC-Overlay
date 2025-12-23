@@ -1,4 +1,4 @@
-# RAICOverlay Development Guidelines
+﻿# RAICOverlay Development Guidelines
 
 Auto-generated from all feature plans. Last updated: 2025-12-22
 
@@ -49,6 +49,7 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - JSON files in Tauri app data directory (extends existing state.json + widget-{id}.json pattern) (027-widget-container)
 - Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x, windows-rs 0.62 (Win32 API), tauri-plugin-log, tauri-plugin-global-shortcut (028-sc-window-detection)
 - JSON files in Tauri app data directory (settings.toml for configuration) (028-sc-window-detection)
+- Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend - unchanged) + `windows-rs` 0.62 (already in use), `tauri` 2.x, `lazy_static` 1.4 (029-low-level-keyboard-hook)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -73,9 +74,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 029-low-level-keyboard-hook: Added Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend - unchanged) + `windows-rs` 0.62 (already in use), `tauri` 2.x, `lazy_static` 1.4
 - 028-sc-window-detection: Added Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x, windows-rs 0.62 (Win32 API), tauri-plugin-log, tauri-plugin-global-shortcut
 - 027-widget-container: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend) + React 19.0.0, Next.js 16.x, motion 12.x (for animations), shadcn/ui, Tailwind CSS 4.x, Tauri 2.x
-- 026-sc-hud-theme: Added TypeScript 5.7.2 (frontend), Rust 2021 Edition (backend - unchanged) + React 19.0.0, Next.js 16.x, Tailwind CSS 4.x, shadcn/ui, motion 12.x, class-variance-authority, lucide-react
 
 
 <!-- MANUAL ADDITIONS START -->
