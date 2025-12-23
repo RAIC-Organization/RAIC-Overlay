@@ -131,10 +131,10 @@
 
 ### Implementation for User Story 5
 
-- [ ] T033 [US5] Implement get_settings_sources Tauri command for debugging in src-tauri/src/settings.rs
-- [ ] T034 [US5] Create SettingsSourcesResponse struct with Serialize in src-tauri/src/settings.rs
-- [ ] T035 [US5] Register get_settings_sources command in invoke_handler in src-tauri/src/lib.rs
-- [ ] T036 [US5] Update settings.example.toml with comprehensive documentation comments in src-tauri/settings.example.toml
+- [X] T033 [US5] Implement get_settings_sources Tauri command for debugging in src-tauri/src/settings.rs
+- [X] T034 [US5] Create SettingsSourcesResponse struct with Serialize in src-tauri/src/settings.rs
+- [X] T035 [US5] Register get_settings_sources command in invoke_handler in src-tauri/src/lib.rs
+- [X] T036 [US5] Update settings.example.toml with comprehensive documentation comments in src-tauri/settings.example.toml
 
 **Checkpoint**: User Story 5 complete - configuration file discoverable with documentation
 

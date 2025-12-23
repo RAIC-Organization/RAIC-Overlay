@@ -332,7 +332,8 @@ pub fn run() {
             logging::cleanup_old_logs,
             logging::get_log_file_path,
             logging::get_log_config,
-            settings::get_settings_command
+            settings::get_settings_command,
+            settings::get_settings_sources
         ])
         .setup(|app| {
             let handle = app.handle().clone();

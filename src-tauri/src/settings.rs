@@ -262,6 +262,32 @@ pub fn get_settings_command() -> SettingsConfig {
 }
 
 // ============================================================================
+// T033-T034: Settings sources response for debugging
+// ============================================================================
+
+/// Response for get_settings_sources command showing where each setting came from.
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SettingsSourcesResponse {
+    pub target_window_name: String,
+    pub debug_border: String,
+    pub log_level: String,
+    pub settings_path: Option<String>,
+}
+
+/// Get information about where each setting value came from (for debugging).
+#[tauri::command]
+pub fn get_settings_sources() -> SettingsSourcesResponse {
+    let settings = get_settings();
+    SettingsSourcesResponse {
+        target_window_name: settings.sources.target_window_name.to_string(),
+        debug_border: settings.sources.debug_border.to_string(),
+        log_level: settings.sources.log_level.to_string(),
+        settings_path: get_settings_path().map(|p| p.to_string_lossy().to_string()),
+    }
+}
+
+// ============================================================================
 // T027-T028: Log level parsing
 // ============================================================================
 
