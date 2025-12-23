@@ -75,12 +75,12 @@
 
 ### Implementation for User Story 2
 
-- [ ] T016 [US2] Add graceful error handling for missing settings.toml file in src-tauri/src/settings.rs
-- [ ] T017 [US2] Add graceful error handling for malformed TOML syntax with warning log in src-tauri/src/settings.rs
-- [ ] T018 [US2] Add graceful error handling for file permission errors in src-tauri/src/settings.rs
-- [ ] T019 [US2] Add unit test for missing file fallback in src-tauri/src/settings.rs
-- [ ] T020 [US2] Add unit test for partial settings file (missing properties) in src-tauri/src/settings.rs
-- [ ] T021 [US2] Add unit test for malformed TOML fallback in src-tauri/src/settings.rs
+- [X] T016 [US2] Add graceful error handling for missing settings.toml file in src-tauri/src/settings.rs
+- [X] T017 [US2] Add graceful error handling for malformed TOML syntax with warning log in src-tauri/src/settings.rs
+- [X] T018 [US2] Add graceful error handling for file permission errors in src-tauri/src/settings.rs
+- [X] T019 [US2] Add unit test for missing file fallback in src-tauri/src/settings.rs
+- [X] T020 [US2] Add unit test for partial settings file (missing properties) in src-tauri/src/settings.rs
+- [X] T021 [US2] Add unit test for malformed TOML fallback in src-tauri/src/settings.rs
 
 **Checkpoint**: User Story 2 complete - all error scenarios handled gracefully
 

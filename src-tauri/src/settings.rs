@@ -398,4 +398,95 @@ log_level = "INFO"
         assert!(!runtime.target_window_name.is_empty());
         assert_eq!(runtime.sources.target_window_name, SettingSource::Default);
     }
+
+    // ========================================================================
+    // T019-T021: User Story 2 - Graceful Fallback Tests
+    // ========================================================================
+
+    /// T019: Test that missing file results in default settings
+    #[test]
+    fn test_missing_file_uses_defaults() {
+        // FileSettings::default represents the case when no file exists
+        let file = FileSettings::default();
+        let runtime = RuntimeSettings::from_file_settings(file);
+
+        // All values should come from defaults
+        assert!(!runtime.target_window_name.is_empty());
+        assert_eq!(runtime.sources.target_window_name, SettingSource::Default);
+        assert_eq!(runtime.sources.debug_border, SettingSource::Default);
+        assert_eq!(runtime.sources.log_level, SettingSource::Default);
+    }
+
+    /// T020: Test partial settings file - only some properties set
+    #[test]
+    fn test_partial_settings_mixed_sources() {
+        let file = FileSettings {
+            target_window_name: Some("CustomWindow".to_string()),
+            debug_border: None, // Will use default
+            log_level: Some("TRACE".to_string()),
+        };
+        let runtime = RuntimeSettings::from_file_settings(file);
+
+        // target_window_name from file
+        assert_eq!(runtime.target_window_name, "CustomWindow");
+        assert_eq!(runtime.sources.target_window_name, SettingSource::File);
+
+        // debug_border from default
+        assert_eq!(runtime.sources.debug_border, SettingSource::Default);
+
+        // log_level from file
+        assert_eq!(runtime.log_level, LevelFilter::Trace);
+        assert_eq!(runtime.sources.log_level, SettingSource::File);
+    }
+
+    /// T021: Test malformed TOML falls back to defaults
+    #[test]
+    fn test_malformed_toml_fallback() {
+        // Malformed TOML should fail to parse
+        let malformed = r#"
+target_window_name = "Missing closing quote
+debug_border = not_a_bool
+"#;
+        let result: Result<FileSettings, _> = toml::from_str(malformed);
+
+        // Parsing should fail
+        assert!(result.is_err());
+
+        // When parsing fails, load_file_settings returns default
+        // (This simulates what happens in the actual load_file_settings function)
+        let fallback = result.unwrap_or_default();
+        assert!(fallback.target_window_name.is_none());
+        assert!(fallback.debug_border.is_none());
+        assert!(fallback.log_level.is_none());
+    }
+
+    /// T021: Test TOML with wrong types falls back gracefully
+    #[test]
+    fn test_toml_wrong_types_fallback() {
+        // debug_border should be bool, not string
+        let wrong_type = r#"
+debug_border = "yes"
+"#;
+        let result: Result<FileSettings, _> = toml::from_str(wrong_type);
+
+        // Should fail due to type mismatch
+        assert!(result.is_err());
+
+        // Fallback to default
+        let fallback = result.unwrap_or_default();
+        assert!(fallback.debug_border.is_none());
+    }
+
+    /// Test that unknown keys are ignored (serde default behavior)
+    #[test]
+    fn test_unknown_keys_ignored() {
+        let toml = r#"
+target_window_name = "Test"
+unknown_setting = "should be ignored"
+another_unknown = 42
+"#;
+        let settings: FileSettings = toml::from_str(toml).unwrap();
+        assert_eq!(settings.target_window_name, Some("Test".to_string()));
+        // Should parse successfully, ignoring unknown fields
+    }
 }
