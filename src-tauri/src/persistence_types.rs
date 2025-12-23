@@ -65,6 +65,7 @@ fn default_opacity() -> f32 {
     0.6
 }
 
+/// WindowType - 'clock' removed in 027-widget-container (migrated to widget system)
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum WindowType {
@@ -72,7 +73,6 @@ pub enum WindowType {
     Draw,
     Browser,
     Fileviewer,
-    Clock,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

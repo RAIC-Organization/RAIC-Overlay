@@ -35,7 +35,6 @@ import { NotesContent } from "@/components/windows/NotesContent";
 import { DrawContent } from "@/components/windows/DrawContent";
 import { BrowserContent } from "@/components/windows/BrowserContent";
 import { FileViewerContent } from "@/components/windows/FileViewerContent";
-import { ClockContent } from "@/components/windows/ClockContent";
 import { OverlayState, initialState } from "@/types/overlay";
 import type { WindowStructure, WindowContentFile, NotesContent as NotesContentType, DrawContent as DrawContentType, BrowserPersistedContent, FileViewerPersistedContent } from "@/types/persistence";
 import { normalizeBrowserContent, normalizeFileViewerContent } from "@/types/persistence";
@@ -188,26 +187,9 @@ function WindowRestorer({
               persistence?.onFileViewerContentChange?.(windowId, filePath, fileType as 'pdf' | 'markdown' | 'unknown', zoom),
           },
         });
-      } else if (windowType === 'clock') {
-        // T022-T023: Clock window restoration (no content state, just structure)
-        openWindow({
-          component: ClockContent,
-          title: 'Clock',
-          contentType: 'clock',
-          windowId,
-          initialX: win.position.x,
-          initialY: win.position.y,
-          initialWidth: win.size.width,
-          initialHeight: win.size.height,
-          initialZIndex: win.zIndex,
-          initialOpacity: win.opacity,
-          initialBackgroundTransparent: win.backgroundTransparent ?? true,
-          componentProps: {
-            isInteractive: mode === 'windowed',
-          },
-        });
       }
       // Note: 'test' windows are not persisted (ephemeral)
+      // Note: 'clock' windows removed in 027-widget-container (migrated to widgets)
     }
   }, [windows, windowContents, mode, openWindow, persistence]);
 

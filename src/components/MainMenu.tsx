@@ -22,7 +22,6 @@ import { NotesContent } from "@/components/windows/NotesContent";
 import { DrawContent } from "@/components/windows/DrawContent";
 import { BrowserContent } from "@/components/windows/BrowserContent";
 import { FileViewerContent } from "@/components/windows/FileViewerContent";
-import { ClockContent } from "@/components/windows/ClockContent";
 import { ScanlineToggle } from "@/components/windows/ScanlineToggle";
 import { useLogger } from "@/hooks/useLogger";
 

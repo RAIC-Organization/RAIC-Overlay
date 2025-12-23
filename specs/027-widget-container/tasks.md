@@ -78,12 +78,12 @@
 
 ### Implementation for User Story 5
 
-- [ ] T017 [US5] Remove Clock window button from MainMenu in src/components/MainMenu.tsx
-- [ ] T018 [P] [US5] Remove 'clock' from WindowContentType in src/types/windows.ts
-- [ ] T019 [P] [US5] Remove 'clock' from WindowType in src/types/persistence.ts
-- [ ] T020 [P] [US5] Remove Clock from WindowType enum in src-tauri/src/persistence_types.rs
-- [ ] T021 [US5] Add migration logic to skip clock windows in useHydration in src/hooks/useHydration.ts
-- [ ] T022 [US5] Delete deprecated ClockContent.tsx from src/components/windows/ClockContent.tsx
+- [x] T017 [US5] Remove Clock window button from MainMenu in src/components/MainMenu.tsx
+- [x] T018 [P] [US5] Remove 'clock' from WindowContentType in src/types/windows.ts
+- [x] T019 [P] [US5] Remove 'clock' from WindowType in src/types/persistence.ts
+- [x] T020 [P] [US5] Remove Clock from WindowType enum in src-tauri/src/persistence_types.rs
+- [x] T021 [US5] Add migration logic to skip clock windows in useHydration in src/hooks/useHydration.ts
+- [x] T022 [US5] Delete deprecated ClockContent.tsx from src/components/windows/ClockContent.tsx
 
 **Checkpoint**: Clock window completely removed, only clock widget available
 

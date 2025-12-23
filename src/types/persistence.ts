@@ -49,7 +49,7 @@ export interface WindowStructure {
   backgroundTransparent: boolean;
 }
 
-export type WindowType = 'notes' | 'draw' | 'browser' | 'fileviewer' | 'clock';
+export type WindowType = 'notes' | 'draw' | 'browser' | 'fileviewer';
 
 export interface Position {
   x: number;

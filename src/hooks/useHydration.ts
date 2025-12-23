@@ -5,15 +5,32 @@
  * hydration status for blocking UI render until complete.
  *
  * @feature 010-state-persistence-system
+ * @feature 027-widget-container
  */
 
 import { useState, useEffect } from 'react';
 import { persistenceService } from '@/stores/persistenceService';
-import type { PersistedState, WindowContentFile } from '@/types/persistence';
+import type { PersistedState, WindowContentFile, WindowStructure } from '@/types/persistence';
 import {
   CURRENT_STATE_VERSION,
   DEFAULT_PERSISTED_STATE,
 } from '@/types/persistence';
+
+/**
+ * Filter out deprecated clock windows from persisted state.
+ * Clock windows were migrated to widgets in 027-widget-container.
+ * @feature 027-widget-container
+ */
+function filterDeprecatedWindowTypes(windows: WindowStructure[]): WindowStructure[] {
+  return windows.filter((w) => {
+    // Filter out clock windows - they've been migrated to widgets
+    if ((w.type as string) === 'clock') {
+      console.log(`Skipping deprecated clock window: ${w.id}`);
+      return false;
+    }
+    return true;
+  });
+}
 
 export interface HydrationResult {
   /** Whether hydration is complete */
@@ -98,14 +115,21 @@ export function useHydration(): HydrationResult {
           contentMap.set(content.windowId, content);
         }
 
+        // Filter out deprecated window types (e.g., clock windows migrated to widgets)
+        // @feature 027-widget-container
+        const filteredState: PersistedState = {
+          ...loadResult.state,
+          windows: filterDeprecatedWindowTypes(loadResult.state.windows),
+        };
+
         const elapsed = performance.now() - startTime;
         console.log(
-          `Hydration complete in ${elapsed.toFixed(0)}ms: ${loadResult.state.windows.length} windows, ${contentMap.size} content files`
+          `Hydration complete in ${elapsed.toFixed(0)}ms: ${filteredState.windows.length} windows, ${contentMap.size} content files`
         );
 
         setResult({
           isHydrated: true,
-          state: loadResult.state,
+          state: filteredState,
           windowContents: contentMap,
           error: null,
           wasReset: false,
