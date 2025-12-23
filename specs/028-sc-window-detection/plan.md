@@ -1,0 +1,106 @@
+# Implementation Plan: Star Citizen Window Detection Enhancement
+
+**Branch**: `028-sc-window-detection` | **Date**: 2025-12-23 | **Spec**: [spec.md](./spec.md)
+**Input**: Feature specification from `/specs/028-sc-window-detection/spec.md`
+
+## Summary
+
+Implement ArkanisOverlay-style three-point window verification for Star Citizen detection (process name + window class + window title), add comprehensive logging for hotkey events and window detection, and implement automatic game launch detection with process monitoring.
+
+## Technical Context
+
+**Language/Version**: Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend)
+**Primary Dependencies**: Tauri 2.x, windows-rs 0.62 (Win32 API), tauri-plugin-log, tauri-plugin-global-shortcut
+**Storage**: JSON files in Tauri app data directory (settings.toml for configuration)
+**Testing**: `cargo test` (Rust), `vitest` (TypeScript)
+**Target Platform**: Windows 11 (64-bit)
+**Project Type**: Desktop application (Tauri + Next.js)
+**Performance Goals**: Window detection <100ms, hotkey logging <50ms, process detection <2s
+**Constraints**: <1% CPU during idle process monitoring, <200ms p95 for user actions
+**Scale/Scope**: Single user desktop application
+
+## Constitution Check
+
+*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+
+| Principle | Status | Notes |
+|-----------|--------|-------|
+| I. Code Quality | PASS | Changes follow existing code patterns, single responsibility functions |
+| II. Testing Standards | PASS | Integration tests for window detection, unit tests for validation logic |
+| III. User Experience Consistency | PASS | Error modals follow existing patterns, logs use consistent format |
+| IV. Performance Requirements | PASS | Performance targets defined (100ms, 50ms, 2s, <1% CPU) |
+| V. Research-First Development | PASS | Windows API patterns researched via ArkanisOverlay reference |
+
+**Simplicity Standard Check:**
+- Uses existing settings.toml pattern (no new configuration system)
+- Extends existing target_window.rs module (no new abstractions)
+- Reuses existing logging infrastructure (tauri-plugin-log)
+- Process monitoring uses simple polling (no complex event systems)
+
+## Project Structure
+
+### Documentation (this feature)
+
+```text
+specs/028-sc-window-detection/
+├── plan.md              # This file
+├── research.md          # Phase 0 output
+├── data-model.md        # Phase 1 output
+├── quickstart.md        # Phase 1 output
+├── contracts/           # Phase 1 output (N/A - no API contracts)
+└── tasks.md             # Phase 2 output
+```
+
+### Source Code (repository root)
+
+```text
+src-tauri/src/
+├── target_window.rs     # MODIFY: Add three-point verification, window class detection
+├── settings.rs          # MODIFY: Add new settings fields
+├── hotkey.rs            # MODIFY: Add logging for F3/F5 events
+├── lib.rs               # MODIFY: Add logging in toggle_visibility/toggle_mode
+├── focus_monitor.rs     # MODIFY: Extend for process monitoring
+├── types.rs             # MODIFY: Add new types for detection result
+└── process_monitor.rs   # NEW: Process lifecycle monitoring
+
+src/
+└── (no frontend changes required - backend only feature)
+```
+
+**Structure Decision**: This feature is primarily backend (Rust) changes. The existing modular structure in `src-tauri/src/` is maintained. One new module (`process_monitor.rs`) is added for process lifecycle monitoring, following the existing pattern of focused modules.
+
+## Complexity Tracking
+
+No constitution violations. All changes follow existing patterns.
+
+---
+
+## Post-Design Constitution Re-Check
+
+*Re-evaluated after Phase 1 design completion*
+
+| Principle | Status | Post-Design Notes |
+|-----------|--------|-------------------|
+| I. Code Quality | PASS | Data model uses clear types, single-responsibility modules |
+| II. Testing Standards | PASS | Unit tests for detection logic, integration tests defined in quickstart |
+| III. User Experience Consistency | PASS | Logging format consistent, error handling follows patterns |
+| IV. Performance Requirements | PASS | Detection <100ms validated, polling interval configurable |
+| V. Research-First Development | PASS | Windows API usage documented in research.md with code examples |
+
+**Simplicity Re-Check:**
+- ✅ One new module (process_monitor.rs) - justified for separation of concerns
+- ✅ No new external dependencies - uses existing windows-rs features
+- ✅ Polling approach chosen over complex event hooks
+- ✅ Settings follow established pattern
+
+---
+
+## Generated Artifacts
+
+| Artifact | Status | Description |
+|----------|--------|-------------|
+| research.md | ✅ Complete | Windows API research, implementation patterns |
+| data-model.md | ✅ Complete | Entity definitions, state transitions |
+| quickstart.md | ✅ Complete | Development and testing guide |
+| contracts/ | N/A | No external API contracts (backend-only feature) |
+| tasks.md | Pending | To be generated by `/speckit.tasks` |
