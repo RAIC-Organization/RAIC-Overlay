@@ -118,14 +118,14 @@
 
 ### Implementation for User Story 3
 
-- [ ] T031 [US3] Create WidgetSettings component with opacity slider and close button in src/components/widgets/WidgetSettings.tsx
-- [ ] T032 [US3] Implement 3D backflip animation structure (perspective, preserve-3d, backface-visibility) in src/components/widgets/Widget.tsx
-- [ ] T033 [US3] Add isFlipped state to widget instance in src/contexts/WidgetsContext.tsx
-- [ ] T034 [US3] Implement flip animation trigger on click (release before hold threshold) in src/components/widgets/Widget.tsx
-- [ ] T035 [US3] Implement flip-back animation on close button click in src/components/widgets/Widget.tsx
-- [ ] T036 [US3] Add SET_WIDGET_OPACITY action to WidgetsContext reducer in src/contexts/WidgetsContext.tsx
-- [ ] T037 [US3] Wire opacity slider to update widget opacity in real-time in src/components/widgets/WidgetSettings.tsx
-- [ ] T038 [US3] Block rapid clicks during flip animation in src/components/widgets/Widget.tsx
+- [x] T031 [US3] Create WidgetSettings component with opacity slider and close button in src/components/widgets/WidgetSettings.tsx
+- [x] T032 [US3] Implement 3D backflip animation structure (perspective, preserve-3d, backface-visibility) in src/components/widgets/Widget.tsx
+- [x] T033 [US3] Add isFlipped state to widget instance in src/contexts/WidgetsContext.tsx
+- [x] T034 [US3] Implement flip animation trigger on click (release before hold threshold) in src/components/widgets/Widget.tsx
+- [x] T035 [US3] Implement flip-back animation on close button click in src/components/widgets/Widget.tsx
+- [x] T036 [US3] Add SET_WIDGET_OPACITY action to WidgetsContext reducer in src/contexts/WidgetsContext.tsx
+- [x] T037 [US3] Wire opacity slider to update widget opacity in real-time in src/components/widgets/WidgetSettings.tsx
+- [x] T038 [US3] Block rapid clicks during flip animation in src/components/widgets/Widget.tsx
 
 **Checkpoint**: Widget flips to reveal settings, opacity slider works, can flip back
 

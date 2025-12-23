@@ -3,17 +3,20 @@
 /**
  * Widget Component
  *
- * Base widget container with transparent background and flip animation
+ * Base widget container with transparent background and 3D backflip animation
  * capability. Widgets have no header/borders and support drag-to-reposition
  * (after 175ms hold to distinguish from click) and corner resize in
- * interaction mode.
+ * interaction mode. Click (release before hold threshold) triggers a backflip
+ * to reveal the settings panel.
  *
  * @feature 027-widget-container
  */
 
 import { useRef, useCallback, useState, type ReactNode } from 'react';
+import { motion } from 'motion/react';
 import type { WidgetInstance } from '@/types/widgets';
 import { WIDGET_CONSTANTS } from '@/types/widgets';
+import { WidgetSettings } from './WidgetSettings';
 
 // ============================================================================
 // Types
@@ -45,7 +48,8 @@ const CORNER_ACCENT_SIZE = 8; // Visual accent size
 
 /**
  * Widget base component - transparent container for widget content.
- * Supports drag-to-move (after hold threshold) and corner resize.
+ * Supports drag-to-move (after hold threshold), corner resize, and
+ * 3D backflip animation to reveal settings.
  */
 export function Widget({
   widget,
@@ -53,6 +57,9 @@ export function Widget({
   children,
   onMove,
   onResize,
+  onOpacityChange,
+  onFlip,
+  onClose,
 }: WidgetProps) {
   // Drag state
   const dragRef = useRef<{
@@ -62,6 +69,7 @@ export function Widget({
     widgetY: number;
     isDragging: boolean;
     holdTimeoutId: ReturnType<typeof setTimeout> | null;
+    hasMoved: boolean;
   } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -78,12 +86,46 @@ export function Widget({
   const [resizeDirection, setResizeDirection] = useState<ResizeDirection>(null);
   const [isResizing, setIsResizing] = useState(false);
 
+  // Animation state - block interactions during flip
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  // ============================================================================
+  // Flip Handlers
+  // ============================================================================
+
+  const handleFlip = useCallback(() => {
+    if (isAnimating || !isInteractive) return;
+
+    setIsAnimating(true);
+    onFlip?.(widget.id, !widget.isFlipped);
+
+    // Unblock after animation completes (500ms per SC-004)
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, WIDGET_CONSTANTS.FLIP_DURATION_MS);
+  }, [isAnimating, isInteractive, widget.id, widget.isFlipped, onFlip]);
+
+  const handleCloseSettings = useCallback(() => {
+    if (isAnimating) return;
+
+    setIsAnimating(true);
+    onFlip?.(widget.id, false);
+
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, WIDGET_CONSTANTS.FLIP_DURATION_MS);
+  }, [isAnimating, widget.id, onFlip]);
+
+  const handleOpacityChange = useCallback((opacity: number) => {
+    onOpacityChange?.(widget.id, opacity);
+  }, [widget.id, onOpacityChange]);
+
   // ============================================================================
   // Drag Handlers (with 175ms hold threshold)
   // ============================================================================
 
   const handleDragPointerDown = useCallback((e: React.PointerEvent) => {
-    if (!isInteractive || isResizing) return;
+    if (!isInteractive || isResizing || isAnimating) return;
 
     // Don't start drag from corner resize areas
     const rect = e.currentTarget.getBoundingClientRect();
@@ -116,26 +158,29 @@ export function Widget({
       widgetY: widget.y,
       isDragging: false,
       holdTimeoutId,
+      hasMoved: false,
     };
-  }, [isInteractive, isResizing, widget.x, widget.y]);
+  }, [isInteractive, isResizing, isAnimating, widget.x, widget.y]);
 
   const handleDragPointerMove = useCallback((e: React.PointerEvent) => {
     if (!dragRef.current) return;
 
     const { startX, startY, widgetX, widgetY, isDragging: isDrag } = dragRef.current;
 
+    // Check if moved beyond threshold
+    const dx = Math.abs(e.clientX - startX);
+    const dy = Math.abs(e.clientY - startY);
+
+    if (dx > 5 || dy > 5) {
+      dragRef.current.hasMoved = true;
+    }
+
     // Only move if hold threshold passed
     if (!isDrag) {
-      // Check if moved too far before threshold - cancel drag
-      const dx = Math.abs(e.clientX - startX);
-      const dy = Math.abs(e.clientY - startY);
-      if (dx > 5 || dy > 5) {
-        // Too much movement before hold threshold - this is a click/swipe, not a drag
-        if (dragRef.current.holdTimeoutId) {
-          clearTimeout(dragRef.current.holdTimeoutId);
-        }
-        dragRef.current = null;
-        return;
+      // If moved too far before threshold - cancel hold timer (becomes neither click nor drag)
+      if (dragRef.current.hasMoved && dragRef.current.holdTimeoutId) {
+        clearTimeout(dragRef.current.holdTimeoutId);
+        dragRef.current.holdTimeoutId = null;
       }
       return;
     }
@@ -154,32 +199,30 @@ export function Widget({
   const handleDragPointerUp = useCallback((e: React.PointerEvent) => {
     e.currentTarget.releasePointerCapture(e.pointerId);
 
-    if (dragRef.current?.holdTimeoutId) {
-      clearTimeout(dragRef.current.holdTimeoutId);
+    if (!dragRef.current) return;
+
+    const { isDragging: wasDragging, hasMoved, holdTimeoutId } = dragRef.current;
+
+    // Clear timeout if still pending
+    if (holdTimeoutId) {
+      clearTimeout(holdTimeoutId);
     }
+
+    // If didn't drag and didn't move significantly, trigger flip (click)
+    if (!wasDragging && !hasMoved) {
+      handleFlip();
+    }
+
     dragRef.current = null;
     setIsDragging(false);
-  }, []);
+  }, [handleFlip]);
 
   // ============================================================================
   // Resize Handlers (corner only)
   // ============================================================================
 
-  const getResizeDirection = useCallback((e: React.PointerEvent): ResizeDirection => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    const offsetY = e.clientY - rect.top;
-
-    if (offsetX < CORNER_SIZE && offsetY < CORNER_SIZE) return 'nw';
-    if (offsetX > rect.width - CORNER_SIZE && offsetY < CORNER_SIZE) return 'ne';
-    if (offsetX < CORNER_SIZE && offsetY > rect.height - CORNER_SIZE) return 'sw';
-    if (offsetX > rect.width - CORNER_SIZE && offsetY > rect.height - CORNER_SIZE) return 'se';
-
-    return null;
-  }, []);
-
   const handleResizePointerDown = useCallback((e: React.PointerEvent, direction: ResizeDirection) => {
-    if (!isInteractive || !direction) return;
+    if (!isInteractive || !direction || isAnimating) return;
 
     e.stopPropagation();
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -195,7 +238,7 @@ export function Widget({
     };
     setResizeDirection(direction);
     setIsResizing(true);
-  }, [isInteractive, widget.x, widget.y, widget.width, widget.height]);
+  }, [isInteractive, isAnimating, widget.x, widget.y, widget.width, widget.height]);
 
   const handleResizePointerMove = useCallback((e: React.PointerEvent) => {
     if (!resizeRef.current) return;
@@ -270,7 +313,7 @@ export function Widget({
       case 'se':
         return 'cursor-nwse-resize';
       default:
-        return isDragging ? 'cursor-grabbing' : 'cursor-move';
+        return isDragging ? 'cursor-grabbing' : 'cursor-pointer';
     }
   };
 
@@ -287,25 +330,68 @@ export function Widget({
         top: widget.y,
         width: widget.width,
         height: widget.height,
-        opacity: widget.opacity,
         // Transparent background - no borders, no header
         background: 'transparent',
         // Enable pointer events in interactive mode
         pointerEvents: isInteractive ? 'auto' : 'none',
+        // 3D perspective for flip animation
+        perspective: '1000px',
       }}
       onPointerDown={handleDragPointerDown}
       onPointerMove={handleDragPointerMove}
       onPointerUp={handleDragPointerUp}
     >
-      {/* Content */}
-      {children}
+      {/* Flip container with 3D transform */}
+      <motion.div
+        className="relative w-full h-full"
+        style={{
+          transformStyle: 'preserve-3d',
+        }}
+        animate={{
+          rotateY: widget.isFlipped ? 180 : 0,
+        }}
+        transition={{
+          duration: WIDGET_CONSTANTS.FLIP_DURATION_MS / 1000,
+          ease: 'easeInOut',
+        }}
+      >
+        {/* Front face - widget content */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            opacity: widget.opacity,
+          }}
+        >
+          {children}
+        </div>
 
-      {/* Corner resize handles - visible only in interactive mode */}
-      {isInteractive && (
+        {/* Back face - settings panel */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            transform: 'rotateY(180deg)',
+            opacity: widget.opacity,
+          }}
+        >
+          <WidgetSettings
+            widgetId={widget.id}
+            opacity={widget.opacity}
+            onOpacityChange={handleOpacityChange}
+            onClose={handleCloseSettings}
+          />
+        </div>
+      </motion.div>
+
+      {/* Corner resize handles - visible only in interactive mode and not flipped */}
+      {isInteractive && !widget.isFlipped && (
         <>
           {/* NW Corner */}
           <div
-            className="absolute top-0 left-0 cursor-nwse-resize"
+            className="absolute top-0 left-0 cursor-nwse-resize z-10"
             style={{ width: CORNER_SIZE, height: CORNER_SIZE }}
             onPointerDown={(e) => handleResizePointerDown(e, 'nw')}
             onPointerMove={handleResizePointerMove}
@@ -319,7 +405,7 @@ export function Widget({
 
           {/* NE Corner */}
           <div
-            className="absolute top-0 right-0 cursor-nesw-resize"
+            className="absolute top-0 right-0 cursor-nesw-resize z-10"
             style={{ width: CORNER_SIZE, height: CORNER_SIZE }}
             onPointerDown={(e) => handleResizePointerDown(e, 'ne')}
             onPointerMove={handleResizePointerMove}
@@ -333,7 +419,7 @@ export function Widget({
 
           {/* SW Corner */}
           <div
-            className="absolute bottom-0 left-0 cursor-nesw-resize"
+            className="absolute bottom-0 left-0 cursor-nesw-resize z-10"
             style={{ width: CORNER_SIZE, height: CORNER_SIZE }}
             onPointerDown={(e) => handleResizePointerDown(e, 'sw')}
             onPointerMove={handleResizePointerMove}
@@ -347,7 +433,7 @@ export function Widget({
 
           {/* SE Corner */}
           <div
-            className="absolute bottom-0 right-0 cursor-nwse-resize"
+            className="absolute bottom-0 right-0 cursor-nwse-resize z-10"
             style={{ width: CORNER_SIZE, height: CORNER_SIZE }}
             onPointerDown={(e) => handleResizePointerDown(e, 'se')}
             onPointerMove={handleResizePointerMove}

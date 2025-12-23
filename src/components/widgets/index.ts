@@ -8,4 +8,5 @@
 
 export { Widget } from './Widget';
 export { WidgetsContainer } from './WidgetsContainer';
+export { WidgetSettings } from './WidgetSettings';
 export { ClockWidgetContent } from './ClockWidgetContent';

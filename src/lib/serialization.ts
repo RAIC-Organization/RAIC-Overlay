@@ -154,6 +154,7 @@ export function serializeState(
       overlayVisible,
     },
     windows: persistableWindows,
+    widgets: [], // Empty by default, widget persistence handled separately
   };
 }
 
