@@ -4,9 +4,8 @@
  * Widget Component
  *
  * Base widget container with transparent background and 3D backflip animation
- * capability. Widgets have no header/borders and support drag-to-reposition
- * (after 175ms hold to distinguish from click) and corner resize in
- * interaction mode. Click (release before hold threshold) triggers a backflip
+ * capability. Widgets have no header/borders and support immediate drag-to-reposition
+ * and corner resize in interaction mode. Double-click triggers a backflip
  * to reveal the settings panel.
  *
  * @feature 027-widget-container
@@ -48,8 +47,8 @@ const CORNER_ACCENT_SIZE = 8; // Visual accent size
 
 /**
  * Widget base component - transparent container for widget content.
- * Supports drag-to-move (after hold threshold), corner resize, and
- * 3D backflip animation to reveal settings.
+ * Supports immediate drag-to-move, corner resize, and
+ * 3D backflip animation to reveal settings on double-click.
  */
 export function Widget({
   widget,
@@ -61,15 +60,12 @@ export function Widget({
   onFlip,
   onClose,
 }: WidgetProps) {
-  // Drag state
+  // Drag state - immediate drag, no hold threshold
   const dragRef = useRef<{
     startX: number;
     startY: number;
     widgetX: number;
     widgetY: number;
-    isDragging: boolean;
-    holdTimeoutId: ReturnType<typeof setTimeout> | null;
-    hasMoved: boolean;
   } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -90,7 +86,7 @@ export function Widget({
   const [isAnimating, setIsAnimating] = useState(false);
 
   // ============================================================================
-  // Flip Handlers
+  // Flip Handlers (triggered by double-click)
   // ============================================================================
 
   const handleFlip = useCallback(() => {
@@ -124,8 +120,16 @@ export function Widget({
     onClose?.(widget.id);
   }, [widget.id, onClose]);
 
+  // Double-click handler for opening settings
+  const handleDoubleClick = useCallback((e: React.MouseEvent) => {
+    if (!isInteractive || isAnimating || widget.isFlipped) return;
+    e.preventDefault();
+    e.stopPropagation();
+    handleFlip();
+  }, [isInteractive, isAnimating, widget.isFlipped, handleFlip]);
+
   // ============================================================================
-  // Drag Handlers (with 175ms hold threshold)
+  // Drag Handlers (immediate drag, no hold threshold)
   // ============================================================================
 
   const handleDragPointerDown = useCallback((e: React.PointerEvent) => {
@@ -147,47 +151,20 @@ export function Widget({
     e.stopPropagation();
     e.currentTarget.setPointerCapture(e.pointerId);
 
-    // Start hold threshold timer
-    const holdTimeoutId = setTimeout(() => {
-      if (dragRef.current) {
-        dragRef.current.isDragging = true;
-        setIsDragging(true);
-      }
-    }, WIDGET_CONSTANTS.HOLD_THRESHOLD_MS);
-
+    // Start dragging immediately
     dragRef.current = {
       startX: e.clientX,
       startY: e.clientY,
       widgetX: widget.x,
       widgetY: widget.y,
-      isDragging: false,
-      holdTimeoutId,
-      hasMoved: false,
     };
+    setIsDragging(true);
   }, [isInteractive, isResizing, isAnimating, widget.x, widget.y]);
 
   const handleDragPointerMove = useCallback((e: React.PointerEvent) => {
     if (!dragRef.current) return;
 
-    const { startX, startY, widgetX, widgetY, isDragging: isDrag } = dragRef.current;
-
-    // Check if moved beyond threshold
-    const dx = Math.abs(e.clientX - startX);
-    const dy = Math.abs(e.clientY - startY);
-
-    if (dx > 5 || dy > 5) {
-      dragRef.current.hasMoved = true;
-    }
-
-    // Only move if hold threshold passed
-    if (!isDrag) {
-      // If moved too far before threshold - cancel hold timer (becomes neither click nor drag)
-      if (dragRef.current.hasMoved && dragRef.current.holdTimeoutId) {
-        clearTimeout(dragRef.current.holdTimeoutId);
-        dragRef.current.holdTimeoutId = null;
-      }
-      return;
-    }
+    const { startX, startY, widgetX, widgetY } = dragRef.current;
 
     const deltaX = e.clientX - startX;
     const deltaY = e.clientY - startY;
@@ -195,31 +172,14 @@ export function Widget({
     const newX = widgetX + deltaX;
     const newY = widgetY + deltaY;
 
-    requestAnimationFrame(() => {
-      onMove?.(widget.id, newX, newY);
-    });
+    onMove?.(widget.id, newX, newY);
   }, [widget.id, onMove]);
 
   const handleDragPointerUp = useCallback((e: React.PointerEvent) => {
     e.currentTarget.releasePointerCapture(e.pointerId);
-
-    if (!dragRef.current) return;
-
-    const { isDragging: wasDragging, hasMoved, holdTimeoutId } = dragRef.current;
-
-    // Clear timeout if still pending
-    if (holdTimeoutId) {
-      clearTimeout(holdTimeoutId);
-    }
-
-    // If didn't drag and didn't move significantly, trigger flip (click)
-    if (!wasDragging && !hasMoved) {
-      handleFlip();
-    }
-
     dragRef.current = null;
     setIsDragging(false);
-  }, [handleFlip]);
+  }, []);
 
   // ============================================================================
   // Resize Handlers (corner only)
@@ -287,14 +247,12 @@ export function Widget({
       }
     }
 
-    requestAnimationFrame(() => {
-      if (newX !== widgetX || newY !== widgetY) {
-        onMove?.(widget.id, newX, newY);
-      }
-      if (newWidth !== widgetWidth || newHeight !== widgetHeight) {
-        onResize?.(widget.id, newWidth, newHeight);
-      }
-    });
+    if (newX !== widgetX || newY !== widgetY) {
+      onMove?.(widget.id, newX, newY);
+    }
+    if (newWidth !== widgetWidth || newHeight !== widgetHeight) {
+      onResize?.(widget.id, newWidth, newHeight);
+    }
   }, [widget.id, onMove, onResize]);
 
   const handleResizePointerUp = useCallback((e: React.PointerEvent) => {
@@ -317,7 +275,7 @@ export function Widget({
       case 'se':
         return 'cursor-nwse-resize';
       default:
-        return isDragging ? 'cursor-grabbing' : 'cursor-pointer';
+        return isDragging ? 'cursor-grabbing' : 'cursor-grab';
     }
   };
 
@@ -344,6 +302,7 @@ export function Widget({
       onPointerDown={handleDragPointerDown}
       onPointerMove={handleDragPointerMove}
       onPointerUp={handleDragPointerUp}
+      onDoubleClick={handleDoubleClick}
     >
       {/* Flip container with 3D transform */}
       <motion.div
