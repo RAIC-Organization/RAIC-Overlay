@@ -1,0 +1,52 @@
+# RAIC Overlay Runtime Settings
+# ==============================
+#
+# Place this file next to the executable as "settings.toml" to override build-time defaults.
+# All settings are optional - omit any to use the default value from the build.
+#
+# Location: Same directory as the executable
+#   Windows: C:\Program Files\RAIC Overlay\settings.toml
+#   Development: target\debug\settings.toml or target\release\settings.toml
+
+# Target Window Name
+# ------------------
+# The overlay will attach to windows containing this string in their title (case-insensitive).
+# This determines which application the overlay tracks and syncs position with.
+#
+# Examples:
+#   target_window_name = "Star Citizen"     # Production use
+#   target_window_name = "Notepad"          # Testing with Notepad
+#   target_window_name = "Chrome"           # Testing with Chrome
+#
+# Default: (from build-time .env file, typically "Star Citizen")
+#
+# target_window_name = "Star Citizen"
+
+# Debug Border
+# ------------
+# Enable a red debug border around the overlay window boundaries.
+# Useful for development to visualize the overlay area.
+#
+# Values: true or false
+# Default: false
+#
+# debug_border = false
+
+# Log Level
+# ---------
+# Controls the verbosity of log output.
+# Higher verbosity levels include all lower levels.
+#
+# Values:
+#   TRACE  - Most verbose, includes all internal details
+#   DEBUG  - Development debugging information
+#   INFO   - General operational information
+#   WARN   - Warnings and errors only (default)
+#   ERROR  - Only critical errors
+#
+# Note: DEBUG and INFO levels also enable console output for development.
+#       WARN and ERROR only log to the log file.
+#
+# Default: WARN
+#
+# log_level = "WARN"

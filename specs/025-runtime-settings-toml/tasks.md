@@ -37,15 +37,15 @@
 
 **⚠️ CRITICAL**: User story integration cannot begin until this phase is complete
 
-- [ ] T004 Create settings types (FileSettings, RuntimeSettings, SettingSource, SettingsSources) in src-tauri/src/settings.rs
-- [ ] T005 Implement get_settings_path() function using std::env::current_exe() in src-tauri/src/settings.rs
-- [ ] T006 Implement load_file_settings() to read and parse settings.toml in src-tauri/src/settings.rs
-- [ ] T007 Implement RuntimeSettings::from_file_settings() for merging with compile-time defaults in src-tauri/src/settings.rs
-- [ ] T008 Implement get_settings() function with OnceLock caching in src-tauri/src/settings.rs
-- [ ] T009 Implement log_settings_sources() to log each setting's source at INFO level in src-tauri/src/settings.rs
-- [ ] T010 Add settings module declaration in src-tauri/src/lib.rs
-- [ ] T011 [P] Create settings.example.toml with documented defaults in src-tauri/settings.example.toml
-- [ ] T012 [P] Add unit tests for TOML parsing edge cases in src-tauri/src/settings.rs
+- [X] T004 Create settings types (FileSettings, RuntimeSettings, SettingSource, SettingsSources) in src-tauri/src/settings.rs
+- [X] T005 Implement get_settings_path() function using std::env::current_exe() in src-tauri/src/settings.rs
+- [X] T006 Implement load_file_settings() to read and parse settings.toml in src-tauri/src/settings.rs
+- [X] T007 Implement RuntimeSettings::from_file_settings() for merging with compile-time defaults in src-tauri/src/settings.rs
+- [X] T008 Implement get_settings() function with OnceLock caching in src-tauri/src/settings.rs
+- [X] T009 Implement log_settings_sources() to log each setting's source at INFO level in src-tauri/src/settings.rs
+- [X] T010 Add settings module declaration in src-tauri/src/lib.rs
+- [X] T011 [P] Create settings.example.toml with documented defaults in src-tauri/settings.example.toml
+- [X] T012 [P] Add unit tests for TOML parsing edge cases in src-tauri/src/settings.rs
 
 **Checkpoint**: Settings module ready - user story integration can now begin
 

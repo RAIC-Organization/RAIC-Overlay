@@ -3,6 +3,7 @@ pub mod logging;
 pub mod logging_types;
 pub mod persistence;
 pub mod persistence_types;
+pub mod settings;
 pub mod state;
 pub mod tray;
 #[cfg(windows)]
