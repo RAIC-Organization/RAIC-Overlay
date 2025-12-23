@@ -97,14 +97,14 @@
 
 ### Implementation for User Story 2
 
-- [ ] T023 [US2] Implement hold threshold detection (175ms) for click vs drag in src/components/widgets/Widget.tsx
-- [ ] T024 [US2] Implement drag-to-reposition functionality with pointer events in src/components/widgets/Widget.tsx
-- [ ] T025 [US2] Add MOVE_WIDGET action to WidgetsContext reducer in src/contexts/WidgetsContext.tsx
-- [ ] T026 [US2] Implement corner accent resize handles (visible in interaction mode only) in src/components/widgets/Widget.tsx
-- [ ] T027 [US2] Implement corner drag-to-resize functionality in src/components/widgets/Widget.tsx
-- [ ] T028 [US2] Add RESIZE_WIDGET action to WidgetsContext reducer in src/contexts/WidgetsContext.tsx
-- [ ] T029 [US2] Enforce minimum widget dimensions (80x60px) and visibility constraints in src/contexts/WidgetsContext.tsx
-- [ ] T030 [US2] Trigger ClockWidgetContent font rescaling on resize via ResizeObserver in src/components/widgets/ClockWidgetContent.tsx
+- [x] T023 [US2] Implement hold threshold detection (175ms) for click vs drag in src/components/widgets/Widget.tsx
+- [x] T024 [US2] Implement drag-to-reposition functionality with pointer events in src/components/widgets/Widget.tsx
+- [x] T025 [US2] Add MOVE_WIDGET action to WidgetsContext reducer in src/contexts/WidgetsContext.tsx
+- [x] T026 [US2] Implement corner accent resize handles (visible in interaction mode only) in src/components/widgets/Widget.tsx
+- [x] T027 [US2] Implement corner drag-to-resize functionality in src/components/widgets/Widget.tsx
+- [x] T028 [US2] Add RESIZE_WIDGET action to WidgetsContext reducer in src/contexts/WidgetsContext.tsx
+- [x] T029 [US2] Enforce minimum widget dimensions (80x60px) and visibility constraints in src/contexts/WidgetsContext.tsx
+- [x] T030 [US2] Trigger ClockWidgetContent font rescaling on resize via ResizeObserver in src/components/widgets/ClockWidgetContent.tsx
 
 **Checkpoint**: Widget can be dragged and resized in interaction mode, content scales appropriately
 
