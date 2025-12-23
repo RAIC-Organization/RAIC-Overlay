@@ -289,17 +289,36 @@ export default function Home() {
     }
   }, [hydrationError, wasReset]);
 
-  // Apply debug border if NEXT_PUBLIC_DEBUG_BORDER is enabled
+  // T025-T026: Apply debug border from runtime settings
   useEffect(() => {
-    const debugBorder = process.env.NEXT_PUBLIC_DEBUG_BORDER === "true";
-    const root = document.getElementById("root");
-    if (root) {
-      if (debugBorder) {
-        root.classList.add("debug-border");
-      } else {
-        root.classList.remove("debug-border");
+    const initDebugBorder = async () => {
+      try {
+        // Query backend for runtime settings
+        const settings = await invoke<{ debugBorder: boolean }>("get_settings_command");
+        const root = document.getElementById("root");
+        if (root) {
+          if (settings.debugBorder) {
+            root.classList.add("debug-border");
+          } else {
+            root.classList.remove("debug-border");
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load settings:", error);
+        // Fall back to build-time env var if command fails
+        const debugBorder = process.env.NEXT_PUBLIC_DEBUG_BORDER === "true";
+        const root = document.getElementById("root");
+        if (root) {
+          if (debugBorder) {
+            root.classList.add("debug-border");
+          } else {
+            root.classList.remove("debug-border");
+          }
+        }
       }
-    }
+    };
+
+    initDebugBorder();
   }, []);
 
   useEffect(() => {

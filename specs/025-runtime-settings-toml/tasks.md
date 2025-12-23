@@ -94,11 +94,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] Create SettingsConfig struct for Tauri command response in src-tauri/src/settings.rs
-- [ ] T023 [US3] Implement get_settings Tauri command in src-tauri/src/settings.rs
-- [ ] T024 [US3] Register get_settings command in invoke_handler in src-tauri/src/lib.rs
-- [ ] T025 [US3] Replace process.env.NEXT_PUBLIC_DEBUG_BORDER with invoke("get_settings") call in app/page.tsx
-- [ ] T026 [US3] Update debug border useEffect to use async settings query in app/page.tsx
+- [X] T022 [US3] Create SettingsConfig struct for Tauri command response in src-tauri/src/settings.rs
+- [X] T023 [US3] Implement get_settings Tauri command in src-tauri/src/settings.rs
+- [X] T024 [US3] Register get_settings command in invoke_handler in src-tauri/src/lib.rs
+- [X] T025 [US3] Replace process.env.NEXT_PUBLIC_DEBUG_BORDER with invoke("get_settings") call in app/page.tsx
+- [X] T026 [US3] Update debug border useEffect to use async settings query in app/page.tsx
 
 **Checkpoint**: User Story 3 complete - debug border configurable at runtime
 

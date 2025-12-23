@@ -247,6 +247,21 @@ pub fn log_settings_sources(settings: &RuntimeSettings) {
 }
 
 // ============================================================================
+// T022-T023: Tauri commands for frontend settings access
+// ============================================================================
+
+/// Get the current settings configuration for frontend access.
+#[tauri::command]
+pub fn get_settings_command() -> SettingsConfig {
+    let settings = get_settings();
+    SettingsConfig {
+        target_window_name: settings.target_window_name.clone(),
+        debug_border: settings.debug_border,
+        log_level: format!("{:?}", settings.log_level).to_uppercase(),
+    }
+}
+
+// ============================================================================
 // T027-T028: Log level parsing
 // ============================================================================
 
