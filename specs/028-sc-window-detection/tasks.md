@@ -36,15 +36,15 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Add `WindowCandidate` struct to `src-tauri/src/types.rs` with fields: hwnd, process_name, window_class, window_title, is_top_level
-- [ ] T005 Add `SearchCriteria` struct to `src-tauri/src/types.rs` with fields: process_name, window_class, window_title
-- [ ] T006 Add `DetectionResult` struct to `src-tauri/src/types.rs` with fields: success, matched_window, candidates_evaluated, search_criteria, detection_time_ms
-- [ ] T007 [P] Add new error variants to `TargetWindowError` enum in `src-tauri/src/types.rs`: ProcessNotRunning, WindowNotReady, ClassMismatch
-- [ ] T008 [P] Add `target_process_name` optional field to `FileSettings` struct in `src-tauri/src/settings.rs`
-- [ ] T009 [P] Add `target_window_class` optional field to `FileSettings` struct in `src-tauri/src/settings.rs`
-- [ ] T010 [P] Add `process_monitor_interval_ms` optional field to `FileSettings` struct in `src-tauri/src/settings.rs`
-- [ ] T011 Add default constants for Star Citizen: `DEFAULT_PROCESS_NAME`, `DEFAULT_WINDOW_CLASS` in `src-tauri/src/settings.rs`
-- [ ] T012 Add accessor functions `get_target_process_name()`, `get_target_window_class()`, `get_process_monitor_interval()` in `src-tauri/src/settings.rs`
+- [X] T004 Add `WindowCandidate` struct to `src-tauri/src/types.rs` with fields: hwnd, process_name, window_class, window_title, is_top_level
+- [X] T005 Add `SearchCriteria` struct to `src-tauri/src/types.rs` with fields: process_name, window_class, window_title
+- [X] T006 Add `DetectionResult` struct to `src-tauri/src/types.rs` with fields: success, matched_window, candidates_evaluated, search_criteria, detection_time_ms
+- [X] T007 [P] Add new error variants to `TargetWindowError` enum in `src-tauri/src/types.rs`: ProcessNotRunning, WindowNotReady, ClassMismatch
+- [X] T008 [P] Add `target_process_name` optional field to `FileSettings` struct in `src-tauri/src/settings.rs`
+- [X] T009 [P] Add `target_window_class` optional field to `FileSettings` struct in `src-tauri/src/settings.rs`
+- [X] T010 [P] Add `process_monitor_interval_ms` optional field to `FileSettings` struct in `src-tauri/src/settings.rs`
+- [X] T011 Add default constants for Star Citizen: `DEFAULT_PROCESS_NAME`, `DEFAULT_WINDOW_CLASS` in `src-tauri/src/settings.rs`
+- [X] T012 Add accessor functions `get_target_process_name()`, `get_target_window_class()`, `get_process_monitor_interval()` in `src-tauri/src/settings.rs`
 
 **Checkpoint**: Foundation ready - types and settings configured. User story implementation can now begin.
 

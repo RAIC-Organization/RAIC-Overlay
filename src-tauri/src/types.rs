@@ -67,12 +67,19 @@ pub struct WindowRect {
 }
 
 // T005: TargetWindowError enum for target window operation errors
+// T007 (028): Added ProcessNotRunning, WindowNotReady, ClassMismatch variants for three-point verification
 #[derive(Debug, Clone, Serialize)]
 #[serde(tag = "type")]
 pub enum TargetWindowError {
     NotFound { pattern: String },
     NotFocused,
     InvalidHandle,
+    // T007 (028): Process exists but not running
+    ProcessNotRunning { process: String },
+    // T007 (028): Process running but window not created yet
+    WindowNotReady { process: String },
+    // T007 (028): Window found but class doesn't match expected value
+    ClassMismatch { expected: String, actual: String },
 }
 
 impl std::fmt::Display for TargetWindowError {
@@ -83,6 +90,15 @@ impl std::fmt::Display for TargetWindowError {
             }
             TargetWindowError::NotFocused => write!(f, "Target window is not focused"),
             TargetWindowError::InvalidHandle => write!(f, "Target window handle is invalid"),
+            TargetWindowError::ProcessNotRunning { process } => {
+                write!(f, "Process '{}' is not running", process)
+            }
+            TargetWindowError::WindowNotReady { process } => {
+                write!(f, "Game process running but window not ready ({})", process)
+            }
+            TargetWindowError::ClassMismatch { expected, actual } => {
+                write!(f, "Window class mismatch: expected '{}', found '{}'", expected, actual)
+            }
         }
     }
 }
@@ -185,4 +201,66 @@ pub struct TargetWindowInfo {
     pub found: bool,
     pub focused: bool,
     pub rect: Option<WindowRect>,
+}
+
+// ============================================================================
+// T004-T006, T023 (028): Types for Star Citizen Window Detection Enhancement
+// ============================================================================
+
+// T004 (028): WindowCandidate represents a window being evaluated during detection
+#[derive(Debug, Clone, Serialize)]
+pub struct WindowCandidate {
+    /// Window handle (stored as u64 for thread safety)
+    pub hwnd: u64,
+    /// Executable name (e.g., "StarCitizen.exe")
+    pub process_name: String,
+    /// Window class name (e.g., "CryENGINE")
+    pub window_class: String,
+    /// Window title text
+    pub window_title: String,
+    /// Whether window is a top-level window
+    pub is_top_level: bool,
+}
+
+// T005 (028): SearchCriteria for window detection configuration
+#[derive(Debug, Clone, Serialize)]
+pub struct SearchCriteria {
+    /// Target process name (e.g., "StarCitizen.exe")
+    pub process_name: String,
+    /// Target window class (e.g., "CryENGINE")
+    pub window_class: String,
+    /// Target window title pattern (e.g., "Star Citizen")
+    pub window_title: String,
+}
+
+// T006 (028): DetectionResult - outcome of a window detection attempt
+#[derive(Debug, Clone, Serialize)]
+pub struct DetectionResult {
+    /// Whether a valid target window was found
+    pub success: bool,
+    /// The window that matched (if success)
+    pub matched_window: Option<WindowCandidate>,
+    /// All candidates that were checked
+    pub candidates_evaluated: Vec<WindowCandidate>,
+    /// The criteria used for detection
+    pub search_criteria: SearchCriteria,
+    /// Time taken for detection in milliseconds
+    pub detection_time_ms: u64,
+}
+
+// T023 (028): HotkeyEvent for logging hotkey presses
+#[derive(Debug, Clone, Serialize)]
+pub struct HotkeyEvent {
+    /// Key identifier (e.g., "F3", "F5")
+    pub key_code: String,
+    /// Epoch timestamp in milliseconds
+    pub timestamp: u64,
+    /// Overlay visibility before action
+    pub overlay_visible_before: bool,
+    /// Overlay mode before action (as string)
+    pub overlay_mode_before: String,
+    /// Description of action performed
+    pub action_taken: String,
+    /// Result of the action
+    pub outcome: String,
 }

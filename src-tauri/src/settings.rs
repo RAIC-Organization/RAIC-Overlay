@@ -28,7 +28,21 @@ pub struct FileSettings {
 
     /// Logging verbosity level (TRACE, DEBUG, INFO, WARN, ERROR)
     pub log_level: Option<String>,
+
+    // T008 (028): Target process name for three-point verification (e.g., "StarCitizen.exe")
+    pub target_process_name: Option<String>,
+
+    // T009 (028): Target window class for three-point verification (e.g., "CryENGINE")
+    pub target_window_class: Option<String>,
+
+    // T010 (028): Polling interval for process monitoring in milliseconds (default: 1000)
+    pub process_monitor_interval_ms: Option<u64>,
 }
+
+// T011 (028): Default constants for Star Citizen window detection
+pub const DEFAULT_PROCESS_NAME: &str = "StarCitizen.exe";
+pub const DEFAULT_WINDOW_CLASS: &str = "CryENGINE";
+pub const DEFAULT_PROCESS_MONITOR_INTERVAL_MS: u64 = 1000;
 
 /// Fully resolved runtime settings.
 /// All fields are guaranteed to have valid values (either from file or defaults).
@@ -43,6 +57,15 @@ pub struct RuntimeSettings {
     /// Logging verbosity level
     pub log_level: LevelFilter,
 
+    // T008 (028): Target process name for three-point verification
+    pub target_process_name: String,
+
+    // T009 (028): Target window class for three-point verification
+    pub target_window_class: String,
+
+    // T010 (028): Polling interval for process monitoring
+    pub process_monitor_interval_ms: u64,
+
     /// Source of each setting for logging
     pub sources: SettingsSources,
 }
@@ -53,6 +76,9 @@ pub struct SettingsSources {
     pub target_window_name: SettingSource,
     pub debug_border: SettingSource,
     pub log_level: SettingSource,
+    pub target_process_name: SettingSource,
+    pub target_window_class: SettingSource,
+    pub process_monitor_interval_ms: SettingSource,
 }
 
 /// Indicates the origin of a setting value
@@ -152,6 +178,9 @@ impl RuntimeSettings {
             target_window_name: SettingSource::Default,
             debug_border: SettingSource::Default,
             log_level: SettingSource::Default,
+            target_process_name: SettingSource::Default,
+            target_window_class: SettingSource::Default,
+            process_monitor_interval_ms: SettingSource::Default,
         };
 
         // target_window_name
@@ -192,10 +221,40 @@ impl RuntimeSettings {
             None => parse_log_level(env!("RAIC_LOG_LEVEL")).unwrap_or(LevelFilter::Warn),
         };
 
+        // T008 (028): target_process_name
+        let target_process_name = match file.target_process_name {
+            Some(ref name) if !name.is_empty() => {
+                sources.target_process_name = SettingSource::File;
+                name.clone()
+            }
+            _ => DEFAULT_PROCESS_NAME.to_string(),
+        };
+
+        // T009 (028): target_window_class
+        let target_window_class = match file.target_window_class {
+            Some(ref class) if !class.is_empty() => {
+                sources.target_window_class = SettingSource::File;
+                class.clone()
+            }
+            _ => DEFAULT_WINDOW_CLASS.to_string(),
+        };
+
+        // T010 (028): process_monitor_interval_ms
+        let process_monitor_interval_ms = match file.process_monitor_interval_ms {
+            Some(interval) if interval > 0 => {
+                sources.process_monitor_interval_ms = SettingSource::File;
+                interval
+            }
+            _ => DEFAULT_PROCESS_MONITOR_INTERVAL_MS,
+        };
+
         Self {
             target_window_name,
             debug_border,
             log_level,
+            target_process_name,
+            target_window_class,
+            process_monitor_interval_ms,
             sources,
         }
     }
@@ -244,6 +303,40 @@ pub fn log_settings_sources(settings: &RuntimeSettings) {
         settings.log_level,
         settings.sources.log_level
     );
+    log::info!(
+        "  target_process_name: '{}' (from {})",
+        settings.target_process_name,
+        settings.sources.target_process_name
+    );
+    log::info!(
+        "  target_window_class: '{}' (from {})",
+        settings.target_window_class,
+        settings.sources.target_window_class
+    );
+    log::info!(
+        "  process_monitor_interval_ms: {} (from {})",
+        settings.process_monitor_interval_ms,
+        settings.sources.process_monitor_interval_ms
+    );
+}
+
+// ============================================================================
+// T012 (028): Accessor functions for new settings
+// ============================================================================
+
+/// Get the target process name (e.g., "StarCitizen.exe")
+pub fn get_target_process_name() -> &'static str {
+    &get_settings().target_process_name
+}
+
+/// Get the target window class (e.g., "CryENGINE")
+pub fn get_target_window_class() -> &'static str {
+    &get_settings().target_window_class
+}
+
+/// Get the process monitor polling interval in milliseconds
+pub fn get_process_monitor_interval() -> u64 {
+    get_settings().process_monitor_interval_ms
 }
 
 // ============================================================================
@@ -390,6 +483,9 @@ log_level = "INFO"
             target_window_name: Some("Test Window".to_string()),
             debug_border: Some(true),
             log_level: Some("DEBUG".to_string()),
+            target_process_name: None,
+            target_window_class: None,
+            process_monitor_interval_ms: None,
         };
         let runtime = RuntimeSettings::from_file_settings(file);
 
@@ -416,9 +512,8 @@ log_level = "INFO"
     #[test]
     fn test_runtime_settings_from_file_settings_invalid_log_level() {
         let file = FileSettings {
-            target_window_name: None,
-            debug_border: None,
             log_level: Some("INVALID".to_string()),
+            ..Default::default()
         };
         let runtime = RuntimeSettings::from_file_settings(file);
 
@@ -430,8 +525,7 @@ log_level = "INFO"
     fn test_runtime_settings_from_file_settings_empty_target_window() {
         let file = FileSettings {
             target_window_name: Some("".to_string()),
-            debug_border: None,
-            log_level: None,
+            ..Default::default()
         };
         let runtime = RuntimeSettings::from_file_settings(file);
 
@@ -463,8 +557,8 @@ log_level = "INFO"
     fn test_partial_settings_mixed_sources() {
         let file = FileSettings {
             target_window_name: Some("CustomWindow".to_string()),
-            debug_border: None, // Will use default
             log_level: Some("TRACE".to_string()),
+            ..Default::default()
         };
         let runtime = RuntimeSettings::from_file_settings(file);
 
@@ -545,6 +639,9 @@ another_unknown = 42
             target_window_name: Some("Test Window".to_string()),
             debug_border: Some(true),
             log_level: Some("DEBUG".to_string()),
+            target_process_name: Some("Test.exe".to_string()),
+            target_window_class: Some("TestClass".to_string()),
+            process_monitor_interval_ms: Some(500),
         };
 
         // Measure time to create RuntimeSettings
@@ -558,5 +655,55 @@ another_unknown = 42
             "Settings merge took too long: {:?}",
             elapsed
         );
+    }
+
+    // ========================================================================
+    // T008-T012 (028): Tests for new window detection settings
+    // ========================================================================
+
+    /// Test that new settings fields default correctly
+    #[test]
+    fn test_new_settings_defaults() {
+        let file = FileSettings::default();
+        let runtime = RuntimeSettings::from_file_settings(file);
+
+        assert_eq!(runtime.target_process_name, DEFAULT_PROCESS_NAME);
+        assert_eq!(runtime.target_window_class, DEFAULT_WINDOW_CLASS);
+        assert_eq!(runtime.process_monitor_interval_ms, DEFAULT_PROCESS_MONITOR_INTERVAL_MS);
+        assert_eq!(runtime.sources.target_process_name, SettingSource::Default);
+        assert_eq!(runtime.sources.target_window_class, SettingSource::Default);
+        assert_eq!(runtime.sources.process_monitor_interval_ms, SettingSource::Default);
+    }
+
+    /// Test that new settings can be overridden from file
+    #[test]
+    fn test_new_settings_from_file() {
+        let file = FileSettings {
+            target_process_name: Some("Custom.exe".to_string()),
+            target_window_class: Some("CustomClass".to_string()),
+            process_monitor_interval_ms: Some(2000),
+            ..Default::default()
+        };
+        let runtime = RuntimeSettings::from_file_settings(file);
+
+        assert_eq!(runtime.target_process_name, "Custom.exe");
+        assert_eq!(runtime.target_window_class, "CustomClass");
+        assert_eq!(runtime.process_monitor_interval_ms, 2000);
+        assert_eq!(runtime.sources.target_process_name, SettingSource::File);
+        assert_eq!(runtime.sources.target_window_class, SettingSource::File);
+        assert_eq!(runtime.sources.process_monitor_interval_ms, SettingSource::File);
+    }
+
+    /// Test that zero interval falls back to default
+    #[test]
+    fn test_zero_interval_uses_default() {
+        let file = FileSettings {
+            process_monitor_interval_ms: Some(0),
+            ..Default::default()
+        };
+        let runtime = RuntimeSettings::from_file_settings(file);
+
+        assert_eq!(runtime.process_monitor_interval_ms, DEFAULT_PROCESS_MONITOR_INTERVAL_MS);
+        assert_eq!(runtime.sources.process_monitor_interval_ms, SettingSource::Default);
     }
 }
