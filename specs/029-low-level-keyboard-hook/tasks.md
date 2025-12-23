@@ -96,11 +96,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T025 [US3] Implement hook installation success detection and set `use_fallback` flag on failure in `src-tauri/src/keyboard_hook.rs`
-- [ ] T026 [US3] Add conditional fallback trigger to existing `tauri-plugin-global-shortcut` registration in `src-tauri/src/lib.rs`
-- [ ] T027 [US3] Add logging for fallback activation with reason in `src-tauri/src/keyboard_hook.rs`
-- [ ] T028 [US3] Implement `is_using_fallback()` query function for status checking in `src-tauri/src/keyboard_hook.rs`
-- [ ] T029 [US3] Handle non-Windows platform gracefully (compile-time feature flag or runtime check) in `src-tauri/src/keyboard_hook.rs`
+- [x] T025 [US3] Implement hook installation success detection and set `use_fallback` flag on failure in `src-tauri/src/keyboard_hook.rs`
+- [x] T026 [US3] Add conditional fallback trigger to existing `tauri-plugin-global-shortcut` registration in `src-tauri/src/lib.rs`
+- [x] T027 [US3] Add logging for fallback activation with reason in `src-tauri/src/keyboard_hook.rs`
+- [x] T028 [US3] Implement `is_using_fallback()` query function for status checking in `src-tauri/src/keyboard_hook.rs`
+- [x] T029 [US3] Handle non-Windows platform gracefully (compile-time feature flag or runtime check) in `src-tauri/src/keyboard_hook.rs`
 
 **Checkpoint**: User Story 3 complete - Application gracefully degrades when hook unavailable
 

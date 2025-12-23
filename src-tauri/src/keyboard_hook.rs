@@ -330,8 +330,12 @@ pub fn start_keyboard_hook<R: Runtime>(app_handle: AppHandle<R>) -> bool {
                     e,
                     error_code
                 );
-                let _ = tx.send(false);
+                // T025, T027: Set fallback flag and log reason
                 KEYBOARD_HOOK_STATE.set_use_fallback(true);
+                log::warn!(
+                    "Falling back to global shortcut plugin (reason: hook installation failed)"
+                );
+                let _ = tx.send(false);
             }
         }
     });
