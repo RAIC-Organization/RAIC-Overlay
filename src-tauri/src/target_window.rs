@@ -240,13 +240,8 @@ pub fn find_target_window_verified() -> DetectionResult {
         candidates.len(), match_count, detection_time_ms
     );
 
-    // T032: Warn if no match found
-    if matched_window.is_none() {
-        log::warn!(
-            "No matching window found for pattern: {} (process={}, class={})",
-            criteria.window_title, criteria.process_name, criteria.window_class
-        );
-    }
+    // T032 (030): Detection failure is logged by callers when user takes action (F3)
+    // Removed per-poll warn! to avoid log spam - the F3 handler logs "detection failed"
 
     DetectionResult {
         success: matched_window.is_some(),
