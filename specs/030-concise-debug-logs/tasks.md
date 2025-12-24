@@ -52,13 +52,13 @@
 
 ### Implementation for User Story 1
 
-- [ ] T004 [P] [US1] Change `log::debug!` to `log::trace!` for search criteria logging in `find_target_window_verified()` at line ~160-163 in `src-tauri/src/target_window.rs`
-- [ ] T005 [P] [US1] Change `log::debug!` to `log::trace!` for per-candidate logging in `find_target_window_verified()` at line ~204-210 in `src-tauri/src/target_window.rs`
-- [ ] T006 [P] [US1] Change `log::debug!` to `log::trace!` for focus state logging in `is_target_focused()` at line ~362-369 in `src-tauri/src/target_window.rs`
-- [ ] T007 [US1] Integrate focus deduplication into `handle_focus_lost()` and `handle_focus_gained()` in `src-tauri/src/focus_monitor.rs`
-- [ ] T007.5 [US1] Verify process_monitor.rs logs state changes only (detected/terminated) not per-poll in `src-tauri/src/process_monitor.rs`
-- [ ] T008 [US1] Verify DEBUG-level detection summary is logged in `find_target_window_verified()` at line ~237-240 in `src-tauri/src/target_window.rs` (per FR-009)
-- [ ] T009 [US1] Run `cargo build` and `cargo clippy` to verify no warnings in `src-tauri/`
+- [X] T004 [P] [US1] Change `log::debug!` to `log::trace!` for search criteria logging in `find_target_window_verified()` at line ~160-163 in `src-tauri/src/target_window.rs`
+- [X] T005 [P] [US1] Change `log::debug!` to `log::trace!` for per-candidate logging in `find_target_window_verified()` at line ~204-210 in `src-tauri/src/target_window.rs`
+- [X] T006 [P] [US1] Change `log::debug!` to `log::trace!` for focus state logging in `is_target_focused()` at line ~362-369 in `src-tauri/src/target_window.rs`
+- [X] T007 [US1] Integrate focus deduplication into `handle_focus_lost()` and `handle_focus_gained()` in `src-tauri/src/focus_monitor.rs`
+- [X] T007.5 [US1] Verify process_monitor.rs logs state changes only (detected/terminated) not per-poll in `src-tauri/src/process_monitor.rs`
+- [X] T008 [US1] Verify DEBUG-level detection summary is logged in `find_target_window_verified()` at line ~237-240 in `src-tauri/src/target_window.rs` (per FR-009)
+- [X] T009 [US1] Run `cargo build` and `cargo clippy` to verify no warnings in `src-tauri/`
 - [ ] T010 [US1] Manual test: Run app for 5 minutes with stable target, verify log file is less than 10KB
 
 **Checkpoint**: User Story 1 complete - logs are now concise at DEBUG level

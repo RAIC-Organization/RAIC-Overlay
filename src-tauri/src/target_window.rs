@@ -156,8 +156,8 @@ pub fn find_target_window_verified() -> DetectionResult {
         window_title: get_target_window_name().to_string(),
     };
 
-    // T033: Log search criteria at start
-    log::debug!(
+    // T033, T004 (030): Log search criteria at TRACE level (per-poll, verbose)
+    log::trace!(
         "Starting window detection: process={}, class={}, title={}",
         criteria.process_name, criteria.window_class, criteria.window_title
     );
@@ -200,10 +200,10 @@ pub fn find_target_window_verified() -> DetectionResult {
     SEARCH_CLASS.with(|c| c.set(None));
     SEARCH_PATTERN.with(|p| p.set(None));
 
-    // T029: Log each candidate at debug level
+    // T029, T005 (030): Log each candidate at TRACE level (per-poll, verbose)
     for candidate in &candidates {
         let valid = validate_candidate(candidate, &criteria);
-        log::debug!(
+        log::trace!(
             "Window candidate: process={}, class={}, title={}, top_level={}, valid={}",
             candidate.process_name, candidate.window_class, candidate.window_title,
             candidate.is_top_level, valid
@@ -232,9 +232,10 @@ pub fn find_target_window_verified() -> DetectionResult {
     // T030: Calculate detection time
     let detection_time_ms = start_time.elapsed().as_millis() as u64;
 
-    // T031: Log detection summary
+    // T031, T008 (030): Log detection summary at TRACE level (per-poll, verbose)
+    // State change events (process detected/terminated) are logged at INFO by callers
     let match_count = cryengine_matches.len() + other_matches.len();
-    log::info!(
+    log::trace!(
         "Detection complete: {} candidates evaluated, {} matched, time={}ms",
         candidates.len(), match_count, detection_time_ms
     );
@@ -358,12 +359,12 @@ pub fn is_target_focused(hwnd: HWND) -> bool {
         let foreground = GetForegroundWindow();
         let is_focused = hwnd == foreground;
 
-        // T035: Log focus state
+        // T035, T006 (030): Log focus state at TRACE level (per-poll, verbose)
         if is_focused {
-            log::debug!("Target window is focused (hwnd={})", hwnd.0 as isize);
+            log::trace!("Target window is focused (hwnd={})", hwnd.0 as isize);
         } else {
             let (fg_process, fg_title) = get_foreground_window_info();
-            log::debug!(
+            log::trace!(
                 "Target window not focused. Foreground: process={}, title={}",
                 fg_process, fg_title
             );

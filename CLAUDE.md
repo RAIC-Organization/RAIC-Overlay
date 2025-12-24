@@ -50,6 +50,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x, windows-rs 0.62 (Win32 API), tauri-plugin-log, tauri-plugin-global-shortcut (028-sc-window-detection)
 - JSON files in Tauri app data directory (settings.toml for configuration) (028-sc-window-detection)
 - Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend - unchanged) + `windows-rs` 0.62 (already in use), `tauri` 2.x, `lazy_static` 1.4 (029-low-level-keyboard-hook)
+- Rust 2021 Edition (Tauri backend) + `log` 0.4, `tauri-plugin-log` 2.x (existing infrastructure) (030-concise-debug-logs)
+- N/A (log files managed by tauri-plugin-log with rotation) (030-concise-debug-logs)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -74,9 +76,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 030-concise-debug-logs: Added Rust 2021 Edition (Tauri backend) + `log` 0.4, `tauri-plugin-log` 2.x (existing infrastructure)
 - 029-low-level-keyboard-hook: Added Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend - unchanged) + `windows-rs` 0.62 (already in use), `tauri` 2.x, `lazy_static` 1.4
 - 028-sc-window-detection: Added Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x, windows-rs 0.62 (Win32 API), tauri-plugin-log, tauri-plugin-global-shortcut
-- 027-widget-container: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend) + React 19.0.0, Next.js 16.x, motion 12.x (for animations), shadcn/ui, Tailwind CSS 4.x, Tauri 2.x
 
 
 <!-- MANUAL ADDITIONS START -->
