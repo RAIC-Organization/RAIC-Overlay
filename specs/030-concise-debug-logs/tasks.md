@@ -105,10 +105,10 @@
 
 **Purpose**: Final validation and documentation
 
-- [ ] T020 [P] Run full `cargo test` to ensure all unit tests pass in `src-tauri/`
-- [ ] T021 [P] Run `cargo clippy` with no warnings in `src-tauri/`
-- [ ] T022 Validate against quickstart.md scenarios in `specs/030-concise-debug-logs/quickstart.md`
-- [ ] T023 Update any inline documentation or comments if log level semantics changed
+- [X] T020 [P] Run full `cargo test` to ensure all unit tests pass in `src-tauri/`
+- [X] T021 [P] Run `cargo clippy` with no warnings in `src-tauri/`
+- [X] T022 Validate against quickstart.md scenarios in `specs/030-concise-debug-logs/quickstart.md`
+- [X] T023 Update any inline documentation or comments if log level semantics changed
 - [ ] T024 Final test: Run app for 30 minutes stable, verify SC-001 (less than 1KB log growth)
 
 ---

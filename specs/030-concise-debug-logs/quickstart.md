@@ -44,7 +44,7 @@ const FOCUS_LOG_DEDUP_MS: u64 = 500;
 fn should_log_focus_change(is_focused: bool) -> bool {
     let mut last = LAST_FOCUS_LOG.lock().unwrap();
     let now = Instant::now();
-    
+
     match *last {
         Some((last_state, last_time)) => {
             // Skip if same state within dedup window
@@ -67,9 +67,12 @@ fn should_log_focus_change(is_focused: bool) -> bool {
 These logs are already event-based and remain unchanged:
 
 - `log::info!` for startup/shutdown events
-- `log::info!` for detection summary
+- `log::info!` for state change events (process detected/terminated)
 - `log::warn!` for detection failures
 - `log::error!` for all errors
+
+Note: The per-poll detection summary was moved to TRACE level since it runs
+every 1000ms. State change events are logged by the callers at INFO level.
 
 ## Testing
 
