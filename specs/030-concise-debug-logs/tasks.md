@@ -73,10 +73,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T011 [US2] Verify search criteria appears in TRACE output by testing with `log_level = "TRACE"` in `settings.toml`
-- [ ] T012 [US2] Verify per-candidate details appear in TRACE output (process, class, title, match result)
-- [ ] T013 [US2] Verify detection failure WARN is logged with search criteria at DEBUG level in `find_target_window_verified()` at line ~243-248 in `src-tauri/src/target_window.rs`
-- [ ] T014 [US2] Restore settings.toml to DEBUG level after verification
+- [X] T011 [US2] Verify search criteria appears in TRACE output by testing with `log_level = "TRACE"` in `settings.toml`
+- [X] T012 [US2] Verify per-candidate details appear in TRACE output (process, class, title, match result)
+- [X] T013 [US2] Verify detection failure WARN is logged with search criteria at DEBUG level in `find_target_window_verified()` at line ~243-248 in `src-tauri/src/target_window.rs`
+- [X] T014 [US2] Restore settings.toml to DEBUG level after verification
 
 **Checkpoint**: User Story 2 complete - TRACE level provides verbose debugging capability
 
@@ -90,11 +90,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T015 [US3] Review startup logging in `src-tauri/src/lib.rs` to confirm event-based (not per-poll)
-- [ ] T016 [US3] Review settings logging in `src-tauri/src/settings.rs` to confirm one-time init logging
-- [ ] T017 [US3] Verify process monitor logs "Starting process monitor" exactly once in `src-tauri/src/process_monitor.rs` at line ~130-133
-- [ ] T018 [US3] Verify focus monitor initialization is logged appropriately (add if missing) in `src-tauri/src/focus_monitor.rs`
-- [ ] T018.5 [US3] Verify graceful shutdown events are logged even during polling cycle (edge case from spec.md L61)
+- [X] T015 [US3] Review startup logging in `src-tauri/src/lib.rs` to confirm event-based (not per-poll)
+- [X] T016 [US3] Review settings logging in `src-tauri/src/settings.rs` to confirm one-time init logging
+- [X] T017 [US3] Verify process monitor logs "Starting process monitor" exactly once in `src-tauri/src/process_monitor.rs` at line ~130-133
+- [X] T018 [US3] Verify focus monitor initialization is logged appropriately (add if missing) in `src-tauri/src/focus_monitor.rs`
+- [X] T018.5 [US3] Verify graceful shutdown events are logged even during polling cycle (edge case from spec.md L61)
 - [ ] T019 [US3] Manual test: Start app, verify startup messages are visible and not buried in polling noise
 
 **Checkpoint**: User Story 3 complete - startup logging is clear and distinct
