@@ -322,23 +322,11 @@ export default function Home() {
   // Scanlines toggle state - feature 026-sc-hud-theme
   const [scanlinesEnabled, setScanlinesEnabled] = useState(false);
 
-  // Capture F3/F5 hotkeys when webview is focused in interactive mode
+  // Always capture F3/F5 hotkeys to prevent webview refresh
+  // Even in click-through mode, if webview retains focus, we must block F5 refresh
+  // The backend handles mode/visibility logic appropriately
   // @feature 031-webview-hotkey-capture
-  useHotkeyCapture(state.mode === 'windowed');
-
-  // Blur webview when switching to non-interactive mode
-  // This ensures focus returns to the game and prevents accidental F5 refresh
-  // @feature 031-webview-hotkey-capture
-  useEffect(() => {
-    if (state.mode === 'fullscreen') {
-      // Blur any focused element in the webview
-      const activeElement = document.activeElement as HTMLElement | null;
-      if (activeElement && activeElement !== document.body) {
-        activeElement.blur();
-        info('Webview blurred on mode change to click-through (webview capture)');
-      }
-    }
-  }, [state.mode]);
+  useHotkeyCapture(true);
 
   // Log hydration warnings/resets
   useEffect(() => {
