@@ -47,6 +47,10 @@ export function DrawContent({
     ? "transparent"
     : (initialAppState?.viewBackgroundColor ?? "#1e1e1e");
 
+  // Store effective color in ref for use in API callback
+  const effectiveColorRef = useRef(effectiveViewBackgroundColor);
+  effectiveColorRef.current = effectiveViewBackgroundColor;
+
   // Update Excalidraw background when transparency/mode changes (033-excalidraw-view-polish)
   // initialData only applies on mount, so we need to use the API for dynamic updates
   useEffect(() => {
@@ -59,6 +63,18 @@ export function DrawContent({
     }
   }, [effectiveViewBackgroundColor]);
 
+  // Callback when Excalidraw API becomes available
+  const handleExcalidrawAPI = useCallback((api: ExcalidrawImperativeAPI) => {
+    excalidrawAPIRef.current = api;
+    // Apply the correct background color immediately when API is ready (033-excalidraw-view-polish)
+    // This fixes the white background flash on new windows
+    api.updateScene({
+      appState: {
+        viewBackgroundColor: effectiveColorRef.current,
+      },
+    });
+  }, []);
+
   const handleChange = useCallback((elements: readonly ExcalidrawElement[], appState: AppState) => {
     if (onContentChangeRef.current) {
       onContentChangeRef.current(elements, appState);
@@ -68,7 +84,7 @@ export function DrawContent({
   return (
     <div className="h-full w-full">
       <Excalidraw
-        excalidrawAPI={(api) => { excalidrawAPIRef.current = api; }}
+        excalidrawAPI={handleExcalidrawAPI}
         theme="dark"
         viewModeEnabled={!isInteractive}
         initialData={{
