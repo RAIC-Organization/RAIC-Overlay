@@ -1,3 +1,4 @@
+import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { DrawContent } from "../../src/components/windows/DrawContent";
@@ -11,15 +12,34 @@ vi.mock("next/dynamic", () => ({
         viewModeEnabled,
         theme,
         initialData,
+        excalidrawAPI,
       }: {
         viewModeEnabled?: boolean;
         theme?: string;
         UIOptions?: Record<string, unknown>;
         initialData?: { appState?: { viewBackgroundColor?: string } };
+        excalidrawAPI?: (api: { updateScene: (data: { appState?: { viewBackgroundColor?: string } }) => void }) => void;
       }) => {
+        // Track background color - starts from initialData, can be updated via API
+        const [bgColor, setBgColor] = React.useState(
+          initialData?.appState?.viewBackgroundColor ?? '#1e1e1e'
+        );
+
+        // Simulate excalidrawAPI callback with updateScene
+        React.useEffect(() => {
+          if (excalidrawAPI) {
+            excalidrawAPI({
+              updateScene: (data: { appState?: { viewBackgroundColor?: string } }) => {
+                if (data.appState?.viewBackgroundColor) {
+                  setBgColor(data.appState.viewBackgroundColor);
+                }
+              },
+            });
+          }
+        }, [excalidrawAPI]);
+
         // Simulate Excalidraw's class behavior: adds excalidraw--view-mode when viewModeEnabled
         const className = `excalidraw${viewModeEnabled ? ' excalidraw--view-mode' : ''}`;
-        const bgColor = initialData?.appState?.viewBackgroundColor ?? '#1e1e1e';
         return (
           <div
             data-testid="excalidraw-mock"
@@ -140,10 +160,13 @@ describe("DrawContent view mode (033-excalidraw-view-polish)", () => {
 
 // Feature: 033-excalidraw-view-polish - Transparent background
 describe("DrawContent background transparency (033-excalidraw-view-polish)", () => {
-  it("should use transparent background when backgroundTransparent=true and isInteractive=false", () => {
+  it("should use transparent background when backgroundTransparent=true and isInteractive=false", async () => {
     render(<DrawContent isInteractive={false} backgroundTransparent={true} />);
-    const excalidraw = screen.getByTestId("excalidraw-mock");
-    expect(excalidraw).toHaveAttribute("data-bgcolor", "transparent");
+    // Wait for the API callback and useEffect to run
+    await waitFor(() => {
+      const excalidraw = screen.getByTestId("excalidraw-mock");
+      expect(excalidraw).toHaveAttribute("data-bgcolor", "transparent");
+    });
   });
 
   it("should use default background when isInteractive=true regardless of backgroundTransparent", () => {
