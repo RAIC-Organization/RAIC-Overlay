@@ -37,9 +37,9 @@
 
 ### Implementation for User Stories 1 & 2 (Combined - Same CSS File)
 
-- [ ] T003 [US1] Add heading styles (.tiptap h1, .tiptap h2, .tiptap h3) with distinct font sizes in src/styles/tiptap.css
-- [ ] T004 [US2] Add bullet list styles (.tiptap ul, .tiptap li) with disc markers and indentation in src/styles/tiptap.css
-- [ ] T005 [US1] Add first-child margin resets for headings in src/styles/tiptap.css
+- [x] T003 [US1] Add heading styles (.tiptap h1, .tiptap h2, .tiptap h3) with distinct font sizes in src/styles/tiptap.css
+- [x] T004 [US2] Add bullet list styles (.tiptap ul, .tiptap li) with disc markers and indentation in src/styles/tiptap.css
+- [x] T005 [US1] Add first-child margin resets for headings in src/styles/tiptap.css
 
 **Checkpoint**: After T005, headings and bullet lists should be visually functional
 
