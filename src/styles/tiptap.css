@@ -82,3 +82,24 @@
 .tiptap li p {
   margin: 0;
 }
+
+/* Ordered lists */
+.tiptap ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.tiptap ol ol {
+  list-style-type: lower-alpha;
+}
+
+.tiptap ol ol ol {
+  list-style-type: lower-roman;
+}
+
+/* Nested list spacing */
+.tiptap li > ul,
+.tiptap li > ol {
+  margin: 0.25rem 0;
+}

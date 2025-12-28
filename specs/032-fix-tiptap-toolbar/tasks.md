@@ -53,8 +53,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T006 [US3] Add ordered list styles (.tiptap ol) with decimal markers and indentation in src/styles/tiptap.css
-- [ ] T007 [US3] Add nested list styles for multi-level lists in src/styles/tiptap.css
+- [x] T006 [US3] Add ordered list styles (.tiptap ol) with decimal markers and indentation in src/styles/tiptap.css
+- [x] T007 [US3] Add nested list styles for multi-level lists in src/styles/tiptap.css
 
 **Checkpoint**: After T007, all list types should be visually functional
 
