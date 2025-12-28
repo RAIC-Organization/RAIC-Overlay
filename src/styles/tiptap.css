@@ -1,0 +1,28 @@
+/*
+ * TipTap Editor Styles
+ * Feature: 032-fix-tiptap-toolbar
+ * Provides visual styling for headings and lists in the Notes window
+ */
+
+/* Base editor styling */
+.tiptap {
+  outline: none;
+  min-height: 100%;
+}
+
+.tiptap:focus {
+  outline: none;
+}
+
+/* Paragraph spacing */
+.tiptap p {
+  margin: 0.5rem 0;
+}
+
+.tiptap p:first-child {
+  margin-top: 0;
+}
+
+.tiptap p:last-child {
+  margin-bottom: 0;
+}
