@@ -78,9 +78,9 @@
 
 **Purpose**: Remove unused code and verify full functionality
 
-- [ ] T009 [P] Remove unused `prose` classes from EditorContent in src/components/windows/NotesContent.tsx (line 58)
-- [ ] T010 Run quickstart.md validation - verify all acceptance scenarios pass
-- [ ] T011 Test persistence - close and reopen Notes window, verify formatted content is restored
+- [x] T009 [P] Remove unused `prose` classes from EditorContent in src/components/windows/NotesContent.tsx (line 58)
+- [x] T010 Run quickstart.md validation - verify all acceptance scenarios pass
+- [x] T011 Test persistence - close and reopen Notes window, verify formatted content is restored
 
 ---
 
