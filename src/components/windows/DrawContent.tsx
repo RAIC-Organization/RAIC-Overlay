@@ -66,13 +66,16 @@ export function DrawContent({
   // Callback when Excalidraw API becomes available
   const handleExcalidrawAPI = useCallback((api: ExcalidrawImperativeAPI) => {
     excalidrawAPIRef.current = api;
-    // Apply the correct background color immediately when API is ready (033-excalidraw-view-polish)
+    // Apply the correct background color after component is fully mounted (033-excalidraw-view-polish)
+    // Using setTimeout to avoid "setState on unmounted component" error
     // This fixes the white background flash on new windows
-    api.updateScene({
-      appState: {
-        viewBackgroundColor: effectiveColorRef.current,
-      },
-    });
+    setTimeout(() => {
+      api.updateScene({
+        appState: {
+          viewBackgroundColor: effectiveColorRef.current,
+        },
+      });
+    }, 0);
   }, []);
 
   const handleChange = useCallback((elements: readonly ExcalidrawElement[], appState: AppState) => {
