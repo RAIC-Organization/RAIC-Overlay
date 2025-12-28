@@ -57,6 +57,8 @@ export function useHotkeyCapture(enabled: boolean): void {
     /**
      * Handles keydown events for F3/F5 hotkeys.
      * Prevents default behavior, applies debouncing, and invokes backend commands.
+     *
+     * Uses capture phase to intercept events BEFORE the webview's native handlers.
      */
     function handleKeyDown(e: KeyboardEvent): void {
       const now = Date.now();
@@ -64,8 +66,9 @@ export function useHotkeyCapture(enabled: boolean): void {
       // Handle F3: Toggle visibility
       if (e.key === KEY_F3) {
         // Always prevent default to block browser find dialog
+        // Use stopImmediatePropagation to prevent ALL other handlers
         e.preventDefault();
-        e.stopPropagation();
+        e.stopImmediatePropagation();
 
         const elapsed = now - lastF3PressRef.current;
         if (elapsed >= DEBOUNCE_MS) {
@@ -84,8 +87,9 @@ export function useHotkeyCapture(enabled: boolean): void {
       // Handle F5: Toggle mode
       if (e.key === KEY_F5) {
         // Always prevent default to block browser page refresh
+        // Use stopImmediatePropagation to prevent ALL other handlers
         e.preventDefault();
-        e.stopPropagation();
+        e.stopImmediatePropagation();
 
         const elapsed = now - lastF5PressRef.current;
         if (elapsed >= DEBOUNCE_MS) {
@@ -102,12 +106,13 @@ export function useHotkeyCapture(enabled: boolean): void {
       }
     }
 
-    // Add event listener at document level for global capture
-    document.addEventListener('keydown', handleKeyDown);
+    // Add event listener at document level with capture phase
+    // Capture phase runs BEFORE bubble phase, intercepting events before webview handlers
+    document.addEventListener('keydown', handleKeyDown, { capture: true });
 
-    // Cleanup on unmount or when disabled
+    // Cleanup on unmount or when disabled (must match capture option)
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown, { capture: true });
     };
   }, [enabled]);
 }
