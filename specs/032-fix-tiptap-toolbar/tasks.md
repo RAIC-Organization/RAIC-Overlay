@@ -68,7 +68,7 @@
 
 ### Verification for User Story 4
 
-- [ ] T008 [US4] **VERIFY** toolbar active states work correctly - place cursor in heading/list and confirm button highlights (existing data-active attribute implementation)
+- [x] T008 [US4] **VERIFY** toolbar active states work correctly - place cursor in heading/list and confirm button highlights (existing data-active attribute implementation)
 
 **Note**: This story verifies existing functionality. The toolbar already has `data-active={editor.isActive(...)}` attributes - CSS styling fix should make the active state visible. If not working, investigate NotesToolbar.tsx.
 
