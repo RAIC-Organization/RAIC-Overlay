@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import type { ExcalidrawImperativeAPI, AppState } from "@excalidraw/excalidraw/types";
 import "@excalidraw/excalidraw/index.css";
@@ -46,6 +46,18 @@ export function DrawContent({
   const effectiveViewBackgroundColor = (backgroundTransparent && !isInteractive)
     ? "transparent"
     : (initialAppState?.viewBackgroundColor ?? "#1e1e1e");
+
+  // Update Excalidraw background when transparency/mode changes (033-excalidraw-view-polish)
+  // initialData only applies on mount, so we need to use the API for dynamic updates
+  useEffect(() => {
+    if (excalidrawAPIRef.current) {
+      excalidrawAPIRef.current.updateScene({
+        appState: {
+          viewBackgroundColor: effectiveViewBackgroundColor,
+        },
+      });
+    }
+  }, [effectiveViewBackgroundColor]);
 
   const handleChange = useCallback((elements: readonly ExcalidrawElement[], appState: AppState) => {
     if (onContentChangeRef.current) {
