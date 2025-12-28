@@ -153,8 +153,8 @@ describe('DrawContent background transparency', () => {
 
 **Purpose**: Final validation and documentation
 
-- [ ] T006 Run manual verification per quickstart.md verification steps
-- [ ] T007 [P] Add feature tag comment to modified files referencing `@feature 033-excalidraw-view-polish`
+- [x] T006 Run manual verification per quickstart.md verification steps
+- [x] T007 [P] Add feature tag comment to modified files referencing `@feature 033-excalidraw-view-polish`
 
 **Verification Steps (T006)**:
 1. UI Controls Hidden:
