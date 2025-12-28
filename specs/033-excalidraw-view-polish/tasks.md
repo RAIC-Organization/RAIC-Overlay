@@ -97,9 +97,9 @@ describe('DrawContent view mode', () => {
 
 ### Implementation for User Story 2
 
-- [ ] T003 [US2] Add `backgroundTransparent` prop to DrawContentProps interface in `src/components/windows/DrawContent.tsx`
-- [ ] T004 [US2] Compute effective `viewBackgroundColor` based on props in `src/components/windows/DrawContent.tsx`
-- [ ] T005 [US2] Apply computed background color to Excalidraw initialData.appState in `src/components/windows/DrawContent.tsx`
+- [x] T003 [US2] Add `backgroundTransparent` prop to DrawContentProps interface in `src/components/windows/DrawContent.tsx`
+- [x] T004 [US2] Compute effective `viewBackgroundColor` based on props in `src/components/windows/DrawContent.tsx`
+- [x] T005 [US2] Apply computed background color to Excalidraw initialData.appState in `src/components/windows/DrawContent.tsx`
 
 **Implementation Details (T003)**:
 Add to `DrawContentProps` interface:
@@ -129,7 +129,7 @@ initialData={{
 }}
 ```
 
-- [ ] T009 [US2] Add integration tests for transparent background in `tests/react/DrawContent.test.tsx`
+- [x] T009 [US2] Add integration tests for transparent background in `tests/react/DrawContent.test.tsx`
 
 **Implementation Details (T009)**:
 Add test cases verifying background color logic:

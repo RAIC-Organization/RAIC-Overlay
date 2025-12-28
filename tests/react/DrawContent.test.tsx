@@ -137,3 +137,42 @@ describe("DrawContent view mode (033-excalidraw-view-polish)", () => {
     expect(excalidraw).not.toHaveClass("excalidraw--view-mode");
   });
 });
+
+// Feature: 033-excalidraw-view-polish - Transparent background
+describe("DrawContent background transparency (033-excalidraw-view-polish)", () => {
+  it("should use transparent background when backgroundTransparent=true and isInteractive=false", () => {
+    render(<DrawContent isInteractive={false} backgroundTransparent={true} />);
+    const excalidraw = screen.getByTestId("excalidraw-mock");
+    expect(excalidraw).toHaveAttribute("data-bgcolor", "transparent");
+  });
+
+  it("should use default background when isInteractive=true regardless of backgroundTransparent", () => {
+    render(<DrawContent isInteractive={true} backgroundTransparent={true} />);
+    const excalidraw = screen.getByTestId("excalidraw-mock");
+    // Interactive mode ignores backgroundTransparent, uses default
+    expect(excalidraw).toHaveAttribute("data-bgcolor", "#1e1e1e");
+  });
+
+  it("should use default background when backgroundTransparent=false", () => {
+    render(<DrawContent isInteractive={false} backgroundTransparent={false} />);
+    const excalidraw = screen.getByTestId("excalidraw-mock");
+    expect(excalidraw).toHaveAttribute("data-bgcolor", "#1e1e1e");
+  });
+
+  it("should use default background when backgroundTransparent is undefined", () => {
+    render(<DrawContent isInteractive={false} />);
+    const excalidraw = screen.getByTestId("excalidraw-mock");
+    expect(excalidraw).toHaveAttribute("data-bgcolor", "#1e1e1e");
+  });
+
+  it("should preserve custom viewBackgroundColor from initialAppState when not transparent", () => {
+    render(
+      <DrawContent
+        isInteractive={true}
+        initialAppState={{ viewBackgroundColor: "#ff0000" }}
+      />
+    );
+    const excalidraw = screen.getByTestId("excalidraw-mock");
+    expect(excalidraw).toHaveAttribute("data-bgcolor", "#ff0000");
+  });
+});

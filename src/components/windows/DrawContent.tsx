@@ -17,6 +17,8 @@ export interface DrawContentProps {
   initialAppState?: Partial<AppState>;
   /** Callback when content changes (for persistence) */
   onContentChange?: (elements: readonly ExcalidrawElement[], appState: AppState) => void;
+  /** Whether window background should be transparent (only applies in non-interactive mode) @feature 033-excalidraw-view-polish */
+  backgroundTransparent?: boolean;
 }
 
 // Dynamic import Excalidraw with SSR disabled (requires browser APIs)
@@ -33,10 +35,17 @@ export function DrawContent({
   initialElements,
   initialAppState,
   onContentChange,
+  backgroundTransparent,
 }: DrawContentProps) {
   const excalidrawAPIRef = useRef<ExcalidrawImperativeAPI | null>(null);
   const onContentChangeRef = useRef(onContentChange);
   onContentChangeRef.current = onContentChange;
+
+  // Compute effective background color for Excalidraw (033-excalidraw-view-polish)
+  // Transparent only applies in non-interactive (view) mode
+  const effectiveViewBackgroundColor = (backgroundTransparent && !isInteractive)
+    ? "transparent"
+    : (initialAppState?.viewBackgroundColor ?? "#1e1e1e");
 
   const handleChange = useCallback((elements: readonly ExcalidrawElement[], appState: AppState) => {
     if (onContentChangeRef.current) {
@@ -52,7 +61,10 @@ export function DrawContent({
         viewModeEnabled={!isInteractive}
         initialData={{
           elements: initialElements,
-          appState: initialAppState,
+          appState: {
+            ...initialAppState,
+            viewBackgroundColor: effectiveViewBackgroundColor,
+          },
         }}
         onChange={handleChange}
         UIOptions={{
