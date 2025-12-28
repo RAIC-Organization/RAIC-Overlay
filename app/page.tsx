@@ -14,6 +14,7 @@
  * @feature 018-window-background-toggle
  * @feature 026-sc-hud-theme
  * @feature 027-widget-container
+ * @feature 031-webview-hotkey-capture
  */
 
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -30,6 +31,7 @@ import { WindowsContainer } from "@/components/windows/WindowsContainer";
 import { WidgetsProvider } from "@/contexts/WidgetsContext";
 import { WidgetsContainer } from "@/components/widgets/WidgetsContainer";
 import { useHydration } from "@/hooks/useHydration";
+import { useHotkeyCapture } from "@/hooks/useHotkeyCapture";
 import { useWindows } from "@/contexts/WindowsContext";
 import { NotesContent } from "@/components/windows/NotesContent";
 import { DrawContent } from "@/components/windows/DrawContent";
@@ -319,6 +321,10 @@ export default function Home() {
   });
   // Scanlines toggle state - feature 026-sc-hud-theme
   const [scanlinesEnabled, setScanlinesEnabled] = useState(false);
+
+  // Capture F3/F5 hotkeys when webview is focused in interactive mode
+  // @feature 031-webview-hotkey-capture
+  useHotkeyCapture(state.mode === 'windowed');
 
   // Log hydration warnings/resets
   useEffect(() => {
