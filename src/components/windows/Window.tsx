@@ -18,6 +18,7 @@
  * @feature 013-window-opacity-control
  * @feature 018-window-background-toggle
  * @feature 026-sc-hud-theme
+ * @feature 033-excalidraw-view-polish
  */
 
 import { useRef, useCallback, useState } from "react";
@@ -280,7 +281,7 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
           className={`overflow-auto pointer-events-auto ${contentBackgroundClass}`}
           style={{ height: contentHeight }}
         >
-          <Component {...(componentProps ?? {})} isInteractive={isInteractive} />
+          <Component {...(componentProps ?? {})} isInteractive={isInteractive} backgroundTransparent={backgroundTransparent} />
         </div>
       </div>
     </motion.div>

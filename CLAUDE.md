@@ -1,4 +1,4 @@
-﻿# RAICOverlay Development Guidelines
+# RAICOverlay Development Guidelines
 
 Auto-generated from all feature plans. Last updated: 2025-12-22
 
@@ -56,6 +56,7 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - N/A (stateless key event handling) (031-webview-hotkey-capture)
 - TypeScript 5.7.2 (React 19.0.0 frontend) + TipTap 3.13.0 (@tiptap/react, @tiptap/starter-kit), Tailwind CSS 4.x, Next.js 16.x (032-fix-tiptap-toolbar)
 - N/A (uses existing persistence system) (032-fix-tiptap-toolbar)
+- TypeScript 5.7.2, React 19.0.0 + @excalidraw/excalidraw 0.18.0, Next.js 16.x, Tailwind CSS 4.x (033-excalidraw-view-polish)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -80,9 +81,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 033-excalidraw-view-polish: Added TypeScript 5.7.2, React 19.0.0 + @excalidraw/excalidraw 0.18.0, Next.js 16.x, Tailwind CSS 4.x
 - 032-fix-tiptap-toolbar: Added TypeScript 5.7.2 (React 19.0.0 frontend) + TipTap 3.13.0 (@tiptap/react, @tiptap/starter-kit), Tailwind CSS 4.x, Next.js 16.x
 - 031-webview-hotkey-capture: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, @tauri-apps/api 2.0.0, Tauri 2.x
-- 030-concise-debug-logs: Added Rust 2021 Edition (Tauri backend) + `log` 0.4, `tauri-plugin-log` 2.x (existing infrastructure)
 
 
 <!-- MANUAL ADDITIONS START -->
