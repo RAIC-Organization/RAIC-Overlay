@@ -55,7 +55,7 @@ export function NotesContent({
       {isInteractive && <NotesToolbar editor={editor} />}
       <EditorContent
         editor={editor}
-        className="flex-1 overflow-auto p-2 prose prose-sm max-w-none dark:prose-invert"
+        className="flex-1 overflow-auto p-2"
       />
     </div>
   );

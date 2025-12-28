@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../src/styles/sc-theme.css";
+@import "../src/styles/tiptap.css";
 
 /*
  * Star Citizen HUD Theme CSS Variables
