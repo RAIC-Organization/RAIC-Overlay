@@ -10,16 +10,29 @@ vi.mock("next/dynamic", () => ({
       const MockExcalidraw = ({
         viewModeEnabled,
         theme,
+        initialData,
       }: {
         viewModeEnabled?: boolean;
         theme?: string;
         UIOptions?: Record<string, unknown>;
-      }) => (
-        <div data-testid="excalidraw-mock" data-viewmode={viewModeEnabled} data-theme={theme}>
-          {!viewModeEnabled && <div data-testid="excalidraw-toolbar">Toolbar</div>}
-          <div data-testid="excalidraw-canvas">Canvas</div>
-        </div>
-      );
+        initialData?: { appState?: { viewBackgroundColor?: string } };
+      }) => {
+        // Simulate Excalidraw's class behavior: adds excalidraw--view-mode when viewModeEnabled
+        const className = `excalidraw${viewModeEnabled ? ' excalidraw--view-mode' : ''}`;
+        const bgColor = initialData?.appState?.viewBackgroundColor ?? '#1e1e1e';
+        return (
+          <div
+            data-testid="excalidraw-mock"
+            data-viewmode={viewModeEnabled}
+            data-theme={theme}
+            data-bgcolor={bgColor}
+            className={className}
+          >
+            {!viewModeEnabled && <div data-testid="excalidraw-toolbar">Toolbar</div>}
+            <div data-testid="excalidraw-canvas">Canvas</div>
+          </div>
+        );
+      };
       return <MockExcalidraw {...props} />;
     };
     return Component;
@@ -107,5 +120,20 @@ describe("DrawContent ephemeral state", () => {
 
     // Each container should have its own wrapper
     expect(container1.firstChild).not.toBe(container2.firstChild);
+  });
+});
+
+// Feature: 033-excalidraw-view-polish
+describe("DrawContent view mode (033-excalidraw-view-polish)", () => {
+  it("should have excalidraw--view-mode class when isInteractive is false", () => {
+    render(<DrawContent isInteractive={false} />);
+    const excalidraw = screen.getByTestId("excalidraw-mock");
+    expect(excalidraw).toHaveClass("excalidraw--view-mode");
+  });
+
+  it("should not have excalidraw--view-mode class when isInteractive is true", () => {
+    render(<DrawContent isInteractive={true} />);
+    const excalidraw = screen.getByTestId("excalidraw-mock");
+    expect(excalidraw).not.toHaveClass("excalidraw--view-mode");
   });
 });

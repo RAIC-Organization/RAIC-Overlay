@@ -52,7 +52,7 @@
 
 ### Implementation for User Story 1
 
-- [ ] T002 [P] [US1] Add CSS rules to hide Excalidraw UI controls in view mode in `app/globals.css`
+- [x] T002 [P] [US1] Add CSS rules to hide Excalidraw UI controls in view mode in `app/globals.css`
 
 **Implementation Details (T002)**:
 Add after existing window styles (around line 185):
@@ -65,7 +65,7 @@ Add after existing window styles (around line 185):
 }
 ```
 
-- [ ] T008 [US1] Add integration test for UI controls hiding in `tests/react/DrawContent.test.tsx`
+- [x] T008 [US1] Add integration test for UI controls hiding in `tests/react/DrawContent.test.tsx`
 
 **Implementation Details (T008)**:
 Add test case verifying `.excalidraw--view-mode` class behavior:
