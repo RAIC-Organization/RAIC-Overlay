@@ -1,0 +1,44 @@
+/**
+ * Excalidraw View Mode CSS Contract
+ * Feature: 033-excalidraw-view-polish
+ *
+ * This contract defines the CSS rules that hide Excalidraw UI controls
+ * when in view mode (non-interactive).
+ *
+ * Target selectors (verified in @excalidraw/excalidraw 0.18.0):
+ * - .excalidraw--view-mode: Class applied by Excalidraw when viewModeEnabled={true}
+ * - .App-menu: Main menu container (hamburger button, top-left)
+ * - .zoom-actions: Zoom controls container (-, %, +, bottom-left)
+ * - .help-icon: Help button (?, bottom-right)
+ */
+
+/* Hide UI controls in Excalidraw view mode */
+.excalidraw.excalidraw--view-mode .App-menu,
+.excalidraw.excalidraw--view-mode .zoom-actions,
+.excalidraw.excalidraw--view-mode .help-icon {
+  display: none !important;
+}
+
+/**
+ * Selector breakdown:
+ *
+ * .excalidraw.excalidraw--view-mode
+ *   The Excalidraw container element with view mode enabled.
+ *   Both classes must be present (no space = same element).
+ *
+ * .App-menu
+ *   Contains the hamburger menu button in the top-left corner.
+ *   Source: @excalidraw/excalidraw/dist/dev/index.css:5847
+ *
+ * .zoom-actions
+ *   Contains zoom out (-), zoom percentage, zoom in (+) buttons.
+ *   Source: @excalidraw/excalidraw/dist/dev/index.css:2754
+ *
+ * .help-icon
+ *   The help button (?) in the bottom-right corner.
+ *   Source: @excalidraw/excalidraw/dist/dev/index.css:5977
+ *
+ * !important:
+ *   Required to override Excalidraw's default styles which use display: flex
+ *   for these elements.
+ */
