@@ -3,14 +3,14 @@
 /**
  * ClockWidgetContent Component
  *
- * Displays system time in 24-hour format (HH:mm:ss) with Orbitron font,
- * white text and blue text-stroke for contrast. Auto-scales text based
- * on container size using ResizeObserver.
+ * Displays system time in 24-hour format (HH:mm:ss) with Orbitron font
+ * and Apple-inspired liquid glass text effect with blue tint.
+ * Auto-scales text based on container size using ResizeObserver.
  *
  * This is the widget version (no window chrome) replacing the window-based
  * ClockContent component.
  *
- * @feature 027-widget-container
+ * @feature 036-liquid-glass-clock
  */
 
 import { useState, useEffect, useRef } from 'react';
@@ -71,16 +71,10 @@ export function ClockWidgetContent({
       ref={containerRef}
       className="w-full h-full flex items-center justify-center pointer-events-none"
     >
-      {/* Styled text with Orbitron font, white color, blue stroke, and dynamic fontSize */}
+      {/* Styled text with Orbitron font, liquid glass effect, and dynamic fontSize */}
       <span
-        className="pointer-events-auto cursor-move select-none font-orbitron"
+        className="pointer-events-auto cursor-move select-none font-orbitron liquid-glass-text"
         style={{
-          // White text color
-          color: 'white',
-          // Blue border with -webkit-text-stroke and paint-order
-          WebkitTextStroke: '2px #3b82f6',
-          paintOrder: 'stroke fill',
-          // Dynamic font size from ResizeObserver
           fontSize: `${fontSize}px`,
         }}
       >

@@ -1,4 +1,4 @@
-﻿# RAICOverlay Development Guidelines
+# RAICOverlay Development Guidelines
 
 Auto-generated from all feature plans. Last updated: 2025-12-22
 
@@ -61,6 +61,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - JSON files in Tauri app data directory (state.json + window-{id}.json) (034-fix-browser-persist)
 - TypeScript 5.7.2, React 19.0.0 + Next.js 16.x, Tailwind CSS 4.x, pdfjs-dist 5.4, react-markdown 10.1, react-zoom-pan-pinch 3.7 (035-fix-file-viewer-transparency)
 - N/A (uses existing persistence system - no changes required) (035-fix-file-viewer-transparency)
+- TypeScript 5.7.2, React 19.0.0 + Next.js 16.x, Tailwind CSS 4.x, motion 12.x (existing) (036-liquid-glass-clock)
+- N/A (UI styling only - no persistence changes) (036-liquid-glass-clock)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -85,9 +87,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 036-liquid-glass-clock: Added TypeScript 5.7.2, React 19.0.0 + Next.js 16.x, Tailwind CSS 4.x, motion 12.x (existing)
 - 035-fix-file-viewer-transparency: Added TypeScript 5.7.2, React 19.0.0 + Next.js 16.x, Tailwind CSS 4.x, pdfjs-dist 5.4, react-markdown 10.1, react-zoom-pan-pinch 3.7
 - 034-fix-browser-persist: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, Tauri 2.x, @tauri-apps/api 2.0.0
-- 033-excalidraw-view-polish: Added TypeScript 5.7.2, React 19.0.0 + @excalidraw/excalidraw 0.18.0, Next.js 16.x, Tailwind CSS 4.x
 
 
 <!-- MANUAL ADDITIONS START -->

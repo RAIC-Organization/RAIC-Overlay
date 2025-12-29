@@ -189,3 +189,32 @@ body {
 .excalidraw.excalidraw--view-mode .help-icon {
   display: none !important;
 }
+
+/* Liquid Glass Text Effect - Feature 036-liquid-glass-clock */
+.liquid-glass-text {
+  /* Semi-transparent blue-tinted background */
+  background: rgba(59, 130, 246, 0.08);
+
+  /* Frosted glass blur effect */
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+
+  /* Subtle glass border */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.5rem;
+
+  /* Luminous glow */
+  box-shadow:
+    0 0 20px rgba(59, 130, 246, 0.25),
+    inset 0 0 15px rgba(255, 255, 255, 0.05);
+
+  /* High-contrast white text with blue glow */
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow:
+    0 0 8px rgba(59, 130, 246, 0.6),
+    0 0 16px rgba(59, 130, 246, 0.4),
+    0 0 32px rgba(59, 130, 246, 0.2);
+
+  /* Padding for glass container */
+  padding: 0.5rem 1rem;
+}
