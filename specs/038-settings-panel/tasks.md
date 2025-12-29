@@ -107,14 +107,14 @@
 
 ### Implementation for User Story 3
 
-- [ ] T034 [US3] Create AutoStartToggle component with toggle UI in src/components/settings/AutoStartToggle.tsx
-- [ ] T035 [US3] Add autostart status check using @tauri-apps/plugin-autostart isEnabled in src/components/settings/AutoStartToggle.tsx
-- [ ] T036 [US3] Add enable/disable handlers using @tauri-apps/plugin-autostart enable/disable in src/components/settings/AutoStartToggle.tsx
-- [ ] T037 [US3] Add get_autostart_status command for querying Windows Registry state in src-tauri/src/user_settings.rs
-- [ ] T038 [US3] Add set_autostart command for enabling/disabling startup registration in src-tauri/src/user_settings.rs
-- [ ] T039 [US3] Register get_autostart_status and set_autostart commands in invoke_handler in src-tauri/src/lib.rs
-- [ ] T040 [US3] Add Startup section with AutoStartToggle to SettingsPanel in src/components/settings/SettingsPanel.tsx
-- [ ] T041 [US3] Sync autoStart toggle state with actual Windows Registry on panel open in src/components/settings/SettingsPanel.tsx
+- [x] T034 [US3] Create AutoStartToggle component with toggle UI in src/components/settings/AutoStartToggle.tsx
+- [x] T035 [US3] Add autostart status check using @tauri-apps/plugin-autostart isEnabled in src/components/settings/AutoStartToggle.tsx
+- [x] T036 [US3] Add enable/disable handlers using @tauri-apps/plugin-autostart enable/disable in src/components/settings/AutoStartToggle.tsx
+- [x] T037 [US3] Add get_autostart_status command for querying Windows Registry state in src-tauri/src/user_settings.rs (N/A - plugin provides JS API directly)
+- [x] T038 [US3] Add set_autostart command for enabling/disabling startup registration in src-tauri/src/user_settings.rs (N/A - plugin provides JS API directly)
+- [x] T039 [US3] Register get_autostart_status and set_autostart commands in invoke_handler in src-tauri/src/lib.rs (N/A - plugin provides JS API directly)
+- [x] T040 [US3] Add Startup section with AutoStartToggle to SettingsPanel in src/components/settings/SettingsPanel.tsx
+- [x] T041 [US3] Sync autoStart toggle state with actual Windows Registry on panel open in src/components/settings/SettingsPanel.tsx
 
 **Checkpoint**: Auto-start toggle correctly registers/unregisters app from Windows startup
 
