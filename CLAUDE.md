@@ -1,4 +1,4 @@
-# RAICOverlay Development Guidelines
+﻿# RAICOverlay Development Guidelines
 
 Auto-generated from all feature plans. Last updated: 2025-12-22
 
@@ -65,6 +65,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - N/A (UI styling only - no persistence changes) (036-liquid-glass-clock)
 - TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, motion 12.x (motion/react), shadcn/ui, Tailwind CSS 4.x, lucide-react (X icon) (037-process-popup-glass)
 - N/A (uses existing state persistence system - no changes required) (037-process-popup-glass)
+- TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend) + Tauri 2.x, React 19.0.0, Next.js 16.x, motion 12.x, shadcn/ui, Tailwind CSS 4.x, tauri-plugin-autostart 2.x, @tauri-apps/plugin-autostart (038-settings-panel)
+- JSON files in Tauri app data directory (`user-settings.json`) (038-settings-panel)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -89,9 +91,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 038-settings-panel: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend) + Tauri 2.x, React 19.0.0, Next.js 16.x, motion 12.x, shadcn/ui, Tailwind CSS 4.x, tauri-plugin-autostart 2.x, @tauri-apps/plugin-autostart
 - 037-process-popup-glass: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, motion 12.x (motion/react), shadcn/ui, Tailwind CSS 4.x, lucide-react (X icon)
 - 036-liquid-glass-clock: Added TypeScript 5.7.2, React 19.0.0 + Next.js 16.x, Tailwind CSS 4.x, motion 12.x (existing)
-- 035-fix-file-viewer-transparency: Added TypeScript 5.7.2, React 19.0.0 + Next.js 16.x, Tailwind CSS 4.x, pdfjs-dist 5.4, react-markdown 10.1, react-zoom-pan-pinch 3.7
 
 
 <!-- MANUAL ADDITIONS START -->
