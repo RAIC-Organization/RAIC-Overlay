@@ -325,6 +325,7 @@ export default function Home() {
   // Always capture F3/F5 hotkeys to prevent webview refresh
   // Even in click-through mode, if webview retains focus, we must block F5 refresh
   // The backend handles mode/visibility logic appropriately
+  // Note: Low-level hook doesn't receive keys when webview is focused, so this is required
   // @feature 031-webview-hotkey-capture
   useHotkeyCapture(true);
 
