@@ -128,9 +128,9 @@
 
 ### Implementation for User Story 4
 
-- [ ] T042 [US4] Add X button with close handler using window.hide() in Settings header in src/components/settings/SettingsPanel.tsx
-- [ ] T043 [US4] Style X button with SC theme (sc-glow-transition hover:bg-muted/50) in src/components/settings/SettingsPanel.tsx
-- [ ] T044 [US4] Verify window.hide() behavior preserves main application state in src/components/settings/SettingsPanel.tsx
+- [x] T042 [US4] Add X button with close handler using window.hide() in Settings header in src/components/settings/SettingsPanel.tsx
+- [x] T043 [US4] Style X button with SC theme (sc-glow-transition hover:bg-muted/50) in src/components/settings/SettingsPanel.tsx
+- [x] T044 [US4] Verify window.hide() behavior preserves main application state in src/components/settings/SettingsPanel.tsx
 
 **Checkpoint**: X button hides Settings window without affecting main overlay functionality
 
