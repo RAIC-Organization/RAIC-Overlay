@@ -31,6 +31,8 @@ import { FileQuestion, FileX2 } from "lucide-react";
 export interface FileViewerContentProps {
   /** Whether the window is in interactive mode */
   isInteractive: boolean;
+  /** Whether the window background should be transparent (in non-interactive mode) */
+  backgroundTransparent?: boolean;
   /** Window ID for persistence */
   windowId?: string;
   /** Initial file path from persisted state */
@@ -45,6 +47,7 @@ export interface FileViewerContentProps {
 
 export function FileViewerContent({
   isInteractive,
+  backgroundTransparent,
   windowId,
   initialFilePath,
   initialFileType,
@@ -53,6 +56,9 @@ export function FileViewerContent({
 }: FileViewerContentProps) {
   // Get persistence context for fallback
   const persistence = usePersistenceContext();
+
+  // Calculate effective transparency: transparent only in non-interactive mode with setting enabled
+  const isEffectivelyTransparent = backgroundTransparent === true && !isInteractive;
 
   // Initialize state with persisted values or defaults
   const [filePath, setFilePath] = useState<string>(initialFilePath || "");
@@ -159,7 +165,7 @@ export function FileViewerContent({
     // Show error state if file was missing on restore
     if (fileError) {
       return (
-        <div className="flex flex-col items-center justify-center h-full text-destructive gap-4">
+        <div className={`flex flex-col items-center justify-center h-full text-destructive gap-4 ${isEffectivelyTransparent ? '' : 'bg-background'}`}>
           <FileX2 className="h-16 w-16 opacity-70" />
           <p className="text-sm font-medium">File Not Found</p>
           <p className="text-xs text-muted-foreground text-center px-4 max-w-md">
@@ -176,7 +182,7 @@ export function FileViewerContent({
 
     if (!filePath) {
       return (
-        <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-4">
+        <div className={`flex flex-col items-center justify-center h-full text-muted-foreground gap-4 ${isEffectivelyTransparent ? '' : 'bg-background'}`}>
           <FileQuestion className="h-16 w-16 opacity-50" />
           <p className="text-sm">No file selected</p>
           {isInteractive && (
@@ -188,15 +194,15 @@ export function FileViewerContent({
 
     switch (fileType) {
       case "pdf":
-        return <PDFRenderer filePath={filePath} zoom={zoom} />;
+        return <PDFRenderer filePath={filePath} zoom={zoom} backgroundTransparent={backgroundTransparent} isInteractive={isInteractive} />;
       case "markdown":
-        return <MarkdownRenderer filePath={filePath} zoom={zoom} />;
+        return <MarkdownRenderer filePath={filePath} zoom={zoom} backgroundTransparent={backgroundTransparent} isInteractive={isInteractive} />;
       case "image":
-        return <ImageRenderer filePath={filePath} zoom={zoom} />;
+        return <ImageRenderer filePath={filePath} zoom={zoom} backgroundTransparent={backgroundTransparent} isInteractive={isInteractive} />;
       case "unknown":
       default:
         return (
-          <div className="flex flex-col items-center justify-center h-full text-destructive gap-2">
+          <div className={`flex flex-col items-center justify-center h-full text-destructive gap-2 ${isEffectivelyTransparent ? '' : 'bg-background'}`}>
             <FileQuestion className="h-12 w-12" />
             <p className="text-sm">Unsupported file type</p>
             <p className="text-xs text-muted-foreground">

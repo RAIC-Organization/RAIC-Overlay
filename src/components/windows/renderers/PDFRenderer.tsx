@@ -19,9 +19,16 @@ export interface PDFRendererProps {
   filePath: string;
   /** Zoom level as percentage (10-200) */
   zoom: number;
+  /** Whether the window background should be transparent (in non-interactive mode) */
+  backgroundTransparent?: boolean;
+  /** Whether the window is in interactive mode */
+  isInteractive?: boolean;
 }
 
-export function PDFRenderer({ filePath, zoom }: PDFRendererProps) {
+export function PDFRenderer({ filePath, zoom, backgroundTransparent, isInteractive }: PDFRendererProps) {
+  // Calculate effective transparency: transparent only in non-interactive mode with setting enabled
+  const isEffectivelyTransparent = backgroundTransparent === true && !isInteractive;
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [pdfDoc, setPdfDoc] = useState<PDFDocumentProxy | null>(null);
@@ -165,7 +172,7 @@ export function PDFRenderer({ filePath, zoom }: PDFRendererProps) {
     <div className="flex flex-col h-full">
       {/* Page navigation */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 p-2 border-b border-border">
+        <div className={`flex items-center justify-center gap-2 p-2 ${isEffectivelyTransparent ? '' : 'border-b border-border'}`}>
           <Button
             variant="ghost"
             size="icon"
@@ -195,7 +202,7 @@ export function PDFRenderer({ filePath, zoom }: PDFRendererProps) {
       {/* PDF canvas */}
       <div
         ref={containerRef}
-        className="flex-1 overflow-auto flex items-start justify-center p-4 bg-muted/30"
+        className={`flex-1 overflow-auto flex items-start justify-center p-4 ${isEffectivelyTransparent ? '' : 'bg-muted/30'}`}
       >
         <canvas ref={canvasRef} className="shadow-md" />
       </div>
