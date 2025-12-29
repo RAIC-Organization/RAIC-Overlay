@@ -30,6 +30,24 @@ use types::{ModeChangePayload, OverlayMode, OverlayReadyPayload, Position, Targe
 #[cfg(windows)]
 use types::{ShowErrorModalPayload, TargetWindowChangedPayload};
 
+// T002 (039): Helper function to get prevent-default plugin with conditional debug/release configuration
+// Debug builds: Allow DevTools access for development (F12, Ctrl+Shift+I)
+// Release builds: Block all browser shortcuts including DevTools
+#[cfg(debug_assertions)]
+fn get_prevent_default_plugin() -> tauri::plugin::TauriPlugin<tauri::Wry> {
+    use tauri_plugin_prevent_default::Flags;
+    // Debug: Allow DevTools for development
+    tauri_plugin_prevent_default::Builder::new()
+        .with_flags(Flags::all().difference(Flags::DEV_TOOLS))
+        .build()
+}
+
+#[cfg(not(debug_assertions))]
+fn get_prevent_default_plugin() -> tauri::plugin::TauriPlugin<tauri::Wry> {
+    // Release: Block all browser shortcuts
+    tauri_plugin_prevent_default::init()
+}
+
 #[tauri::command]
 async fn set_visibility(
     window: tauri::WebviewWindow,
@@ -396,6 +414,8 @@ pub fn run() {
         }))
         // T012 (038): Initialize autostart plugin
         .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, None))
+        // T003 (039): Register prevent-default plugin to block browser shortcuts
+        .plugin(get_prevent_default_plugin())
         .plugin(hotkey::build_shortcut_plugin().build())
         .manage(OverlayState::default())
         .invoke_handler(tauri::generate_handler![

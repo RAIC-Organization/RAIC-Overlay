@@ -34,8 +34,8 @@ Based on plan.md structure:
 
 **⚠️ CRITICAL**: This single plugin registration implements FR-001 through FR-009, covering all user stories simultaneously. FR-010 (text input preservation) and FR-011 (F3 toggle preservation) are verified in Phase 7 as edge case validation.
 
-- [ ] T002 Create `get_prevent_default_plugin()` helper function with conditional debug/release configuration in src-tauri/src/lib.rs
-- [ ] T003 Register prevent-default plugin in `tauri::Builder::default()` chain in src-tauri/src/lib.rs
+- [X] T002 Create `get_prevent_default_plugin()` helper function with conditional debug/release configuration in src-tauri/src/lib.rs
+- [X] T003 Register prevent-default plugin in `tauri::Builder::default()` chain in src-tauri/src/lib.rs
 
 **Checkpoint**: Plugin integrated - all browser shortcuts should now be blocked
 
