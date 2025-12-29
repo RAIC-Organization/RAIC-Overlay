@@ -9,6 +9,7 @@
  *
  * @feature 007-windows-system
  * @feature 010-state-persistence-system
+ * @feature 034-fix-browser-persist
  */
 
 import { useEffect, useRef, useCallback } from 'react';
@@ -16,6 +17,7 @@ import { windowEvents } from '@/lib/windowEvents';
 import { useWindows } from '@/contexts/WindowsContext';
 import { usePersistenceContext } from '@/contexts/PersistenceContext';
 import type { WindowOpenPayload } from '@/types/windows';
+import type { FileType } from '@/types/persistence';
 
 /**
  * Hook that subscribes to window events and dispatches actions to the context.
@@ -65,6 +67,26 @@ export function useWindowEvents(): void {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onContentChange: (elements: any[], appState: any) => {
           persistenceRef.current?.onDrawContentChange(windowId, elements, appState);
+        },
+      };
+    }
+
+    // Add content change callback for browser windows
+    if (payload.contentType === 'browser' && persistenceRef.current) {
+      enhancedPayload.componentProps = {
+        ...enhancedPayload.componentProps,
+        onContentChange: (url: string, zoom: number) => {
+          persistenceRef.current?.onBrowserContentChange(windowId, url, zoom);
+        },
+      };
+    }
+
+    // Add content change callback for file viewer windows
+    if (payload.contentType === 'fileviewer' && persistenceRef.current) {
+      enhancedPayload.componentProps = {
+        ...enhancedPayload.componentProps,
+        onContentChange: (filePath: string, fileType: FileType, zoom: number) => {
+          persistenceRef.current?.onFileViewerContentChange(windowId, filePath, fileType, zoom);
         },
       };
     }
