@@ -154,9 +154,22 @@ fn current_time_ms() -> u64 {
         .as_millis() as u64
 }
 
+/// T025 (038): Check modifier keys for hotkey matching
+fn check_modifiers() -> (bool, bool, bool) {
+    use windows::Win32::UI::Input::KeyboardAndMouse::{GetKeyState, VK_CONTROL, VK_MENU, VK_SHIFT};
+
+    unsafe {
+        let ctrl = GetKeyState(VK_CONTROL.0 as i32) < 0;
+        let shift = GetKeyState(VK_SHIFT.0 as i32) < 0;
+        let alt = GetKeyState(VK_MENU.0 as i32) < 0;
+        (ctrl, shift, alt)
+    }
+}
+
 // T009, T010, T011: Low-level keyboard hook callback
+// T025 (038): Modified to use configurable hotkeys from user_settings
 /// Callback function for the low-level keyboard hook
-/// Detects F3/F5 key presses and emits events
+/// Detects configured hotkey presses and emits events
 unsafe extern "system" fn keyboard_hook_callback(
     n_code: i32,
     w_param: WPARAM,
@@ -173,42 +186,44 @@ unsafe extern "system" fn keyboard_hook_callback(
             let vk_code = kb_struct.vkCode;
             let now = current_time_ms();
 
-            // T009, T010, T024: Check for F3 (toggle visibility) with debounce and logging
-            if vk_code == VK_F3 {
+            // T025 (038): Get configured hotkeys from user settings
+            let hotkeys = crate::user_settings::get_hotkey_settings();
+            let (ctrl, shift, alt) = check_modifiers();
+
+            // T025 (038): Check for toggle_visibility hotkey with modifiers
+            let vis = &hotkeys.toggle_visibility;
+            if vk_code == vis.key_code && ctrl == vis.ctrl && shift == vis.shift && alt == vis.alt {
                 let last_press = KEYBOARD_HOOK_STATE.get_last_f3_press();
                 if now - last_press >= DEBOUNCE_MS {
                     KEYBOARD_HOOK_STATE.set_last_f3_press(now);
-                    // T024: Log with timestamp
                     log::info!(
-                        "F3 pressed: toggle visibility requested (low-level hook, timestamp={})",
-                        now
+                        "{} pressed: toggle visibility requested (low-level hook, timestamp={})",
+                        vis.key, now
                     );
                     KEYBOARD_HOOK_STATE.emit_action(HotkeyAction::ToggleVisibility);
                 } else {
                     log::debug!(
-                        "F3 pressed: debounced ({}ms since last, threshold={}ms)",
-                        now - last_press,
-                        DEBOUNCE_MS
+                        "{} pressed: debounced ({}ms since last, threshold={}ms)",
+                        vis.key, now - last_press, DEBOUNCE_MS
                     );
                 }
             }
 
-            // T009, T010, T024: Check for F5 (toggle mode) with debounce and logging
-            if vk_code == VK_F5 {
+            // T025 (038): Check for toggle_mode hotkey with modifiers
+            let mode = &hotkeys.toggle_mode;
+            if vk_code == mode.key_code && ctrl == mode.ctrl && shift == mode.shift && alt == mode.alt {
                 let last_press = KEYBOARD_HOOK_STATE.get_last_f5_press();
                 if now - last_press >= DEBOUNCE_MS {
                     KEYBOARD_HOOK_STATE.set_last_f5_press(now);
-                    // T024: Log with timestamp
                     log::info!(
-                        "F5 pressed: toggle mode requested (low-level hook, timestamp={})",
-                        now
+                        "{} pressed: toggle mode requested (low-level hook, timestamp={})",
+                        mode.key, now
                     );
                     KEYBOARD_HOOK_STATE.emit_action(HotkeyAction::ToggleMode);
                 } else {
                     log::debug!(
-                        "F5 pressed: debounced ({}ms since last, threshold={}ms)",
-                        now - last_press,
-                        DEBOUNCE_MS
+                        "{} pressed: debounced ({}ms since last, threshold={}ms)",
+                        mode.key, now - last_press, DEBOUNCE_MS
                     );
                 }
             }

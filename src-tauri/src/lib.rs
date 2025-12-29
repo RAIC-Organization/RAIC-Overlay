@@ -417,6 +417,7 @@ pub fn run() {
             // T011 (038): Settings panel commands
             user_settings::load_user_settings,
             user_settings::save_user_settings,
+            user_settings::update_hotkeys,
             settings_window::open_settings_window
         ])
         .setup(|app| {

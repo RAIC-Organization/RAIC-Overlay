@@ -63,18 +63,18 @@
 
 ### Implementation for User Story 1
 
-- [ ] T016 [US1] Create HotkeyInput component with key capture logic in src/components/settings/HotkeyInput.tsx
-- [ ] T017 [US1] Add keyboard event handler for capturing key combinations in src/components/settings/HotkeyInput.tsx
-- [ ] T018 [US1] Add duplicate key validation display in HotkeyInput component in src/components/settings/HotkeyInput.tsx
-- [ ] T019 [US1] Add reserved key rejection with user feedback in src/components/settings/HotkeyInput.tsx
-- [ ] T020 [US1] Create SettingsPanel component with hotkeys section in src/components/settings/SettingsPanel.tsx
-- [ ] T021 [US1] Add settings load on mount and save handler in src/components/settings/SettingsPanel.tsx
-- [ ] T022 [US1] Create settings page route in app/settings/page.tsx
-- [ ] T023 [US1] Add update_hotkeys command for applying hotkey changes in src-tauri/src/user_settings.rs
-- [ ] T024 [US1] Register update_hotkeys command in invoke_handler in src-tauri/src/lib.rs
-- [ ] T025 [US1] Modify keyboard_hook.rs to use configurable hotkey bindings from user settings in src-tauri/src/keyboard_hook.rs
-- [ ] T026 [US1] Add load_user_settings call during app startup to initialize cached settings in src-tauri/src/lib.rs
-- [ ] T027 [US1] Add hotkeys-updated event emission after hotkey changes applied in src-tauri/src/user_settings.rs
+- [x] T016 [US1] Create HotkeyInput component with key capture logic in src/components/settings/HotkeyInput.tsx
+- [x] T017 [US1] Add keyboard event handler for capturing key combinations in src/components/settings/HotkeyInput.tsx
+- [x] T018 [US1] Add duplicate key validation display in HotkeyInput component in src/components/settings/HotkeyInput.tsx
+- [x] T019 [US1] Add reserved key rejection with user feedback in src/components/settings/HotkeyInput.tsx
+- [x] T020 [US1] Create SettingsPanel component with hotkeys section in src/components/settings/SettingsPanel.tsx
+- [x] T021 [US1] Add settings load on mount and save handler in src/components/settings/SettingsPanel.tsx
+- [x] T022 [US1] Create settings page route in app/settings/page.tsx
+- [x] T023 [US1] Add update_hotkeys command for applying hotkey changes in src-tauri/src/user_settings.rs
+- [x] T024 [US1] Register update_hotkeys command in invoke_handler in src-tauri/src/lib.rs
+- [x] T025 [US1] Modify keyboard_hook.rs to use configurable hotkey bindings from user settings in src-tauri/src/keyboard_hook.rs
+- [x] T026 [US1] Add load_user_settings call during app startup to initialize cached settings in src-tauri/src/lib.rs
+- [x] T027 [US1] Add hotkeys-updated event emission after hotkey changes applied in src-tauri/src/user_settings.rs
 
 **Checkpoint**: Users can open Settings, configure custom hotkeys, and have them work immediately
 

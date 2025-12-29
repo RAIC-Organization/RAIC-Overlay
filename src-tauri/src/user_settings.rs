@@ -183,3 +183,30 @@ pub fn init_user_settings(app: &tauri::AppHandle) {
         *cache = Some(UserSettings::default());
     }
 }
+
+/// T023-T024: Update hotkey bindings at runtime
+/// This updates the cached settings so the keyboard hook uses the new bindings
+#[tauri::command]
+pub fn update_hotkeys(hotkeys: HotkeySettings) -> Result<(), String> {
+    if let Ok(mut cache) = USER_SETTINGS.write() {
+        if let Some(ref mut settings) = *cache {
+            settings.hotkeys = hotkeys.clone();
+            log::info!(
+                "Hotkeys updated: visibility={}/{}, mode={}/{}",
+                settings.hotkeys.toggle_visibility.key,
+                settings.hotkeys.toggle_visibility.key_code,
+                settings.hotkeys.toggle_mode.key,
+                settings.hotkeys.toggle_mode.key_code
+            );
+        } else {
+            // No settings cached, create with new hotkeys
+            let mut new_settings = UserSettings::default();
+            new_settings.hotkeys = hotkeys;
+            *cache = Some(new_settings);
+            log::info!("Hotkeys initialized with new bindings");
+        }
+        Ok(())
+    } else {
+        Err("Failed to acquire settings lock".to_string())
+    }
+}
