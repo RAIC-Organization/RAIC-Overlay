@@ -39,17 +39,17 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T005 Create user settings types file with UserSettings, HotkeySettings, HotkeyBinding structs in src-tauri/src/user_settings_types.rs
-- [ ] T006 Add LoadUserSettingsResult and SaveUserSettingsResult types to src-tauri/src/user_settings_types.rs
-- [ ] T007 Create user settings persistence module with load/save commands in src-tauri/src/user_settings.rs
-- [ ] T008 Add get_hotkey_settings() accessor function for keyboard hook integration in src-tauri/src/user_settings.rs
-- [ ] T009 Create settings window module with open_settings_window command in src-tauri/src/settings_window.rs
-- [ ] T010 Add module declarations for user_settings, user_settings_types, and settings_window to src-tauri/src/lib.rs
-- [ ] T011 Register load_user_settings, save_user_settings, and open_settings_window in invoke_handler in src-tauri/src/lib.rs
-- [ ] T012 Initialize tauri-plugin-autostart in app setup block in src-tauri/src/lib.rs
-- [ ] T013 [P] Create TypeScript user-settings types file with interfaces in src/types/user-settings.ts
-- [ ] T014 [P] Create VK code mapping utility with keyToVkCode function in src/utils/vk-codes.ts
-- [ ] T015 [P] Create hotkey validation utility with validateHotkeyBinding, formatHotkey, hotkeyEquals in src/utils/hotkey-validation.ts
+- [x] T005 Create user settings types file with UserSettings, HotkeySettings, HotkeyBinding structs in src-tauri/src/user_settings_types.rs
+- [x] T006 Add LoadUserSettingsResult and SaveUserSettingsResult types to src-tauri/src/user_settings_types.rs
+- [x] T007 Create user settings persistence module with load/save commands in src-tauri/src/user_settings.rs
+- [x] T008 Add get_hotkey_settings() accessor function for keyboard hook integration in src-tauri/src/user_settings.rs
+- [x] T009 Create settings window module with open_settings_window command in src-tauri/src/settings_window.rs
+- [x] T010 Add module declarations for user_settings, user_settings_types, and settings_window to src-tauri/src/lib.rs
+- [x] T011 Register load_user_settings, save_user_settings, and open_settings_window in invoke_handler in src-tauri/src/lib.rs
+- [x] T012 Initialize tauri-plugin-autostart in app setup block in src-tauri/src/lib.rs
+- [x] T013 [P] Create TypeScript user-settings types file with interfaces in src/types/user-settings.ts
+- [x] T014 [P] Create VK code mapping utility with keyToVkCode function in src/utils/vk-codes.ts
+- [x] T015 [P] Create hotkey validation utility with validateHotkeyBinding, formatHotkey, hotkeyEquals in src/utils/hotkey-validation.ts
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 

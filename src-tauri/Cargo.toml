@@ -28,9 +28,7 @@ lazy_static = "1.4"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-global-shortcut = "2"
-
 # T001 (038): Auto-start plugin for Windows Registry integration
-[target.'cfg(desktop)'.dependencies]
 tauri-plugin-autostart = "2"
 
 # T001, T002: Windows API dependency for target window attachment

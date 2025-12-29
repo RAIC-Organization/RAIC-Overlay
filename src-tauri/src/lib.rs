@@ -10,6 +10,10 @@ pub mod persistence_types;
 #[cfg(windows)]
 pub mod process_monitor;
 pub mod settings;
+// T010 (038): Settings panel modules
+pub mod settings_window;
+pub mod user_settings;
+pub mod user_settings_types;
 pub mod state;
 pub mod tray;
 #[cfg(windows)]
@@ -390,6 +394,8 @@ pub fn run() {
                 let _ = window.show();
             }
         }))
+        // T012 (038): Initialize autostart plugin
+        .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, None))
         .plugin(hotkey::build_shortcut_plugin().build())
         .manage(OverlayState::default())
         .invoke_handler(tauri::generate_handler![
@@ -407,7 +413,11 @@ pub fn run() {
             logging::get_log_file_path,
             logging::get_log_config,
             settings::get_settings_command,
-            settings::get_settings_sources
+            settings::get_settings_sources,
+            // T011 (038): Settings panel commands
+            user_settings::load_user_settings,
+            user_settings::save_user_settings,
+            settings_window::open_settings_window
         ])
         .setup(|app| {
             let handle = app.handle().clone();
@@ -420,6 +430,9 @@ pub fn run() {
             if let Err(e) = logging::cleanup_old_logs(handle.clone()) {
                 log::warn!("Failed to cleanup old logs: {}", e);
             }
+
+            // T026 (038): Initialize user settings cache
+            user_settings::init_user_settings(&handle);
 
             // T018 (029): Start low-level keyboard hook for F3/F5 hotkeys
             // This replaces global shortcut registration which doesn't work with Star Citizen
