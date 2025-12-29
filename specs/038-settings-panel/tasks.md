@@ -88,12 +88,12 @@
 
 ### Implementation for User Story 2
 
-- [ ] T028 [US2] Add "Settings" MenuItem above "Exit" in tray menu creation in src-tauri/src/tray.rs
-- [ ] T029 [US2] Add menu event handler for "settings" item that calls open_settings_window in src-tauri/src/tray.rs
-- [ ] T030 [US2] Add draggable header with data-tauri-drag-region attribute in src/components/settings/SettingsPanel.tsx
-- [ ] T031 [US2] Apply liquid glass styling (bg-background/80 backdrop-blur-xl) matching ErrorModal in src/components/settings/SettingsPanel.tsx
-- [ ] T032 [US2] Add SC theme glow effects (sc-glow-transition sc-corner-accents shadow-glow-sm) to SettingsPanel in src/components/settings/SettingsPanel.tsx
-- [ ] T033 [US2] Add window focus logic in open_settings_window for existing window case (FR-017) in src-tauri/src/settings_window.rs
+- [x] T028 [US2] Add "Settings" MenuItem above "Exit" in tray menu creation in src-tauri/src/tray.rs
+- [x] T029 [US2] Add menu event handler for "settings" item that calls open_settings_window in src-tauri/src/tray.rs
+- [x] T030 [US2] Add draggable header with data-tauri-drag-region attribute in src/components/settings/SettingsPanel.tsx
+- [x] T031 [US2] Apply liquid glass styling (bg-background/80 backdrop-blur-xl) matching ErrorModal in src/components/settings/SettingsPanel.tsx
+- [x] T032 [US2] Add SC theme glow effects (sc-glow-transition sc-corner-accents shadow-glow-sm) to SettingsPanel in src/components/settings/SettingsPanel.tsx
+- [x] T033 [US2] Add window focus logic in open_settings_window for existing window case (FR-017) in src-tauri/src/settings_window.rs
 
 **Checkpoint**: Settings opens from tray, window appears in taskbar, can be dragged, matches app styling
 

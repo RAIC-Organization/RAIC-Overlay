@@ -1,8 +1,9 @@
 //! System tray icon module
 //!
-//! Provides tray icon functionality with "Exit" menu option.
+//! Provides tray icon functionality with "Settings" and "Exit" menu options.
 //!
 //! @feature 022-tray-icon-menu
+//! @feature 038-settings-panel
 
 use tauri::{
     menu::{Menu, MenuItem},
@@ -13,18 +14,24 @@ use tauri::{
 #[cfg(windows)]
 use crate::keyboard_hook;
 
+use crate::settings_window;
+
 /// Initialize the system tray icon with menu.
 ///
 /// Creates a tray icon using the app's default icon with:
 /// - Tooltip showing "RAICOverlay"
-/// - Context menu with "Exit" option
+/// - Context menu with "Settings" and "Exit" options
+/// - Settings handler that opens Settings window
 /// - Exit handler that emits event for persistence before terminating
 pub fn setup_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
+    // T028 (038): Create MenuItem with id "settings" and text "Settings"
+    let settings_item = MenuItem::with_id(app, "settings", "Settings", true, None::<&str>)?;
+
     // T010: Create MenuItem with id "quit" and text "Exit"
     let quit_item = MenuItem::with_id(app, "quit", "Exit", true, None::<&str>)?;
 
-    // T011: Create Menu with quit_item
-    let menu = Menu::with_items(app, &[&quit_item])?;
+    // T011: Create Menu with settings and quit items
+    let menu = Menu::with_items(app, &[&settings_item, &quit_item])?;
 
     // T006, T007, T012: Build tray icon with icon, tooltip, and menu
     let app_handle = app.clone();
@@ -34,7 +41,16 @@ pub fn setup_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
         .tooltip("RAICOverlay")
         .on_menu_event(move |app, event| {
             // T013: Handle menu events
-            if event.id.as_ref() == "quit" {
+            // T029 (038): Handle "settings" menu click
+            if event.id.as_ref() == "settings" {
+                log::info!("Settings requested via tray menu");
+                let app_clone = app.clone();
+                tauri::async_runtime::spawn(async move {
+                    if let Err(e) = settings_window::open_settings_window(app_clone).await {
+                        log::error!("Failed to open settings window: {}", e);
+                    }
+                });
+            } else if event.id.as_ref() == "quit" {
                 // T016: Log exit request
                 log::info!("Exit requested via tray menu");
 
