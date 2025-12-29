@@ -1,10 +1,20 @@
 "use client";
 
+/**
+ * ErrorModal Component
+ *
+ * Displays error messages when target process is not found.
+ * Styled with liquid glass effect and SC theme to match overlay windows.
+ * Features window header with title and X close button.
+ * Auto-dismisses after configurable timeout with countdown display.
+ *
+ * @feature 037-process-popup-glass
+ */
+
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { Card } from "@/components/ui/card";
+import { X } from "lucide-react";
 
-// ErrorModal component with entrance/exit animations
 interface ErrorModalProps {
   visible: boolean;
   targetName: string;
@@ -64,13 +74,36 @@ export function ErrorModal({
           aria-labelledby="error-modal-title"
           aria-describedby="error-modal-description"
         >
-          <Card className="error-modal p-6 max-w-md mx-4 shadow-2xl">
-            <div className="flex flex-col items-center gap-4">
-              {/* Error icon */}
-              <div className="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center">
+          {/* SC-themed container with liquid glass effect */}
+          <div className="relative max-w-md w-full mx-4 border border-border rounded-lg overflow-hidden sc-glow-transition sc-corner-accents shadow-glow-sm bg-background/80 backdrop-blur-xl">
+            {/* Window header */}
+            <div className="flex items-center justify-between px-3 py-2 border-b border-border bg-muted/50">
+              <h2
+                id="error-modal-title"
+                className="font-display text-sm font-medium uppercase tracking-wide truncate"
+              >
+                {targetName} Not Found
+              </h2>
+              <button
+                onClick={onDismiss}
+                className="p-1 rounded sc-glow-transition hover:bg-muted/50 hover:shadow-glow-sm cursor-pointer"
+                aria-label="Close"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Content area */}
+            <div className="p-6 flex flex-col items-center gap-4">
+              {/* Warning icon with blue glow */}
+              <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-destructive"
+                  className="h-6 w-6"
+                  style={{
+                    color: "rgba(59, 130, 246, 0.9)",
+                    filter: "drop-shadow(0 0 8px rgba(59, 130, 246, 0.6))",
+                  }}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -85,33 +118,19 @@ export function ErrorModal({
               </div>
 
               {/* Error message */}
-              <h2
-                id="error-modal-title"
-                className="text-lg font-semibold text-card-foreground text-center"
-              >
-                {targetName} Not Found
-              </h2>
               <p
                 id="error-modal-description"
-                className="text-sm text-muted-foreground text-center"
+                className="font-display text-sm text-muted-foreground text-center"
               >
                 {message}
               </p>
 
-              {/* Dismiss button - using plain button with Tailwind styles */}
-              <button
-                onClick={onDismiss}
-                className="mt-2 px-4 py-2 text-sm font-medium rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
-              >
-                Dismiss
-              </button>
-
-              {/* Auto-dismiss indicator */}
-              <p className="text-xs text-muted-foreground">
+              {/* Auto-dismiss countdown */}
+              <p className="font-display text-xs text-muted-foreground">
                 Auto-dismissing in {Math.ceil(remainingTime / 1000)}s
               </p>
             </div>
-          </Card>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
