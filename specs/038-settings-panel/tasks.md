@@ -140,12 +140,12 @@
 
 **Purpose**: Handle error conditions and edge cases from spec
 
-- [ ] T045 [P] Add fallback to default hotkeys when settings file is corrupted or missing in src-tauri/src/user_settings.rs
-- [ ] T046 [P] Add error handling for Registry write failures with user-friendly message in src/components/settings/AutoStartToggle.tsx
-- [ ] T047 [P] Add loading state indicator while settings are being loaded in src/components/settings/SettingsPanel.tsx
-- [ ] T048 [P] Add saving state indicator with disabled save button while persisting in src/components/settings/SettingsPanel.tsx
-- [ ] T049 [P] Add modifier-only key rejection with informative message in src/components/settings/HotkeyInput.tsx
-- [ ] T050 Verify settings file written atomically (temp file + rename pattern) in src-tauri/src/user_settings.rs
+- [x] T045 [P] Add fallback to default hotkeys when settings file is corrupted or missing in src-tauri/src/user_settings.rs
+- [x] T046 [P] Add error handling for Registry write failures with user-friendly message in src/components/settings/AutoStartToggle.tsx
+- [x] T047 [P] Add loading state indicator while settings are being loaded in src/components/settings/SettingsPanel.tsx
+- [x] T048 [P] Add saving state indicator with disabled save button while persisting in src/components/settings/SettingsPanel.tsx
+- [x] T049 [P] Add modifier-only key rejection with informative message in src/components/settings/HotkeyInput.tsx
+- [x] T050 Verify settings file written atomically (temp file + rename pattern) in src-tauri/src/user_settings.rs
 - [ ] T051 Run manual integration tests from quickstart.md validation checklist
 
 ---

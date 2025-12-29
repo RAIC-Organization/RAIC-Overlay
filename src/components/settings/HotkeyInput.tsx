@@ -45,8 +45,11 @@ export function HotkeyInput({
       e.preventDefault();
       e.stopPropagation();
 
-      // T019: Reject standalone modifier keys
+      // T019, T049: Reject standalone modifier keys with informative message
       if (isModifierKey(e.key)) {
+        // Show temporary hint that user needs to press a non-modifier key
+        setLocalError("Hold modifier(s) and press a key");
+        onValidationError?.("Hold modifier(s) and press a key");
         return; // Wait for non-modifier key
       }
 
