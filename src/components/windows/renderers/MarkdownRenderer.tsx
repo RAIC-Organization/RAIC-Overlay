@@ -18,9 +18,16 @@ export interface MarkdownRendererProps {
   filePath: string;
   /** Zoom level as percentage (10-200) */
   zoom: number;
+  /** Whether the window background should be transparent (in non-interactive mode) */
+  backgroundTransparent?: boolean;
+  /** Whether the window is in interactive mode */
+  isInteractive?: boolean;
 }
 
-export function MarkdownRenderer({ filePath, zoom }: MarkdownRendererProps) {
+export function MarkdownRenderer({ filePath, zoom, backgroundTransparent, isInteractive }: MarkdownRendererProps) {
+  // Calculate effective transparency: transparent only in non-interactive mode with setting enabled
+  const isEffectivelyTransparent = backgroundTransparent === true && !isInteractive;
+
   const [content, setContent] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -74,7 +81,7 @@ export function MarkdownRenderer({ filePath, zoom }: MarkdownRendererProps) {
 
   return (
     <div
-      className="p-4 overflow-auto h-full"
+      className={`p-4 overflow-auto h-full ${isEffectivelyTransparent ? '' : 'bg-background'}`}
       style={{ fontSize: `${fontSize}px` }}
     >
       <article className="prose prose-invert prose-sm max-w-none">

@@ -23,6 +23,10 @@ export interface ImageRendererProps {
   zoom: number;
   /** Callback when internal zoom changes (for toolbar sync) */
   onZoomChange?: (zoom: number) => void;
+  /** Whether the window background should be transparent (in non-interactive mode) */
+  backgroundTransparent?: boolean;
+  /** Whether the window is in interactive mode */
+  isInteractive?: boolean;
 }
 
 /**
@@ -52,7 +56,10 @@ const IMAGE_MIME_TYPES: Record<string, string> = {
  *
  * @feature 017-image-viewer-zoom
  */
-export function ImageRenderer({ filePath, zoom, onZoomChange }: ImageRendererProps) {
+export function ImageRenderer({ filePath, zoom, onZoomChange, backgroundTransparent, isInteractive }: ImageRendererProps) {
+  // Calculate effective transparency: transparent only in non-interactive mode with setting enabled
+  const isEffectivelyTransparent = backgroundTransparent === true && !isInteractive;
+
   const [imageDataUrl, setImageDataUrl] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -111,7 +118,7 @@ export function ImageRenderer({ filePath, zoom, onZoomChange }: ImageRendererPro
   }
 
   return (
-    <div className="w-full h-full overflow-hidden bg-muted/30">
+    <div className={`w-full h-full overflow-hidden ${isEffectivelyTransparent ? '' : 'bg-muted/30'}`}>
       <TransformWrapper
         initialScale={zoom / 100}
         minScale={0.1}
