@@ -318,6 +318,12 @@ pub fn sync_browser_webview_bounds(
         .set_size(Size::Logical(LogicalSize::new(bounds.width, bounds.height)))
         .map_err(|e| format!("Failed to set size: {}", e))?;
 
+    // Re-apply always_on_top to ensure WebView stays above main overlay
+    // Moving/resizing windows can affect z-order on Windows
+    webview
+        .set_always_on_top(true)
+        .map_err(|e| format!("Failed to set always on top: {}", e))?;
+
     Ok(())
 }
 

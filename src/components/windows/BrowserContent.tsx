@@ -132,16 +132,19 @@ export function BrowserContent({
     let debounceTimer: ReturnType<typeof setTimeout> | null = null;
     const DEBOUNCE_MS = 16; // ~60fps, ensures final position is accurate
 
-    const syncBoundsNow = () => {
+    const syncBoundsNow = async () => {
       if (!contentRef.current) return;
       const rect = contentRef.current.getBoundingClientRect();
       if (rect.width > 0 && rect.height > 0) {
-        webview.syncBounds({
+        await webview.syncBounds({
           x: rect.left,
           y: rect.top,
           width: rect.width,
           height: rect.height,
         });
+        // Re-apply cursor ignore state after bounds sync
+        // Windows may reset window properties during position/size changes
+        webview.setIgnoreCursor(!isInteractive);
       }
     };
 
@@ -167,7 +170,7 @@ export function BrowserContent({
       window.removeEventListener("resize", debouncedSyncBounds);
       window.removeEventListener("scroll", debouncedSyncBounds, true);
     };
-  }, [webview.isReady, webview.syncBounds]);
+  }, [webview.isReady, webview.syncBounds, webview.setIgnoreCursor, isInteractive]);
 
   // Sync bounds when window position/size changes (from drag/resize)
   // This is critical for real-time position sync during window moves
@@ -175,21 +178,24 @@ export function BrowserContent({
     if (!webview.isReady || !contentRef.current) return;
 
     // Use requestAnimationFrame to ensure layout is updated before reading bounds
-    const frameId = requestAnimationFrame(() => {
+    const frameId = requestAnimationFrame(async () => {
       if (!contentRef.current) return;
       const rect = contentRef.current.getBoundingClientRect();
       if (rect.width > 0 && rect.height > 0) {
-        webview.syncBounds({
+        await webview.syncBounds({
           x: rect.left,
           y: rect.top,
           width: rect.width,
           height: rect.height,
         });
+        // Re-apply cursor ignore state after bounds sync
+        // Windows may reset window properties during position/size changes
+        webview.setIgnoreCursor(!isInteractive);
       }
     });
 
     return () => cancelAnimationFrame(frameId);
-  }, [webview.isReady, webview.syncBounds, windowX, windowY, windowWidth, windowHeight]);
+  }, [webview.isReady, webview.syncBounds, webview.setIgnoreCursor, isInteractive, windowX, windowY, windowWidth, windowHeight]);
 
   // T046: Sync opacity with WebView when it changes
   useEffect(() => {
