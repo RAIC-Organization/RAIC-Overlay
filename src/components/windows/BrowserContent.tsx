@@ -45,6 +45,14 @@ export interface BrowserContentProps {
   onContentChange?: (url: string, zoom: number) => void;
   /** T046: Window opacity (0.1-1.0) for WebView sync */
   opacity?: number;
+  /** Window X position for WebView bounds sync */
+  windowX?: number;
+  /** Window Y position for WebView bounds sync */
+  windowY?: number;
+  /** Window width for WebView bounds sync */
+  windowWidth?: number;
+  /** Window height for WebView bounds sync */
+  windowHeight?: number;
 }
 
 export function BrowserContent({
@@ -54,6 +62,10 @@ export function BrowserContent({
   initialZoom,
   onContentChange,
   opacity,
+  windowX,
+  windowY,
+  windowWidth,
+  windowHeight,
 }: BrowserContentProps) {
   // Get persistence context for fallback when no callback is provided
   const persistence = usePersistenceContext();
@@ -156,6 +168,28 @@ export function BrowserContent({
       window.removeEventListener("scroll", debouncedSyncBounds, true);
     };
   }, [webview.isReady, webview.syncBounds]);
+
+  // Sync bounds when window position/size changes (from drag/resize)
+  // This is critical for real-time position sync during window moves
+  useEffect(() => {
+    if (!webview.isReady || !contentRef.current) return;
+
+    // Use requestAnimationFrame to ensure layout is updated before reading bounds
+    const frameId = requestAnimationFrame(() => {
+      if (!contentRef.current) return;
+      const rect = contentRef.current.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        webview.syncBounds({
+          x: rect.left,
+          y: rect.top,
+          width: rect.width,
+          height: rect.height,
+        });
+      }
+    });
+
+    return () => cancelAnimationFrame(frameId);
+  }, [webview.isReady, webview.syncBounds, windowX, windowY, windowWidth, windowHeight]);
 
   // T046: Sync opacity with WebView when it changes
   useEffect(() => {
