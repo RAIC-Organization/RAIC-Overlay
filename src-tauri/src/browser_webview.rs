@@ -114,11 +114,13 @@ pub async fn create_browser_webview(
     // T036: URL change events also handled by plugin
     // CRITICAL: focused(false) prevents WebView from stealing focus from main overlay
     // skip_taskbar(true) keeps the browser window hidden from taskbar
+    // resizable(false) prevents direct resize - size is controlled by React component
     let webview = WebviewWindowBuilder::new(&app, &webview_id, WebviewUrl::External(url))
         .title("Browser Content")
         .decorations(false)
         .transparent(true)
         .always_on_top(true)
+        .resizable(false)  // Prevent direct resize, React component controls size
         .inner_size(bounds.width, bounds.height)
         .position(bounds.x, bounds.y)
         .visible(true)
