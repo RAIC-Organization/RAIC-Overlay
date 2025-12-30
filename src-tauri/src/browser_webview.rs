@@ -57,6 +57,10 @@ pub fn build_browser_webview_plugin() -> tauri::plugin::TauriPlugin<tauri::Wry> 
 ///
 /// Creates a frameless, transparent, always-on-top WebView that renders external URLs.
 /// The WebView is positioned and sized according to the provided bounds.
+///
+/// This command is IDEMPOTENT: if a WebView for the given window_id already exists,
+/// it returns the existing webview_id without error. This handles React Strict Mode
+/// double-mounting gracefully.
 #[tauri::command]
 pub async fn create_browser_webview(
     app: AppHandle,
@@ -67,6 +71,16 @@ pub async fn create_browser_webview(
     zoom: f64,
 ) -> Result<String, String> {
     let webview_id = format!("browser-webview-{}", window_id);
+
+    // IDEMPOTENT CHECK: If WebView already exists, return existing ID
+    // This handles React Strict Mode double-mounting gracefully
+    if app.get_webview_window(&webview_id).is_some() {
+        log::debug!(
+            "Browser WebView {} already exists, returning existing ID (idempotent)",
+            webview_id
+        );
+        return Ok(webview_id);
+    }
 
     log::debug!(
         "Creating browser WebView: {} for window {} at ({}, {}) {}x{}",
@@ -124,6 +138,9 @@ pub async fn create_browser_webview(
 /// T006: Destroy a browser WebView window
 ///
 /// Closes and cleans up the WebView when the browser window is closed.
+///
+/// This command is IDEMPOTENT: if the WebView doesn't exist, it returns
+/// success without error. This handles React Strict Mode cleanup gracefully.
 #[tauri::command]
 pub fn destroy_browser_webview(
     app: AppHandle,
@@ -132,17 +149,21 @@ pub fn destroy_browser_webview(
 ) -> Result<(), String> {
     log::debug!("Destroying browser WebView: {}", webview_id);
 
-    // Close the WebView window
+    // Close the WebView window if it exists (idempotent - no error if missing)
     if let Some(webview) = app.get_webview_window(&webview_id) {
         webview
             .close()
             .map_err(|e| format!("Failed to close WebView: {}", e))?;
+        log::info!("Destroyed browser WebView: {}", webview_id);
+    } else {
+        log::debug!(
+            "Browser WebView {} already destroyed or never existed (idempotent)",
+            webview_id
+        );
     }
 
-    // Unregister from state
+    // Unregister from state (also idempotent - no error if not registered)
     state.unregister(&webview_id);
-
-    log::info!("Destroyed browser WebView: {}", webview_id);
 
     Ok(())
 }
