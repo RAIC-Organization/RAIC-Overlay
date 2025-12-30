@@ -30,6 +30,7 @@ export const BROWSER_DEFAULTS = {
 /**
  * Props for BrowserContent component.
  * Extended with persistence support in 015-browser-persistence.
+ * Extended with opacity support in 040-webview-browser.
  */
 export interface BrowserContentProps {
   /** Whether the window is in interactive mode */
@@ -42,6 +43,8 @@ export interface BrowserContentProps {
   initialZoom?: number;
   /** Callback when browser content changes (for persistence) - passes both url and zoom */
   onContentChange?: (url: string, zoom: number) => void;
+  /** T046: Window opacity (0.1-1.0) for WebView sync */
+  opacity?: number;
 }
 
 export function BrowserContent({
@@ -50,6 +53,7 @@ export function BrowserContent({
   initialUrl,
   initialZoom,
   onContentChange,
+  opacity,
 }: BrowserContentProps) {
   // Get persistence context for fallback when no callback is provided
   const persistence = usePersistenceContext();
@@ -152,6 +156,12 @@ export function BrowserContent({
       window.removeEventListener("scroll", debouncedSyncBounds, true);
     };
   }, [webview.isReady, webview.syncBounds]);
+
+  // T046: Sync opacity with WebView when it changes
+  useEffect(() => {
+    if (!webview.isReady || opacity === undefined) return;
+    webview.setOpacity(opacity);
+  }, [webview.isReady, webview.setOpacity, opacity]);
 
   // Zoom handlers that use the WebView hook
   const handleZoomIn = useCallback(() => {

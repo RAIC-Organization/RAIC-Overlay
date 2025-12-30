@@ -457,7 +457,9 @@ pub fn run() {
             browser_webview::browser_refresh,
             browser_webview::set_browser_zoom,
             // T029 (040): Browser WebView positioning command
-            browser_webview::sync_browser_webview_bounds
+            browser_webview::sync_browser_webview_bounds,
+            // T045 (040): Browser WebView opacity command
+            browser_webview::set_browser_webview_opacity
         ])
         .setup(|app| {
             let handle = app.handle().clone();

@@ -296,6 +296,32 @@ pub fn sync_browser_webview_bounds(
     Ok(())
 }
 
+/// T044: Set the opacity/alpha of the WebView window
+///
+/// Note: WebView window opacity synchronization is not supported in Tauri 2.x.
+/// The WebView window remains fully opaque while the parent browser window
+/// can have its UI chrome opacity adjusted. This is documented as a known
+/// limitation in the WebView browser feature.
+///
+/// This command exists for API compatibility but is a no-op.
+#[tauri::command]
+pub fn set_browser_webview_opacity(
+    _app: AppHandle,
+    webview_id: String,
+    opacity: f64,
+) -> Result<(), String> {
+    // T047: WebView opacity sync is not supported - Tauri 2.x doesn't expose
+    // a cross-platform opacity API for WebviewWindow. The window is created
+    // with transparent:true which allows the HTML content to have transparency,
+    // but the window itself cannot have its opacity adjusted programmatically.
+    log::debug!(
+        "WebView {} opacity sync requested ({:.0}%) - not supported, ignoring",
+        webview_id,
+        opacity * 100.0
+    );
+    Ok(())
+}
+
 /// Normalize URL by adding https:// if no protocol is present.
 fn normalize_url(url: &str) -> Result<String, String> {
     let trimmed = url.trim();

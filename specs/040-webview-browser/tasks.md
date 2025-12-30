@@ -161,11 +161,11 @@
 
 ### Implementation for User Story 5
 
-- [ ] T043 [US5] Add setOpacity method to useBrowserWebView hook in src/hooks/useBrowserWebView.ts
-- [ ] T044 [US5] Create set_browser_webview_opacity command in src-tauri/src/browser_webview.rs
-- [ ] T045 [US5] Register set_browser_webview_opacity command in src-tauri/src/lib.rs
-- [ ] T046 [US5] Connect window opacity changes to WebView opacity sync in src/components/windows/BrowserContent.tsx
-- [ ] T047 [US5] Document WebView transparency limitations (if any) in quickstart.md in specs/040-webview-browser/quickstart.md
+- [x] T043 [US5] Add setOpacity method to useBrowserWebView hook in src/hooks/useBrowserWebView.ts
+- [x] T044 [US5] Create set_browser_webview_opacity command in src-tauri/src/browser_webview.rs
+- [x] T045 [US5] Register set_browser_webview_opacity command in src-tauri/src/lib.rs
+- [x] T046 [US5] Connect window opacity changes to WebView opacity sync in src/components/windows/BrowserContent.tsx
+- [x] T047 [US5] Document WebView transparency limitations (if any) in quickstart.md in specs/040-webview-browser/quickstart.md
 
 **Checkpoint**: User Story 5 complete - WebView opacity matches browser window opacity setting
 
