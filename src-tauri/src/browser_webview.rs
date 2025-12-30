@@ -307,22 +307,49 @@ pub fn sync_browser_webview_bounds(
         .get_webview_window(&webview_id)
         .ok_or_else(|| format!("WebView not found: {}", webview_id))?;
 
-    // Use logical pixels for DPI-independent positioning
-    use tauri::{LogicalPosition, LogicalSize, Position, Size};
+    // Use Windows API SetWindowPos to set position, size, AND z-order in one call
+    // This ensures the WebView stays on top of other always-on-top windows
+    #[cfg(target_os = "windows")]
+    {
+        use windows::Win32::Foundation::HWND;
+        use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, HWND_TOPMOST, SWP_NOACTIVATE};
 
-    webview
-        .set_position(Position::Logical(LogicalPosition::new(bounds.x, bounds.y)))
-        .map_err(|e| format!("Failed to set position: {}", e))?;
+        let hwnd = webview.hwnd().map_err(|e| format!("Failed to get HWND: {}", e))?;
+        let hwnd = HWND(hwnd.0);
 
-    webview
-        .set_size(Size::Logical(LogicalSize::new(bounds.width, bounds.height)))
-        .map_err(|e| format!("Failed to set size: {}", e))?;
+        unsafe {
+            // SetWindowPos with HWND_TOPMOST places window at top of z-order
+            // SWP_NOACTIVATE prevents stealing focus
+            SetWindowPos(
+                hwnd,
+                Some(HWND_TOPMOST),
+                bounds.x as i32,
+                bounds.y as i32,
+                bounds.width as i32,
+                bounds.height as i32,
+                SWP_NOACTIVATE,
+            )
+            .map_err(|e| format!("SetWindowPos failed: {}", e))?;
+        }
+    }
 
-    // Re-apply always_on_top to ensure WebView stays above main overlay
-    // Moving/resizing windows can affect z-order on Windows
-    webview
-        .set_always_on_top(true)
-        .map_err(|e| format!("Failed to set always on top: {}", e))?;
+    // Fallback for non-Windows platforms
+    #[cfg(not(target_os = "windows"))]
+    {
+        use tauri::{LogicalPosition, LogicalSize, Position, Size};
+
+        webview
+            .set_position(Position::Logical(LogicalPosition::new(bounds.x, bounds.y)))
+            .map_err(|e| format!("Failed to set position: {}", e))?;
+
+        webview
+            .set_size(Size::Logical(LogicalSize::new(bounds.width, bounds.height)))
+            .map_err(|e| format!("Failed to set size: {}", e))?;
+
+        webview
+            .set_always_on_top(true)
+            .map_err(|e| format!("Failed to set always on top: {}", e))?;
+    }
 
     Ok(())
 }
@@ -372,14 +399,21 @@ pub fn set_browser_webview_opacity(
             let alpha = (opacity.clamp(0.0, 1.0) * 255.0) as u8;
             SetLayeredWindowAttributes(hwnd, COLORREF(0), alpha, LWA_ALPHA)
                 .map_err(|e| format!("Failed to set opacity: {}", e))?;
+
+            // Re-apply z-order using SetWindowPos with HWND_TOPMOST
+            // Setting layered window attributes can affect z-order
+            use windows::Win32::UI::WindowsAndMessaging::{
+                SetWindowPos, HWND_TOPMOST, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE,
+            };
+            SetWindowPos(
+                hwnd,
+                Some(HWND_TOPMOST),
+                0, 0, 0, 0,
+                SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE,
+            )
+            .map_err(|e| format!("SetWindowPos failed: {}", e))?;
         }
     }
-
-    // Re-apply always_on_top to ensure WebView stays above main overlay
-    // Setting layered window attributes can affect z-order
-    webview
-        .set_always_on_top(true)
-        .map_err(|e| format!("Failed to set always on top: {}", e))?;
 
     log::debug!("WebView {} opacity set to {:.0}%", webview_id, opacity * 100.0);
     Ok(())
