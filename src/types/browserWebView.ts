@@ -121,6 +121,11 @@ export interface UseBrowserWebViewActions {
   /** Set WebView visibility (show/hide) */
   setVisibility: (visible: boolean) => Promise<void>;
   /**
+   * Set whether WebView should ignore cursor/mouse events.
+   * Used for non-interactive (fullscreen/passive) mode.
+   */
+  setIgnoreCursor: (ignore: boolean) => Promise<void>;
+  /**
    * Explicitly destroy the WebView.
    * Called when browser window is closed via UI, NOT during React cleanup.
    * This is separate from useEffect cleanup to support React Strict Mode.

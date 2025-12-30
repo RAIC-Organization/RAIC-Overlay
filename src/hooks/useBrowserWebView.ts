@@ -347,6 +347,22 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
     [webviewId]
   );
 
+  const setIgnoreCursor = useCallback(
+    async (ignore: boolean) => {
+      if (!webviewId) return;
+
+      try {
+        await invoke("set_browser_webview_ignore_cursor", {
+          webviewId,
+          ignore,
+        });
+      } catch (err) {
+        logError(`[useBrowserWebView] Set ignore cursor failed: ${err}`);
+      }
+    },
+    [webviewId]
+  );
+
   // Explicit destroy function for when the window is closed via UI
   // This is NOT called in useEffect cleanup (React Strict Mode compatibility)
   const destroy = useCallback(async () => {
@@ -381,6 +397,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
     syncBounds,
     setOpacity,
     setVisibility,
+    setIgnoreCursor,
     destroy,
   };
 }

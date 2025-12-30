@@ -197,6 +197,15 @@ export function BrowserContent({
     webview.setOpacity(opacity);
   }, [webview.isReady, webview.setOpacity, opacity]);
 
+  // Sync interactive mode with WebView cursor handling
+  // In non-interactive (passive/fullscreen) mode, ignore cursor events
+  // so clicks pass through to the game behind
+  useEffect(() => {
+    if (!webview.isReady) return;
+    // When not interactive, ignore cursor events (clicks pass through)
+    webview.setIgnoreCursor(!isInteractive);
+  }, [webview.isReady, webview.setIgnoreCursor, isInteractive]);
+
   // Zoom handlers that use the WebView hook
   const handleZoomIn = useCallback(() => {
     const newZoom = Math.min(

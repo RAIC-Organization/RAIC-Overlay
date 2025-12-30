@@ -323,26 +323,84 @@ pub fn sync_browser_webview_bounds(
 
 /// T044: Set the opacity/alpha of the WebView window
 ///
-/// Note: WebView window opacity synchronization is not supported in Tauri 2.x.
-/// The WebView window remains fully opaque while the parent browser window
-/// can have its UI chrome opacity adjusted. This is documented as a known
-/// limitation in the WebView browser feature.
-///
-/// This command exists for API compatibility but is a no-op.
+/// Uses Windows SetLayeredWindowAttributes API to set window transparency.
+/// Opacity range: 0.0 (fully transparent) to 1.0 (fully opaque)
 #[tauri::command]
 pub fn set_browser_webview_opacity(
-    _app: AppHandle,
+    app: AppHandle,
     webview_id: String,
     opacity: f64,
 ) -> Result<(), String> {
-    // T047: WebView opacity sync is not supported - Tauri 2.x doesn't expose
-    // a cross-platform opacity API for WebviewWindow. The window is created
-    // with transparent:true which allows the HTML content to have transparency,
-    // but the window itself cannot have its opacity adjusted programmatically.
     log::debug!(
-        "WebView {} opacity sync requested ({:.0}%) - not supported, ignoring",
+        "Setting WebView {} opacity to {:.0}%",
         webview_id,
         opacity * 100.0
+    );
+
+    let webview = app
+        .get_webview_window(&webview_id)
+        .ok_or_else(|| format!("WebView not found: {}", webview_id))?;
+
+    // Use Windows API to set window opacity
+    #[cfg(target_os = "windows")]
+    {
+        use windows::Win32::Foundation::{COLORREF, HWND};
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetWindowLongW, SetLayeredWindowAttributes, SetWindowLongW, GWL_EXSTYLE,
+            LWA_ALPHA, WS_EX_LAYERED,
+        };
+
+        // Get the HWND from the WebView window
+        let hwnd = webview.hwnd().map_err(|e| format!("Failed to get HWND: {}", e))?;
+        let hwnd = HWND(hwnd.0);
+
+        unsafe {
+            // Ensure WS_EX_LAYERED style is set
+            let ex_style = GetWindowLongW(hwnd, GWL_EXSTYLE);
+            if ex_style & WS_EX_LAYERED.0 as i32 == 0 {
+                SetWindowLongW(hwnd, GWL_EXSTYLE, ex_style | WS_EX_LAYERED.0 as i32);
+            }
+
+            // Set opacity (0-255 range)
+            // crKey is ignored when using LWA_ALPHA, but we must provide a value
+            let alpha = (opacity.clamp(0.0, 1.0) * 255.0) as u8;
+            SetLayeredWindowAttributes(hwnd, COLORREF(0), alpha, LWA_ALPHA)
+                .map_err(|e| format!("Failed to set opacity: {}", e))?;
+        }
+    }
+
+    log::debug!("WebView {} opacity set to {:.0}%", webview_id, opacity * 100.0);
+    Ok(())
+}
+
+/// Set whether the WebView should ignore cursor/mouse events
+///
+/// When true, clicks pass through to windows behind the WebView.
+/// Used for non-interactive (fullscreen/passive) mode.
+#[tauri::command]
+pub fn set_browser_webview_ignore_cursor(
+    app: AppHandle,
+    webview_id: String,
+    ignore: bool,
+) -> Result<(), String> {
+    log::debug!(
+        "Setting WebView {} ignore cursor events to {}",
+        webview_id,
+        ignore
+    );
+
+    let webview = app
+        .get_webview_window(&webview_id)
+        .ok_or_else(|| format!("WebView not found: {}", webview_id))?;
+
+    webview
+        .set_ignore_cursor_events(ignore)
+        .map_err(|e| format!("Failed to set ignore cursor events: {}", e))?;
+
+    log::debug!(
+        "WebView {} ignore cursor events set to {}",
+        webview_id,
+        ignore
     );
     Ok(())
 }

@@ -474,6 +474,8 @@ pub fn run() {
             browser_webview::sync_browser_webview_bounds,
             // T045 (040): Browser WebView opacity command
             browser_webview::set_browser_webview_opacity,
+            // Browser WebView cursor ignore command (for non-interactive mode)
+            browser_webview::set_browser_webview_ignore_cursor,
             // T054 (040): Browser WebView visibility commands
             browser_webview::set_browser_webview_visibility,
             browser_webview::set_all_browser_webviews_visibility,
