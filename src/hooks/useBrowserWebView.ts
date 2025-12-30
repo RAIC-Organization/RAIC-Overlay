@@ -80,6 +80,13 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
     let mounted = true;
 
     const createWebView = async () => {
+      // Wait for valid initialBounds before creating WebView
+      // This prevents creating at (0,0) before DOM is positioned
+      if (!initialBounds) {
+        logDebug(`[useBrowserWebView] Waiting for valid bounds for ${windowId}`);
+        return;
+      }
+
       // Prevent duplicate creation attempts within the same mount
       if (creatingRef.current) {
         logDebug(`[useBrowserWebView] Creation already in progress for ${windowId}`);
@@ -98,15 +105,10 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
       creatingRef.current = true;
 
       try {
-        logDebug(`[useBrowserWebView] Creating WebView for window ${windowId}`);
+        logDebug(`[useBrowserWebView] Creating WebView for window ${windowId} at (${initialBounds.x}, ${initialBounds.y})`);
 
-        // Default bounds if not provided
-        const bounds: BrowserWebViewBounds = initialBounds || {
-          x: 0,
-          y: 0,
-          width: 400,
-          height: 300,
-        };
+        // Use the valid initialBounds
+        const bounds: BrowserWebViewBounds = initialBounds;
 
         // Convert zoom percentage to factor
         const zoomFactor = initialZoom / 100;
@@ -156,9 +158,9 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
       creatingRef.current = false;
       // Note: We intentionally do NOT destroy the WebView or clear webviewIdRef here
     };
-    // Note: initialBounds intentionally excluded - only windowId matters for identity
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [windowId]);
+    // initialBounds included so effect re-runs when bounds become valid
+    // Backend is idempotent so re-running after WebView exists is safe
+  }, [windowId, initialBounds]);
 
   // Set up event listeners
   useEffect(() => {
