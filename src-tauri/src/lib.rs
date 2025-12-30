@@ -1,3 +1,5 @@
+// T002 (040): Browser WebView types for WebView architecture
+pub mod browser_webview_types;
 pub mod hotkey;
 // T008 (029): Low-level keyboard hook module
 #[cfg(windows)]
