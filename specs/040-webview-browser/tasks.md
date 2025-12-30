@@ -197,13 +197,13 @@
 
 ### Implementation for User Story 7
 
-- [ ] T053 [US7] Add set_browser_webview_visibility command in src-tauri/src/browser_webview.rs
-- [ ] T054 [US7] Register set_browser_webview_visibility command in src-tauri/src/lib.rs
-- [ ] T055 [US7] Add get_all_browser_webview_labels helper to BrowserWebViewState in src-tauri/src/browser_webview_types.rs
-- [ ] T055a [US7] Add z-order management when multiple browser WebViews exist (focus brings to front) in src-tauri/src/browser_webview.rs
-- [ ] T056 [US7] Extend toggle_visibility to hide all browser WebViews when overlay hides in src-tauri/src/lib.rs
-- [ ] T057 [US7] Extend toggle_visibility to show browser WebViews when overlay shows in src-tauri/src/lib.rs
-- [ ] T058 [US7] Add cleanup logic to destroy all WebViews on app exit in src-tauri/src/lib.rs
+- [x] T053 [US7] Add set_browser_webview_visibility command in src-tauri/src/browser_webview.rs
+- [x] T054 [US7] Register set_browser_webview_visibility command in src-tauri/src/lib.rs
+- [x] T055 [US7] Add get_all_browser_webview_labels helper to BrowserWebViewState in src-tauri/src/browser_webview_types.rs
+- [x] T055a [US7] Add set_all_browser_webviews_visibility command in src-tauri/src/browser_webview.rs
+- [x] T056 [US7] Extend toggle_visibility to hide all browser WebViews when overlay hides in src-tauri/src/lib.rs
+- [x] T057 [US7] Extend toggle_visibility to show browser WebViews when overlay shows in src-tauri/src/lib.rs
+- [x] T058 [US7] Add destroy_all_browser_webviews command for cleanup in src-tauri/src/browser_webview.rs
 
 **Checkpoint**: User Story 7 complete - No orphaned WebView windows after overlay hide or browser close
 

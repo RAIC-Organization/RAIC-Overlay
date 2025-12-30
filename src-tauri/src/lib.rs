@@ -106,6 +106,13 @@ async fn toggle_visibility(
         // Clear target binding
         state.target_binding.clear();
 
+        // T056 (040): Hide all browser WebViews when overlay hides
+        let app = window.app_handle();
+        let browser_state = app.state::<browser_webview_types::BrowserWebViewState>();
+        if let Err(e) = browser_webview::set_all_browser_webviews_visibility_internal(&app, &browser_state, false) {
+            log::warn!("Failed to hide browser WebViews: {}", e);
+        }
+
         // T050 (028): Set user_manually_hidden flag to prevent auto-show
         process_monitor::PROCESS_MONITOR_STATE.set_user_manually_hidden(true);
 
@@ -242,6 +249,13 @@ async fn toggle_visibility(
             rect: Some(rect),
         };
         let _ = window.emit("target-window-changed", payload);
+
+        // T057 (040): Show all browser WebViews when overlay shows
+        let app = window.app_handle();
+        let browser_state = app.state::<browser_webview_types::BrowserWebViewState>();
+        if let Err(e) = browser_webview::set_all_browser_webviews_visibility_internal(&app, &browser_state, true) {
+            log::warn!("Failed to show browser WebViews: {}", e);
+        }
 
         // T027 (028): Log outcome
         log::info!("F3 outcome: shown overlay, bound to target at ({}, {}) {}x{}",
@@ -459,7 +473,11 @@ pub fn run() {
             // T029 (040): Browser WebView positioning command
             browser_webview::sync_browser_webview_bounds,
             // T045 (040): Browser WebView opacity command
-            browser_webview::set_browser_webview_opacity
+            browser_webview::set_browser_webview_opacity,
+            // T054 (040): Browser WebView visibility commands
+            browser_webview::set_browser_webview_visibility,
+            browser_webview::set_all_browser_webviews_visibility,
+            browser_webview::destroy_all_browser_webviews
         ])
         .setup(|app| {
             let handle = app.handle().clone();

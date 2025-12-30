@@ -322,6 +322,139 @@ pub fn set_browser_webview_opacity(
     Ok(())
 }
 
+/// T053: Set the visibility of a WebView window
+///
+/// Shows or hides the WebView window to sync with overlay visibility.
+#[tauri::command]
+pub fn set_browser_webview_visibility(
+    app: AppHandle,
+    state: State<'_, BrowserWebViewState>,
+    webview_id: String,
+    visible: bool,
+) -> Result<(), String> {
+    log::debug!("Setting WebView {} visibility to {}", webview_id, visible);
+
+    let webview = app
+        .get_webview_window(&webview_id)
+        .ok_or_else(|| format!("WebView not found: {}", webview_id))?;
+
+    if visible {
+        webview
+            .show()
+            .map_err(|e| format!("Failed to show WebView: {}", e))?;
+    } else {
+        webview
+            .hide()
+            .map_err(|e| format!("Failed to hide WebView: {}", e))?;
+    }
+
+    // Update visibility in state
+    state.update_visibility(&webview_id, visible);
+
+    log::debug!("WebView {} visibility set to {}", webview_id, visible);
+    Ok(())
+}
+
+/// T055a: Set all browser WebViews visibility at once
+///
+/// Used by overlay toggle to hide/show all WebViews together.
+#[tauri::command]
+pub fn set_all_browser_webviews_visibility(
+    app: AppHandle,
+    state: State<'_, BrowserWebViewState>,
+    visible: bool,
+) -> Result<(), String> {
+    log::debug!("Setting all browser WebViews visibility to {}", visible);
+
+    let labels = state.get_all_labels();
+    let mut errors = Vec::new();
+
+    for webview_id in labels {
+        if let Some(webview) = app.get_webview_window(&webview_id) {
+            let result = if visible {
+                webview.show()
+            } else {
+                webview.hide()
+            };
+
+            if let Err(e) = result {
+                errors.push(format!("{}: {}", webview_id, e));
+            } else {
+                state.update_visibility(&webview_id, visible);
+            }
+        }
+    }
+
+    if errors.is_empty() {
+        log::debug!("All browser WebViews visibility set to {}", visible);
+        Ok(())
+    } else {
+        Err(format!("Some WebViews failed: {}", errors.join(", ")))
+    }
+}
+
+/// T056, T057: Internal function for lib.rs to call without State extraction
+///
+/// Used by overlay toggle to hide/show all WebViews together.
+pub fn set_all_browser_webviews_visibility_internal(
+    app: &AppHandle,
+    state: &BrowserWebViewState,
+    visible: bool,
+) -> Result<(), String> {
+    log::debug!("Setting all browser WebViews visibility to {} (internal)", visible);
+
+    let labels = state.get_all_labels();
+    let mut errors = Vec::new();
+
+    for webview_id in labels {
+        if let Some(webview) = app.get_webview_window(&webview_id) {
+            let result = if visible {
+                webview.show()
+            } else {
+                webview.hide()
+            };
+
+            if let Err(e) = result {
+                errors.push(format!("{}: {}", webview_id, e));
+            } else {
+                state.update_visibility(&webview_id, visible);
+            }
+        }
+    }
+
+    if errors.is_empty() {
+        log::debug!("All browser WebViews visibility set to {} (internal)", visible);
+        Ok(())
+    } else {
+        Err(format!("Some WebViews failed: {}", errors.join(", ")))
+    }
+}
+
+/// T058: Destroy all browser WebViews (cleanup on app exit)
+///
+/// Closes all browser WebView windows and clears state.
+#[tauri::command]
+pub fn destroy_all_browser_webviews(
+    app: AppHandle,
+    state: State<'_, BrowserWebViewState>,
+) -> Result<(), String> {
+    log::debug!("Destroying all browser WebViews");
+
+    let labels = state.get_all_labels();
+
+    for webview_id in labels {
+        if let Some(webview) = app.get_webview_window(&webview_id) {
+            if let Err(e) = webview.close() {
+                log::warn!("Failed to close WebView {}: {}", webview_id, e);
+            }
+        }
+        state.unregister(&webview_id);
+    }
+
+    log::info!("All browser WebViews destroyed");
+    Ok(())
+}
+
 /// Normalize URL by adding https:// if no protocol is present.
 fn normalize_url(url: &str) -> Result<String, String> {
     let trimmed = url.trim();

@@ -118,6 +118,8 @@ export interface UseBrowserWebViewActions {
   syncBounds: (bounds: BrowserWebViewBounds) => Promise<void>;
   /** Set WebView opacity (0.0-1.0) */
   setOpacity: (opacity: number) => Promise<void>;
+  /** Set WebView visibility (show/hide) */
+  setVisibility: (visible: boolean) => Promise<void>;
 }
 
 /**

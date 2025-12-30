@@ -307,6 +307,22 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
     [webviewId]
   );
 
+  const setVisibility = useCallback(
+    async (visible: boolean) => {
+      if (!webviewId) return;
+
+      try {
+        await invoke("set_browser_webview_visibility", {
+          webviewId,
+          visible,
+        });
+      } catch (err) {
+        logError(`[useBrowserWebView] Set visibility failed: ${err}`);
+      }
+    },
+    [webviewId]
+  );
+
   return {
     webviewId,
     isReady,
@@ -323,5 +339,6 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
     setZoom: setZoomLevel,
     syncBounds,
     setOpacity,
+    setVisibility,
   };
 }
