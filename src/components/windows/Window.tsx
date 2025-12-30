@@ -281,7 +281,7 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
           className={`overflow-auto pointer-events-auto ${contentBackgroundClass}`}
           style={{ height: contentHeight }}
         >
-          <Component {...(componentProps ?? {})} isInteractive={isInteractive} backgroundTransparent={backgroundTransparent} opacity={opacity} />
+          <Component {...(componentProps ?? {})} windowId={id} isInteractive={isInteractive} backgroundTransparent={backgroundTransparent} opacity={opacity} />
         </div>
       </div>
     </motion.div>
