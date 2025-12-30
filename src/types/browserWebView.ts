@@ -131,6 +131,11 @@ export interface UseBrowserWebViewActions {
    */
   bringToFront: () => Promise<void>;
   /**
+   * Send WebView to the back of z-order (behind other overlay windows).
+   * Called when mouse leaves the browser component area.
+   */
+  sendToBack: () => Promise<void>;
+  /**
    * Explicitly destroy the WebView.
    * Called when browser window is closed via UI, NOT during React cleanup.
    * This is separate from useEffect cleanup to support React Strict Mode.

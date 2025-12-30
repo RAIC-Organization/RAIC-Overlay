@@ -380,6 +380,17 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
     }
   }, [webviewId]);
 
+  // Send WebView to back of z-order (called on mouse leave)
+  const sendToBack = useCallback(async () => {
+    if (!webviewId) return;
+
+    try {
+      await invoke("send_browser_webview_to_back", { webviewId });
+    } catch (err) {
+      logError(`[useBrowserWebView] Send to back failed: ${err}`);
+    }
+  }, [webviewId]);
+
   // Explicit destroy function for when the window is closed via UI
   // This is NOT called in useEffect cleanup (React Strict Mode compatibility)
   const destroy = useCallback(async () => {
@@ -416,6 +427,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
     setVisibility,
     setIgnoreCursor,
     bringToFront,
+    sendToBack,
     destroy,
   };
 }

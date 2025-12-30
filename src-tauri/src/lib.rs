@@ -478,6 +478,8 @@ pub fn run() {
             browser_webview::set_browser_webview_ignore_cursor,
             // Browser WebView bring to front command (for mouse enter)
             browser_webview::bring_browser_webview_to_front,
+            // Browser WebView send to back command (for mouse leave)
+            browser_webview::send_browser_webview_to_back,
             // T054 (040): Browser WebView visibility commands
             browser_webview::set_browser_webview_visibility,
             browser_webview::set_all_browser_webviews_visibility,

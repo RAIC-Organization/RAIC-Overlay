@@ -32,6 +32,8 @@ import { WindowHeader } from './WindowHeader';
 interface WindowProps {
   window: WindowInstance;
   isInteractive?: boolean;
+  /** Whether this window is the focused/topmost window in the overlay */
+  isFocused?: boolean;
   onExitComplete?: () => void;
 }
 
@@ -39,7 +41,7 @@ type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw' | null;
 
 const RESIZE_HANDLE_SIZE = 8;
 
-export function Window({ window: windowInstance, isInteractive = true, onExitComplete }: WindowProps) {
+export function Window({ window: windowInstance, isInteractive = true, isFocused = false, onExitComplete }: WindowProps) {
   const { id, title, component: Component, componentProps, contentType, x, y, width, height, zIndex, opacity, backgroundTransparent } =
     windowInstance;
 
@@ -287,7 +289,7 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
           className={`overflow-auto pointer-events-auto ${contentBackgroundClass}`}
           style={{ height: contentHeight }}
         >
-          <Component {...(componentProps ?? {})} windowId={id} isInteractive={isInteractive} backgroundTransparent={backgroundTransparent} opacity={opacity} windowX={x} windowY={y} windowWidth={width} windowHeight={height} />
+          <Component {...(componentProps ?? {})} windowId={id} isInteractive={isInteractive} isFocused={isFocused} backgroundTransparent={backgroundTransparent} opacity={opacity} windowX={x} windowY={y} windowWidth={width} windowHeight={height} />
         </div>
       </div>
     </motion.div>

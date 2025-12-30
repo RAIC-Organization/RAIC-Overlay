@@ -35,6 +35,8 @@ export const BROWSER_DEFAULTS = {
 export interface BrowserContentProps {
   /** Whether the window is in interactive mode */
   isInteractive: boolean;
+  /** Whether this window is the focused/topmost window in the overlay */
+  isFocused?: boolean;
   /** Window ID for persistence (required for WebView) */
   windowId: string;
   /** Initial URL from persisted state */
@@ -57,6 +59,7 @@ export interface BrowserContentProps {
 
 export function BrowserContent({
   isInteractive,
+  isFocused = false,
   windowId,
   initialUrl,
   initialZoom,
@@ -216,6 +219,32 @@ export function BrowserContent({
     webview.setOpacity(opacity);
   }, [webview.isReady, webview.setOpacity, opacity, isInteractive]);
 
+  // Track previous focus state to detect actual changes
+  const prevFocusedRef = useRef<boolean | null>(null);
+
+  // Sync WebView z-order with window focus state
+  // Only react to actual focus CHANGES to avoid unnecessary z-order updates
+  // When focus changes to this window → bring WebView to front
+  // When focus changes away from this window → send WebView to back
+  useEffect(() => {
+    if (!webview.isReady) return;
+
+    const prevFocused = prevFocusedRef.current;
+
+    // Only act on actual state changes, not just re-renders
+    if (prevFocused !== isFocused) {
+      prevFocusedRef.current = isFocused;
+
+      if (isFocused) {
+        webview.bringToFront();
+      } else if (prevFocused === true) {
+        // Only send to back if we were previously focused
+        // This prevents sending to back on initial render or when clicking outside
+        webview.sendToBack();
+      }
+    }
+  }, [webview.isReady, webview.bringToFront, webview.sendToBack, isFocused]);
+
   // Zoom handlers that use the WebView hook
   const handleZoomIn = useCallback(() => {
     const newZoom = Math.min(
@@ -256,11 +285,12 @@ export function BrowserContent({
       )}
       {/* T016: Content area placeholder - WebView is positioned over this area */}
       {/* Padding allows window resize handles to be grabbed */}
-      {/* onMouseEnter brings WebView to front when user hovers over browser area */}
+      {/* onMouseEnter brings WebView to front as a backup for focus-based z-order */}
+      {/* Z-order is primarily controlled by isFocused prop (see useEffect above) */}
       <div
         className="flex-1 overflow-hidden relative p-1"
         onMouseEnter={() => {
-          if (webview.isReady) {
+          if (webview.isReady && isFocused) {
             webview.bringToFront();
           }
         }}
