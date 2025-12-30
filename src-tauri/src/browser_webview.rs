@@ -369,6 +369,12 @@ pub fn set_browser_webview_opacity(
         }
     }
 
+    // Re-apply always_on_top to ensure WebView stays above main overlay
+    // Setting layered window attributes can affect z-order
+    webview
+        .set_always_on_top(true)
+        .map_err(|e| format!("Failed to set always on top: {}", e))?;
+
     log::debug!("WebView {} opacity set to {:.0}%", webview_id, opacity * 100.0);
     Ok(())
 }
