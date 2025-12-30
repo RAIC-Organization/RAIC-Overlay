@@ -213,15 +213,15 @@
 
 **Purpose**: Error display and edge case handling across all user stories
 
-- [ ] T059 Add browser-error event emission for navigation failures in src-tauri/src/browser_webview.rs
-- [ ] T060 Add browser-loading event emission for loading state in src-tauri/src/browser_webview.rs
-- [ ] T061 Add event listener for browser-error in useBrowserWebView hook in src/hooks/useBrowserWebView.ts
-- [ ] T062 Add event listener for browser-loading in useBrowserWebView hook in src/hooks/useBrowserWebView.ts
-- [ ] T063 Add error state to useBrowserWebView hook in src/hooks/useBrowserWebView.ts
-- [ ] T064 Add isLoading state to useBrowserWebView hook in src/hooks/useBrowserWebView.ts
-- [ ] T065 Modify BrowserToolbar to show error icon and status text in URL bar area in src/components/windows/BrowserToolbar.tsx
-- [ ] T066 Add loading indicator to BrowserToolbar when isLoading is true in src/components/windows/BrowserToolbar.tsx
-- [ ] T067 Clear error state when new navigation begins in src/hooks/useBrowserWebView.ts
+- [x] T059 N/A - Tauri 2.x WebviewWindow doesn't expose navigation error hooks; errors handled via command Result in frontend
+- [x] T060 N/A - Tauri 2.x WebviewWindow doesn't expose loading state hooks; loading tracked via command calls in frontend
+- [x] T061 Add event listener for browser-error in useBrowserWebView hook in src/hooks/useBrowserWebView.ts
+- [x] T062 Add event listener for browser-loading in useBrowserWebView hook in src/hooks/useBrowserWebView.ts
+- [x] T063 Add error state to useBrowserWebView hook in src/hooks/useBrowserWebView.ts
+- [x] T064 Add isLoading state to useBrowserWebView hook in src/hooks/useBrowserWebView.ts
+- [x] T065 Modify BrowserToolbar to show error icon and status text in URL bar area in src/components/windows/BrowserToolbar.tsx
+- [x] T066 Add loading indicator to BrowserToolbar when isLoading is true in src/components/windows/BrowserToolbar.tsx
+- [x] T067 Clear error state when new navigation begins in src/hooks/useBrowserWebView.ts
 
 ---
 

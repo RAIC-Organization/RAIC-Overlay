@@ -189,6 +189,7 @@ export function BrowserContent({
           canGoForward={webview.canGoForward}
           zoom={webview.zoom}
           isLoading={webview.isLoading}
+          error={webview.error}
           onNavigate={webview.navigate}
           onBack={webview.goBack}
           onForward={webview.goForward}
