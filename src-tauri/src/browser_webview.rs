@@ -111,6 +111,8 @@ pub async fn create_browser_webview(
     // T010: Create the WebView window with frameless, transparent, always-on-top config
     // T012: Popup blocking handled by browser-webview plugin's on_navigation hook
     // T036: URL change events also handled by plugin
+    // CRITICAL: focused(false) prevents WebView from stealing focus from main overlay
+    // skip_taskbar(true) keeps the browser window hidden from taskbar
     let webview = WebviewWindowBuilder::new(&app, &webview_id, WebviewUrl::External(url))
         .title("Browser Content")
         .decorations(false)
@@ -119,6 +121,8 @@ pub async fn create_browser_webview(
         .inner_size(bounds.width, bounds.height)
         .position(bounds.x, bounds.y)
         .visible(true)
+        .focused(false)  // Don't steal focus from main overlay window
+        .skip_taskbar(true)  // Hide from taskbar
         .build()
         .map_err(|e| format!("Failed to create WebView: {}", e))?;
 

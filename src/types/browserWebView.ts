@@ -120,6 +120,12 @@ export interface UseBrowserWebViewActions {
   setOpacity: (opacity: number) => Promise<void>;
   /** Set WebView visibility (show/hide) */
   setVisibility: (visible: boolean) => Promise<void>;
+  /**
+   * Explicitly destroy the WebView.
+   * Called when browser window is closed via UI, NOT during React cleanup.
+   * This is separate from useEffect cleanup to support React Strict Mode.
+   */
+  destroy: () => Promise<void>;
 }
 
 /**

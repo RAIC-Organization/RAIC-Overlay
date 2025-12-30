@@ -71,15 +71,30 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
   const creatingRef = useRef(false); // Guard against duplicate creation
 
   // Create WebView on mount
+  // NOTE: We do NOT destroy WebView in cleanup due to React Strict Mode double-mounting.
+  // WebViews are cleaned up when:
+  // 1. The browser window is closed (via closeWindow in WindowsContext)
+  // 2. The app exits (destroy_all_browser_webviews)
+  // The backend create_browser_webview is idempotent - returns existing WebView if already created.
   useEffect(() => {
     let mounted = true;
 
     const createWebView = async () => {
-      // Prevent duplicate creation attempts
-      if (creatingRef.current || webviewIdRef.current) {
-        logDebug(`[useBrowserWebView] Skipping duplicate creation for ${windowId}`);
+      // Prevent duplicate creation attempts within the same mount
+      if (creatingRef.current) {
+        logDebug(`[useBrowserWebView] Creation already in progress for ${windowId}`);
         return;
       }
+
+      // If we already have a webviewId, the WebView exists (idempotent backend)
+      if (webviewIdRef.current) {
+        logDebug(`[useBrowserWebView] WebView already exists: ${webviewIdRef.current}`);
+        setWebviewId(webviewIdRef.current);
+        setIsReady(true);
+        setIsLoading(false);
+        return;
+      }
+
       creatingRef.current = true;
 
       try {
@@ -104,8 +119,9 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
         });
 
         if (!mounted) {
-          // Component unmounted during creation, destroy the WebView
-          await invoke("destroy_browser_webview", { webviewId: id });
+          // Component unmounted during creation - DON'T destroy!
+          // The WebView will be reused if component remounts (React Strict Mode)
+          logDebug(`[useBrowserWebView] Component unmounted during creation, keeping WebView for reuse`);
           return;
         }
 
@@ -131,19 +147,14 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
 
     createWebView();
 
-    // Cleanup on unmount
+    // Cleanup on unmount - DON'T destroy WebView!
+    // React Strict Mode causes mount->unmount->mount, and destroying here
+    // would kill the WebView that the second mount needs.
+    // WebViews are destroyed by WindowsContext when the window is closed.
     return () => {
       mounted = false;
       creatingRef.current = false;
-
-      const id = webviewIdRef.current;
-      if (id) {
-        logDebug(`[useBrowserWebView] Destroying WebView: ${id}`);
-        invoke("destroy_browser_webview", { webviewId: id }).catch((err) => {
-          logError(`[useBrowserWebView] Failed to destroy WebView: ${err}`);
-        });
-        webviewIdRef.current = null;
-      }
+      // Note: We intentionally do NOT destroy the WebView or clear webviewIdRef here
     };
     // Note: initialBounds intentionally excluded - only windowId matters for identity
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -336,6 +347,23 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
     [webviewId]
   );
 
+  // Explicit destroy function for when the window is closed via UI
+  // This is NOT called in useEffect cleanup (React Strict Mode compatibility)
+  const destroy = useCallback(async () => {
+    const id = webviewIdRef.current;
+    if (id) {
+      logDebug(`[useBrowserWebView] Explicitly destroying WebView: ${id}`);
+      try {
+        await invoke("destroy_browser_webview", { webviewId: id });
+        webviewIdRef.current = null;
+        setWebviewId(null);
+        setIsReady(false);
+      } catch (err) {
+        logError(`[useBrowserWebView] Failed to destroy WebView: ${err}`);
+      }
+    }
+  }, []);
+
   return {
     webviewId,
     isReady,
@@ -353,5 +381,6 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
     syncBounds,
     setOpacity,
     setVisibility,
+    destroy,
   };
 }
