@@ -45,7 +45,10 @@ pub fn build_browser_webview_plugin() -> tauri::plugin::TauriPlugin<tauri::Wry> 
                 can_go_forward: false,  // Forward is typically false after new navigation
             };
 
-            if let Err(e) = window.emit("browser-url-changed", &payload) {
+            // IMPORTANT: Use emit_all to send to ALL windows including main overlay
+            // window.emit() only sends to the WebView window itself, but React app
+            // is running in the main overlay window and needs to receive this event
+            if let Err(e) = window.app_handle().emit("browser-url-changed", &payload) {
                 log::warn!("Failed to emit browser-url-changed: {}", e);
             }
 
