@@ -238,3 +238,26 @@ pub async fn create_browser_webview(
 - **Position sync**: Debounce rapid resize/move events, but ensure final position is accurate
 - **URL change events**: Already debounced by persistence system (existing debounce logic)
 - **WebView creation**: Async operation, show loading state in toolbar
+
+## Hotkey Priority
+
+Overlay hotkeys (F3 to toggle visibility, F5 to toggle mode) take priority over WebView keyboard input. This is achieved through a low-level Windows keyboard hook (`src-tauri/src/keyboard_hook.rs`) that intercepts keyboard events at the OS level before they reach any window, including the WebView.
+
+The priority order is:
+1. **Low-level keyboard hook** (F3, F5) - Intercepts at OS level
+2. **WebView keyboard events** - Only receives keys not consumed by hook
+3. **Main overlay window** - Standard Tauri webview
+
+This ensures the user can always toggle the overlay even when focus is on a WebView displaying an interactive web page.
+
+## Known Limitations
+
+### WebView Opacity Synchronization
+
+Tauri 2.x doesn't expose a cross-platform opacity API for `WebviewWindow`. The `set_browser_webview_opacity` command exists for API compatibility but is a no-op. The WebView window is created with `transparent: true` which allows HTML content to have transparency, but the window itself cannot have its opacity adjusted programmatically like the parent browser window.
+
+### Navigation Events
+
+Tauri 2.x's WebviewWindow doesn't expose loading start/finish hooks. The `on_navigation` hook only fires when navigation begins (for URL bar sync). Loading state is approximated in the frontend by:
+- Setting `isLoading = true` when a navigation command is invoked
+- Clearing `isLoading` when URL change event is received or error occurs

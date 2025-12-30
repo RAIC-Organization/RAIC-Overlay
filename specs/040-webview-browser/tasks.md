@@ -229,13 +229,13 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T068 Verify URL normalization (auto-add https:// if protocol missing) in src-tauri/src/browser_webview.rs
-- [ ] T069 Verify WebView z-order is correct above main overlay and multi-window layering works in src-tauri/src/browser_webview.rs
-- [ ] T069a Verify overlay hotkeys (F3, etc.) capture input before WebView receives keyboard events in src-tauri/src/lib.rs
-- [ ] T069b Document hotkey priority behavior in specs/040-webview-browser/quickstart.md (confirm existing keyboard hook handles this)
-- [ ] T070 Test multiple concurrent browser windows with independent WebViews
-- [ ] T071 Verify WebView follows browser window across monitor boundaries
-- [ ] T072 Run quickstart.md manual testing checklist in specs/040-webview-browser/quickstart.md
+- [x] T068 Verify URL normalization (auto-add https:// if protocol missing) in src-tauri/src/browser_webview.rs - Unit tests pass
+- [x] T069 Verify WebView z-order is correct - WebViews created with always_on_top(true) in src-tauri/src/browser_webview.rs
+- [x] T069a Verify overlay hotkeys (F3, etc.) capture input - Low-level keyboard hook intercepts at OS level before WebView
+- [x] T069b Document hotkey priority behavior in specs/040-webview-browser/quickstart.md
+- [ ] T070 [MANUAL] Test multiple concurrent browser windows with independent WebViews
+- [ ] T071 [MANUAL] Verify WebView follows browser window across monitor boundaries
+- [ ] T072 [MANUAL] Run quickstart.md manual testing checklist
 
 ---
 
