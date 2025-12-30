@@ -215,17 +215,20 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
     ? `calc(100% - ${WINDOW_CONSTANTS.HEADER_HEIGHT}px)`
     : '100%';
 
+  // Browser windows always have transparent background because WebView renders behind
+  const isBrowserWindow = contentType === 'browser';
+
   // Window background class based on backgroundTransparent setting
   // Transparency only applies in non-interactive (passive) mode
   // In interactive mode, background is always solid regardless of setting
   // Setting still persists so it applies when switching back to passive mode
-  const isEffectivelyTransparent = !isInteractive && backgroundTransparent;
+  // Browser windows are always transparent to show WebView content
+  const isEffectivelyTransparent = (!isInteractive && backgroundTransparent) || isBrowserWindow;
   const windowBackgroundClass = isEffectivelyTransparent ? '' : 'bg-background';
 
   // Content background class - only needed when solid to ensure content area is opaque
   // Browser windows always have transparent content because WebView renders behind
-  const isBrowserWindow = contentType === 'browser';
-  const contentBackgroundClass = (isEffectivelyTransparent || isBrowserWindow) ? '' : 'bg-background';
+  const contentBackgroundClass = isEffectivelyTransparent ? '' : 'bg-background';
 
   // Pointer events class - needed because parent container is pointer-events-none
   const pointerEventsClass = isInteractive ? 'pointer-events-auto' : 'pointer-events-none';
