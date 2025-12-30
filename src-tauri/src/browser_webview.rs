@@ -5,8 +5,53 @@
 //!
 //! @feature 040-webview-browser
 
-use crate::browser_webview_types::{BrowserWebViewBounds, BrowserWebViewState};
-use tauri::{AppHandle, Manager, State, WebviewUrl, WebviewWindowBuilder};
+use crate::browser_webview_types::{BrowserUrlPayload, BrowserWebViewBounds, BrowserWebViewState};
+use tauri::{AppHandle, Emitter, Manager, State, WebviewUrl, WebviewWindowBuilder};
+
+/// T036: Build the browser WebView plugin that hooks into navigation events.
+///
+/// This plugin emits `browser-url-changed` events when WebViews navigate,
+/// allowing the frontend to sync the URL bar.
+pub fn build_browser_webview_plugin() -> tauri::plugin::TauriPlugin<tauri::Wry> {
+    tauri::plugin::Builder::new("browser-webview")
+        .on_navigation(|window, url| {
+            let label = window.label();
+
+            // Only handle browser-webview-* windows
+            if !label.starts_with("browser-webview-") {
+                return true; // Allow navigation for non-browser windows
+            }
+
+            let scheme = url.scheme();
+
+            // T012: Block javascript: and data: URL navigation (popup/XSS prevention)
+            if scheme == "javascript" || scheme == "data" {
+                log::debug!("Blocked navigation to {} URL in {}", scheme, label);
+                return false;
+            }
+
+            // T036, T037: Emit browser-url-changed event with navigation info
+            let url_string = url.to_string();
+            log::debug!("Navigation in {}: {}", label, url_string);
+
+            // We can't determine canGoBack/canGoForward from here reliably,
+            // so we set them to true and let the frontend handle disabling
+            // based on actual navigation attempts
+            let payload = BrowserUrlPayload {
+                webview_id: label.to_string(),
+                url: url_string,
+                can_go_back: true,  // Will be refined by actual navigation
+                can_go_forward: false,  // Forward is typically false after new navigation
+            };
+
+            if let Err(e) = window.emit("browser-url-changed", &payload) {
+                log::warn!("Failed to emit browser-url-changed: {}", e);
+            }
+
+            true // Allow navigation
+        })
+        .build()
+}
 
 /// T005: Create a new browser WebView window
 ///
@@ -50,7 +95,8 @@ pub async fn create_browser_webview(
         .map_err(|e| format!("Invalid URL '{}': {}", normalized_url, e))?;
 
     // T010: Create the WebView window with frameless, transparent, always-on-top config
-    // T012: Popup blocking is implicit - we don't register any new window handler
+    // T012: Popup blocking handled by browser-webview plugin's on_navigation hook
+    // T036: URL change events also handled by plugin
     let webview = WebviewWindowBuilder::new(&app, &webview_id, WebviewUrl::External(url))
         .title("Browser Content")
         .decorations(false)
@@ -59,15 +105,6 @@ pub async fn create_browser_webview(
         .inner_size(bounds.width, bounds.height)
         .position(bounds.x, bounds.y)
         .visible(true)
-        // T012: Block javascript: and data: URL navigation (popup/XSS prevention)
-        .on_navigation(|url| {
-            let scheme = url.scheme();
-            let allowed = scheme != "javascript" && scheme != "data";
-            if !allowed {
-                log::debug!("Blocked navigation to {} URL", scheme);
-            }
-            allowed
-        })
         .build()
         .map_err(|e| format!("Failed to create WebView: {}", e))?;
 

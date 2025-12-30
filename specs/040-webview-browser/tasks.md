@@ -141,13 +141,13 @@
 
 ### Implementation for User Story 4
 
-- [ ] T036 [US4] Add on_navigation hook to emit browser-url-changed event in src-tauri/src/browser_webview.rs
-- [ ] T037 [US4] Include canGoBack/canGoForward in browser-url-changed event payload in src-tauri/src/browser_webview.rs
-- [ ] T038 [US4] Add event listener for browser-url-changed in useBrowserWebView hook in src/hooks/useBrowserWebView.ts
-- [ ] T039 [US4] Update currentUrl state when browser-url-changed event received in src/hooks/useBrowserWebView.ts
-- [ ] T040 [US4] Update canGoBack/canGoForward state from event payload in src/hooks/useBrowserWebView.ts
-- [ ] T041 [US4] Pass currentUrl from hook to BrowserToolbar URL bar in src/components/windows/BrowserContent.tsx
-- [ ] T042 [US4] Pass canGoBack/canGoForward to enable/disable back/forward buttons in src/components/windows/BrowserContent.tsx
+- [x] T036 [US4] Add on_navigation hook to emit browser-url-changed event in src-tauri/src/browser_webview.rs
+- [x] T037 [US4] Include canGoBack/canGoForward in browser-url-changed event payload in src-tauri/src/browser_webview.rs
+- [x] T038 [US4] Add event listener for browser-url-changed in useBrowserWebView hook in src/hooks/useBrowserWebView.ts
+- [x] T039 [US4] Update currentUrl state when browser-url-changed event received in src/hooks/useBrowserWebView.ts
+- [x] T040 [US4] Update canGoBack/canGoForward state from event payload in src/hooks/useBrowserWebView.ts
+- [x] T041 [US4] Pass currentUrl from hook to BrowserToolbar URL bar in src/components/windows/BrowserContent.tsx
+- [x] T042 [US4] Pass canGoBack/canGoForward to enable/disable back/forward buttons in src/components/windows/BrowserContent.tsx
 
 **Checkpoint**: User Story 4 complete - URL bar reflects WebView navigation within 500ms
 

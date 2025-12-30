@@ -420,6 +420,8 @@ pub fn run() {
         .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, None))
         // T003 (039): Register prevent-default plugin to block browser shortcuts
         .plugin(get_prevent_default_plugin())
+        // T036 (040): Register browser WebView plugin for navigation events
+        .plugin(browser_webview::build_browser_webview_plugin())
         .plugin(hotkey::build_shortcut_plugin().build())
         .manage(OverlayState::default())
         // T008 (040): Initialize BrowserWebViewState for WebView tracking
