@@ -469,6 +469,7 @@ pub fn run() {
             browser_webview::browser_go_back,
             browser_webview::browser_go_forward,
             browser_webview::browser_refresh,
+            browser_webview::report_browser_url_change,
             browser_webview::set_browser_zoom,
             // T029 (040): Browser WebView positioning command
             browser_webview::sync_browser_webview_bounds,
@@ -529,6 +530,9 @@ pub fn run() {
             // T048 (028): Start process monitor for automatic game detection
             #[cfg(windows)]
             process_monitor::start_process_monitor(handle.clone());
+
+            // Start browser WebView URL polling for tracking navigation changes
+            browser_webview::start_browser_url_polling(handle.clone());
 
             // Get main window
             let window = app

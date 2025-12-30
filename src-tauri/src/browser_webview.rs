@@ -5,7 +5,7 @@
 //!
 //! @feature 040-webview-browser
 
-use crate::browser_webview_types::{BrowserUrlPayload, BrowserWebViewBounds, BrowserWebViewState};
+use crate::browser_webview_types::{BrowserLoadingPayload, BrowserUrlPayload, BrowserWebViewBounds, BrowserWebViewState};
 use crate::state::OverlayState;
 use tauri::{AppHandle, Emitter, Manager, State, WebviewUrl, WebviewWindowBuilder};
 
@@ -120,7 +120,7 @@ pub async fn create_browser_webview(
 
     // T010: Create the WebView window with frameless, transparent, always-on-top config
     // T012: Popup blocking handled by browser-webview plugin's on_navigation hook
-    // T036: URL change events also handled by plugin
+    // T036: URL change events handled by on_navigation hook and backend URL polling
     // CRITICAL: focused(false) prevents WebView from stealing focus from main overlay
     // skip_taskbar(true) keeps the browser window hidden from taskbar
     // resizable(false) prevents direct resize - size is controlled by React component
@@ -309,6 +309,32 @@ pub fn browser_refresh(app: AppHandle, webview_id: String) -> Result<(), String>
     webview
         .eval("window.location.reload()")
         .map_err(|e| format!("Refresh failed: {}", e))?;
+
+    Ok(())
+}
+
+/// Report URL change from injected JavaScript
+///
+/// Called by the URL tracking script injected into WebViews.
+/// Emits browser-url-changed event to all windows for the React app to receive.
+#[tauri::command]
+pub fn report_browser_url_change(
+    app: AppHandle,
+    webview_id: String,
+    url: String,
+) -> Result<(), String> {
+    log::debug!("URL change reported for {}: {}", webview_id, url);
+
+    let payload = BrowserUrlPayload {
+        webview_id: webview_id.clone(),
+        url,
+        can_go_back: true,
+        can_go_forward: false,
+    };
+
+    // Emit to all windows so the React app in main overlay receives it
+    app.emit("browser-url-changed", &payload)
+        .map_err(|e| format!("Failed to emit browser-url-changed: {}", e))?;
 
     Ok(())
 }
@@ -722,6 +748,88 @@ pub fn destroy_all_browser_webviews(
 
     log::info!("All browser WebViews destroyed");
     Ok(())
+}
+
+/// Start URL polling for all browser WebViews.
+///
+/// Polls each WebView's current URL every 500ms and emits browser-url-changed
+/// events when URLs change. This handles cases where on_navigation doesn't fire
+/// (e.g., client-side routing, redirects, JavaScript navigation).
+pub fn start_browser_url_polling(app: AppHandle) {
+    use std::thread;
+    use std::time::Duration;
+
+    thread::spawn(move || {
+        log::debug!("Starting browser URL polling thread");
+
+        loop {
+            thread::sleep(Duration::from_millis(500));
+
+            // Get state from app
+            let browser_state = match app.try_state::<BrowserWebViewState>() {
+                Some(state) => state,
+                None => continue, // State not ready yet
+            };
+
+            // Get all WebView labels
+            let labels = browser_state.get_all_labels();
+
+            for webview_id in labels {
+                // Get the WebView window
+                let webview = match app.get_webview_window(&webview_id) {
+                    Some(w) => w,
+                    None => continue, // WebView closed or not found
+                };
+
+                // Get current URL from the WebView
+                let current_url = match webview.url() {
+                    Ok(url) => url.to_string(),
+                    Err(_) => continue, // Can't get URL, skip
+                };
+
+                // Get stored URL from state
+                let stored_url = browser_state
+                    .get_info(&webview_id)
+                    .map(|info| info.current_url)
+                    .unwrap_or_default();
+
+                // If URL changed, update state and emit event
+                if current_url != stored_url && !current_url.is_empty() {
+                    log::debug!(
+                        "URL polling detected change for {}: {} -> {}",
+                        webview_id,
+                        stored_url,
+                        current_url
+                    );
+
+                    // Update state
+                    browser_state.update_url(&webview_id, &current_url);
+
+                    // Emit URL change event to all windows
+                    let url_payload = BrowserUrlPayload {
+                        webview_id: webview_id.clone(),
+                        url: current_url,
+                        can_go_back: true,
+                        can_go_forward: false,
+                    };
+
+                    if let Err(e) = app.emit("browser-url-changed", &url_payload) {
+                        log::warn!("Failed to emit browser-url-changed from polling: {}", e);
+                    }
+
+                    // Also emit loading=false to stop the loading indicator
+                    let loading_payload = BrowserLoadingPayload {
+                        webview_id: webview_id.clone(),
+                        is_loading: false,
+                    };
+
+                    if let Err(e) = app.emit("browser-loading", &loading_payload) {
+                        log::warn!("Failed to emit browser-loading from polling: {}", e);
+                    }
+                }
+            }
+        }
+    });
 }
 
 /// Normalize URL by adding https:// if no protocol is present.
