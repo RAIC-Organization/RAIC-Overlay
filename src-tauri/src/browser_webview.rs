@@ -6,6 +6,7 @@
 //! @feature 040-webview-browser
 
 use crate::browser_webview_types::{BrowserUrlPayload, BrowserWebViewBounds, BrowserWebViewState};
+use crate::state::OverlayState;
 use tauri::{AppHandle, Emitter, Manager, State, WebviewUrl, WebviewWindowBuilder};
 
 /// T036: Build the browser WebView plugin that hooks into navigation events.
@@ -65,6 +66,7 @@ pub fn build_browser_webview_plugin() -> tauri::plugin::TauriPlugin<tauri::Wry> 
 pub async fn create_browser_webview(
     app: AppHandle,
     state: State<'_, BrowserWebViewState>,
+    overlay_state: State<'_, OverlayState>,
     window_id: String,
     initial_url: String,
     bounds: BrowserWebViewBounds,
@@ -109,12 +111,17 @@ pub async fn create_browser_webview(
         .parse::<tauri::Url>()
         .map_err(|e| format!("Invalid URL '{}': {}", normalized_url, e))?;
 
+    // Check if overlay is currently visible - WebView should match overlay visibility
+    // This prevents WebViews from showing on startup when overlay is hidden
+    let overlay_visible = overlay_state.is_visible();
+
     // T010: Create the WebView window with frameless, transparent, always-on-top config
     // T012: Popup blocking handled by browser-webview plugin's on_navigation hook
     // T036: URL change events also handled by plugin
     // CRITICAL: focused(false) prevents WebView from stealing focus from main overlay
     // skip_taskbar(true) keeps the browser window hidden from taskbar
     // resizable(false) prevents direct resize - size is controlled by React component
+    // visible(overlay_visible) syncs with overlay visibility state
     let webview = WebviewWindowBuilder::new(&app, &webview_id, WebviewUrl::External(url))
         .title("Browser Content")
         .decorations(false)
@@ -123,7 +130,7 @@ pub async fn create_browser_webview(
         .resizable(false)  // Prevent direct resize, React component controls size
         .inner_size(bounds.width, bounds.height)
         .position(bounds.x, bounds.y)
-        .visible(true)
+        .visible(overlay_visible)  // Match overlay visibility state
         .focused(false)  // Don't steal focus from main overlay window
         .skip_taskbar(true)  // Hide from taskbar
         .build()
@@ -172,10 +179,16 @@ pub async fn create_browser_webview(
         log::debug!("WebView {} initial opacity set to {:.0}%", webview_id, opacity_value * 100.0);
     }
 
-    // Register in state
+    // Register in state (with initial visibility matching overlay)
     state.register(&webview_id, &window_id, &normalized_url, zoom_factor);
+    state.update_visibility(&webview_id, overlay_visible);
 
-    log::info!("Created browser WebView: {} -> {}", webview_id, normalized_url);
+    log::info!(
+        "Created browser WebView: {} -> {} (visible: {})",
+        webview_id,
+        normalized_url,
+        overlay_visible
+    );
 
     Ok(webview_id)
 }
