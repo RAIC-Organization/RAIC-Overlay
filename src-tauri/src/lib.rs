@@ -1,5 +1,7 @@
 // T002 (040): Browser WebView types for WebView architecture
 pub mod browser_webview_types;
+// T005-T006 (040): Browser WebView commands for WebView architecture
+pub mod browser_webview;
 pub mod hotkey;
 // T008 (029): Low-level keyboard hook module
 #[cfg(windows)]
@@ -420,6 +422,8 @@ pub fn run() {
         .plugin(get_prevent_default_plugin())
         .plugin(hotkey::build_shortcut_plugin().build())
         .manage(OverlayState::default())
+        // T008 (040): Initialize BrowserWebViewState for WebView tracking
+        .manage(browser_webview_types::BrowserWebViewState::new())
         .invoke_handler(tauri::generate_handler![
             set_visibility,
             get_overlay_state,
@@ -440,7 +444,10 @@ pub fn run() {
             user_settings::load_user_settings,
             user_settings::save_user_settings,
             user_settings::update_hotkeys,
-            settings_window::open_settings_window
+            settings_window::open_settings_window,
+            // T007 (040): Browser WebView commands
+            browser_webview::create_browser_webview,
+            browser_webview::destroy_browser_webview
         ])
         .setup(|app| {
             let handle = app.handle().clone();

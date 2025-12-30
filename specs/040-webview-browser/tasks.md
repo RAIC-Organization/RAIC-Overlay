@@ -39,14 +39,14 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Create BrowserWebViewState struct with HashMap and methods in src-tauri/src/browser_webview_types.rs
-- [ ] T005 Create browser_webview.rs module with create_browser_webview command in src-tauri/src/browser_webview.rs
-- [ ] T006 Add destroy_browser_webview command in src-tauri/src/browser_webview.rs
-- [ ] T007 Register browser_webview module and commands in src-tauri/src/lib.rs
-- [ ] T008 Initialize BrowserWebViewState in app builder in src-tauri/src/lib.rs
-- [ ] T009 Create useBrowserWebView hook skeleton with create/destroy lifecycle in src/hooks/useBrowserWebView.ts
-- [ ] T009a [P] Create useBrowserWebView.test.ts skeleton with lifecycle tests in src/hooks/useBrowserWebView.test.ts
-- [ ] T009b [P] Create browser_webview Rust test module skeleton in src-tauri/src/browser_webview.rs (#[cfg(test)] mod tests)
+- [x] T004 Create BrowserWebViewState struct with HashMap and methods in src-tauri/src/browser_webview_types.rs
+- [x] T005 Create browser_webview.rs module with create_browser_webview command in src-tauri/src/browser_webview.rs
+- [x] T006 Add destroy_browser_webview command in src-tauri/src/browser_webview.rs
+- [x] T007 Register browser_webview module and commands in src-tauri/src/lib.rs
+- [x] T008 Initialize BrowserWebViewState in app builder in src-tauri/src/lib.rs
+- [x] T009 Create useBrowserWebView hook skeleton with create/destroy lifecycle in src/hooks/useBrowserWebView.ts
+- [x] T009a [P] Create useBrowserWebView.test.ts skeleton with lifecycle tests in src/hooks/useBrowserWebView.test.ts
+- [x] T009b [P] Create browser_webview Rust test module skeleton in src-tauri/src/browser_webview.rs (#[cfg(test)] mod tests)
 
 **Checkpoint**: Foundation ready - WebView can be created and destroyed. User story implementation can now begin.
 
