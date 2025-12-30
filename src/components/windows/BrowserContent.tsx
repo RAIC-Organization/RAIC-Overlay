@@ -265,7 +265,7 @@ export function BrowserContent({
         {!isInteractive && <div className="absolute inset-1 z-10" />}
         <div
           ref={contentRef}
-          className="w-full h-full bg-background/50"
+          className="w-full h-full"
         />
       </div>
     </div>
