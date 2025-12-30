@@ -89,15 +89,15 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
         const zoomFactor = initialZoom / 100;
 
         const id = await invoke<string>("create_browser_webview", {
-          windowId,
-          initialUrl,
+          window_id: windowId,
+          initial_url: initialUrl,
           bounds,
           zoom: zoomFactor,
         });
 
         if (!mounted) {
           // Component unmounted during creation, destroy the WebView
-          await invoke("destroy_browser_webview", { webviewId: id });
+          await invoke("destroy_browser_webview", { webview_id: id });
           return;
         }
 
@@ -129,7 +129,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
       const id = webviewIdRef.current;
       if (id) {
         logDebug(`[useBrowserWebView] Destroying WebView: ${id}`);
-        invoke("destroy_browser_webview", { webviewId: id }).catch((err) => {
+        invoke("destroy_browser_webview", { webview_id: id }).catch((err) => {
           logError(`[useBrowserWebView] Failed to destroy WebView: ${err}`);
         });
       }
@@ -205,7 +205,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
       try {
         setIsLoading(true);
         setError(null);
-        await invoke("browser_navigate", { webviewId, url });
+        await invoke("browser_navigate", { webview_id: webviewId, url });
         setCurrentUrl(url);
       } catch (err) {
         logError(`[useBrowserWebView] Navigate failed: ${err}`);
@@ -225,7 +225,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
 
     try {
       setIsLoading(true);
-      await invoke("browser_go_back", { webviewId });
+      await invoke("browser_go_back", { webview_id: webviewId });
     } catch (err) {
       logError(`[useBrowserWebView] Go back failed: ${err}`);
       setIsLoading(false);
@@ -237,7 +237,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
 
     try {
       setIsLoading(true);
-      await invoke("browser_go_forward", { webviewId });
+      await invoke("browser_go_forward", { webview_id: webviewId });
     } catch (err) {
       logError(`[useBrowserWebView] Go forward failed: ${err}`);
       setIsLoading(false);
@@ -250,7 +250,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
     try {
       setIsLoading(true);
       setError(null);
-      await invoke("browser_refresh", { webviewId });
+      await invoke("browser_refresh", { webview_id: webviewId });
     } catch (err) {
       logError(`[useBrowserWebView] Refresh failed: ${err}`);
       setIsLoading(false);
@@ -266,7 +266,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
         const clampedZoom = Math.max(10, Math.min(200, newZoom));
         const zoomFactor = clampedZoom / 100;
 
-        await invoke("set_browser_zoom", { webviewId, zoom: zoomFactor });
+        await invoke("set_browser_zoom", { webview_id: webviewId, zoom: zoomFactor });
         setZoom(clampedZoom);
         onZoomChange?.(clampedZoom);
       } catch (err) {
@@ -281,7 +281,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
       if (!webviewId) return;
 
       try {
-        await invoke("sync_browser_webview_bounds", { webviewId, bounds });
+        await invoke("sync_browser_webview_bounds", { webview_id: webviewId, bounds });
       } catch (err) {
         logError(`[useBrowserWebView] Sync bounds failed: ${err}`);
       }
@@ -297,7 +297,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
         // Clamp opacity to valid range
         const clampedOpacity = Math.max(0, Math.min(1, opacity));
         await invoke("set_browser_webview_opacity", {
-          webviewId,
+          webview_id: webviewId,
           opacity: clampedOpacity,
         });
       } catch (err) {
@@ -313,7 +313,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
 
       try {
         await invoke("set_browser_webview_visibility", {
-          webviewId,
+          webview_id: webviewId,
           visible,
         });
       } catch (err) {
