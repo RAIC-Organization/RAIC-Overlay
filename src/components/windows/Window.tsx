@@ -40,7 +40,7 @@ type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw' | null;
 const RESIZE_HANDLE_SIZE = 8;
 
 export function Window({ window: windowInstance, isInteractive = true, onExitComplete }: WindowProps) {
-  const { id, title, component: Component, componentProps, x, y, width, height, zIndex, opacity, backgroundTransparent } =
+  const { id, title, component: Component, componentProps, contentType, x, y, width, height, zIndex, opacity, backgroundTransparent } =
     windowInstance;
 
   const { focusWindow, resizeWindow, moveWindow, setWindowOpacity, setWindowBackgroundTransparent } = useWindows();
@@ -223,7 +223,9 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
   const windowBackgroundClass = isEffectivelyTransparent ? '' : 'bg-background';
 
   // Content background class - only needed when solid to ensure content area is opaque
-  const contentBackgroundClass = isEffectivelyTransparent ? '' : 'bg-background';
+  // Browser windows always have transparent content because WebView renders behind
+  const isBrowserWindow = contentType === 'browser';
+  const contentBackgroundClass = (isEffectivelyTransparent || isBrowserWindow) ? '' : 'bg-background';
 
   // Pointer events class - needed because parent container is pointer-events-none
   const pointerEventsClass = isInteractive ? 'pointer-events-auto' : 'pointer-events-none';
