@@ -235,21 +235,24 @@ export function BrowserContent({
 
   return (
     <div className="flex flex-col h-full">
+      {/* Toolbar with solid background - window bg is transparent for browser */}
       {isInteractive && (
-        <BrowserToolbar
-          url={webview.currentUrl}
-          canGoBack={webview.canGoBack}
-          canGoForward={webview.canGoForward}
-          zoom={webview.zoom}
-          isLoading={webview.isLoading}
-          error={webview.error}
-          onNavigate={webview.navigate}
-          onBack={webview.goBack}
-          onForward={webview.goForward}
-          onRefresh={webview.refresh}
-          onZoomIn={handleZoomIn}
-          onZoomOut={handleZoomOut}
-        />
+        <div className="bg-background">
+          <BrowserToolbar
+            url={webview.currentUrl}
+            canGoBack={webview.canGoBack}
+            canGoForward={webview.canGoForward}
+            zoom={webview.zoom}
+            isLoading={webview.isLoading}
+            error={webview.error}
+            onNavigate={webview.navigate}
+            onBack={webview.goBack}
+            onForward={webview.goForward}
+            onRefresh={webview.refresh}
+            onZoomIn={handleZoomIn}
+            onZoomOut={handleZoomOut}
+          />
+        </div>
       )}
       {/* T016: Content area placeholder - WebView is positioned over this area */}
       {/* Padding allows window resize handles to be grabbed */}

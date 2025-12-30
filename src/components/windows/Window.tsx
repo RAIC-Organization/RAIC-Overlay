@@ -263,8 +263,9 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
         onPointerLeave={handlePointerLeave}
       >
         {/* Header - only visible in interactive mode */}
+        {/* Browser windows need explicit background since window bg is transparent */}
         {isInteractive && (
-          <div className="pointer-events-auto">
+          <div className={`pointer-events-auto ${isBrowserWindow ? 'bg-background' : ''}`}>
             <WindowHeader
               windowId={id}
               title={title}
