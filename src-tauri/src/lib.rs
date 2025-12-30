@@ -447,7 +447,13 @@ pub fn run() {
             settings_window::open_settings_window,
             // T007 (040): Browser WebView commands
             browser_webview::create_browser_webview,
-            browser_webview::destroy_browser_webview
+            browser_webview::destroy_browser_webview,
+            // T022 (040): Browser WebView navigation commands
+            browser_webview::browser_navigate,
+            browser_webview::browser_go_back,
+            browser_webview::browser_go_forward,
+            browser_webview::browser_refresh,
+            browser_webview::set_browser_zoom
         ])
         .setup(|app| {
             let handle = app.handle().clone();

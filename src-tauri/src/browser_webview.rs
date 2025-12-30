@@ -110,6 +110,112 @@ pub fn destroy_browser_webview(
     Ok(())
 }
 
+/// T017: Navigate the WebView to a new URL
+///
+/// Changes the WebView's current page to the specified URL.
+#[tauri::command]
+pub fn browser_navigate(app: AppHandle, webview_id: String, url: String) -> Result<(), String> {
+    log::debug!("Navigating WebView {} to {}", webview_id, url);
+
+    let webview = app
+        .get_webview_window(&webview_id)
+        .ok_or_else(|| format!("WebView not found: {}", webview_id))?;
+
+    // Normalize URL
+    let normalized_url = normalize_url(&url)?;
+
+    // Parse and navigate
+    let parsed_url = normalized_url
+        .parse::<tauri::Url>()
+        .map_err(|e| format!("Invalid URL '{}': {}", normalized_url, e))?;
+
+    webview
+        .navigate(parsed_url)
+        .map_err(|e| format!("Navigation failed: {}", e))?;
+
+    log::info!("WebView {} navigating to {}", webview_id, normalized_url);
+    Ok(())
+}
+
+/// T018: Navigate back in the WebView history
+///
+/// Goes back one page in the WebView's navigation history.
+#[tauri::command]
+pub fn browser_go_back(app: AppHandle, webview_id: String) -> Result<(), String> {
+    log::debug!("WebView {} going back", webview_id);
+
+    let webview = app
+        .get_webview_window(&webview_id)
+        .ok_or_else(|| format!("WebView not found: {}", webview_id))?;
+
+    // Execute JavaScript to go back
+    webview
+        .eval("window.history.back()")
+        .map_err(|e| format!("Go back failed: {}", e))?;
+
+    Ok(())
+}
+
+/// T019: Navigate forward in the WebView history
+///
+/// Goes forward one page in the WebView's navigation history.
+#[tauri::command]
+pub fn browser_go_forward(app: AppHandle, webview_id: String) -> Result<(), String> {
+    log::debug!("WebView {} going forward", webview_id);
+
+    let webview = app
+        .get_webview_window(&webview_id)
+        .ok_or_else(|| format!("WebView not found: {}", webview_id))?;
+
+    // Execute JavaScript to go forward
+    webview
+        .eval("window.history.forward()")
+        .map_err(|e| format!("Go forward failed: {}", e))?;
+
+    Ok(())
+}
+
+/// T020: Refresh the current page in the WebView
+///
+/// Reloads the current page in the WebView.
+#[tauri::command]
+pub fn browser_refresh(app: AppHandle, webview_id: String) -> Result<(), String> {
+    log::debug!("WebView {} refreshing", webview_id);
+
+    let webview = app
+        .get_webview_window(&webview_id)
+        .ok_or_else(|| format!("WebView not found: {}", webview_id))?;
+
+    // Execute JavaScript to reload
+    webview
+        .eval("window.location.reload()")
+        .map_err(|e| format!("Refresh failed: {}", e))?;
+
+    Ok(())
+}
+
+/// T021: Set the zoom level of the WebView
+///
+/// Changes the WebView's zoom factor (0.1 - 2.0).
+#[tauri::command]
+pub fn set_browser_zoom(app: AppHandle, webview_id: String, zoom: f64) -> Result<(), String> {
+    log::debug!("Setting WebView {} zoom to {}", webview_id, zoom);
+
+    let webview = app
+        .get_webview_window(&webview_id)
+        .ok_or_else(|| format!("WebView not found: {}", webview_id))?;
+
+    // Clamp zoom to valid range
+    let zoom_factor = zoom.clamp(0.1, 2.0);
+
+    webview
+        .set_zoom(zoom_factor)
+        .map_err(|e| format!("Set zoom failed: {}", e))?;
+
+    log::info!("WebView {} zoom set to {:.0}%", webview_id, zoom_factor * 100.0);
+    Ok(())
+}
+
 /// Normalize URL by adding https:// if no protocol is present.
 fn normalize_url(url: &str) -> Result<String, String> {
     let trimmed = url.trim();

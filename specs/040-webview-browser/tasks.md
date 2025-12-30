@@ -86,22 +86,22 @@
 
 ### Implementation for User Story 2
 
-- [ ] T017 [P] [US2] Add browser_navigate command in src-tauri/src/browser_webview.rs
-- [ ] T018 [P] [US2] Add browser_go_back command in src-tauri/src/browser_webview.rs
-- [ ] T019 [P] [US2] Add browser_go_forward command in src-tauri/src/browser_webview.rs
-- [ ] T020 [P] [US2] Add browser_refresh command in src-tauri/src/browser_webview.rs
-- [ ] T021 [P] [US2] Add set_browser_zoom command in src-tauri/src/browser_webview.rs
-- [ ] T022 [US2] Register new navigation commands in src-tauri/src/lib.rs
-- [ ] T023 [US2] Add navigate, goBack, goForward, refresh, setZoom methods to useBrowserWebView hook in src/hooks/useBrowserWebView.ts
-- [ ] T024 [US2] Connect BrowserToolbar onNavigate to hook navigate method in src/components/windows/BrowserContent.tsx
-- [ ] T025 [US2] Connect BrowserToolbar onBack/onForward to hook methods in src/components/windows/BrowserContent.tsx
-- [ ] T026 [US2] Connect BrowserToolbar onRefresh to hook method in src/components/windows/BrowserContent.tsx
-- [ ] T027 [US2] Connect BrowserToolbar zoom controls to hook setZoom method in src/components/windows/BrowserContent.tsx
+- [x] T017 [P] [US2] Add browser_navigate command in src-tauri/src/browser_webview.rs
+- [x] T018 [P] [US2] Add browser_go_back command in src-tauri/src/browser_webview.rs
+- [x] T019 [P] [US2] Add browser_go_forward command in src-tauri/src/browser_webview.rs
+- [x] T020 [P] [US2] Add browser_refresh command in src-tauri/src/browser_webview.rs
+- [x] T021 [P] [US2] Add set_browser_zoom command in src-tauri/src/browser_webview.rs
+- [x] T022 [US2] Register new navigation commands in src-tauri/src/lib.rs
+- [x] T023 [US2] Add navigate, goBack, goForward, refresh, setZoom methods to useBrowserWebView hook in src/hooks/useBrowserWebView.ts
+- [x] T024 [US2] Connect BrowserToolbar onNavigate to hook navigate method in src/components/windows/BrowserContent.tsx
+- [x] T025 [US2] Connect BrowserToolbar onBack/onForward to hook methods in src/components/windows/BrowserContent.tsx
+- [x] T026 [US2] Connect BrowserToolbar onRefresh to hook method in src/components/windows/BrowserContent.tsx
+- [x] T027 [US2] Connect BrowserToolbar zoom controls to hook setZoom method in src/components/windows/BrowserContent.tsx
 
 ### Tests for User Story 2
 
-- [ ] T027a [P] [US2] Add test: navigate command changes WebView URL in src-tauri/src/browser_webview.rs
-- [ ] T027b [P] [US2] Add test: useBrowserWebView hook exposes navigation methods in src/hooks/useBrowserWebView.test.ts
+- [x] T027a [P] [US2] Add test: navigate command changes WebView URL in src-tauri/src/browser_webview.rs
+- [x] T027b [P] [US2] Add test: useBrowserWebView hook exposes navigation methods in src/hooks/useBrowserWebView.test.ts
 
 **Checkpoint**: User Story 2 complete - All browser controls (navigate, back, forward, refresh, zoom) work with WebView
 
