@@ -68,12 +68,20 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
   const unlistenErrorRef = useRef<UnlistenFn | null>(null);
   const unlistenLoadingRef = useRef<UnlistenFn | null>(null);
   const webviewIdRef = useRef<string | null>(null);
+  const creatingRef = useRef(false); // Guard against duplicate creation
 
   // Create WebView on mount
   useEffect(() => {
     let mounted = true;
 
     const createWebView = async () => {
+      // Prevent duplicate creation attempts
+      if (creatingRef.current || webviewIdRef.current) {
+        logDebug(`[useBrowserWebView] Skipping duplicate creation for ${windowId}`);
+        return;
+      }
+      creatingRef.current = true;
+
       try {
         logDebug(`[useBrowserWebView] Creating WebView for window ${windowId}`);
 
@@ -108,6 +116,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
 
         logDebug(`[useBrowserWebView] WebView created: ${id}`);
       } catch (err) {
+        creatingRef.current = false; // Reset on error so retry is possible
         if (mounted) {
           logError(`[useBrowserWebView] Failed to create WebView: ${err}`);
           setError({
@@ -125,6 +134,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
     // Cleanup on unmount
     return () => {
       mounted = false;
+      creatingRef.current = false;
 
       const id = webviewIdRef.current;
       if (id) {
@@ -132,9 +142,12 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
         invoke("destroy_browser_webview", { webviewId: id }).catch((err) => {
           logError(`[useBrowserWebView] Failed to destroy WebView: ${err}`);
         });
+        webviewIdRef.current = null;
       }
     };
-  }, [windowId, initialUrl, initialZoom, initialBounds]);
+    // Note: initialBounds intentionally excluded - only windowId matters for identity
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [windowId]);
 
   // Set up event listeners
   useEffect(() => {
