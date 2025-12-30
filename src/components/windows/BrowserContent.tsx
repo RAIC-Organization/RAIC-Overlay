@@ -198,20 +198,23 @@ export function BrowserContent({
     return () => cancelAnimationFrame(frameId);
   }, [webview.isReady, webview.syncBounds, webview.setIgnoreCursor, isInteractive, windowX, windowY, windowWidth, windowHeight]);
 
-  // T046: Sync opacity with WebView when it changes
-  useEffect(() => {
-    if (!webview.isReady || opacity === undefined) return;
-    webview.setOpacity(opacity);
-  }, [webview.isReady, webview.setOpacity, opacity]);
-
   // Sync interactive mode with WebView cursor handling
   // In non-interactive (passive/fullscreen) mode, ignore cursor events
   // so clicks pass through to the game behind
+  // NOTE: This effect MUST run before opacity sync to ensure correct state
   useEffect(() => {
     if (!webview.isReady) return;
     // When not interactive, ignore cursor events (clicks pass through)
     webview.setIgnoreCursor(!isInteractive);
   }, [webview.isReady, webview.setIgnoreCursor, isInteractive]);
+
+  // T046: Sync opacity with WebView when it changes or when mode changes
+  // Re-apply opacity after mode toggle because Windows API calls in
+  // setIgnoreCursor may affect layered window attributes
+  useEffect(() => {
+    if (!webview.isReady || opacity === undefined) return;
+    webview.setOpacity(opacity);
+  }, [webview.isReady, webview.setOpacity, opacity, isInteractive]);
 
   // Zoom handlers that use the WebView hook
   const handleZoomIn = useCallback(() => {
