@@ -62,7 +62,9 @@ impl BrowserWebViewInfo {
 }
 
 /// Event payload for URL change notifications.
+/// Uses camelCase for JSON serialization to match TypeScript interface.
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct BrowserUrlPayload {
     /// Source webview label
     pub webview_id: String,
@@ -75,7 +77,9 @@ pub struct BrowserUrlPayload {
 }
 
 /// Event payload for error notifications.
+/// Uses camelCase for JSON serialization to match TypeScript interface.
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct BrowserErrorPayload {
     /// Source webview label
     pub webview_id: String,
@@ -86,7 +90,9 @@ pub struct BrowserErrorPayload {
 }
 
 /// Event payload for loading state notifications.
+/// Uses camelCase for JSON serialization to match TypeScript interface.
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct BrowserLoadingPayload {
     /// Source webview label
     pub webview_id: String,

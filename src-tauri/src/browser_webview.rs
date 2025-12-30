@@ -8,11 +8,13 @@
 use crate::browser_webview_types::{BrowserLoadingPayload, BrowserUrlPayload, BrowserWebViewBounds, BrowserWebViewState};
 use crate::state::OverlayState;
 use tauri::{AppHandle, Emitter, Manager, State, WebviewUrl, WebviewWindowBuilder};
+use tauri::webview::PageLoadEvent;
 
 /// T036: Build the browser WebView plugin that hooks into navigation events.
 ///
-/// This plugin emits `browser-url-changed` events when WebViews navigate,
-/// allowing the frontend to sync the URL bar.
+/// This plugin handles navigation security (popup/XSS blocking).
+/// URL change events are handled by on_page_load callback in create_browser_webview
+/// because on_page_load fires AFTER navigation completes with the correct URL.
 pub fn build_browser_webview_plugin() -> tauri::plugin::TauriPlugin<tauri::Wry> {
     tauri::plugin::Builder::new("browser-webview")
         .on_navigation(|window, url| {
@@ -31,26 +33,8 @@ pub fn build_browser_webview_plugin() -> tauri::plugin::TauriPlugin<tauri::Wry> 
                 return false;
             }
 
-            // T036, T037: Emit browser-url-changed event with navigation info
-            let url_string = url.to_string();
-            log::debug!("Navigation in {}: {}", label, url_string);
-
-            // We can't determine canGoBack/canGoForward from here reliably,
-            // so we set them to true and let the frontend handle disabling
-            // based on actual navigation attempts
-            let payload = BrowserUrlPayload {
-                webview_id: label.to_string(),
-                url: url_string,
-                can_go_back: true,  // Will be refined by actual navigation
-                can_go_forward: false,  // Forward is typically false after new navigation
-            };
-
-            // IMPORTANT: Use emit_all to send to ALL windows including main overlay
-            // window.emit() only sends to the WebView window itself, but React app
-            // is running in the main overlay window and needs to receive this event
-            if let Err(e) = window.app_handle().emit("browser-url-changed", &payload) {
-                log::warn!("Failed to emit browser-url-changed: {}", e);
-            }
+            // Log navigation attempt (URL emission handled by on_page_load callback)
+            log::debug!("Navigation allowed in {}: {}", label, url);
 
             true // Allow navigation
         })
@@ -120,11 +104,16 @@ pub async fn create_browser_webview(
 
     // T010: Create the WebView window with frameless, transparent, always-on-top config
     // T012: Popup blocking handled by browser-webview plugin's on_navigation hook
-    // T036: URL change events handled by on_navigation hook and backend URL polling
+    // T036: URL change events handled by on_page_load callback (more reliable than on_navigation)
     // CRITICAL: focused(false) prevents WebView from stealing focus from main overlay
     // skip_taskbar(true) keeps the browser window hidden from taskbar
     // resizable(false) prevents direct resize - size is controlled by React component
     // visible(overlay_visible) syncs with overlay visibility state
+
+    // Clone values needed in the on_page_load callback
+    let webview_id_for_callback = webview_id.clone();
+    let app_handle = app.clone();
+
     let webview = WebviewWindowBuilder::new(&app, &webview_id, WebviewUrl::External(url))
         .title("Browser Content")
         .decorations(false)
@@ -136,6 +125,57 @@ pub async fn create_browser_webview(
         .visible(overlay_visible)  // Match overlay visibility state
         .focused(false)  // Don't steal focus from main overlay window
         .skip_taskbar(true)  // Hide from taskbar
+        // T036: on_page_load fires when pages actually load, more reliable for URL tracking
+        // than on_navigation (which fires before navigation)
+        .on_page_load(move |_window, payload| {
+            let page_url = payload.url().to_string();
+
+            match payload.event() {
+                PageLoadEvent::Started => {
+                    log::debug!("Page load started in {}: {}", webview_id_for_callback, page_url);
+
+                    // Emit loading started event
+                    let loading_payload = BrowserLoadingPayload {
+                        webview_id: webview_id_for_callback.clone(),
+                        is_loading: true,
+                    };
+
+                    if let Err(e) = app_handle.emit("browser-loading", &loading_payload) {
+                        log::warn!("Failed to emit browser-loading (started): {}", e);
+                    }
+                }
+                PageLoadEvent::Finished => {
+                    log::info!("Page load finished in {}: {}", webview_id_for_callback, page_url);
+
+                    // Update state with new URL
+                    if let Some(browser_state) = app_handle.try_state::<BrowserWebViewState>() {
+                        browser_state.update_url(&webview_id_for_callback, &page_url);
+                    }
+
+                    // Emit URL change event with the actual loaded URL
+                    let url_payload = BrowserUrlPayload {
+                        webview_id: webview_id_for_callback.clone(),
+                        url: page_url,
+                        can_go_back: true,  // Will be refined by actual navigation attempts
+                        can_go_forward: false,  // Typically false after new navigation
+                    };
+
+                    if let Err(e) = app_handle.emit("browser-url-changed", &url_payload) {
+                        log::warn!("Failed to emit browser-url-changed: {}", e);
+                    }
+
+                    // Emit loading finished event
+                    let loading_payload = BrowserLoadingPayload {
+                        webview_id: webview_id_for_callback.clone(),
+                        is_loading: false,
+                    };
+
+                    if let Err(e) = app_handle.emit("browser-loading", &loading_payload) {
+                        log::warn!("Failed to emit browser-loading (finished): {}", e);
+                    }
+                }
+            }
+        })
         .build()
         .map_err(|e| format!("Failed to create WebView: {}", e))?;
 
@@ -750,25 +790,32 @@ pub fn destroy_all_browser_webviews(
     Ok(())
 }
 
-/// Start URL polling for all browser WebViews.
+/// Start URL polling for all browser WebViews (backup mechanism).
 ///
-/// Polls each WebView's current URL every 500ms and emits browser-url-changed
-/// events when URLs change. This handles cases where on_navigation doesn't fire
-/// (e.g., client-side routing, redirects, JavaScript navigation).
+/// Polls each WebView's current URL every 2 seconds and emits browser-url-changed
+/// events when URLs change. This is a BACKUP mechanism - primary URL tracking is
+/// handled by the on_page_load callback in create_browser_webview which is more
+/// reliable and immediate.
+///
+/// This polling handles edge cases where on_page_load might not fire:
+/// - Some client-side routing in SPAs
+/// - URL fragment changes (#hash)
+/// - Certain redirect scenarios
 pub fn start_browser_url_polling(app: AppHandle) {
     use std::thread;
     use std::time::Duration;
 
     thread::spawn(move || {
-        log::debug!("Starting browser URL polling thread");
+        log::debug!("Browser URL polling thread started (backup mechanism)");
 
         loop {
-            thread::sleep(Duration::from_millis(500));
+            // Poll less frequently since on_page_load is the primary mechanism
+            thread::sleep(Duration::from_millis(2000));
 
             // Get state from app
             let browser_state = match app.try_state::<BrowserWebViewState>() {
                 Some(state) => state,
-                None => continue, // State not ready yet
+                None => continue,
             };
 
             // Get all WebView labels
@@ -778,13 +825,13 @@ pub fn start_browser_url_polling(app: AppHandle) {
                 // Get the WebView window
                 let webview = match app.get_webview_window(&webview_id) {
                     Some(w) => w,
-                    None => continue, // WebView closed or not found
+                    None => continue,
                 };
 
                 // Get current URL from the WebView
                 let current_url = match webview.url() {
                     Ok(url) => url.to_string(),
-                    Err(_) => continue, // Can't get URL, skip
+                    Err(_) => continue,
                 };
 
                 // Get stored URL from state
@@ -794,9 +841,10 @@ pub fn start_browser_url_polling(app: AppHandle) {
                     .unwrap_or_default();
 
                 // If URL changed, update state and emit event
+                // This should rarely happen since on_page_load is the primary mechanism
                 if current_url != stored_url && !current_url.is_empty() {
                     log::debug!(
-                        "URL polling detected change for {}: {} -> {}",
+                        "URL polling detected change for {}: {} -> {} (backup catch)",
                         webview_id,
                         stored_url,
                         current_url
