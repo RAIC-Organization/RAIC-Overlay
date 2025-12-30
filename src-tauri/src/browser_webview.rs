@@ -69,6 +69,7 @@ pub async fn create_browser_webview(
     initial_url: String,
     bounds: BrowserWebViewBounds,
     zoom: f64,
+    opacity: Option<f64>,
 ) -> Result<String, String> {
     let webview_id = format!("browser-webview-{}", window_id);
 
@@ -130,6 +131,44 @@ pub async fn create_browser_webview(
     webview
         .set_zoom(zoom_factor)
         .map_err(|e| format!("Failed to set zoom: {}", e))?;
+
+    // Set initial opacity if provided
+    #[cfg(target_os = "windows")]
+    if let Some(opacity_value) = opacity {
+        use windows::Win32::Foundation::{COLORREF, HWND};
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetWindowLongW, SetLayeredWindowAttributes, SetWindowLongW, SetWindowPos,
+            GWL_EXSTYLE, HWND_TOPMOST, LWA_ALPHA, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE,
+            WS_EX_LAYERED,
+        };
+
+        let hwnd = webview.hwnd().map_err(|e| format!("Failed to get HWND: {}", e))?;
+        let hwnd = HWND(hwnd.0);
+
+        unsafe {
+            // Ensure WS_EX_LAYERED style is set
+            let ex_style = GetWindowLongW(hwnd, GWL_EXSTYLE);
+            if ex_style & WS_EX_LAYERED.0 as i32 == 0 {
+                SetWindowLongW(hwnd, GWL_EXSTYLE, ex_style | WS_EX_LAYERED.0 as i32);
+            }
+
+            // Set opacity (0-255 range)
+            let alpha = (opacity_value.clamp(0.0, 1.0) * 255.0) as u8;
+            SetLayeredWindowAttributes(hwnd, COLORREF(0), alpha, LWA_ALPHA)
+                .map_err(|e| format!("Failed to set initial opacity: {}", e))?;
+
+            // Re-apply z-order after setting layered attributes
+            SetWindowPos(
+                hwnd,
+                Some(HWND_TOPMOST),
+                0, 0, 0, 0,
+                SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE,
+            )
+            .map_err(|e| format!("SetWindowPos failed: {}", e))?;
+        }
+
+        log::debug!("WebView {} initial opacity set to {:.0}%", webview_id, opacity_value * 100.0);
+    }
 
     // Register in state
     state.register(&webview_id, &window_id, &normalized_url, zoom_factor);

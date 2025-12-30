@@ -31,6 +31,8 @@ export interface UseBrowserWebViewOptions {
   initialZoom: number;
   /** Initial bounds for the WebView */
   initialBounds?: BrowserWebViewBounds;
+  /** Initial opacity (0.0-1.0, optional) */
+  initialOpacity?: number;
   /** Callback when URL changes */
   onUrlChange?: (url: string) => void;
   /** Callback when zoom changes */
@@ -49,6 +51,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
     initialUrl,
     initialZoom,
     initialBounds,
+    initialOpacity,
     onUrlChange,
     onZoomChange,
   } = options;
@@ -118,6 +121,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
           initialUrl,
           bounds,
           zoom: zoomFactor,
+          opacity: initialOpacity,
         });
 
         if (!mounted) {

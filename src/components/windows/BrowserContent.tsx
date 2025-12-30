@@ -113,6 +113,7 @@ export function BrowserContent({
     initialUrl: effectiveInitialUrl,
     initialZoom: effectiveInitialZoom,
     initialBounds,
+    initialOpacity: opacity,
     onUrlChange: (url) => {
       handleContentChange(url, webview.zoom);
     },
