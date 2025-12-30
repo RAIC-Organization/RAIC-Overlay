@@ -108,6 +108,51 @@ export function BrowserContent({
   // T013: No iframe rendering - WebView is a separate native window
   // The content area is just a placeholder that we position the WebView over
 
+  // T033-T035: Sync bounds when content area changes (resize, move, scroll)
+  useEffect(() => {
+    if (!webview.isReady || !contentRef.current) return;
+
+    // T035: Debounce timer for rapid updates
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    const DEBOUNCE_MS = 16; // ~60fps, ensures final position is accurate
+
+    const syncBoundsNow = () => {
+      if (!contentRef.current) return;
+      const rect = contentRef.current.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        webview.syncBounds({
+          x: rect.left,
+          y: rect.top,
+          width: rect.width,
+          height: rect.height,
+        });
+      }
+    };
+
+    const debouncedSyncBounds = () => {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(syncBoundsNow, DEBOUNCE_MS);
+    };
+
+    // T032: Initial sync when WebView is ready
+    syncBoundsNow();
+
+    // T033: ResizeObserver for content area size changes
+    const resizeObserver = new ResizeObserver(debouncedSyncBounds);
+    resizeObserver.observe(contentRef.current);
+
+    // T034: Window resize and scroll listeners (handles window move indirectly)
+    window.addEventListener("resize", debouncedSyncBounds);
+    window.addEventListener("scroll", debouncedSyncBounds, true);
+
+    return () => {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", debouncedSyncBounds);
+      window.removeEventListener("scroll", debouncedSyncBounds, true);
+    };
+  }, [webview.isReady, webview.syncBounds]);
+
   // Zoom handlers that use the WebView hook
   const handleZoomIn = useCallback(() => {
     const newZoom = Math.min(

@@ -115,19 +115,19 @@
 
 ### Implementation for User Story 3
 
-- [ ] T028 [US3] Add sync_browser_webview_bounds command in src-tauri/src/browser_webview.rs
-- [ ] T029 [US3] Register sync_browser_webview_bounds command in src-tauri/src/lib.rs
-- [ ] T030 [US3] Add syncBounds method to useBrowserWebView hook in src/hooks/useBrowserWebView.ts
-- [ ] T031 [US3] Calculate content area bounds using getBoundingClientRect in src/components/windows/BrowserContent.tsx
-- [ ] T032 [US3] Call syncBounds on initial mount with calculated bounds in src/components/windows/BrowserContent.tsx
-- [ ] T033 [US3] Add ResizeObserver to detect content area size changes in src/components/windows/BrowserContent.tsx
-- [ ] T034 [US3] Add window move/resize event listener to sync bounds in src/components/windows/BrowserContent.tsx
-- [ ] T035 [US3] Implement debounce for rapid move/resize events (final sync must be accurate) in src/components/windows/BrowserContent.tsx
+- [x] T028 [US3] Add sync_browser_webview_bounds command in src-tauri/src/browser_webview.rs
+- [x] T029 [US3] Register sync_browser_webview_bounds command in src-tauri/src/lib.rs
+- [x] T030 [US3] Add syncBounds method to useBrowserWebView hook in src/hooks/useBrowserWebView.ts
+- [x] T031 [US3] Calculate content area bounds using getBoundingClientRect in src/components/windows/BrowserContent.tsx
+- [x] T032 [US3] Call syncBounds on initial mount with calculated bounds in src/components/windows/BrowserContent.tsx
+- [x] T033 [US3] Add ResizeObserver to detect content area size changes in src/components/windows/BrowserContent.tsx
+- [x] T034 [US3] Add window move/resize event listener to sync bounds in src/components/windows/BrowserContent.tsx
+- [x] T035 [US3] Implement debounce for rapid move/resize events (final sync must be accurate) in src/components/windows/BrowserContent.tsx
 
 ### Tests for User Story 3
 
-- [ ] T035a [P] [US3] Add test: sync_browser_webview_bounds updates position/size in src-tauri/src/browser_webview.rs
-- [ ] T035b [P] [US3] Add test: bounds sync completes within 100ms threshold in src-tauri/src/browser_webview.rs
+- [x] T035a [P] [US3] Add test: sync_browser_webview_bounds updates position/size in src-tauri/src/browser_webview.rs
+- [x] T035b [P] [US3] Add test: bounds sync completes within 100ms threshold in src-tauri/src/browser_webview.rs
 
 **Checkpoint**: User Story 3 complete - WebView maintains 2px alignment during and after window move/resize operations
 

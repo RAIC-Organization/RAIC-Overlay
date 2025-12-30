@@ -216,6 +216,49 @@ pub fn set_browser_zoom(app: AppHandle, webview_id: String, zoom: f64) -> Result
     Ok(())
 }
 
+/// T028: Synchronize WebView bounds with browser window content area
+///
+/// Updates the WebView position and size to match the browser window's content area.
+/// Uses logical pixels for DPI-independent positioning.
+/// Performance target: must complete within 100ms.
+#[tauri::command]
+pub fn sync_browser_webview_bounds(
+    app: AppHandle,
+    webview_id: String,
+    bounds: BrowserWebViewBounds,
+) -> Result<(), String> {
+    log::debug!(
+        "Syncing WebView {} bounds to ({}, {}) {}x{}",
+        webview_id,
+        bounds.x,
+        bounds.y,
+        bounds.width,
+        bounds.height
+    );
+
+    // Validate bounds
+    if !bounds.is_valid() {
+        return Err("Invalid bounds: all values must be non-negative and dimensions must be positive".to_string());
+    }
+
+    let webview = app
+        .get_webview_window(&webview_id)
+        .ok_or_else(|| format!("WebView not found: {}", webview_id))?;
+
+    // Use logical pixels for DPI-independent positioning
+    use tauri::{LogicalPosition, LogicalSize, Position, Size};
+
+    webview
+        .set_position(Position::Logical(LogicalPosition::new(bounds.x, bounds.y)))
+        .map_err(|e| format!("Failed to set position: {}", e))?;
+
+    webview
+        .set_size(Size::Logical(LogicalSize::new(bounds.width, bounds.height)))
+        .map_err(|e| format!("Failed to set size: {}", e))?;
+
+    Ok(())
+}
+
 /// Normalize URL by adding https:// if no protocol is present.
 fn normalize_url(url: &str) -> Result<String, String> {
     let trimmed = url.trim();
