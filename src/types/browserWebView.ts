@@ -126,6 +126,11 @@ export interface UseBrowserWebViewActions {
    */
   setIgnoreCursor: (ignore: boolean) => Promise<void>;
   /**
+   * Bring WebView to the front of z-order.
+   * Called when mouse enters the browser component area.
+   */
+  bringToFront: () => Promise<void>;
+  /**
    * Explicitly destroy the WebView.
    * Called when browser window is closed via UI, NOT during React cleanup.
    * This is separate from useEffect cleanup to support React Strict Mode.

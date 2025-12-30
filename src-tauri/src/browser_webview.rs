@@ -490,6 +490,47 @@ pub fn set_browser_webview_ignore_cursor(
     Ok(())
 }
 
+/// Bring a WebView to the front of the z-order
+///
+/// Uses SetWindowPos with HWND_TOPMOST to ensure the WebView is above
+/// all other windows. Called when mouse enters the browser component area.
+#[tauri::command]
+pub fn bring_browser_webview_to_front(app: AppHandle, webview_id: String) -> Result<(), String> {
+    let webview = app
+        .get_webview_window(&webview_id)
+        .ok_or_else(|| format!("WebView not found: {}", webview_id))?;
+
+    #[cfg(target_os = "windows")]
+    {
+        use windows::Win32::Foundation::HWND;
+        use windows::Win32::UI::WindowsAndMessaging::{
+            SetWindowPos, HWND_TOPMOST, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE,
+        };
+
+        let hwnd = webview.hwnd().map_err(|e| format!("Failed to get HWND: {}", e))?;
+        let hwnd = HWND(hwnd.0);
+
+        unsafe {
+            SetWindowPos(
+                hwnd,
+                Some(HWND_TOPMOST),
+                0, 0, 0, 0,
+                SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE,
+            )
+            .map_err(|e| format!("SetWindowPos failed: {}", e))?;
+        }
+    }
+
+    #[cfg(not(target_os = "windows"))]
+    {
+        webview
+            .set_always_on_top(true)
+            .map_err(|e| format!("Failed to set always on top: {}", e))?;
+    }
+
+    Ok(())
+}
+
 /// T053: Set the visibility of a WebView window
 ///
 /// Shows or hides the WebView window to sync with overlay visibility.

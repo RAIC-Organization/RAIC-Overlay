@@ -253,26 +253,20 @@ export function BrowserContent({
       )}
       {/* T016: Content area placeholder - WebView is positioned over this area */}
       {/* Padding allows window resize handles to be grabbed */}
-      <div className="flex-1 overflow-hidden relative p-1">
+      {/* onMouseEnter brings WebView to front when user hovers over browser area */}
+      <div
+        className="flex-1 overflow-hidden relative p-1"
+        onMouseEnter={() => {
+          if (webview.isReady) {
+            webview.bringToFront();
+          }
+        }}
+      >
         {!isInteractive && <div className="absolute inset-1 z-10" />}
         <div
           ref={contentRef}
-          className="w-full h-full bg-background/50 flex items-center justify-center text-muted-foreground"
-        >
-          {!webview.isReady && !webview.error && (
-            <span className="text-sm">Loading WebView...</span>
-          )}
-          {webview.error && (
-            <div className="text-center p-4">
-              <span className="text-destructive text-sm block">{webview.error.message}</span>
-            </div>
-          )}
-          {webview.isReady && !webview.error && (
-            <span className="text-sm opacity-50">
-              Content rendered in WebView window
-            </span>
-          )}
-        </div>
+          className="w-full h-full bg-background/50"
+        />
       </div>
     </div>
   );

@@ -369,6 +369,17 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
     [webviewId]
   );
 
+  // Bring WebView to front of z-order (called on mouse enter)
+  const bringToFront = useCallback(async () => {
+    if (!webviewId) return;
+
+    try {
+      await invoke("bring_browser_webview_to_front", { webviewId });
+    } catch (err) {
+      logError(`[useBrowserWebView] Bring to front failed: ${err}`);
+    }
+  }, [webviewId]);
+
   // Explicit destroy function for when the window is closed via UI
   // This is NOT called in useEffect cleanup (React Strict Mode compatibility)
   const destroy = useCallback(async () => {
@@ -404,6 +415,7 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
     setOpacity,
     setVisibility,
     setIgnoreCursor,
+    bringToFront,
     destroy,
   };
 }
