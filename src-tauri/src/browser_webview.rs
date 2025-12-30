@@ -49,7 +49,8 @@ pub async fn create_browser_webview(
         .parse::<tauri::Url>()
         .map_err(|e| format!("Invalid URL '{}': {}", normalized_url, e))?;
 
-    // Create the WebView window
+    // T010: Create the WebView window with frameless, transparent, always-on-top config
+    // T012: Popup blocking is implicit - we don't register any new window handler
     let webview = WebviewWindowBuilder::new(&app, &webview_id, WebviewUrl::External(url))
         .title("Browser Content")
         .decorations(false)
@@ -58,6 +59,15 @@ pub async fn create_browser_webview(
         .inner_size(bounds.width, bounds.height)
         .position(bounds.x, bounds.y)
         .visible(true)
+        // T012: Block javascript: and data: URL navigation (popup/XSS prevention)
+        .on_navigation(|url| {
+            let scheme = url.scheme();
+            let allowed = scheme != "javascript" && scheme != "data";
+            if !allowed {
+                log::debug!("Blocked navigation to {} URL", scheme);
+            }
+            allowed
+        })
         .build()
         .map_err(|e| format!("Failed to create WebView: {}", e))?;
 

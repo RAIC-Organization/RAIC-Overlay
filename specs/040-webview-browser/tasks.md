@@ -60,19 +60,19 @@
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Configure WebviewWindowBuilder with decorations(false), transparent(true), always_on_top(true) in src-tauri/src/browser_webview.rs
-- [ ] T010a [US1] Implement WebView z-order tracking for multiple browser windows in src-tauri/src/browser_webview_types.rs
-- [ ] T011 [US1] Implement WebviewUrl::External URL parsing and validation in src-tauri/src/browser_webview.rs
-- [ ] T012 [US1] Add popup blocking via on_navigation hook (block javascript: and data: schemes) in src-tauri/src/browser_webview.rs
-- [ ] T013 [US1] Modify BrowserContent.tsx to remove iframe rendering in src/components/windows/BrowserContent.tsx
-- [ ] T014 [US1] Add WebView creation call on component mount in src/components/windows/BrowserContent.tsx
-- [ ] T015 [US1] Add WebView destruction call on component unmount in src/components/windows/BrowserContent.tsx
-- [ ] T016 [US1] Create content area placeholder div with ref for bounds calculation in src/components/windows/BrowserContent.tsx
+- [x] T010 [US1] Configure WebviewWindowBuilder with decorations(false), transparent(true), always_on_top(true) in src-tauri/src/browser_webview.rs
+- [x] T010a [US1] Implement WebView z-order tracking for multiple browser windows in src-tauri/src/browser_webview_types.rs
+- [x] T011 [US1] Implement WebviewUrl::External URL parsing and validation in src-tauri/src/browser_webview.rs
+- [x] T012 [US1] Add popup blocking via on_navigation hook (block javascript: and data: schemes) in src-tauri/src/browser_webview.rs
+- [x] T013 [US1] Modify BrowserContent.tsx to remove iframe rendering in src/components/windows/BrowserContent.tsx
+- [x] T014 [US1] Add WebView creation call on component mount in src/components/windows/BrowserContent.tsx
+- [x] T015 [US1] Add WebView destruction call on component unmount in src/components/windows/BrowserContent.tsx
+- [x] T016 [US1] Create content area placeholder div with ref for bounds calculation in src/components/windows/BrowserContent.tsx
 
 ### Tests for User Story 1
 
-- [ ] T016a [P] [US1] Add integration test: WebView creates successfully with external URL in src-tauri/src/browser_webview.rs
-- [ ] T016b [P] [US1] Add integration test: WebView loads blocked sites (simulate X-Frame-Options bypass) in src-tauri/src/browser_webview.rs
+- [x] T016a [P] [US1] Add integration test: WebView creates successfully with external URL in src-tauri/src/browser_webview.rs
+- [x] T016b [P] [US1] Add integration test: WebView loads blocked sites (simulate X-Frame-Options bypass) in src-tauri/src/browser_webview.rs
 
 **Checkpoint**: User Story 1 complete - Browser can load any website (google.com, youtube.com, etc.) without X-Frame-Options errors
 

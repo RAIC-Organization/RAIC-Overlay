@@ -3,22 +3,25 @@
 /**
  * Browser Content Component
  *
- * Renders an embedded browser (iframe) with navigation controls,
- * zoom functionality, and persistence support.
+ * Renders browser content using native Tauri WebView windows instead of iframe.
+ * This bypasses X-Frame-Options restrictions and allows loading any website.
  *
  * @feature 014-browser-component
  * @feature 015-browser-persistence
+ * @feature 040-webview-browser
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { BrowserToolbar } from "./BrowserToolbar";
 import { clampBrowserZoom } from "@/types/persistence";
 import { usePersistenceContext } from "@/contexts/PersistenceContext";
+import { useBrowserWebView } from "@/hooks/useBrowserWebView";
+import type { BrowserWebViewBounds } from "@/types/browserWebView";
 
 // Browser constants
 export const BROWSER_DEFAULTS = {
   DEFAULT_URL: "https://example.com",
-  DEFAULT_ZOOM: 50,
+  DEFAULT_ZOOM: 100,
   ZOOM_MIN: 10,
   ZOOM_MAX: 200,
   ZOOM_STEP: 10,
@@ -31,8 +34,8 @@ export const BROWSER_DEFAULTS = {
 export interface BrowserContentProps {
   /** Whether the window is in interactive mode */
   isInteractive: boolean;
-  /** Window ID for persistence (optional) */
-  windowId?: string;
+  /** Window ID for persistence (required for WebView) */
+  windowId: string;
   /** Initial URL from persisted state */
   initialUrl?: string;
   /** Initial zoom level from persisted state (10-200) */
@@ -58,12 +61,10 @@ export function BrowserContent({
     initialZoom ?? BROWSER_DEFAULTS.DEFAULT_ZOOM
   );
 
-  const [url, setUrl] = useState<string>(effectiveInitialUrl);
-  const [historyStack, setHistoryStack] = useState<string[]>([effectiveInitialUrl]);
-  const [historyIndex, setHistoryIndex] = useState(0);
-  const [zoom, setZoom] = useState<number>(effectiveInitialZoom);
-  const [isLoading, setIsLoading] = useState(false);
-  const [iframeKey, setIframeKey] = useState(0);
+  // T016: Ref for content area placeholder div
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [initialBounds, setInitialBounds] = useState<BrowserWebViewBounds | undefined>(undefined);
+  const [boundsReady, setBoundsReady] = useState(false);
 
   // Unified content change handler - uses prop callback or falls back to persistence context
   const handleContentChange = useCallback((newUrl: string, newZoom: number) => {
@@ -74,124 +75,94 @@ export function BrowserContent({
     }
   }, [windowId, onContentChange, persistence]);
 
-  // Normalize URL by adding https:// if no protocol
-  const normalizeUrl = (input: string): string => {
-    const trimmed = input.trim();
-    if (!trimmed) return "";
-    if (/^https?:\/\//i.test(trimmed)) {
-      return trimmed;
+  // Calculate initial bounds from content area on mount
+  useEffect(() => {
+    if (contentRef.current && !boundsReady) {
+      const rect = contentRef.current.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        setInitialBounds({
+          x: rect.left,
+          y: rect.top,
+          width: rect.width,
+          height: rect.height,
+        });
+        setBoundsReady(true);
+      }
     }
-    return `https://${trimmed}`;
-  };
+  }, [boundsReady]);
 
-  // Navigate to a new URL
-  const navigateTo = (newUrl: string) => {
-    const normalized = normalizeUrl(newUrl);
-    if (!normalized) return;
+  // T014, T015: Use WebView hook for browser functionality
+  const webview = useBrowserWebView({
+    windowId,
+    initialUrl: effectiveInitialUrl,
+    initialZoom: effectiveInitialZoom,
+    initialBounds,
+    onUrlChange: (url) => {
+      handleContentChange(url, webview.zoom);
+    },
+    onZoomChange: (zoom) => {
+      handleContentChange(webview.currentUrl, zoom);
+    },
+  });
 
-    // Truncate forward history and add new URL
-    const newStack = [...historyStack.slice(0, historyIndex + 1), normalized];
-    setHistoryStack(newStack);
-    setHistoryIndex(newStack.length - 1);
-    setUrl(normalized);
-    setIsLoading(true);
-  };
+  // T013: No iframe rendering - WebView is a separate native window
+  // The content area is just a placeholder that we position the WebView over
 
-  // Go back in history
-  const goBack = () => {
-    if (historyIndex > 0) {
-      const newIndex = historyIndex - 1;
-      setHistoryIndex(newIndex);
-      setUrl(historyStack[newIndex]);
-      setIsLoading(true);
-    }
-  };
-
-  // Go forward in history
-  const goForward = () => {
-    if (historyIndex < historyStack.length - 1) {
-      const newIndex = historyIndex + 1;
-      setHistoryIndex(newIndex);
-      setUrl(historyStack[newIndex]);
-      setIsLoading(true);
-    }
-  };
-
-  // Refresh current page
-  const refresh = () => {
-    setIsLoading(true);
-    setIframeKey((prev) => prev + 1);
-  };
-
-  // Zoom in
-  const zoomIn = () => {
+  // Zoom handlers that use the WebView hook
+  const handleZoomIn = useCallback(() => {
     const newZoom = Math.min(
-      zoom + BROWSER_DEFAULTS.ZOOM_STEP,
+      webview.zoom + BROWSER_DEFAULTS.ZOOM_STEP,
       BROWSER_DEFAULTS.ZOOM_MAX
     );
-    setZoom(newZoom);
-    handleContentChange(url, newZoom);
-  };
+    webview.setZoom(newZoom);
+  }, [webview]);
 
-  // Zoom out
-  const zoomOut = () => {
+  const handleZoomOut = useCallback(() => {
     const newZoom = Math.max(
-      zoom - BROWSER_DEFAULTS.ZOOM_STEP,
+      webview.zoom - BROWSER_DEFAULTS.ZOOM_STEP,
       BROWSER_DEFAULTS.ZOOM_MIN
     );
-    setZoom(newZoom);
-    handleContentChange(url, newZoom);
-  };
-
-  // Handle iframe load - persist URL after page loads
-  const handleIframeLoad = () => {
-    setIsLoading(false);
-    // Persist the URL after the page loads (handles redirects)
-    handleContentChange(url, zoom);
-  };
-
-  // Computed navigation states
-  const canGoBack = historyIndex > 0;
-  const canGoForward = historyIndex < historyStack.length - 1;
-
-  // Calculate zoom transform values
-  const scaleValue = zoom / 100;
-  const inverseScale = 100 / zoom;
+    webview.setZoom(newZoom);
+  }, [webview]);
 
   return (
     <div className="flex flex-col h-full">
       {isInteractive && (
         <BrowserToolbar
-          url={url}
-          canGoBack={canGoBack}
-          canGoForward={canGoForward}
-          zoom={zoom}
-          isLoading={isLoading}
-          onNavigate={navigateTo}
-          onBack={goBack}
-          onForward={goForward}
-          onRefresh={refresh}
-          onZoomIn={zoomIn}
-          onZoomOut={zoomOut}
+          url={webview.currentUrl}
+          canGoBack={webview.canGoBack}
+          canGoForward={webview.canGoForward}
+          zoom={webview.zoom}
+          isLoading={webview.isLoading}
+          onNavigate={webview.navigate}
+          onBack={webview.goBack}
+          onForward={webview.goForward}
+          onRefresh={webview.refresh}
+          onZoomIn={handleZoomIn}
+          onZoomOut={handleZoomOut}
         />
       )}
+      {/* T016: Content area placeholder - WebView is positioned over this area */}
       {/* Padding allows window resize handles to be grabbed */}
       <div className="flex-1 overflow-hidden relative p-1">
         {!isInteractive && <div className="absolute inset-1 z-10" />}
-        <div className="w-full h-full overflow-hidden">
-          <iframe
-            key={iframeKey}
-            src={url}
-            title="Browser Content"
-            className="border-0"
-            style={{
-              width: `${inverseScale * 100}%`,
-              height: `${inverseScale * 100}%`,
-              transform: `scale(${scaleValue})`,
-              transformOrigin: "0 0",
-            }}
-            onLoad={handleIframeLoad}
-          />
+        <div
+          ref={contentRef}
+          className="w-full h-full bg-background/50 flex items-center justify-center text-muted-foreground"
+        >
+          {!webview.isReady && !webview.error && (
+            <span className="text-sm">Loading WebView...</span>
+          )}
+          {webview.error && (
+            <div className="text-center p-4">
+              <span className="text-destructive text-sm block">{webview.error.message}</span>
+            </div>
+          )}
+          {webview.isReady && !webview.error && (
+            <span className="text-sm opacity-50">
+              Content rendered in WebView window
+            </span>
+          )}
         </div>
       </div>
     </div>
