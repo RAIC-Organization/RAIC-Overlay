@@ -179,11 +179,11 @@
 
 ### Implementation for User Story 6
 
-- [ ] T048 [US6] Ensure initialUrl from window content prop is passed to WebView creation in src/components/windows/BrowserContent.tsx
-- [ ] T049 [US6] Ensure initialZoom from window content prop is passed to WebView creation in src/components/windows/BrowserContent.tsx
-- [ ] T050 [US6] Add URL change handler that updates window content state (triggers persistence) in src/components/windows/BrowserContent.tsx
-- [ ] T051 [US6] Add zoom change handler that updates window content state (triggers persistence) in src/components/windows/BrowserContent.tsx
-- [ ] T052 [US6] Implement debounce for URL persistence to avoid excessive writes in src/hooks/useBrowserWebView.ts
+- [x] T048 [US6] Ensure initialUrl from window content prop is passed to WebView creation in src/components/windows/BrowserContent.tsx
+- [x] T049 [US6] Ensure initialZoom from window content prop is passed to WebView creation in src/components/windows/BrowserContent.tsx
+- [x] T050 [US6] Add URL change handler that updates window content state (triggers persistence) in src/components/windows/BrowserContent.tsx
+- [x] T051 [US6] Add zoom change handler that updates window content state (triggers persistence) in src/components/windows/BrowserContent.tsx
+- [x] T052 [US6] Implement debounce for URL persistence to avoid excessive writes in src/hooks/useBrowserWebView.ts
 
 **Checkpoint**: User Story 6 complete - Browser state persists across application restarts with 100% reliability
 
