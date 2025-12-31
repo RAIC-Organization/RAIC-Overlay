@@ -70,7 +70,7 @@
 
 ### Implementation for User Story 2
 
-- [ ] T011 [US2] Verify TARGET_WINDOW_NAME override works by testing with custom value (manual verification - implementation done in US1)
+- [X] T011 [US2] Verify TARGET_WINDOW_NAME override works by testing with custom value (manual verification - implementation done in US1)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work - default builds and custom TARGET_WINDOW_NAME builds both function correctly
 
@@ -84,9 +84,9 @@
 
 ### Implementation for User Story 3
 
-- [ ] T012 [US3] Verify TARGET_PROCESS_NAME override works by testing with custom value (manual verification - implementation done in US1)
-- [ ] T013 [US3] Verify TARGET_WINDOW_CLASS override works by testing with custom value (manual verification - implementation done in US1)
-- [ ] T014 [US3] Verify mixed configuration works (e.g., custom TARGET_WINDOW_NAME with default process/class)
+- [X] T012 [US3] Verify TARGET_PROCESS_NAME override works by testing with custom value (manual verification - implementation done in US1)
+- [X] T013 [US3] Verify TARGET_WINDOW_CLASS override works by testing with custom value (manual verification - implementation done in US1)
+- [X] T014 [US3] Verify mixed configuration works (e.g., custom TARGET_WINDOW_NAME with default process/class)
 
 **Checkpoint**: All user stories should now be independently functional
 
