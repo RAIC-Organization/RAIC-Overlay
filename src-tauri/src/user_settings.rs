@@ -6,6 +6,7 @@ use std::fs::{self, File};
 use std::io::{Read, Write};
 use std::path::PathBuf;
 use std::sync::RwLock;
+use tauri::Emitter;
 use tauri::Manager;
 
 const USER_SETTINGS_FILE: &str = "user-settings.json";
@@ -186,8 +187,9 @@ pub fn init_user_settings(app: &tauri::AppHandle) {
 
 /// T023-T024: Update hotkey bindings at runtime
 /// This updates the cached settings so the keyboard hook uses the new bindings
+/// @feature 042-sync-webview-hotkeys: Now emits hotkeys-updated event for frontend sync
 #[tauri::command]
-pub fn update_hotkeys(hotkeys: HotkeySettings) -> Result<(), String> {
+pub fn update_hotkeys(app: tauri::AppHandle, hotkeys: HotkeySettings) -> Result<(), String> {
     if let Ok(mut cache) = USER_SETTINGS.write() {
         if let Some(ref mut settings) = *cache {
             settings.hotkeys = hotkeys.clone();
@@ -201,12 +203,19 @@ pub fn update_hotkeys(hotkeys: HotkeySettings) -> Result<(), String> {
         } else {
             // No settings cached, create with new hotkeys
             let mut new_settings = UserSettings::default();
-            new_settings.hotkeys = hotkeys;
+            new_settings.hotkeys = hotkeys.clone();
             *cache = Some(new_settings);
             log::info!("Hotkeys initialized with new bindings");
         }
-        Ok(())
     } else {
-        Err("Failed to acquire settings lock".to_string())
+        return Err("Failed to acquire settings lock".to_string());
     }
+
+    // Emit event to frontend for real-time sync
+    // @feature 042-sync-webview-hotkeys
+    app.emit("hotkeys-updated", &hotkeys)
+        .map_err(|e| format!("Failed to emit hotkeys-updated event: {}", e))?;
+
+    log::info!("Hotkeys update event emitted to frontend");
+    Ok(())
 }
