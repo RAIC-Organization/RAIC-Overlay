@@ -96,10 +96,10 @@
 
 **Purpose**: Documentation updates and final verification
 
-- [ ] T015 [P] Update `.env.example` to mark TARGET_WINDOW_NAME as optional and add TARGET_PROCESS_NAME and TARGET_WINDOW_CLASS with documentation
-- [ ] T016 [P] Update `check-build.ps1` to make TARGET_WINDOW_NAME optional or remove the line that sets it (currently sets `$env:TARGET_WINDOW_NAME = "Star Citizen"` on line 1)
-- [ ] T017 Run quickstart.md validation - test zero-config build, custom build, and partial customization scenarios
-- [ ] T018 Verify settings.toml runtime override still works and takes precedence over build-time values
+- [X] T015 [P] Update `.env.example` to mark TARGET_WINDOW_NAME as optional and add TARGET_PROCESS_NAME and TARGET_WINDOW_CLASS with documentation
+- [X] T016 [P] Update `check-build.ps1` to make TARGET_WINDOW_NAME optional or remove the line that sets it (currently sets `$env:TARGET_WINDOW_NAME = "Star Citizen"` on line 1)
+- [X] T017 Run quickstart.md validation - test zero-config build, custom build, and partial customization scenarios
+- [X] T018 Verify settings.toml runtime override still works and takes precedence over build-time values
 
 ---
 
