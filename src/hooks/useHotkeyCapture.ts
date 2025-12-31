@@ -34,13 +34,22 @@ const DEBOUNCE_MS = 200;
  * Compares a KeyboardEvent against a HotkeyBinding configuration.
  * Returns true if the event matches the binding exactly (key + all modifiers).
  *
+ * Key comparison is case-insensitive for letter keys because:
+ * - KeyboardEvent.key returns lowercase 'r' when pressing R without shift
+ * - HotkeyBinding stores uppercase 'R' from the settings panel
+ * - Function keys (F1-F12) are preserved as-is
+ *
  * @param event - The KeyboardEvent from the keydown handler
  * @param binding - The HotkeyBinding configuration to match against
  * @returns true if the event matches the binding
  */
 function matchesHotkey(event: KeyboardEvent, binding: HotkeyBinding): boolean {
+  // Case-insensitive key comparison for letter keys
+  // (event.key is lowercase when ctrl is pressed, but binding.key is uppercase)
+  const keyMatches = event.key.toLowerCase() === binding.key.toLowerCase();
+
   return (
-    event.key === binding.key &&
+    keyMatches &&
     event.ctrlKey === binding.ctrl &&
     event.shiftKey === binding.shift &&
     event.altKey === binding.alt
