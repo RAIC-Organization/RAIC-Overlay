@@ -39,9 +39,10 @@ pub struct FileSettings {
     pub process_monitor_interval_ms: Option<u64>,
 }
 
-// T011 (028): Default constants for Star Citizen window detection
-pub const DEFAULT_PROCESS_NAME: &str = "StarCitizen.exe";
-pub const DEFAULT_WINDOW_CLASS: &str = "CryENGINE";
+// T007-T008 (043): Removed DEFAULT_PROCESS_NAME and DEFAULT_WINDOW_CLASS constants
+// Now using env!("TARGET_PROCESS_NAME") and env!("TARGET_WINDOW_CLASS") build-time macros
+
+// T010 (028): Polling interval for process monitoring in milliseconds
 pub const DEFAULT_PROCESS_MONITOR_INTERVAL_MS: u64 = 1000;
 
 /// Fully resolved runtime settings.
@@ -221,22 +222,22 @@ impl RuntimeSettings {
             None => parse_log_level(env!("RAIC_LOG_LEVEL")).unwrap_or(LevelFilter::Warn),
         };
 
-        // T008 (028): target_process_name
+        // T009 (043): target_process_name - now uses env!() macro for build-time default
         let target_process_name = match file.target_process_name {
             Some(ref name) if !name.is_empty() => {
                 sources.target_process_name = SettingSource::File;
                 name.clone()
             }
-            _ => DEFAULT_PROCESS_NAME.to_string(),
+            _ => env!("TARGET_PROCESS_NAME").to_string(),
         };
 
-        // T009 (028): target_window_class
+        // T010 (043): target_window_class - now uses env!() macro for build-time default
         let target_window_class = match file.target_window_class {
             Some(ref class) if !class.is_empty() => {
                 sources.target_window_class = SettingSource::File;
                 class.clone()
             }
-            _ => DEFAULT_WINDOW_CLASS.to_string(),
+            _ => env!("TARGET_WINDOW_CLASS").to_string(),
         };
 
         // T010 (028): process_monitor_interval_ms
@@ -662,17 +663,24 @@ another_unknown = 42
     // ========================================================================
 
     /// Test that new settings fields default correctly
+    /// T007-T008 (043): Updated to use env!() macros instead of removed constants
     #[test]
     fn test_new_settings_defaults() {
         let file = FileSettings::default();
         let runtime = RuntimeSettings::from_file_settings(file);
 
-        assert_eq!(runtime.target_process_name, DEFAULT_PROCESS_NAME);
-        assert_eq!(runtime.target_window_class, DEFAULT_WINDOW_CLASS);
-        assert_eq!(runtime.process_monitor_interval_ms, DEFAULT_PROCESS_MONITOR_INTERVAL_MS);
+        assert_eq!(runtime.target_process_name, env!("TARGET_PROCESS_NAME"));
+        assert_eq!(runtime.target_window_class, env!("TARGET_WINDOW_CLASS"));
+        assert_eq!(
+            runtime.process_monitor_interval_ms,
+            DEFAULT_PROCESS_MONITOR_INTERVAL_MS
+        );
         assert_eq!(runtime.sources.target_process_name, SettingSource::Default);
         assert_eq!(runtime.sources.target_window_class, SettingSource::Default);
-        assert_eq!(runtime.sources.process_monitor_interval_ms, SettingSource::Default);
+        assert_eq!(
+            runtime.sources.process_monitor_interval_ms,
+            SettingSource::Default
+        );
     }
 
     /// Test that new settings can be overridden from file

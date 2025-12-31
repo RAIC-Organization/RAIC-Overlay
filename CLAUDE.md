@@ -1,4 +1,4 @@
-﻿# RAICOverlay Development Guidelines
+# RAICOverlay Development Guidelines
 
 Auto-generated from all feature plans. Last updated: 2025-12-22
 
@@ -75,6 +75,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - N/A (no persistence changes) (041-header-button-groups)
 - TypeScript 5.7.2 (frontend), Rust 2021 Edition (backend - unchanged) + React 19.0.0, Next.js 16.0.10, @tauri-apps/api 2.0.0, motion 12.x (042-sync-webview-hotkeys)
 - JSON files in Tauri app data directory (user-settings.json via existing persistence) (042-sync-webview-hotkeys)
+- Rust 2021 Edition (Tauri backend) + Tauri 2.x, existing `build.rs` and `settings.rs` modules (043-build-env-defaults)
+- N/A (build-time configuration only) (043-build-env-defaults)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -99,9 +101,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 043-build-env-defaults: Added Rust 2021 Edition (Tauri backend) + Tauri 2.x, existing `build.rs` and `settings.rs` modules
 - 042-sync-webview-hotkeys: Added TypeScript 5.7.2 (frontend), Rust 2021 Edition (backend - unchanged) + React 19.0.0, Next.js 16.0.10, @tauri-apps/api 2.0.0, motion 12.x
 - 041-header-button-groups: Added TypeScript 5.7.2 (React 19.0.0 frontend) + React 19.0.0, Next.js 16.x, motion 12.x, shadcn/ui (ButtonGroup, Button)
-- 040-webview-browser: Added Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x (WebviewWindow API, window management), React 19.0.0, Next.js 16.x, @tauri-apps/api 2.0.0, motion 12.x, shadcn/ui
 
 
 <!-- MANUAL ADDITIONS START -->
