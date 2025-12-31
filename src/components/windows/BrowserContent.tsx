@@ -85,6 +85,11 @@ export function BrowserContent({
   const [initialBounds, setInitialBounds] = useState<BrowserWebViewBounds | undefined>(undefined);
   const [boundsReady, setBoundsReady] = useState(false);
 
+  // Refs to track current URL and zoom for persistence callbacks
+  // This avoids stale closure issues where callbacks reference old values
+  const currentUrlRef = useRef(effectiveInitialUrl);
+  const currentZoomRef = useRef(effectiveInitialZoom);
+
   // Unified content change handler - uses prop callback or falls back to persistence context
   const handleContentChange = useCallback((newUrl: string, newZoom: number) => {
     if (onContentChange) {
@@ -111,6 +116,7 @@ export function BrowserContent({
   }, [boundsReady]);
 
   // T014, T015: Use WebView hook for browser functionality
+  // Use refs for callback values to avoid stale closure issues
   const webview = useBrowserWebView({
     windowId,
     initialUrl: effectiveInitialUrl,
@@ -118,10 +124,12 @@ export function BrowserContent({
     initialBounds,
     initialOpacity: opacity,
     onUrlChange: (url) => {
-      handleContentChange(url, webview.zoom);
+      currentUrlRef.current = url;
+      handleContentChange(url, currentZoomRef.current);
     },
     onZoomChange: (zoom) => {
-      handleContentChange(webview.currentUrl, zoom);
+      currentZoomRef.current = zoom;
+      handleContentChange(currentUrlRef.current, zoom);
     },
   });
 

@@ -73,6 +73,23 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
   const webviewIdRef = useRef<string | null>(null);
   const creatingRef = useRef(false); // Guard against duplicate creation
 
+  // Track navigation history for back/forward button state
+  // When user goes back, forward becomes available
+  // When user navigates to new page (not via back/forward), forward is cleared
+  const wentBackRef = useRef(false);
+  const navigationCountRef = useRef(0); // Track number of navigations for canGoBack
+
+  // Store callbacks in refs to avoid recreating event listeners on every render
+  // This prevents race conditions where listeners are removed/added during navigation
+  const onUrlChangeRef = useRef(onUrlChange);
+  const onZoomChangeRef = useRef(onZoomChange);
+
+  // Keep refs updated with latest callbacks
+  useEffect(() => {
+    onUrlChangeRef.current = onUrlChange;
+    onZoomChangeRef.current = onZoomChange;
+  });
+
   // Create WebView on mount
   // NOTE: We do NOT destroy WebView in cleanup due to React Strict Mode double-mounting.
   // WebViews are cleaned up when:
@@ -177,12 +194,29 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
           "browser-url-changed",
           (event) => {
             if (event.payload.webviewId === webviewId) {
-              logDebug(`[useBrowserWebView] URL changed: ${event.payload.url}`);
+              logDebug(`[useBrowserWebView] URL changed: ${event.payload.url}, wentBack=${wentBackRef.current}`);
               setCurrentUrl(event.payload.url);
-              setCanGoBack(event.payload.canGoBack);
-              setCanGoForward(event.payload.canGoForward);
+
+              // Track navigation count for canGoBack
+              navigationCountRef.current += 1;
+              // Can go back if we have more than 1 navigation
+              setCanGoBack(navigationCountRef.current > 1);
+
+              // Handle canGoForward based on navigation type:
+              // - If we just went back, forward is available
+              // - Otherwise (new navigation), forward is cleared
+              if (wentBackRef.current) {
+                logDebug(`[useBrowserWebView] Setting canGoForward=true (went back)`);
+                setCanGoForward(true);
+                wentBackRef.current = false; // Reset the flag
+              } else {
+                logDebug(`[useBrowserWebView] Setting canGoForward=false (new navigation)`);
+                setCanGoForward(false);
+              }
+
               setError(null);
-              onUrlChange?.(event.payload.url);
+              // Use ref to call latest callback without causing listener recreation
+              onUrlChangeRef.current?.(event.payload.url);
             }
           }
         );
@@ -222,7 +256,9 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
       unlistenErrorRef.current?.();
       unlistenLoadingRef.current?.();
     };
-  }, [webviewId, onUrlChange]);
+    // Note: onUrlChange is stored in a ref and updated separately
+    // to avoid recreating listeners on every render (which causes race conditions)
+  }, [webviewId]);
 
   // Navigation methods
   const navigate = useCallback(
@@ -235,6 +271,8 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
       try {
         setIsLoading(true);
         setError(null);
+        // Explicit navigation clears forward history
+        wentBackRef.current = false;
         await invoke("browser_navigate", { webviewId, url });
         setCurrentUrl(url);
       } catch (err) {
@@ -255,9 +293,15 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
 
     try {
       setIsLoading(true);
+      // Set flag so the URL change event knows this was a back navigation
+      // This will make canGoForward = true when the page loads
+      wentBackRef.current = true;
+      logDebug(`[useBrowserWebView] goBack() called, wentBackRef set to true`);
       await invoke("browser_go_back", { webviewId });
+      logDebug(`[useBrowserWebView] goBack() invoke completed`);
     } catch (err) {
       logError(`[useBrowserWebView] Go back failed: ${err}`);
+      wentBackRef.current = false; // Reset on error
       setIsLoading(false);
     }
   }, [webviewId]);
@@ -267,9 +311,15 @@ export function useBrowserWebView(options: UseBrowserWebViewOptions): UseBrowser
 
     try {
       setIsLoading(true);
+      // Set flag so the URL change event knows this was a forward navigation
+      // canGoForward will remain true (we keep going forward in history)
+      wentBackRef.current = true; // Treat forward same as back - we're navigating history
       await invoke("browser_go_forward", { webviewId });
     } catch (err) {
       logError(`[useBrowserWebView] Go forward failed: ${err}`);
+      wentBackRef.current = false; // Reset on error
+      // If forward fails, we might be at the end of history
+      setCanGoForward(false);
       setIsLoading(false);
     }
   }, [webviewId]);

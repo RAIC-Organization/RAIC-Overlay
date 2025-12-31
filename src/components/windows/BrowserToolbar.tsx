@@ -57,6 +57,8 @@ export function BrowserToolbar({
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       onNavigate(inputValue);
+      // Blur input so subsequent URL changes from WebView navigation will update the bar
+      inputRef.current?.blur();
     }
   };
 
