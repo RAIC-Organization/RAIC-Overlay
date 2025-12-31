@@ -1,4 +1,4 @@
-# RAICOverlay Development Guidelines
+﻿# RAICOverlay Development Guidelines
 
 Auto-generated from all feature plans. Last updated: 2025-12-22
 
@@ -71,6 +71,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - N/A (plugin configuration is compile-time only) (039-prevent-default-plugin)
 - Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x (WebviewWindow API, window management), React 19.0.0, Next.js 16.x, @tauri-apps/api 2.0.0, motion 12.x, shadcn/ui (040-webview-browser)
 - JSON files in Tauri app data directory (existing persistence system - state.json + window-{id}.json) (040-webview-browser)
+- TypeScript 5.7.2 (React 19.0.0 frontend) + React 19.0.0, Next.js 16.x, motion 12.x, shadcn/ui (ButtonGroup, Button) (041-header-button-groups)
+- N/A (no persistence changes) (041-header-button-groups)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -95,9 +97,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 041-header-button-groups: Added TypeScript 5.7.2 (React 19.0.0 frontend) + React 19.0.0, Next.js 16.x, motion 12.x, shadcn/ui (ButtonGroup, Button)
 - 040-webview-browser: Added Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x (WebviewWindow API, window management), React 19.0.0, Next.js 16.x, @tauri-apps/api 2.0.0, motion 12.x, shadcn/ui
 - 039-prevent-default-plugin: Added Rust 2021 Edition (backend), TypeScript 5.7.2 (frontend - unchanged) + Tauri 2.x, tauri-plugin-prevent-default 4.0.3 (new)
-- 038-settings-panel: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend) + Tauri 2.x, React 19.0.0, Next.js 16.x, motion 12.x, shadcn/ui, Tailwind CSS 4.x, tauri-plugin-autostart 2.x, @tauri-apps/plugin-autostart
 
 
 <!-- MANUAL ADDITIONS START -->
