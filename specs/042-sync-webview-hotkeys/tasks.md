@@ -96,8 +96,8 @@
 > - US3: `DEFAULT_USER_SETTINGS.hotkeys` provides F3/F5 defaults when no settings exist
 > - US4: `matchesHotkey()` checks all modifier flags (ctrl, shift, alt)
 
-- [ ] T022 [US3] Verify DEFAULT_USER_SETTINGS fallback works when load_user_settings fails (already implemented in T013) in src/hooks/useHotkeyCapture.ts
-- [ ] T023 [US4] Verify matchesHotkey checks all modifier flags: ctrl, shift, alt (already implemented in T012) in src/hooks/useHotkeyCapture.ts
+- [x] T022 [US3] Verify DEFAULT_USER_SETTINGS fallback works when load_user_settings fails (already implemented in T013) in src/hooks/useHotkeyCapture.ts
+- [x] T023 [US4] Verify matchesHotkey checks all modifier flags: ctrl, shift, alt (already implemented in T012) in src/hooks/useHotkeyCapture.ts
 
 **Checkpoint**: Default F3/F5 work on fresh install. Modifier keys are correctly validated.
 
@@ -107,10 +107,10 @@
 
 **Purpose**: Final verification and code quality
 
-- [ ] T024 Update JSDoc header comment in src/hooks/useHotkeyCapture.ts to reflect new dynamic configuration behavior
-- [ ] T025 Remove old KEY_F3 and KEY_F5 constants from src/hooks/useHotkeyCapture.ts (no longer needed)
-- [ ] T026 Run TypeScript compilation check with `npm run type-check`
-- [ ] T027 Run Rust compilation check with `cd src-tauri && cargo check`
+- [x] T024 Update JSDoc header comment in src/hooks/useHotkeyCapture.ts to reflect new dynamic configuration behavior
+- [x] T025 Remove old KEY_F3 and KEY_F5 constants from src/hooks/useHotkeyCapture.ts (no longer needed)
+- [x] T026 Run TypeScript compilation check with `npm run type-check`
+- [x] T027 Run Rust compilation check with `cd src-tauri && cargo check`
 - [ ] T028 Manual test: Default F3/F5 work on fresh install when overlay is focused
 - [ ] T029 Manual test: Custom hotkey (Ctrl+O) works when overlay is focused
 - [ ] T030 Manual test: Hotkey change in Settings takes effect immediately
