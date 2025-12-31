@@ -3,22 +3,25 @@
 /**
  * Browser Content Component
  *
- * Renders an embedded browser (iframe) with navigation controls,
- * zoom functionality, and persistence support.
+ * Renders browser content using native Tauri WebView windows instead of iframe.
+ * This bypasses X-Frame-Options restrictions and allows loading any website.
  *
  * @feature 014-browser-component
  * @feature 015-browser-persistence
+ * @feature 040-webview-browser
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { BrowserToolbar } from "./BrowserToolbar";
 import { clampBrowserZoom } from "@/types/persistence";
 import { usePersistenceContext } from "@/contexts/PersistenceContext";
+import { useBrowserWebView } from "@/hooks/useBrowserWebView";
+import type { BrowserWebViewBounds } from "@/types/browserWebView";
 
 // Browser constants
 export const BROWSER_DEFAULTS = {
   DEFAULT_URL: "https://example.com",
-  DEFAULT_ZOOM: 50,
+  DEFAULT_ZOOM: 100,
   ZOOM_MIN: 10,
   ZOOM_MAX: 200,
   ZOOM_STEP: 10,
@@ -27,26 +30,45 @@ export const BROWSER_DEFAULTS = {
 /**
  * Props for BrowserContent component.
  * Extended with persistence support in 015-browser-persistence.
+ * Extended with opacity support in 040-webview-browser.
  */
 export interface BrowserContentProps {
   /** Whether the window is in interactive mode */
   isInteractive: boolean;
-  /** Window ID for persistence (optional) */
-  windowId?: string;
+  /** Whether this window is the focused/topmost window in the overlay */
+  isFocused?: boolean;
+  /** Window ID for persistence (required for WebView) */
+  windowId: string;
   /** Initial URL from persisted state */
   initialUrl?: string;
   /** Initial zoom level from persisted state (10-200) */
   initialZoom?: number;
   /** Callback when browser content changes (for persistence) - passes both url and zoom */
   onContentChange?: (url: string, zoom: number) => void;
+  /** T046: Window opacity (0.1-1.0) for WebView sync */
+  opacity?: number;
+  /** Window X position for WebView bounds sync */
+  windowX?: number;
+  /** Window Y position for WebView bounds sync */
+  windowY?: number;
+  /** Window width for WebView bounds sync */
+  windowWidth?: number;
+  /** Window height for WebView bounds sync */
+  windowHeight?: number;
 }
 
 export function BrowserContent({
   isInteractive,
+  isFocused = false,
   windowId,
   initialUrl,
   initialZoom,
   onContentChange,
+  opacity,
+  windowX,
+  windowY,
+  windowWidth,
+  windowHeight,
 }: BrowserContentProps) {
   // Get persistence context for fallback when no callback is provided
   const persistence = usePersistenceContext();
@@ -58,12 +80,15 @@ export function BrowserContent({
     initialZoom ?? BROWSER_DEFAULTS.DEFAULT_ZOOM
   );
 
-  const [url, setUrl] = useState<string>(effectiveInitialUrl);
-  const [historyStack, setHistoryStack] = useState<string[]>([effectiveInitialUrl]);
-  const [historyIndex, setHistoryIndex] = useState(0);
-  const [zoom, setZoom] = useState<number>(effectiveInitialZoom);
-  const [isLoading, setIsLoading] = useState(false);
-  const [iframeKey, setIframeKey] = useState(0);
+  // T016: Ref for content area placeholder div
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [initialBounds, setInitialBounds] = useState<BrowserWebViewBounds | undefined>(undefined);
+  const [boundsReady, setBoundsReady] = useState(false);
+
+  // Refs to track current URL and zoom for persistence callbacks
+  // This avoids stale closure issues where callbacks reference old values
+  const currentUrlRef = useRef(effectiveInitialUrl);
+  const currentZoomRef = useRef(effectiveInitialZoom);
 
   // Unified content change handler - uses prop callback or falls back to persistence context
   const handleContentChange = useCallback((newUrl: string, newZoom: number) => {
@@ -74,125 +99,215 @@ export function BrowserContent({
     }
   }, [windowId, onContentChange, persistence]);
 
-  // Normalize URL by adding https:// if no protocol
-  const normalizeUrl = (input: string): string => {
-    const trimmed = input.trim();
-    if (!trimmed) return "";
-    if (/^https?:\/\//i.test(trimmed)) {
-      return trimmed;
+  // Calculate initial bounds from content area on mount
+  useEffect(() => {
+    if (contentRef.current && !boundsReady) {
+      const rect = contentRef.current.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        setInitialBounds({
+          x: rect.left,
+          y: rect.top,
+          width: rect.width,
+          height: rect.height,
+        });
+        setBoundsReady(true);
+      }
     }
-    return `https://${trimmed}`;
-  };
+  }, [boundsReady]);
 
-  // Navigate to a new URL
-  const navigateTo = (newUrl: string) => {
-    const normalized = normalizeUrl(newUrl);
-    if (!normalized) return;
+  // T014, T015: Use WebView hook for browser functionality
+  // Use refs for callback values to avoid stale closure issues
+  const webview = useBrowserWebView({
+    windowId,
+    initialUrl: effectiveInitialUrl,
+    initialZoom: effectiveInitialZoom,
+    initialBounds,
+    initialOpacity: opacity,
+    onUrlChange: (url) => {
+      currentUrlRef.current = url;
+      handleContentChange(url, currentZoomRef.current);
+    },
+    onZoomChange: (zoom) => {
+      currentZoomRef.current = zoom;
+      handleContentChange(currentUrlRef.current, zoom);
+    },
+  });
 
-    // Truncate forward history and add new URL
-    const newStack = [...historyStack.slice(0, historyIndex + 1), normalized];
-    setHistoryStack(newStack);
-    setHistoryIndex(newStack.length - 1);
-    setUrl(normalized);
-    setIsLoading(true);
-  };
+  // T013: No iframe rendering - WebView is a separate native window
+  // The content area is just a placeholder that we position the WebView over
 
-  // Go back in history
-  const goBack = () => {
-    if (historyIndex > 0) {
-      const newIndex = historyIndex - 1;
-      setHistoryIndex(newIndex);
-      setUrl(historyStack[newIndex]);
-      setIsLoading(true);
+  // T033-T035: Sync bounds when content area changes (resize, move, scroll)
+  useEffect(() => {
+    if (!webview.isReady || !contentRef.current) return;
+
+    // T035: Debounce timer for rapid updates
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    const DEBOUNCE_MS = 16; // ~60fps, ensures final position is accurate
+
+    const syncBoundsNow = async () => {
+      if (!contentRef.current) return;
+      const rect = contentRef.current.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        await webview.syncBounds({
+          x: rect.left,
+          y: rect.top,
+          width: rect.width,
+          height: rect.height,
+        });
+        // Re-apply cursor ignore state after bounds sync
+        // Windows may reset window properties during position/size changes
+        webview.setIgnoreCursor(!isInteractive);
+      }
+    };
+
+    const debouncedSyncBounds = () => {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(syncBoundsNow, DEBOUNCE_MS);
+    };
+
+    // T032: Initial sync when WebView is ready
+    syncBoundsNow();
+
+    // T033: ResizeObserver for content area size changes
+    const resizeObserver = new ResizeObserver(debouncedSyncBounds);
+    resizeObserver.observe(contentRef.current);
+
+    // T034: Window resize and scroll listeners (handles window move indirectly)
+    window.addEventListener("resize", debouncedSyncBounds);
+    window.addEventListener("scroll", debouncedSyncBounds, true);
+
+    return () => {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", debouncedSyncBounds);
+      window.removeEventListener("scroll", debouncedSyncBounds, true);
+    };
+  }, [webview.isReady, webview.syncBounds, webview.setIgnoreCursor, isInteractive]);
+
+  // Sync bounds when window position/size changes (from drag/resize)
+  // This is critical for real-time position sync during window moves
+  useEffect(() => {
+    if (!webview.isReady || !contentRef.current) return;
+
+    // Use requestAnimationFrame to ensure layout is updated before reading bounds
+    const frameId = requestAnimationFrame(async () => {
+      if (!contentRef.current) return;
+      const rect = contentRef.current.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        await webview.syncBounds({
+          x: rect.left,
+          y: rect.top,
+          width: rect.width,
+          height: rect.height,
+        });
+        // Re-apply cursor ignore state after bounds sync
+        // Windows may reset window properties during position/size changes
+        webview.setIgnoreCursor(!isInteractive);
+      }
+    });
+
+    return () => cancelAnimationFrame(frameId);
+  }, [webview.isReady, webview.syncBounds, webview.setIgnoreCursor, isInteractive, windowX, windowY, windowWidth, windowHeight]);
+
+  // Sync interactive mode with WebView cursor handling
+  // In non-interactive (passive/fullscreen) mode, ignore cursor events
+  // so clicks pass through to the game behind
+  // NOTE: This effect MUST run before opacity sync to ensure correct state
+  useEffect(() => {
+    if (!webview.isReady) return;
+    // When not interactive, ignore cursor events (clicks pass through)
+    webview.setIgnoreCursor(!isInteractive);
+  }, [webview.isReady, webview.setIgnoreCursor, isInteractive]);
+
+  // T046: Sync opacity with WebView when it changes or when mode changes
+  // Re-apply opacity after mode toggle because Windows API calls in
+  // setIgnoreCursor may affect layered window attributes
+  useEffect(() => {
+    if (!webview.isReady || opacity === undefined) return;
+    webview.setOpacity(opacity);
+  }, [webview.isReady, webview.setOpacity, opacity, isInteractive]);
+
+  // Track previous focus state to detect actual changes
+  const prevFocusedRef = useRef<boolean | null>(null);
+
+  // Sync WebView z-order with window focus state
+  // Only react to actual focus CHANGES to avoid unnecessary z-order updates
+  // When focus changes to this window → bring WebView to front
+  // When focus changes away from this window → send WebView to back
+  useEffect(() => {
+    if (!webview.isReady) return;
+
+    const prevFocused = prevFocusedRef.current;
+
+    // Only act on actual state changes, not just re-renders
+    if (prevFocused !== isFocused) {
+      prevFocusedRef.current = isFocused;
+
+      if (isFocused) {
+        webview.bringToFront();
+      } else if (prevFocused === true) {
+        // Only send to back if we were previously focused
+        // This prevents sending to back on initial render or when clicking outside
+        webview.sendToBack();
+      }
     }
-  };
+  }, [webview.isReady, webview.bringToFront, webview.sendToBack, isFocused]);
 
-  // Go forward in history
-  const goForward = () => {
-    if (historyIndex < historyStack.length - 1) {
-      const newIndex = historyIndex + 1;
-      setHistoryIndex(newIndex);
-      setUrl(historyStack[newIndex]);
-      setIsLoading(true);
-    }
-  };
-
-  // Refresh current page
-  const refresh = () => {
-    setIsLoading(true);
-    setIframeKey((prev) => prev + 1);
-  };
-
-  // Zoom in
-  const zoomIn = () => {
+  // Zoom handlers that use the WebView hook
+  const handleZoomIn = useCallback(() => {
     const newZoom = Math.min(
-      zoom + BROWSER_DEFAULTS.ZOOM_STEP,
+      webview.zoom + BROWSER_DEFAULTS.ZOOM_STEP,
       BROWSER_DEFAULTS.ZOOM_MAX
     );
-    setZoom(newZoom);
-    handleContentChange(url, newZoom);
-  };
+    webview.setZoom(newZoom);
+  }, [webview]);
 
-  // Zoom out
-  const zoomOut = () => {
+  const handleZoomOut = useCallback(() => {
     const newZoom = Math.max(
-      zoom - BROWSER_DEFAULTS.ZOOM_STEP,
+      webview.zoom - BROWSER_DEFAULTS.ZOOM_STEP,
       BROWSER_DEFAULTS.ZOOM_MIN
     );
-    setZoom(newZoom);
-    handleContentChange(url, newZoom);
-  };
-
-  // Handle iframe load - persist URL after page loads
-  const handleIframeLoad = () => {
-    setIsLoading(false);
-    // Persist the URL after the page loads (handles redirects)
-    handleContentChange(url, zoom);
-  };
-
-  // Computed navigation states
-  const canGoBack = historyIndex > 0;
-  const canGoForward = historyIndex < historyStack.length - 1;
-
-  // Calculate zoom transform values
-  const scaleValue = zoom / 100;
-  const inverseScale = 100 / zoom;
+    webview.setZoom(newZoom);
+  }, [webview]);
 
   return (
     <div className="flex flex-col h-full">
+      {/* Toolbar with solid background - window bg is transparent for browser */}
       {isInteractive && (
-        <BrowserToolbar
-          url={url}
-          canGoBack={canGoBack}
-          canGoForward={canGoForward}
-          zoom={zoom}
-          isLoading={isLoading}
-          onNavigate={navigateTo}
-          onBack={goBack}
-          onForward={goForward}
-          onRefresh={refresh}
-          onZoomIn={zoomIn}
-          onZoomOut={zoomOut}
-        />
-      )}
-      {/* Padding allows window resize handles to be grabbed */}
-      <div className="flex-1 overflow-hidden relative p-1">
-        {!isInteractive && <div className="absolute inset-1 z-10" />}
-        <div className="w-full h-full overflow-hidden">
-          <iframe
-            key={iframeKey}
-            src={url}
-            title="Browser Content"
-            className="border-0"
-            style={{
-              width: `${inverseScale * 100}%`,
-              height: `${inverseScale * 100}%`,
-              transform: `scale(${scaleValue})`,
-              transformOrigin: "0 0",
-            }}
-            onLoad={handleIframeLoad}
+        <div className="bg-background">
+          <BrowserToolbar
+            url={webview.currentUrl}
+            canGoBack={webview.canGoBack}
+            canGoForward={webview.canGoForward}
+            zoom={webview.zoom}
+            isLoading={webview.isLoading}
+            error={webview.error}
+            onNavigate={webview.navigate}
+            onBack={webview.goBack}
+            onForward={webview.goForward}
+            onRefresh={webview.refresh}
+            onZoomIn={handleZoomIn}
+            onZoomOut={handleZoomOut}
           />
         </div>
+      )}
+      {/* T016: Content area placeholder - WebView is positioned over this area */}
+      {/* Padding allows window resize handles to be grabbed */}
+      {/* onMouseEnter brings WebView to front as a backup for focus-based z-order */}
+      {/* Z-order is primarily controlled by isFocused prop (see useEffect above) */}
+      <div
+        className="flex-1 overflow-hidden relative p-1"
+        onMouseEnter={() => {
+          if (webview.isReady && isFocused) {
+            webview.bringToFront();
+          }
+        }}
+      >
+        {!isInteractive && <div className="absolute inset-1 z-10" />}
+        <div
+          ref={contentRef}
+          className="w-full h-full"
+        />
       </div>
     </div>
   );

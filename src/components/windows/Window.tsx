@@ -32,6 +32,8 @@ import { WindowHeader } from './WindowHeader';
 interface WindowProps {
   window: WindowInstance;
   isInteractive?: boolean;
+  /** Whether this window is the focused/topmost window in the overlay */
+  isFocused?: boolean;
   onExitComplete?: () => void;
 }
 
@@ -39,8 +41,8 @@ type ResizeDirection = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw' | null;
 
 const RESIZE_HANDLE_SIZE = 8;
 
-export function Window({ window: windowInstance, isInteractive = true, onExitComplete }: WindowProps) {
-  const { id, title, component: Component, componentProps, x, y, width, height, zIndex, opacity, backgroundTransparent } =
+export function Window({ window: windowInstance, isInteractive = true, isFocused = false, onExitComplete }: WindowProps) {
+  const { id, title, component: Component, componentProps, contentType, x, y, width, height, zIndex, opacity, backgroundTransparent } =
     windowInstance;
 
   const { focusWindow, resizeWindow, moveWindow, setWindowOpacity, setWindowBackgroundTransparent } = useWindows();
@@ -215,14 +217,19 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
     ? `calc(100% - ${WINDOW_CONSTANTS.HEADER_HEIGHT}px)`
     : '100%';
 
+  // Browser windows always have transparent background because WebView renders behind
+  const isBrowserWindow = contentType === 'browser';
+
   // Window background class based on backgroundTransparent setting
   // Transparency only applies in non-interactive (passive) mode
   // In interactive mode, background is always solid regardless of setting
   // Setting still persists so it applies when switching back to passive mode
-  const isEffectivelyTransparent = !isInteractive && backgroundTransparent;
+  // Browser windows are always transparent to show WebView content
+  const isEffectivelyTransparent = (!isInteractive && backgroundTransparent) || isBrowserWindow;
   const windowBackgroundClass = isEffectivelyTransparent ? '' : 'bg-background';
 
   // Content background class - only needed when solid to ensure content area is opaque
+  // Browser windows always have transparent content because WebView renders behind
   const contentBackgroundClass = isEffectivelyTransparent ? '' : 'bg-background';
 
   // Pointer events class - needed because parent container is pointer-events-none
@@ -258,8 +265,9 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
         onPointerLeave={handlePointerLeave}
       >
         {/* Header - only visible in interactive mode */}
+        {/* Browser windows need explicit background since window bg is transparent */}
         {isInteractive && (
-          <div className="pointer-events-auto">
+          <div className={`pointer-events-auto ${isBrowserWindow ? 'bg-background' : ''}`}>
             <WindowHeader
               windowId={id}
               title={title}
@@ -281,7 +289,7 @@ export function Window({ window: windowInstance, isInteractive = true, onExitCom
           className={`overflow-auto pointer-events-auto ${contentBackgroundClass}`}
           style={{ height: contentHeight }}
         >
-          <Component {...(componentProps ?? {})} isInteractive={isInteractive} backgroundTransparent={backgroundTransparent} />
+          <Component {...(componentProps ?? {})} windowId={id} isInteractive={isInteractive} isFocused={isFocused} backgroundTransparent={backgroundTransparent} opacity={opacity} windowX={x} windowY={y} windowWidth={width} windowHeight={height} />
         </div>
       </div>
     </motion.div>

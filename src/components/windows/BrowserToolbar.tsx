@@ -11,7 +11,9 @@ import {
   Minus,
   Plus,
   Loader2,
+  AlertCircle,
 } from "lucide-react";
+import type { BrowserErrorEvent } from "@/types/browserWebView";
 
 export interface BrowserToolbarProps {
   url: string;
@@ -19,6 +21,7 @@ export interface BrowserToolbarProps {
   canGoForward: boolean;
   zoom: number;
   isLoading: boolean;
+  error: BrowserErrorEvent | null;
   onNavigate: (url: string) => void;
   onBack: () => void;
   onForward: () => void;
@@ -33,6 +36,7 @@ export function BrowserToolbar({
   canGoForward,
   zoom,
   isLoading,
+  error,
   onNavigate,
   onBack,
   onForward,
@@ -53,6 +57,8 @@ export function BrowserToolbar({
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       onNavigate(inputValue);
+      // Blur input so subsequent URL changes from WebView navigation will update the bar
+      inputRef.current?.blur();
     }
   };
 
@@ -98,10 +104,18 @@ export function BrowserToolbar({
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Enter URL..."
-          className="h-8 pr-8"
+          className={`h-8 pr-8 ${error ? "border-destructive text-destructive" : ""}`}
         />
-        {isLoading && (
+        {isLoading && !error && (
           <Loader2 className="h-4 w-4 absolute right-2 top-1/2 -translate-y-1/2 animate-spin text-muted-foreground" />
+        )}
+        {error && (
+          <span
+            className="absolute right-2 top-1/2 -translate-y-1/2"
+            title={error.message}
+          >
+            <AlertCircle className="h-4 w-4 text-destructive" />
+          </span>
         )}
       </div>
 

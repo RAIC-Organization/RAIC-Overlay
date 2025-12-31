@@ -1,3 +1,7 @@
+// T002 (040): Browser WebView types for WebView architecture
+pub mod browser_webview_types;
+// T005-T006 (040): Browser WebView commands for WebView architecture
+pub mod browser_webview;
 pub mod hotkey;
 // T008 (029): Low-level keyboard hook module
 #[cfg(windows)]
@@ -101,6 +105,13 @@ async fn toggle_visibility(
         state.set_mode(OverlayMode::Fullscreen);
         // Clear target binding
         state.target_binding.clear();
+
+        // T056 (040): Hide all browser WebViews when overlay hides
+        let app = window.app_handle();
+        let browser_state = app.state::<browser_webview_types::BrowserWebViewState>();
+        if let Err(e) = browser_webview::set_all_browser_webviews_visibility_internal(&app, &browser_state, false) {
+            log::warn!("Failed to hide browser WebViews: {}", e);
+        }
 
         // T050 (028): Set user_manually_hidden flag to prevent auto-show
         process_monitor::PROCESS_MONITOR_STATE.set_user_manually_hidden(true);
@@ -238,6 +249,13 @@ async fn toggle_visibility(
             rect: Some(rect),
         };
         let _ = window.emit("target-window-changed", payload);
+
+        // T057 (040): Show all browser WebViews when overlay shows
+        let app = window.app_handle();
+        let browser_state = app.state::<browser_webview_types::BrowserWebViewState>();
+        if let Err(e) = browser_webview::set_all_browser_webviews_visibility_internal(&app, &browser_state, true) {
+            log::warn!("Failed to show browser WebViews: {}", e);
+        }
 
         // T027 (028): Log outcome
         log::info!("F3 outcome: shown overlay, bound to target at ({}, {}) {}x{}",
@@ -416,8 +434,12 @@ pub fn run() {
         .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, None))
         // T003 (039): Register prevent-default plugin to block browser shortcuts
         .plugin(get_prevent_default_plugin())
+        // T036 (040): Register browser WebView plugin for navigation events
+        .plugin(browser_webview::build_browser_webview_plugin())
         .plugin(hotkey::build_shortcut_plugin().build())
         .manage(OverlayState::default())
+        // T008 (040): Initialize BrowserWebViewState for WebView tracking
+        .manage(browser_webview_types::BrowserWebViewState::new())
         .invoke_handler(tauri::generate_handler![
             set_visibility,
             get_overlay_state,
@@ -438,7 +460,31 @@ pub fn run() {
             user_settings::load_user_settings,
             user_settings::save_user_settings,
             user_settings::update_hotkeys,
-            settings_window::open_settings_window
+            settings_window::open_settings_window,
+            // T007 (040): Browser WebView commands
+            browser_webview::create_browser_webview,
+            browser_webview::destroy_browser_webview,
+            // T022 (040): Browser WebView navigation commands
+            browser_webview::browser_navigate,
+            browser_webview::browser_go_back,
+            browser_webview::browser_go_forward,
+            browser_webview::browser_refresh,
+            browser_webview::report_browser_url_change,
+            browser_webview::set_browser_zoom,
+            // T029 (040): Browser WebView positioning command
+            browser_webview::sync_browser_webview_bounds,
+            // T045 (040): Browser WebView opacity command
+            browser_webview::set_browser_webview_opacity,
+            // Browser WebView cursor ignore command (for non-interactive mode)
+            browser_webview::set_browser_webview_ignore_cursor,
+            // Browser WebView bring to front command (for mouse enter)
+            browser_webview::bring_browser_webview_to_front,
+            // Browser WebView send to back command (for mouse leave)
+            browser_webview::send_browser_webview_to_back,
+            // T054 (040): Browser WebView visibility commands
+            browser_webview::set_browser_webview_visibility,
+            browser_webview::set_all_browser_webviews_visibility,
+            browser_webview::destroy_all_browser_webviews
         ])
         .setup(|app| {
             let handle = app.handle().clone();
@@ -484,6 +530,9 @@ pub fn run() {
             // T048 (028): Start process monitor for automatic game detection
             #[cfg(windows)]
             process_monitor::start_process_monitor(handle.clone());
+
+            // Start browser WebView URL polling for tracking navigation changes
+            browser_webview::start_browser_url_polling(handle.clone());
 
             // Get main window
             let window = app

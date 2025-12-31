@@ -21,6 +21,7 @@ import {
   useRef,
   type ReactNode,
 } from 'react';
+import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
 import { usePersistence } from '@/hooks/usePersistence';
 import { useWindows } from '@/contexts/WindowsContext';
@@ -28,6 +29,7 @@ import { useWidgets } from '@/contexts/WidgetsContext';
 import type { WindowInstance, WindowContentType } from '@/types/windows';
 import type { WidgetInstance } from '@/types/widgets';
 import type { FileType } from '@/types/persistence';
+import { debug as logDebug, error as logError } from '@/lib/logger';
 import { serializeNotesContent, serializeDrawContent, serializeBrowserContent, serializeFileViewerContent } from '@/lib/serialization';
 
 // ============================================================================
@@ -287,9 +289,22 @@ export function PersistenceProvider({
     [saveFileViewerContentDebounced]
   );
 
-  // Handle window close - delete content and save state
+  // Handle window close - delete content, cleanup WebView, and save state
   const onWindowClosed = useCallback(
     async (windowId: string, contentType?: WindowContentType) => {
+      // For browser windows, destroy the WebView on the backend
+      // This cleanup is done here (not in useEffect) to support React Strict Mode
+      if (contentType === 'browser') {
+        const webviewId = `browser-webview-${windowId}`;
+        logDebug(`[PersistenceContext] Destroying WebView for closed browser window: ${webviewId}`);
+        try {
+          await invoke('destroy_browser_webview', { webviewId });
+        } catch (err) {
+          // Ignore errors - WebView might already be destroyed or never created
+          logError(`[PersistenceContext] Failed to destroy WebView: ${err}`);
+        }
+      }
+
       // Only delete content for persistable windows
       if (contentType === 'notes' || contentType === 'draw' || contentType === 'browser' || contentType === 'fileviewer') {
         await deleteWindowContent(windowId);

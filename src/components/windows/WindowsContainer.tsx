@@ -31,13 +31,24 @@ export function WindowsContainer({ mode = 'windowed' }: WindowsContainerProps) {
   // Determine if we're in interactive mode
   const isInteractive = mode === 'windowed';
 
+  // Compute the maximum zIndex to determine which window is focused
+  const maxZIndex = windows.length > 0
+    ? Math.max(...windows.map(w => w.zIndex))
+    : 0;
+
   return (
     <div className="absolute inset-0 pointer-events-none">
       <AnimatePresence>
         {windows.map((windowInstance) => (
           // Key directly on Window - AnimatePresence tracks keys on direct children
           // Window's motion.div handles its own positioning and pointer-events
-          <Window key={windowInstance.id} window={windowInstance} isInteractive={isInteractive} />
+          // isFocused is true when this window has the highest zIndex
+          <Window
+            key={windowInstance.id}
+            window={windowInstance}
+            isInteractive={isInteractive}
+            isFocused={windowInstance.zIndex === maxZIndex}
+          />
         ))}
       </AnimatePresence>
     </div>

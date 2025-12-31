@@ -534,6 +534,18 @@ export default function Home() {
   const handleWindowClose = useCallback(async (windowId: string, contentType?: WindowContentType) => {
     console.log(`Window closed: ${windowId} (type: ${contentType})`);
 
+    // For browser windows, destroy the WebView on the backend
+    if (contentType === 'browser') {
+      const webviewId = `browser-webview-${windowId}`;
+      console.log(`Destroying WebView for closed browser window: ${webviewId}`);
+      try {
+        await invoke('destroy_browser_webview', { webviewId });
+      } catch (err) {
+        // Ignore errors - WebView might already be destroyed or never created
+        console.error(`Failed to destroy WebView: ${err}`);
+      }
+    }
+
     // Delete the window content file if it's a persistable window
     if (contentType === 'notes' || contentType === 'draw' || contentType === 'browser' || contentType === 'fileviewer') {
       const deleteResult = await persistenceService.deleteWindowContent(windowId);

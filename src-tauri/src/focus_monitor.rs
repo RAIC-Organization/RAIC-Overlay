@@ -14,6 +14,7 @@ use std::time::{Duration, Instant};
 #[cfg(windows)]
 use tauri::{AppHandle, Emitter, Manager};
 
+use crate::browser_webview_types::BrowserWebViewState;
 use crate::state::OverlayState;
 
 // T002 (030): Deduplication state for focus logging
@@ -133,6 +134,35 @@ fn is_overlay_focused(app: &AppHandle) -> bool {
     HWND(overlay_hwnd.0) == foreground
 }
 
+// Check if any browser WebView window is focused
+// Browser WebViews are part of the overlay system, so focus on them
+// should NOT trigger overlay auto-hide
+#[cfg(windows)]
+fn is_browser_webview_focused(app: &AppHandle) -> bool {
+    use windows::Win32::Foundation::HWND;
+    use windows::Win32::UI::WindowsAndMessaging::GetForegroundWindow;
+
+    // Get the current foreground window
+    let foreground = unsafe { GetForegroundWindow() };
+
+    // Get all browser WebView labels from state
+    let browser_state = app.state::<BrowserWebViewState>();
+    let webview_labels = browser_state.get_all_labels();
+
+    // Check if foreground window is any of our browser WebViews
+    for label in webview_labels {
+        if let Some(webview) = app.get_webview_window(&label) {
+            if let Ok(webview_hwnd) = webview.hwnd() {
+                if HWND(webview_hwnd.0) == foreground {
+                    return true;
+                }
+            }
+        }
+    }
+
+    false
+}
+
 // T028, T047: Handle focus check (polling approach) with timing instrumentation
 #[cfg(windows)]
 fn handle_focus_check(app: &AppHandle) {
@@ -165,8 +195,12 @@ fn handle_focus_check(app: &AppHandle) {
     // Check if the overlay itself is focused (F5 interactive mode)
     let is_overlay_active = is_overlay_focused(app);
 
-    // Treat overlay focus as "target focused" to prevent auto-hide during F5 interaction
-    let is_focused = is_target_focused || is_overlay_active;
+    // Check if any browser WebView is focused (part of the overlay system)
+    let is_webview_active = is_browser_webview_focused(app);
+
+    // Treat overlay/webview focus as "target focused" to prevent auto-hide
+    // during F5 interaction or when using browser WebViews
+    let is_focused = is_target_focused || is_overlay_active || is_webview_active;
 
     // Update focus state in target binding
     let was_focused = state.target_binding.is_focused();
@@ -216,6 +250,14 @@ fn handle_focus_lost(app: &AppHandle, state: &OverlayState) {
         let _ = window.hide();
     }
 
+    // Hide all browser WebViews (they are part of the overlay system)
+    let browser_state = app.state::<BrowserWebViewState>();
+    let _ = crate::browser_webview::set_all_browser_webviews_visibility_internal(
+        app,
+        &browser_state,
+        false,
+    );
+
     // Emit auto-hide-changed event
     let payload = AutoHideChangedPayload {
         auto_hidden: true,
@@ -252,6 +294,14 @@ fn handle_focus_gained(app: &AppHandle, state: &OverlayState) {
             // Show the overlay
             let _ = window.show();
         }
+
+        // Show all browser WebViews (they are part of the overlay system)
+        let browser_state = app.state::<BrowserWebViewState>();
+        let _ = crate::browser_webview::set_all_browser_webviews_visibility_internal(
+            app,
+            &browser_state,
+            true,
+        );
     }
 
     // Clear auto-hidden flag
