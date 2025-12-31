@@ -50,16 +50,16 @@
 
 ### Implementation for User Story 1
 
-- [ ] T008 [US1] Add imports for `listen`, `UnlistenFn` from `@tauri-apps/api/event` in src/hooks/useHotkeyCapture.ts
-- [ ] T009 [US1] Add imports for `HotkeySettings`, `HotkeyBinding`, `LoadUserSettingsResult`, `DEFAULT_USER_SETTINGS` from `@/types/user-settings` in src/hooks/useHotkeyCapture.ts
-- [ ] T010 [US1] Add `useState` import and create `hotkeyConfig` state variable in src/hooks/useHotkeyCapture.ts
-- [ ] T011 [US1] Add `unlistenRef` useRef for event listener cleanup in src/hooks/useHotkeyCapture.ts
-- [ ] T012 [US1] Implement `matchesHotkey(event, binding)` helper function to compare KeyboardEvent against HotkeyBinding in src/hooks/useHotkeyCapture.ts
-- [ ] T013 [US1] Add useEffect to load initial settings via `invoke('load_user_settings')` with fallback to DEFAULT_USER_SETTINGS in src/hooks/useHotkeyCapture.ts
-- [ ] T014 [US1] Replace hardcoded F3/F5 checks with `matchesHotkey(e, hotkeyConfig.toggleVisibility)` and `matchesHotkey(e, hotkeyConfig.toggleMode)` in keydown handler in src/hooks/useHotkeyCapture.ts
-- [ ] T015 [US1] Rename debounce refs from `lastF3PressRef`/`lastF5PressRef` to `lastVisibilityPressRef`/`lastModePressRef` in src/hooks/useHotkeyCapture.ts
-- [ ] T016 [US1] Update useEffect dependency array to include `hotkeyConfig` alongside `enabled` in src/hooks/useHotkeyCapture.ts
-- [ ] T017 [US1] Add early return in capture useEffect if `hotkeyConfig` is null (settings not yet loaded) in src/hooks/useHotkeyCapture.ts
+- [x] T008 [US1] Add imports for `listen`, `UnlistenFn` from `@tauri-apps/api/event` in src/hooks/useHotkeyCapture.ts
+- [x] T009 [US1] Add imports for `HotkeySettings`, `HotkeyBinding`, `LoadUserSettingsResult`, `DEFAULT_USER_SETTINGS` from `@/types/user-settings` in src/hooks/useHotkeyCapture.ts
+- [x] T010 [US1] Add `useState` import and create `hotkeyConfig` state variable in src/hooks/useHotkeyCapture.ts
+- [x] T011 [US1] Add `unlistenRef` useRef for event listener cleanup in src/hooks/useHotkeyCapture.ts
+- [x] T012 [US1] Implement `matchesHotkey(event, binding)` helper function to compare KeyboardEvent against HotkeyBinding in src/hooks/useHotkeyCapture.ts
+- [x] T013 [US1] Add useEffect to load initial settings via `invoke('load_user_settings')` with fallback to DEFAULT_USER_SETTINGS in src/hooks/useHotkeyCapture.ts
+- [x] T014 [US1] Replace hardcoded F3/F5 checks with `matchesHotkey(e, hotkeyConfig.toggleVisibility)` and `matchesHotkey(e, hotkeyConfig.toggleMode)` in keydown handler in src/hooks/useHotkeyCapture.ts
+- [x] T015 [US1] Rename debounce refs from `lastF3PressRef`/`lastF5PressRef` to `lastVisibilityPressRef`/`lastModePressRef` in src/hooks/useHotkeyCapture.ts
+- [x] T016 [US1] Update useEffect dependency array to include `hotkeyConfig` alongside `enabled` in src/hooks/useHotkeyCapture.ts
+- [x] T017 [US1] Add early return in capture useEffect if `hotkeyConfig` is null (settings not yet loaded) in src/hooks/useHotkeyCapture.ts
 
 **Checkpoint**: Custom hotkeys work when overlay is focused. Test with Ctrl+O configured as visibility toggle.
 
@@ -73,10 +73,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T018 [US2] Add useEffect for event listener setup with `listen<HotkeySettings>('hotkeys-updated', ...)` in src/hooks/useHotkeyCapture.ts
-- [ ] T019 [US2] Update `hotkeyConfig` state when `hotkeys-updated` event is received in src/hooks/useHotkeyCapture.ts
-- [ ] T020 [US2] Add cleanup function that calls `unlistenRef.current?.()` on unmount in src/hooks/useHotkeyCapture.ts
-- [ ] T021 [US2] Add info log when hotkeys are updated via event in src/hooks/useHotkeyCapture.ts
+- [x] T018 [US2] Add useEffect for event listener setup with `listen<HotkeySettings>('hotkeys-updated', ...)` in src/hooks/useHotkeyCapture.ts
+- [x] T019 [US2] Update `hotkeyConfig` state when `hotkeys-updated` event is received in src/hooks/useHotkeyCapture.ts
+- [x] T020 [US2] Add cleanup function that calls `unlistenRef.current?.()` on unmount in src/hooks/useHotkeyCapture.ts
+- [x] T021 [US2] Add info log when hotkeys are updated via event in src/hooks/useHotkeyCapture.ts
 
 **Checkpoint**: Hotkey changes apply immediately. Test by changing visibility toggle from F3 to Ctrl+O and verifying Ctrl+O works and F3 no longer triggers.
 
