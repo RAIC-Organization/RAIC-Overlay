@@ -123,7 +123,7 @@ export function MainMenu({
           transition={{ duration: showHideDuration, ease: "easeOut" }}
           className="bg-transparent flex justify-center items-center gap-2 p-2"
         >
-          {/* Windows: Notes & Test Windows */}
+          {/* Apps: Window-based components */}
           <ButtonGroup>
             <Button variant="secondary" onClick={handleOpenNotes}>
               Notes
@@ -137,13 +137,16 @@ export function MainMenu({
             <Button variant="secondary" onClick={handleOpenFileViewer}>
               File Viewer
             </Button>
-            <Button variant="secondary" onClick={handleOpenClockWidget}>
-              Clock
-            </Button>
-            <Button variant="secondary" onClick={handleTestWindows}>
-              Test Windows
-            </Button>
           </ButtonGroup>
+
+          {/* Widgets: Lightweight overlay components */}
+          <div className="flex items-center gap-1 ml-2 border-l border-border pl-2">
+            <ButtonGroup>
+              <Button variant="secondary" onClick={handleOpenClockWidget}>
+                Clock
+              </Button>
+            </ButtonGroup>
+          </div>
 
           {/* Settings: Scanlines toggle - feature 026-sc-hud-theme */}
           <div className="flex items-center gap-1 ml-2 border-l border-border pl-2">
