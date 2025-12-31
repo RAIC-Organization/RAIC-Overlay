@@ -147,7 +147,7 @@ export interface IWindowEventEmitter {
  * Maps to the component type for serialization.
  * @note 'clock' removed in 027-widget-container (migrated to widget system)
  */
-export type WindowContentType = 'notes' | 'draw' | 'browser' | 'fileviewer' | 'test';
+export type WindowContentType = 'notes' | 'draw' | 'browser' | 'fileviewer';
 
 /**
  * Represents a single window instance in the system.
