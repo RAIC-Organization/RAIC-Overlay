@@ -89,9 +89,9 @@
 
 **Purpose**: Final validation
 
-- [ ] T010 Run application with `npm run tauri dev` and verify visual layout
-- [ ] T011 Verify TypeScript compilation passes with `npx tsc --noEmit`
-- [ ] T012 Verify all buttons still function correctly (Notes, Draw, Browser, File Viewer, Clock)
+- [ ] T010 Run application with `npm run tauri dev` and verify visual layout (manual verification required)
+- [X] T011 Verify TypeScript compilation passes with `npx tsc --noEmit`
+- [ ] T012 Verify all buttons still function correctly (Notes, Draw, Browser, File Viewer, Clock) (manual verification required)
 
 ---
 
