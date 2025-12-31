@@ -17,7 +17,6 @@ import { OverlayMode } from "@/types/overlay";
 import { WindowRect } from "@/types/ipc";
 import { windowEvents } from "@/lib/windowEvents";
 import { widgetEvents } from "@/lib/widgetEvents";
-import { TestWindowContent } from "@/components/windows/TestWindowContent";
 import { NotesContent } from "@/components/windows/NotesContent";
 import { DrawContent } from "@/components/windows/DrawContent";
 import { BrowserContent } from "@/components/windows/BrowserContent";
@@ -94,14 +93,6 @@ export function MainMenu({
     log.info("Opening Clock widget");
     widgetEvents.emit("widget:open", {
       type: "clock",
-    });
-  };
-
-  const handleTestWindows = () => {
-    windowEvents.emit("window:open", {
-      component: TestWindowContent,
-      title: "Test Windows",
-      contentType: "test",
     });
   };
 

@@ -62,9 +62,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T005 [US2] Remove Test Windows button from ButtonGroup JSX in src/components/MainMenu.tsx
-- [ ] T006 [US2] Remove handleTestWindows function in src/components/MainMenu.tsx
-- [ ] T007 [US2] Remove TestWindowContent import statement in src/components/MainMenu.tsx
+- [X] T005 [US2] Remove Test Windows button from ButtonGroup JSX in src/components/MainMenu.tsx
+- [X] T006 [US2] Remove handleTestWindows function in src/components/MainMenu.tsx
+- [X] T007 [US2] Remove TestWindowContent import statement in src/components/MainMenu.tsx
 
 **Checkpoint**: Test Windows button is removed from UI - User Story 2 complete
 
