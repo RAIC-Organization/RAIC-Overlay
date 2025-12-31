@@ -78,8 +78,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T008 [P] [US3] Delete TestWindowContent component file at src/components/windows/TestWindowContent.tsx
-- [ ] T009 [P] [US3] Remove 'test' from WindowContentType union in src/types/windows.ts
+- [X] T008 [P] [US3] Delete TestWindowContent component file at src/components/windows/TestWindowContent.tsx
+- [X] T009 [P] [US3] Remove 'test' from WindowContentType union in src/types/windows.ts
 
 **Checkpoint**: Codebase has no TestWindowContent references - User Story 3 complete
 
