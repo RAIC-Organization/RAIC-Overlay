@@ -16,6 +16,7 @@ import { motion } from 'motion/react';
 import type { WidgetInstance } from '@/types/widgets';
 import { WIDGET_CONSTANTS } from '@/types/widgets';
 import { WidgetSettings } from './WidgetSettings';
+import { ChronometerWidgetSettings } from './ChronometerWidgetSettings';
 
 // ============================================================================
 // Types
@@ -341,13 +342,24 @@ export function Widget({
             opacity: widget.opacity,
           }}
         >
-          <WidgetSettings
-            widgetId={widget.id}
-            opacity={widget.opacity}
-            onOpacityChange={handleOpacityChange}
-            onClose={handleCloseSettings}
-            onCloseWidget={handleCloseWidget}
-          />
+          {/* Render chronometer-specific settings for chronometer widgets */}
+          {widget.type === 'chronometer' ? (
+            <ChronometerWidgetSettings
+              widgetId={widget.id}
+              opacity={widget.opacity}
+              onOpacityChange={handleOpacityChange}
+              onClose={handleCloseSettings}
+              onCloseWidget={handleCloseWidget}
+            />
+          ) : (
+            <WidgetSettings
+              widgetId={widget.id}
+              opacity={widget.opacity}
+              onOpacityChange={handleOpacityChange}
+              onClose={handleCloseSettings}
+              onCloseWidget={handleCloseWidget}
+            />
+          )}
         </div>
       </motion.div>
 

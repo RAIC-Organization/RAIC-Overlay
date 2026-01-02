@@ -260,7 +260,58 @@ unsafe extern "system" fn keyboard_hook_callback(
                     );
                 }
             }
-            // T008 (045): Check for chronometer_start_pause hotkey with modifiers            let chrono_toggle = &hotkeys.chronometer_start_pause;            if vk_code == chrono_toggle.key_code                && ctrl == chrono_toggle.ctrl                && shift == chrono_toggle.shift                && alt == chrono_toggle.alt            {                let last_press = KEYBOARD_HOOK_STATE.get_last_chrono_toggle();                if now - last_press >= DEBOUNCE_MS {                    KEYBOARD_HOOK_STATE.set_last_chrono_toggle(now);                    log::debug!(                        "Ctrl+{} pressed: chronometer toggle (low-level hook, timestamp={})",                        chrono_toggle.key, now                    );                    KEYBOARD_HOOK_STATE.emit_action(HotkeyAction::ChronometerStartPause);                } else {                    log::debug!(                        "Ctrl+{} pressed: debounced ({}ms since last, threshold={}ms)",                        chrono_toggle.key, now - last_press, DEBOUNCE_MS                    );                }            }            // T009 (045): Check for chronometer_reset hotkey with modifiers            let chrono_reset = &hotkeys.chronometer_reset;            if vk_code == chrono_reset.key_code                && ctrl == chrono_reset.ctrl                && shift == chrono_reset.shift                && alt == chrono_reset.alt            {                let last_press = KEYBOARD_HOOK_STATE.get_last_chrono_reset();                if now - last_press >= DEBOUNCE_MS {                    KEYBOARD_HOOK_STATE.set_last_chrono_reset(now);                    log::debug!(                        "Ctrl+{} pressed: chronometer reset (low-level hook, timestamp={})",                        chrono_reset.key, now                    );                    KEYBOARD_HOOK_STATE.emit_action(HotkeyAction::ChronometerReset);                } else {                    log::debug!(                        "Ctrl+{} pressed: debounced ({}ms since last, threshold={}ms)",                        chrono_reset.key, now - last_press, DEBOUNCE_MS                    );                }            }
+
+            // T008 (045): Check for chronometer_start_pause hotkey with modifiers
+            let chrono_toggle = &hotkeys.chronometer_start_pause;
+            if vk_code == chrono_toggle.key_code
+                && ctrl == chrono_toggle.ctrl
+                && shift == chrono_toggle.shift
+                && alt == chrono_toggle.alt
+            {
+                let last_press = KEYBOARD_HOOK_STATE.get_last_chrono_toggle();
+                if now - last_press >= DEBOUNCE_MS {
+                    KEYBOARD_HOOK_STATE.set_last_chrono_toggle(now);
+                    log::info!(
+                        "Ctrl+{} pressed: chronometer toggle (low-level hook, timestamp={})",
+                        chrono_toggle.key,
+                        now
+                    );
+                    KEYBOARD_HOOK_STATE.emit_action(HotkeyAction::ChronometerStartPause);
+                } else {
+                    log::debug!(
+                        "Ctrl+{} pressed: debounced ({}ms since last, threshold={}ms)",
+                        chrono_toggle.key,
+                        now - last_press,
+                        DEBOUNCE_MS
+                    );
+                }
+            }
+
+            // T009 (045): Check for chronometer_reset hotkey with modifiers
+            let chrono_reset = &hotkeys.chronometer_reset;
+            if vk_code == chrono_reset.key_code
+                && ctrl == chrono_reset.ctrl
+                && shift == chrono_reset.shift
+                && alt == chrono_reset.alt
+            {
+                let last_press = KEYBOARD_HOOK_STATE.get_last_chrono_reset();
+                if now - last_press >= DEBOUNCE_MS {
+                    KEYBOARD_HOOK_STATE.set_last_chrono_reset(now);
+                    log::info!(
+                        "Ctrl+{} pressed: chronometer reset (low-level hook, timestamp={})",
+                        chrono_reset.key,
+                        now
+                    );
+                    KEYBOARD_HOOK_STATE.emit_action(HotkeyAction::ChronometerReset);
+                } else {
+                    log::debug!(
+                        "Ctrl+{} pressed: debounced ({}ms since last, threshold={}ms)",
+                        chrono_reset.key,
+                        now - last_press,
+                        DEBOUNCE_MS
+                    );
+                }
+            }
         }
     }
 
