@@ -1,0 +1,22 @@
+# GitHub Release Workflow
+# Triggers on semantic version tags and creates a GitHub release with MSI installer
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+      - '*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and Release
+    runs-on: windows-latest
+
+    steps:
+      - name: Placeholder
+        run: echo "Workflow skeleton created"
