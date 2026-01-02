@@ -1,0 +1,131 @@
+# =============================================================================
+# GitHub Release Workflow
+# =============================================================================
+# Triggers on semantic version tags (v0.1.0, 1.2.3, 2.0.0-beta.1) and:
+# 1. Updates version in tauri.conf.json, package.json, and Cargo.toml
+# 2. Builds the Tauri application with MSI installer
+# 3. Creates a GitHub release with auto-generated changelog
+# 4. Attaches MSI installer to the release
+# 5. Detects pre-releases automatically (tags containing hyphen)
+# =============================================================================
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'    # Matches v0.1.0, v1.2.3-beta.1, etc.
+      - '*.*.*'     # Matches 0.1.0, 1.2.3-rc.1, etc.
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  release:
+    name: Build and Release
+    runs-on: windows-latest
+
+    steps:
+      # =========================
+      # Setup & Configuration
+      # =========================
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}" -replace '^v', ''
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+          echo "Extracted version: $version"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust dependencies
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "src-tauri -> target"
+
+      # =========================
+      # Version Update
+      # =========================
+      - name: Update version in config files
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.VERSION }}"
+
+          # Update tauri.conf.json
+          $tauriConf = Get-Content src-tauri/tauri.conf.json | ConvertFrom-Json
+          $tauriConf.version = $version
+          $tauriConf | ConvertTo-Json -Depth 10 | Set-Content src-tauri/tauri.conf.json
+          echo "Updated tauri.conf.json to version $version"
+
+          # Update package.json
+          $packageJson = Get-Content package.json | ConvertFrom-Json
+          $packageJson.version = $version
+          $packageJson | ConvertTo-Json -Depth 10 | Set-Content package.json
+          echo "Updated package.json to version $version"
+
+          # Update Cargo.toml (regex replace for TOML)
+          $cargoToml = Get-Content src-tauri/Cargo.toml -Raw
+          $cargoToml = $cargoToml -replace '(?m)^version = ".*"', "version = `"$version`""
+          Set-Content src-tauri/Cargo.toml $cargoToml -NoNewline
+          echo "Updated Cargo.toml to version $version"
+
+      # =========================
+      # Build
+      # =========================
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Build Tauri release
+        run: npm run tauri build
+
+      - name: Verify MSI artifact exists
+        shell: pwsh
+        run: |
+          $msiFiles = Get-ChildItem -Path "src-tauri/target/release/bundle/msi/*.msi" -ErrorAction SilentlyContinue
+          if ($null -eq $msiFiles -or $msiFiles.Count -eq 0) {
+            Write-Error "::error::MSI installer was not generated. Check Tauri build output for errors."
+            exit 1
+          }
+          echo "Found MSI artifact(s):"
+          $msiFiles | ForEach-Object { echo "  - $($_.Name)" }
+
+      # =========================
+      # Release
+      # =========================
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: RAIC Overlay ${{ github.ref_name }}
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          files: |
+            src-tauri/target/release/bundle/msi/*.msi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release summary
+        if: always()
+        shell: pwsh
+        run: |
+          echo "## Release Summary" >> $env:GITHUB_STEP_SUMMARY
+          echo "" >> $env:GITHUB_STEP_SUMMARY
+          echo "- **Tag**: ${{ github.ref_name }}" >> $env:GITHUB_STEP_SUMMARY
+          echo "- **Version**: ${{ steps.version.outputs.VERSION }}" >> $env:GITHUB_STEP_SUMMARY
+          echo "- **Pre-release**: ${{ contains(github.ref_name, '-') }}" >> $env:GITHUB_STEP_SUMMARY
