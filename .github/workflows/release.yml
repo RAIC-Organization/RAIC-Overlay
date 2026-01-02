@@ -1,16 +1,27 @@
+# =============================================================================
 # GitHub Release Workflow
-# Triggers on semantic version tags and creates a GitHub release with MSI installer
+# =============================================================================
+# Triggers on semantic version tags (v0.1.0, 1.2.3, 2.0.0-beta.1) and:
+# 1. Updates version in tauri.conf.json, package.json, and Cargo.toml
+# 2. Builds the Tauri application with MSI installer
+# 3. Creates a GitHub release with auto-generated changelog
+# 4. Attaches MSI installer to the release
+# 5. Detects pre-releases automatically (tags containing hyphen)
+# =============================================================================
 
 name: Release
 
 on:
   push:
     tags:
-      - 'v*.*.*'
-      - '*.*.*'
+      - 'v*.*.*'    # Matches v0.1.0, v1.2.3-beta.1, etc.
+      - '*.*.*'     # Matches 0.1.0, 1.2.3-rc.1, etc.
 
 permissions:
   contents: write
+
+env:
+  CARGO_TERM_COLOR: always
 
 jobs:
   release:
@@ -18,11 +29,12 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # T003: Checkout repository
+      # =========================
+      # Setup & Configuration
+      # =========================
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # T004: Extract version from tag (strip 'v' prefix if present)
       - name: Extract version from tag
         id: version
         shell: pwsh
@@ -31,24 +43,23 @@ jobs:
           echo "VERSION=$version" >> $env:GITHUB_OUTPUT
           echo "Extracted version: $version"
 
-      # T005: Setup Node.js with npm cache
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
 
-      # T006: Setup Rust toolchain
       - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      # T007: Cache Rust dependencies
       - name: Cache Rust dependencies
         uses: swatinem/rust-cache@v2
         with:
           workspaces: "src-tauri -> target"
 
-      # T009-T011: Update version in all config files
+      # =========================
+      # Version Update
+      # =========================
       - name: Update version in config files
         shell: pwsh
         run: |
@@ -72,19 +83,18 @@ jobs:
           Set-Content src-tauri/Cargo.toml $cargoToml -NoNewline
           echo "Updated Cargo.toml to version $version"
 
-      # T012: Install frontend dependencies
+      # =========================
+      # Build
+      # =========================
       - name: Install frontend dependencies
         run: npm ci
 
-      # T013: Build frontend
       - name: Build frontend
         run: npm run build
 
-      # T014: Build Tauri application with MSI
       - name: Build Tauri release
         run: npm run tauri build
 
-      # T014b: Verify MSI was created
       - name: Verify MSI artifact exists
         shell: pwsh
         run: |
@@ -96,7 +106,9 @@ jobs:
           echo "Found MSI artifact(s):"
           $msiFiles | ForEach-Object { echo "  - $($_.Name)" }
 
-      # T015-T018: Create GitHub release with MSI attachment
+      # =========================
+      # Release
+      # =========================
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -108,7 +120,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # T021: Summary output for debugging
       - name: Release summary
         if: always()
         shell: pwsh

@@ -104,10 +104,10 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T022 [P] Add workflow comments explaining each section purpose in .github/workflows/release.yml
-- [ ] T023 [P] Add env section with CARGO_TERM_COLOR: always for consistent output in .github/workflows/release.yml
-- [ ] T024 Validate complete workflow YAML syntax using actionlint or GitHub Actions syntax checker
-- [ ] T025 Run quickstart.md validation by simulating first release process documentation
+- [x] T022 [P] Add workflow comments explaining each section purpose in .github/workflows/release.yml
+- [x] T023 [P] Add env section with CARGO_TERM_COLOR: always for consistent output in .github/workflows/release.yml
+- [x] T024 Validate complete workflow YAML syntax using actionlint or GitHub Actions syntax checker
+- [x] T025 Run quickstart.md validation by simulating first release process documentation
 
 ---
 
