@@ -51,17 +51,17 @@
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Implement GitHub API client with reqwest in src-tauri/src/update/checker.rs (fetch latest release, parse response)
-- [ ] T012 [US1] Implement version comparison logic using semver in src-tauri/src/update/checker.rs (compare current vs latest, strip v prefix)
-- [ ] T013 [US1] Implement MSI asset finder in src-tauri/src/update/checker.rs (find .msi file in release assets)
-- [ ] T014 [US1] Implement check_for_updates Tauri command in src-tauri/src/update/checker.rs (combines GitHub fetch, version compare, return UpdateCheckResult)
-- [ ] T015 [US1] Implement cleanup_old_installers Tauri command in src-tauri/src/update/state.rs (delete pending installer on startup)
-- [ ] T016 [US1] Register check_for_updates and cleanup_old_installers commands in src-tauri/src/lib.rs invoke_handler
-- [ ] T017 [P] [US1] Create UpdateNotification component at src/components/update/UpdateNotification.tsx (display version, Accept/Later buttons)
-- [ ] T018 [P] [US1] Create useUpdateChecker hook at src/hooks/useUpdateChecker.ts (check on mount, 24h interval, manage state)
-- [ ] T019 [US1] Create update component exports at src/components/update/index.ts
-- [ ] T020 [US1] Integrate useUpdateChecker hook and UpdateNotification in main app component
-- [ ] T021 [US1] Call cleanup_old_installers on app startup in useUpdateChecker hook
+- [X] T011 [US1] Implement GitHub API client with reqwest in src-tauri/src/update/checker.rs (fetch latest release, parse response)
+- [X] T012 [US1] Implement version comparison logic using semver in src-tauri/src/update/checker.rs (compare current vs latest, strip v prefix)
+- [X] T013 [US1] Implement MSI asset finder in src-tauri/src/update/checker.rs (find .msi file in release assets)
+- [X] T014 [US1] Implement check_for_updates Tauri command in src-tauri/src/update/checker.rs (combines GitHub fetch, version compare, return UpdateCheckResult)
+- [X] T015 [US1] Implement cleanup_old_installers Tauri command in src-tauri/src/update/state.rs (delete pending installer on startup)
+- [X] T016 [US1] Register check_for_updates and cleanup_old_installers commands in src-tauri/src/lib.rs invoke_handler
+- [X] T017 [P] [US1] Create UpdateNotification component at src/components/update/UpdateNotification.tsx (display version, Accept/Later buttons)
+- [X] T018 [P] [US1] Create useUpdateChecker hook at src/hooks/useUpdateChecker.ts (check on mount, 24h interval, manage state)
+- [X] T019 [US1] Create update component exports at src/components/update/index.ts
+- [X] T020 [US1] Integrate useUpdateChecker hook and UpdateNotification in main app component
+- [X] T021 [US1] Call cleanup_old_installers on app startup in useUpdateChecker hook
 
 **Checkpoint**: User Story 1 complete - app checks for updates and shows notification
 
