@@ -94,13 +94,13 @@
 
 ### Implementation for User Story 3
 
-- [ ] T023 [P] [US3] Create ChronometerWidgetSettings.tsx component with hotkey input fields in src/components/widgets/ChronometerWidgetSettings.tsx
-- [ ] T024 [US3] Add HotkeyInput component for start/pause hotkey configuration in src/components/widgets/ChronometerWidgetSettings.tsx
-- [ ] T025 [US3] Add HotkeyInput component for reset hotkey configuration in src/components/widgets/ChronometerWidgetSettings.tsx
-- [ ] T026 [US3] Add conflict validation against F3/F5 system hotkeys in src/components/widgets/ChronometerWidgetSettings.tsx
-- [ ] T027 [US3] Add save handler that invokes update_chronometer_hotkeys command in src/components/widgets/ChronometerWidgetSettings.tsx
-- [ ] T028 [US3] Implement update_chronometer_hotkeys command in src-tauri/src/user_settings.rs
-- [ ] T029 [US3] Emit hotkeys-updated event after saving new configuration in src-tauri/src/user_settings.rs
+- [X] T023 [P] [US3] Create ChronometerWidgetSettings.tsx component with hotkey input fields in src/components/widgets/ChronometerWidgetSettings.tsx
+- [X] T024 [US3] Add HotkeyInput component for start/pause hotkey configuration in src/components/widgets/ChronometerWidgetSettings.tsx
+- [X] T025 [US3] Add HotkeyInput component for reset hotkey configuration in src/components/widgets/ChronometerWidgetSettings.tsx
+- [X] T026 [US3] Add conflict validation against F3/F5 system hotkeys in src/components/widgets/ChronometerWidgetSettings.tsx
+- [X] T027 [US3] Add save handler that invokes update_chronometer_hotkeys command in src/components/widgets/ChronometerWidgetSettings.tsx
+- [X] T028 [US3] Implement update_chronometer_hotkeys command in src-tauri/src/user_settings.rs
+- [X] T029 [US3] Emit hotkeys-updated event after saving new configuration in src-tauri/src/user_settings.rs
 
 **Checkpoint**: Custom hotkeys can be configured, saved, and take effect immediately
 
