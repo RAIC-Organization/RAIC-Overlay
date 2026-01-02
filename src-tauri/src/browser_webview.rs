@@ -5,10 +5,12 @@
 //!
 //! @feature 040-webview-browser
 
-use crate::browser_webview_types::{BrowserLoadingPayload, BrowserUrlPayload, BrowserWebViewBounds, BrowserWebViewState};
+use crate::browser_webview_types::{
+    BrowserLoadingPayload, BrowserUrlPayload, BrowserWebViewBounds, BrowserWebViewState,
+};
 use crate::state::OverlayState;
-use tauri::{AppHandle, Emitter, Manager, State, WebviewUrl, WebviewWindowBuilder};
 use tauri::webview::PageLoadEvent;
+use tauri::{AppHandle, Emitter, Manager, State, WebviewUrl, WebviewWindowBuilder};
 
 /// T036: Build the browser WebView plugin that hooks into navigation events.
 ///
@@ -84,7 +86,10 @@ pub async fn create_browser_webview(
 
     // Validate bounds
     if !bounds.is_valid() {
-        return Err("Invalid bounds: all values must be non-negative and dimensions must be positive".to_string());
+        return Err(
+            "Invalid bounds: all values must be non-negative and dimensions must be positive"
+                .to_string(),
+        );
     }
 
     // Clamp zoom to valid range
@@ -119,12 +124,12 @@ pub async fn create_browser_webview(
         .decorations(false)
         .transparent(true)
         .always_on_top(true)
-        .resizable(false)  // Prevent direct resize, React component controls size
+        .resizable(false) // Prevent direct resize, React component controls size
         .inner_size(bounds.width, bounds.height)
         .position(bounds.x, bounds.y)
-        .visible(overlay_visible)  // Match overlay visibility state
-        .focused(false)  // Don't steal focus from main overlay window
-        .skip_taskbar(true)  // Hide from taskbar
+        .visible(overlay_visible) // Match overlay visibility state
+        .focused(false) // Don't steal focus from main overlay window
+        .skip_taskbar(true) // Hide from taskbar
         // T036: on_page_load fires when pages actually load, more reliable for URL tracking
         // than on_navigation (which fires before navigation)
         .on_page_load(move |_window, payload| {
@@ -132,7 +137,11 @@ pub async fn create_browser_webview(
 
             match payload.event() {
                 PageLoadEvent::Started => {
-                    log::debug!("Page load started in {}: {}", webview_id_for_callback, page_url);
+                    log::debug!(
+                        "Page load started in {}: {}",
+                        webview_id_for_callback,
+                        page_url
+                    );
 
                     // Emit loading started event
                     let loading_payload = BrowserLoadingPayload {
@@ -145,7 +154,11 @@ pub async fn create_browser_webview(
                     }
                 }
                 PageLoadEvent::Finished => {
-                    log::info!("Page load finished in {}: {}", webview_id_for_callback, page_url);
+                    log::info!(
+                        "Page load finished in {}: {}",
+                        webview_id_for_callback,
+                        page_url
+                    );
 
                     // Update state with new URL
                     if let Some(browser_state) = app_handle.try_state::<BrowserWebViewState>() {
@@ -156,8 +169,8 @@ pub async fn create_browser_webview(
                     let url_payload = BrowserUrlPayload {
                         webview_id: webview_id_for_callback.clone(),
                         url: page_url,
-                        can_go_back: true,  // Will be refined by actual navigation attempts
-                        can_go_forward: false,  // Typically false after new navigation
+                        can_go_back: true, // Will be refined by actual navigation attempts
+                        can_go_forward: false, // Typically false after new navigation
                     };
 
                     if let Err(e) = app_handle.emit("browser-url-changed", &url_payload) {
@@ -189,12 +202,13 @@ pub async fn create_browser_webview(
     if let Some(opacity_value) = opacity {
         use windows::Win32::Foundation::{COLORREF, HWND};
         use windows::Win32::UI::WindowsAndMessaging::{
-            GetWindowLongW, SetLayeredWindowAttributes, SetWindowLongW, SetWindowPos,
-            GWL_EXSTYLE, HWND_TOPMOST, LWA_ALPHA, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE,
-            WS_EX_LAYERED,
+            GetWindowLongW, SetLayeredWindowAttributes, SetWindowLongW, SetWindowPos, GWL_EXSTYLE,
+            HWND_TOPMOST, LWA_ALPHA, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE, WS_EX_LAYERED,
         };
 
-        let hwnd = webview.hwnd().map_err(|e| format!("Failed to get HWND: {}", e))?;
+        let hwnd = webview
+            .hwnd()
+            .map_err(|e| format!("Failed to get HWND: {}", e))?;
         let hwnd = HWND(hwnd.0);
 
         unsafe {
@@ -213,13 +227,20 @@ pub async fn create_browser_webview(
             SetWindowPos(
                 hwnd,
                 Some(HWND_TOPMOST),
-                0, 0, 0, 0,
+                0,
+                0,
+                0,
+                0,
                 SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE,
             )
             .map_err(|e| format!("SetWindowPos failed: {}", e))?;
         }
 
-        log::debug!("WebView {} initial opacity set to {:.0}%", webview_id, opacity_value * 100.0);
+        log::debug!(
+            "WebView {} initial opacity set to {:.0}%",
+            webview_id,
+            opacity_value * 100.0
+        );
     }
 
     // Register in state (with initial visibility matching overlay)
@@ -397,7 +418,11 @@ pub fn set_browser_zoom(app: AppHandle, webview_id: String, zoom: f64) -> Result
         .set_zoom(zoom_factor)
         .map_err(|e| format!("Set zoom failed: {}", e))?;
 
-    log::info!("WebView {} zoom set to {:.0}%", webview_id, zoom_factor * 100.0);
+    log::info!(
+        "WebView {} zoom set to {:.0}%",
+        webview_id,
+        zoom_factor * 100.0
+    );
     Ok(())
 }
 
@@ -423,7 +448,10 @@ pub fn sync_browser_webview_bounds(
 
     // Validate bounds
     if !bounds.is_valid() {
-        return Err("Invalid bounds: all values must be non-negative and dimensions must be positive".to_string());
+        return Err(
+            "Invalid bounds: all values must be non-negative and dimensions must be positive"
+                .to_string(),
+        );
     }
 
     let webview = app
@@ -437,7 +465,9 @@ pub fn sync_browser_webview_bounds(
         use windows::Win32::Foundation::HWND;
         use windows::Win32::UI::WindowsAndMessaging::{SetWindowPos, HWND_TOPMOST, SWP_NOACTIVATE};
 
-        let hwnd = webview.hwnd().map_err(|e| format!("Failed to get HWND: {}", e))?;
+        let hwnd = webview
+            .hwnd()
+            .map_err(|e| format!("Failed to get HWND: {}", e))?;
         let hwnd = HWND(hwnd.0);
 
         unsafe {
@@ -502,12 +532,14 @@ pub fn set_browser_webview_opacity(
     {
         use windows::Win32::Foundation::{COLORREF, HWND};
         use windows::Win32::UI::WindowsAndMessaging::{
-            GetWindowLongW, SetLayeredWindowAttributes, SetWindowLongW, GWL_EXSTYLE,
-            LWA_ALPHA, WS_EX_LAYERED,
+            GetWindowLongW, SetLayeredWindowAttributes, SetWindowLongW, GWL_EXSTYLE, LWA_ALPHA,
+            WS_EX_LAYERED,
         };
 
         // Get the HWND from the WebView window
-        let hwnd = webview.hwnd().map_err(|e| format!("Failed to get HWND: {}", e))?;
+        let hwnd = webview
+            .hwnd()
+            .map_err(|e| format!("Failed to get HWND: {}", e))?;
         let hwnd = HWND(hwnd.0);
 
         unsafe {
@@ -531,14 +563,21 @@ pub fn set_browser_webview_opacity(
             SetWindowPos(
                 hwnd,
                 Some(HWND_TOPMOST),
-                0, 0, 0, 0,
+                0,
+                0,
+                0,
+                0,
                 SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE,
             )
             .map_err(|e| format!("SetWindowPos failed: {}", e))?;
         }
     }
 
-    log::debug!("WebView {} opacity set to {:.0}%", webview_id, opacity * 100.0);
+    log::debug!(
+        "WebView {} opacity set to {:.0}%",
+        webview_id,
+        opacity * 100.0
+    );
     Ok(())
 }
 
@@ -591,14 +630,19 @@ pub fn bring_browser_webview_to_front(app: AppHandle, webview_id: String) -> Res
             SetWindowPos, HWND_TOPMOST, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE,
         };
 
-        let hwnd = webview.hwnd().map_err(|e| format!("Failed to get HWND: {}", e))?;
+        let hwnd = webview
+            .hwnd()
+            .map_err(|e| format!("Failed to get HWND: {}", e))?;
         let hwnd = HWND(hwnd.0);
 
         unsafe {
             SetWindowPos(
                 hwnd,
                 Some(HWND_TOPMOST),
-                0, 0, 0, 0,
+                0,
+                0,
+                0,
+                0,
                 SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE,
             )
             .map_err(|e| format!("SetWindowPos failed: {}", e))?;
@@ -632,7 +676,9 @@ pub fn send_browser_webview_to_back(app: AppHandle, webview_id: String) -> Resul
             SetWindowPos, HWND_NOTOPMOST, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE,
         };
 
-        let hwnd = webview.hwnd().map_err(|e| format!("Failed to get HWND: {}", e))?;
+        let hwnd = webview
+            .hwnd()
+            .map_err(|e| format!("Failed to get HWND: {}", e))?;
         let hwnd = HWND(hwnd.0);
 
         unsafe {
@@ -640,7 +686,10 @@ pub fn send_browser_webview_to_back(app: AppHandle, webview_id: String) -> Resul
             SetWindowPos(
                 hwnd,
                 Some(HWND_NOTOPMOST),
-                0, 0, 0, 0,
+                0,
+                0,
+                0,
+                0,
                 SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE,
             )
             .map_err(|e| format!("SetWindowPos failed: {}", e))?;
@@ -736,7 +785,10 @@ pub fn set_all_browser_webviews_visibility_internal(
     state: &BrowserWebViewState,
     visible: bool,
 ) -> Result<(), String> {
-    log::debug!("Setting all browser WebViews visibility to {} (internal)", visible);
+    log::debug!(
+        "Setting all browser WebViews visibility to {} (internal)",
+        visible
+    );
 
     let labels = state.get_all_labels();
     let mut errors = Vec::new();
@@ -758,7 +810,10 @@ pub fn set_all_browser_webviews_visibility_internal(
     }
 
     if errors.is_empty() {
-        log::debug!("All browser WebViews visibility set to {} (internal)", visible);
+        log::debug!(
+            "All browser WebViews visibility set to {} (internal)",
+            visible
+        );
         Ok(())
     } else {
         Err(format!("Some WebViews failed: {}", errors.join(", ")))
@@ -921,10 +976,7 @@ mod tests {
 
     #[test]
     fn test_normalize_url_without_protocol() {
-        assert_eq!(
-            normalize_url("google.com").unwrap(),
-            "https://google.com"
-        );
+        assert_eq!(normalize_url("google.com").unwrap(), "https://google.com");
     }
 
     #[test]

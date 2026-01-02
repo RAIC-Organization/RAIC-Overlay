@@ -29,7 +29,10 @@ fn main() {
     // TARGET_WINDOW_CLASS (optional, default: "CryENGINE")
     let (target_window_class, target_window_class_from_env) =
         get_env_or_default("TARGET_WINDOW_CLASS", "CryENGINE");
-    println!("cargo:rustc-env=TARGET_WINDOW_CLASS={}", target_window_class);
+    println!(
+        "cargo:rustc-env=TARGET_WINDOW_CLASS={}",
+        target_window_class
+    );
 
     // VITE_DEBUG_BORDER (optional, default: false)
     let debug_border = std::env::var("VITE_DEBUG_BORDER").unwrap_or_else(|_| "false".to_string());

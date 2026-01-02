@@ -33,7 +33,11 @@ pub fn set_window_top_center(window: &WebviewWindow) -> Result<(), String> {
 }
 
 /// Position the window at screen center (both horizontally and vertically)
-pub fn set_window_screen_center(window: &WebviewWindow, width: f64, height: f64) -> Result<(), String> {
+pub fn set_window_screen_center(
+    window: &WebviewWindow,
+    width: f64,
+    height: f64,
+) -> Result<(), String> {
     let monitor = window
         .current_monitor()
         .map_err(|e| format!("Failed to get current monitor: {}", e))?
@@ -170,7 +174,8 @@ pub fn sync_overlay_to_target(window: &WebviewWindow, rect: &WindowRect) -> Resu
 
     window
         .set_size(tauri::Size::Physical(PhysicalSize::new(
-            rect.width, rect.height,
+            rect.width,
+            rect.height,
         )))
         .map_err(|e| format!("Failed to set overlay size: {}", e))?;
 

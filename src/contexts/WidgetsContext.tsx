@@ -94,6 +94,9 @@ function getDefaultDimensions(type: WidgetType): { width: number; height: number
     case 'clock':
     case 'timer':
       return { width: 200, height: 80 };
+    case 'chronometer':
+      // Chronometer needs space for compact hotkey settings panel
+      return { width: 180, height: 180 };
     default:
       return { width: WIDGET_CONSTANTS.DEFAULT_WIDTH, height: WIDGET_CONSTANTS.DEFAULT_HEIGHT };
   }
@@ -106,6 +109,7 @@ function getDefaultOpacity(type: WidgetType): number {
   switch (type) {
     case 'clock':
     case 'timer':
+    case 'chronometer':
       return 0.8;
     default:
       return WIDGET_CONSTANTS.DEFAULT_OPACITY;

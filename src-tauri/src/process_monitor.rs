@@ -98,9 +98,10 @@ pub fn is_process_running() -> bool {
 
     // Process is running if we found any candidates with matching process name
     let target_process = settings::get_target_process_name().to_lowercase();
-    result.candidates_evaluated.iter().any(|c| {
-        c.process_name.to_lowercase() == target_process
-    })
+    result
+        .candidates_evaluated
+        .iter()
+        .any(|c| c.process_name.to_lowercase() == target_process)
 }
 
 #[cfg(not(windows))]
@@ -129,7 +130,8 @@ pub fn start_process_monitor<R: Runtime>(app_handle: AppHandle<R>) {
 
     log::info!(
         "Starting process monitor for '{}' with {}ms interval",
-        target_process, interval
+        target_process,
+        interval
     );
 
     thread::spawn(move || {
@@ -171,7 +173,9 @@ pub fn start_process_monitor<R: Runtime>(app_handle: AppHandle<R>) {
 
                             if target_window::is_target_focused(hwnd) {
                                 if !PROCESS_MONITOR_STATE.is_user_manually_hidden() {
-                                    log::info!("Target focused on launch - emitting auto-show event");
+                                    log::info!(
+                                        "Target focused on launch - emitting auto-show event"
+                                    );
                                     let _ = app_handle.emit("auto-show-overlay", ());
                                 } else {
                                     log::debug!("Target focused but user manually hidden - not auto-showing");

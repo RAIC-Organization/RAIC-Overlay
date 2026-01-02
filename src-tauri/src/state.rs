@@ -1,9 +1,9 @@
 use std::sync::atomic::{AtomicBool, AtomicU8, Ordering};
 use std::sync::Mutex;
 
-use crate::types::{OverlayMode, OverlayStateResponse, WindowState};
 #[cfg(windows)]
 use crate::types::TargetWindowState;
+use crate::types::{OverlayMode, OverlayStateResponse, WindowState};
 
 // T007: Extended OverlayState with mode, saved_window_state, target_binding, and auto_hidden fields
 pub struct OverlayState {

@@ -24,9 +24,7 @@ fn get_user_settings_path(app: &tauri::AppHandle) -> Result<PathBuf, String> {
 
 /// Load user settings from disk
 #[tauri::command]
-pub async fn load_user_settings(
-    app: tauri::AppHandle,
-) -> Result<LoadUserSettingsResult, String> {
+pub async fn load_user_settings(app: tauri::AppHandle) -> Result<LoadUserSettingsResult, String> {
     let path = get_user_settings_path(&app)?;
 
     if !path.exists() {
@@ -97,8 +95,7 @@ pub async fn save_user_settings(
         .map_err(|e| format!("Failed to get app data dir: {}", e))?;
 
     // Ensure directory exists
-    fs::create_dir_all(&data_dir)
-        .map_err(|e| format!("Failed to create directory: {}", e))?;
+    fs::create_dir_all(&data_dir).map_err(|e| format!("Failed to create directory: {}", e))?;
 
     let path = data_dir.join(USER_SETTINGS_FILE);
     let temp_path = path.with_extension("json.tmp");
@@ -108,8 +105,8 @@ pub async fn save_user_settings(
         .map_err(|e| format!("Serialization failed: {}", e))?;
 
     // Write to temp file first (atomic write pattern)
-    let mut file = File::create(&temp_path)
-        .map_err(|e| format!("Failed to create temp file: {}", e))?;
+    let mut file =
+        File::create(&temp_path).map_err(|e| format!("Failed to create temp file: {}", e))?;
 
     file.write_all(json.as_bytes())
         .map_err(|e| format!("Failed to write: {}", e))?;
@@ -118,8 +115,7 @@ pub async fn save_user_settings(
         .map_err(|e| format!("Failed to sync: {}", e))?;
 
     // Atomic rename
-    fs::rename(&temp_path, &path)
-        .map_err(|e| format!("Failed to rename: {}", e))?;
+    fs::rename(&temp_path, &path).map_err(|e| format!("Failed to rename: {}", e))?;
 
     // Update cache
     if let Ok(mut cache) = USER_SETTINGS.write() {

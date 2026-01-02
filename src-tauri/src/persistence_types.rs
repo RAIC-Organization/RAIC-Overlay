@@ -100,11 +100,13 @@ pub struct WindowFlags {
 /// Widget type enum - extensible for future widget types
 /// @feature 027-widget-container
 /// @feature 044-session-timer-widget
+/// @feature 045-chronometer-widget
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum WidgetType {
     Clock,
     Timer,
+    Chronometer,
 }
 
 /// Persisted widget structure for storage
@@ -182,7 +184,6 @@ impl Default for GlobalSettings {
         }
     }
 }
-
 
 impl Default for PersistedState {
     fn default() -> Self {

@@ -16,6 +16,7 @@ import { motion } from 'motion/react';
 import type { WidgetInstance } from '@/types/widgets';
 import { WIDGET_CONSTANTS } from '@/types/widgets';
 import { WidgetSettings } from './WidgetSettings';
+import { ChronometerWidgetSettings } from './ChronometerWidgetSettings';
 
 // ============================================================================
 // Types
@@ -331,23 +332,36 @@ export function Widget({
           {children}
         </div>
 
-        {/* Back face - settings panel */}
+        {/* Back face - settings panel (auto-sized, min matches widget) */}
         <div
-          className="absolute inset-0"
+          className="absolute top-0 left-0"
           style={{
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)',
             opacity: widget.opacity,
+            minWidth: widget.width,
+            minHeight: widget.height,
           }}
         >
-          <WidgetSettings
-            widgetId={widget.id}
-            opacity={widget.opacity}
-            onOpacityChange={handleOpacityChange}
-            onClose={handleCloseSettings}
-            onCloseWidget={handleCloseWidget}
-          />
+          {/* Render chronometer-specific settings for chronometer widgets */}
+          {widget.type === 'chronometer' ? (
+            <ChronometerWidgetSettings
+              widgetId={widget.id}
+              opacity={widget.opacity}
+              onOpacityChange={handleOpacityChange}
+              onClose={handleCloseSettings}
+              onCloseWidget={handleCloseWidget}
+            />
+          ) : (
+            <WidgetSettings
+              widgetId={widget.id}
+              opacity={widget.opacity}
+              onOpacityChange={handleOpacityChange}
+              onClose={handleCloseSettings}
+              onCloseWidget={handleCloseWidget}
+            />
+          )}
         </div>
       </motion.div>
 
