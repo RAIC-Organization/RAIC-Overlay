@@ -77,10 +77,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] Add reset function to useChronometer hook that sets elapsedMs to 0 and stops timer in src/hooks/useChronometer.ts
-- [ ] T020 [US2] Add Tauri event listener for 'chronometer-reset' that calls reset in src/hooks/useChronometer.ts
-- [ ] T021 [US2] Add chronometerReset matching and debounce logic to handleKeyDown in src/hooks/useHotkeyCapture.ts
-- [ ] T022 [US2] Add lastChronoResetRef for debouncing in src/hooks/useHotkeyCapture.ts
+- [X] T019 [US2] Add reset function to useChronometer hook that sets elapsedMs to 0 and stops timer in src/hooks/useChronometer.ts
+- [X] T020 [US2] Add Tauri event listener for 'chronometer-reset' that calls reset in src/hooks/useChronometer.ts
+- [X] T021 [US2] Add chronometerReset matching and debounce logic to handleKeyDown in src/hooks/useHotkeyCapture.ts
+- [X] T022 [US2] Add lastChronoResetRef for debouncing in src/hooks/useHotkeyCapture.ts
 
 **Checkpoint**: Ctrl+Y resets chronometer to 00:00:00 in both interactive and non-interactive modes
 
