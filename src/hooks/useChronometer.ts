@@ -412,13 +412,16 @@ export function useChronometer(): ChronometerResult {
     const listener = () => forceUpdate({});
     listeners.add(listener);
 
-    // Setup event listeners and load persisted state on first mount
+    // Load persisted state only once (first hook instance ever)
     if (isFirstMount.current) {
       isFirstMount.current = false;
       loadPersistedState();
-      setupTauriListeners();
-      setupEventEmitterListeners();
     }
+
+    // Always try to setup event listeners - internal guards handle deduplication
+    // This fixes React StrictMode remount issue where refs persist but listeners were cleaned up
+    setupTauriListeners();
+    setupEventEmitterListeners();
 
     return () => {
       listeners.delete(listener);
