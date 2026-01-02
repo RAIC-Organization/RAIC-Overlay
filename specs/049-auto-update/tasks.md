@@ -95,11 +95,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T029 [US3] Implement dismiss_update Tauri command in src-tauri/src/update/state.rs (update last_notified_version)
-- [ ] T030 [US3] Implement get_update_state Tauri command in src-tauri/src/update/state.rs (for debugging)
-- [ ] T031 [US3] Register dismiss_update and get_update_state commands in src-tauri/src/lib.rs invoke_handler
-- [ ] T032 [US3] Add "Ask Again Later" button handler in UpdateNotification.tsx that calls dismiss_update and closes popup
-- [ ] T033 [US3] Add popup dismiss handler (X button/click outside) in UpdateNotification.tsx that behaves like "Ask Again Later"
+- [X] T029 [US3] Implement dismiss_update Tauri command in src-tauri/src/update/state.rs (update last_notified_version)
+- [X] T030 [US3] Implement get_update_state Tauri command in src-tauri/src/update/state.rs (for debugging)
+- [X] T031 [US3] Register dismiss_update and get_update_state commands in src-tauri/src/lib.rs invoke_handler
+- [X] T032 [US3] Add "Ask Again Later" button handler in UpdateNotification.tsx that calls dismiss_update and closes popup
+- [X] T033 [US3] Add popup dismiss handler (X button/click outside) in UpdateNotification.tsx that behaves like "Ask Again Later"
 
 **Checkpoint**: User Story 3 complete - users can postpone updates
 

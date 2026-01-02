@@ -266,16 +266,25 @@ export function useUpdateChecker(): UpdateCheckerResult {
     setUiState("idle");
   }, [updateInfo]);
 
-  // Dismiss notification
-  const onDismiss = useCallback(() => {
+  // Dismiss notification (T033: behaves like "Ask Again Later")
+  const onDismiss = useCallback(async () => {
     if (uiState === "downloading" || uiState === "installing") {
       debug("Update: Cannot dismiss during download/install");
       return;
     }
 
+    // T033: X button/click outside behaves like "Ask Again Later"
+    if (updateInfo?.version) {
+      try {
+        await invoke("dismiss_update", { version: updateInfo.version });
+      } catch (err) {
+        debug(`Update: Failed to save dismissed state: ${err}`);
+      }
+    }
+
     setVisible(false);
     setUiState("idle");
-  }, [uiState]);
+  }, [uiState, updateInfo]);
 
   // Retry download
   const onRetry = useCallback(() => {
