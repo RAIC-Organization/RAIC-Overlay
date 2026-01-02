@@ -105,6 +105,15 @@ export function MainMenu({
     });
   };
 
+  // Open chronometer widget
+  // @feature 045-chronometer-widget
+  const handleOpenChronometerWidget = () => {
+    log.info("Opening Chronometer widget");
+    widgetEvents.emit("widget:open", {
+      type: "chronometer",
+    });
+  };
+
   // Handle scanlines toggle - feature 026-sc-hud-theme
   const handleScanlinesChange = (enabled: boolean) => {
     if (onScanlinesChange) {
@@ -147,6 +156,9 @@ export function MainMenu({
               </Button>
               <Button variant="secondary" onClick={handleOpenTimerWidget}>
                 Timer
+              </Button>
+              <Button variant="secondary" onClick={handleOpenChronometerWidget}>
+                Stopwatch
               </Button>
             </ButtonGroup>
           </div>

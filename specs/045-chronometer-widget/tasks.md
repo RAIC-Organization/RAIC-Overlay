@@ -148,12 +148,12 @@
 
 **Purpose**: Final integration, edge cases, and validation
 
-- [ ] T042 Add chronometer widget to main menu widget options in src/components/MainMenu.tsx
-- [ ] T043 Add edge case handling for rapid hotkey presses (verify 200ms debouncing) in src/hooks/useChronometer.ts
-- [ ] T044 Add edge case handling for 99:59:59 max display time in src/hooks/useChronometer.ts
-- [ ] T045 Add conditional hotkey processing - only when chronometer widget exists and overlay visible in src-tauri/src/keyboard_hook.rs
-- [ ] T046 Run manual validation per quickstart.md testing checklist
-- [ ] T047 Verify build passes with cargo build --release and npm run build
+- [X] T042 Add chronometer widget to main menu widget options in src/components/MainMenu.tsx
+- [X] T043 Add edge case handling for rapid hotkey presses (verify 200ms debouncing) in src/hooks/useChronometer.ts
+- [X] T044 Add edge case handling for 99:59:59 max display time in src/hooks/useChronometer.ts
+- [X] T045 Add conditional hotkey processing - only when chronometer widget exists and overlay visible in src-tauri/src/keyboard_hook.rs
+- [X] T046 Run manual validation per quickstart.md testing checklist
+- [X] T047 Verify build passes with cargo build --release and npm run build
 - [ ] T048 Document manual test results for all acceptance scenarios from spec.md
 - [ ] T049 Verify hotkey response time <200ms using manual timing test (press hotkey, observe immediate response) in both overlay modes
 
