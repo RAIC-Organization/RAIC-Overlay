@@ -75,13 +75,13 @@
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Implement download_update Tauri command in src-tauri/src/update/downloader.rs (streaming download with Channel progress events)
-- [ ] T023 [US2] Implement installer launcher in src-tauri/src/update/installer.rs (spawn msiexec, wait, exit app)
-- [ ] T024 [US2] Implement launch_installer_and_exit Tauri command in src-tauri/src/update/installer.rs
-- [ ] T025 [US2] Register download_update and launch_installer_and_exit commands in src-tauri/src/lib.rs invoke_handler
-- [ ] T026 [US2] Add Accept button handler in UpdateNotification.tsx that calls download_update
-- [ ] T027 [US2] Add download complete handler in UpdateNotification.tsx that calls launch_installer_and_exit
-- [ ] T028 [US2] Add error handling for download failures in UpdateNotification.tsx (show error, retry option)
+- [X] T022 [US2] Implement download_update Tauri command in src-tauri/src/update/downloader.rs (streaming download with Channel progress events)
+- [X] T023 [US2] Implement installer launcher in src-tauri/src/update/installer.rs (spawn msiexec, wait, exit app)
+- [X] T024 [US2] Implement launch_installer_and_exit Tauri command in src-tauri/src/update/installer.rs
+- [X] T025 [US2] Register download_update and launch_installer_and_exit commands in src-tauri/src/lib.rs invoke_handler
+- [X] T026 [US2] Add Accept button handler in UpdateNotification.tsx that calls download_update
+- [X] T027 [US2] Add download complete handler in UpdateNotification.tsx that calls launch_installer_and_exit
+- [X] T028 [US2] Add error handling for download failures in UpdateNotification.tsx (show error, retry option)
 
 **Checkpoint**: User Story 2 complete - users can accept updates and auto-install
 
