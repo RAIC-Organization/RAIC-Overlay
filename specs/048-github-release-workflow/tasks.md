@@ -35,11 +35,11 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 Add checkout step using actions/checkout@v4 in .github/workflows/release.yml
-- [ ] T004 Add version extraction step with PowerShell to strip 'v' prefix from github.ref_name in .github/workflows/release.yml
-- [ ] T005 Add Node.js setup step using actions/setup-node@v4 with npm cache in .github/workflows/release.yml
-- [ ] T006 Add Rust toolchain setup step using dtolnay/rust-toolchain@stable in .github/workflows/release.yml
-- [ ] T007 Add Rust cache step using swatinem/rust-cache@v2 with workspace configuration in .github/workflows/release.yml
+- [x] T003 Add checkout step using actions/checkout@v4 in .github/workflows/release.yml
+- [x] T004 Add version extraction step with PowerShell to strip 'v' prefix from github.ref_name in .github/workflows/release.yml
+- [x] T005 Add Node.js setup step using actions/setup-node@v4 with npm cache in .github/workflows/release.yml
+- [x] T006 Add Rust toolchain setup step using dtolnay/rust-toolchain@stable in .github/workflows/release.yml
+- [x] T007 Add Rust cache step using swatinem/rust-cache@v2 with workspace configuration in .github/workflows/release.yml
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 

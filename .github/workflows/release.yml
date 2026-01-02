@@ -18,5 +18,32 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Placeholder
-        run: echo "Workflow skeleton created"
+      # T003: Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # T004: Extract version from tag (strip 'v' prefix if present)
+      - name: Extract version from tag
+        id: version
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}" -replace '^v', ''
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+          echo "Extracted version: $version"
+
+      # T005: Setup Node.js with npm cache
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      # T006: Setup Rust toolchain
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      # T007: Cache Rust dependencies
+      - name: Cache Rust dependencies
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "src-tauri -> target"
