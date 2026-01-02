@@ -28,7 +28,14 @@ export function ChronometerWidgetContent({
   isInteractive,
 }: ChronometerWidgetContentProps) {
   // Get chronometer state from shared hook
-  const { formattedTime, isRunning } = useChronometer();
+  const { formattedTime, isRunning, pauseAndSave } = useChronometer();
+
+  // Pause and save state when widget is closed (unmounted)
+  useEffect(() => {
+    return () => {
+      pauseAndSave();
+    };
+  }, [pauseAndSave]);
 
   // containerRef for ResizeObserver
   const containerRef = useRef<HTMLDivElement>(null);

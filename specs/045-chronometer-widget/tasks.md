@@ -134,11 +134,11 @@
 
 ### Implementation for User Story 5
 
-- [ ] T037 [US5] Add elapsedMs persistence to widget data in useChronometer hook in src/hooks/useChronometer.ts
-- [ ] T038 [US5] Add loadPersistedState function to restore elapsedMs on widget mount in src/hooks/useChronometer.ts
-- [ ] T039 [US5] Add pauseAndSave function called on widget close in src/hooks/useChronometer.ts
-- [ ] T040 [US5] Add chronometer widget defaults (width, height, opacity) to WidgetsContext in src/contexts/WidgetsContext.tsx
-- [ ] T041 [US5] Wire widget close event to trigger pauseAndSave in src/components/widgets/ChronometerWidgetContent.tsx
+- [X] T037 [US5] Add elapsedMs persistence to widget data in useChronometer hook in src/hooks/useChronometer.ts
+- [X] T038 [US5] Add loadPersistedState function to restore elapsedMs on widget mount in src/hooks/useChronometer.ts
+- [X] T039 [US5] Add pauseAndSave function called on widget close in src/hooks/useChronometer.ts
+- [X] T040 [US5] Add chronometer widget defaults (width, height, opacity) to WidgetsContext in src/contexts/WidgetsContext.tsx
+- [X] T041 [US5] Wire widget close event to trigger pauseAndSave in src/components/widgets/ChronometerWidgetContent.tsx
 
 **Checkpoint**: Chronometer state persists across widget close/reopen - always reopens paused
 

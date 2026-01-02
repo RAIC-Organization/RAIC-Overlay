@@ -16,10 +16,17 @@
  * @feature 045-chronometer-widget
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { listen, UnlistenFn } from '@tauri-apps/api/event';
 import { debug } from '@/lib/logger';
 import { chronometerEvents } from '@/lib/chronometerEvents';
+
+// ============================================================================
+// Persistence
+// ============================================================================
+
+/** localStorage key for chronometer state */
+const PERSISTENCE_KEY = 'chronometer-elapsed-ms';
 
 // ============================================================================
 // Types
@@ -51,6 +58,8 @@ export interface ChronometerResult {
   toggle: () => void;
   /** Reset to 00:00:00 */
   reset: () => void;
+  /** Pause and save state (for widget close) */
+  pauseAndSave: () => void;
 }
 
 // ============================================================================
@@ -183,7 +192,66 @@ function toggle(): void {
 }
 
 /**
+ * Persists the current elapsed time to localStorage.
+ */
+function persistElapsedMs(): void {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(PERSISTENCE_KEY, globalState.elapsedMs.toString());
+      debug(`Chronometer: persisted elapsedMs=${globalState.elapsedMs}`);
+    }
+  } catch (err) {
+    debug(`Chronometer: failed to persist - ${err}`);
+  }
+}
+
+/**
+ * Loads persisted elapsed time from localStorage.
+ * Returns 0 if not found or on error.
+ */
+function loadPersistedElapsedMs(): number {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const stored = localStorage.getItem(PERSISTENCE_KEY);
+      if (stored !== null) {
+        const parsed = parseInt(stored, 10);
+        if (!isNaN(parsed) && parsed >= 0) {
+          debug(`Chronometer: loaded persisted elapsedMs=${parsed}`);
+          return Math.min(parsed, MAX_ELAPSED_MS);
+        }
+      }
+    }
+  } catch (err) {
+    debug(`Chronometer: failed to load persisted state - ${err}`);
+  }
+  return 0;
+}
+
+/**
+ * Pauses the chronometer and saves current state.
+ * Used when widget is closed.
+ */
+function pauseAndSave(): void {
+  debug('Chronometer: pauseAndSave called');
+
+  // Stop if running
+  if (globalState.isRunning) {
+    setGlobalState((prev) => ({
+      ...prev,
+      isRunning: false,
+      lastTickTimestamp: null,
+    }));
+    stopGlobalInterval();
+  }
+
+  // Persist current elapsed time
+  persistElapsedMs();
+  debug('Chronometer: paused and saved');
+}
+
+/**
  * Resets the chronometer to 00:00:00 and stops it.
+ * Also clears persisted state.
  */
 function reset(): void {
   debug('Chronometer: reset called');
@@ -194,7 +262,41 @@ function reset(): void {
     elapsedMs: 0,
   }));
   stopGlobalInterval();
+
+  // Clear persisted state
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem(PERSISTENCE_KEY);
+    }
+  } catch (err) {
+    debug(`Chronometer: failed to clear persisted state - ${err}`);
+  }
+
   debug('Chronometer: reset to 00:00:00');
+}
+
+/** Track if persisted state has been loaded */
+let persistedStateLoaded = false;
+
+/**
+ * Loads persisted state on first hook mount.
+ * Only called once to restore elapsedMs from previous session.
+ */
+function loadPersistedState(): void {
+  if (persistedStateLoaded) return;
+  persistedStateLoaded = true;
+
+  const savedElapsedMs = loadPersistedElapsedMs();
+  if (savedElapsedMs > 0) {
+    setGlobalState((prev) => ({
+      ...prev,
+      elapsedMs: savedElapsedMs,
+      // Always start paused after restore
+      isRunning: false,
+      lastTickTimestamp: null,
+    }));
+    debug(`Chronometer: restored elapsedMs=${savedElapsedMs}, paused`);
+  }
 }
 
 /**
@@ -310,9 +412,10 @@ export function useChronometer(): ChronometerResult {
     const listener = () => forceUpdate({});
     listeners.add(listener);
 
-    // Setup event listeners on first mount
+    // Setup event listeners and load persisted state on first mount
     if (isFirstMount.current) {
       isFirstMount.current = false;
+      loadPersistedState();
       setupTauriListeners();
       setupEventEmitterListeners();
     }
@@ -330,5 +433,6 @@ export function useChronometer(): ChronometerResult {
     formattedTime: formatChronometerTime(globalState.elapsedMs),
     toggle,
     reset,
+    pauseAndSave,
   };
 }
