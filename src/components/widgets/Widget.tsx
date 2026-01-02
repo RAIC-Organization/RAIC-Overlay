@@ -332,14 +332,16 @@ export function Widget({
           {children}
         </div>
 
-        {/* Back face - settings panel */}
+        {/* Back face - settings panel (auto-sized, min matches widget) */}
         <div
-          className="absolute inset-0"
+          className="absolute top-0 left-0"
           style={{
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)',
             opacity: widget.opacity,
+            minWidth: widget.width,
+            minHeight: widget.height,
           }}
         >
           {/* Render chronometer-specific settings for chronometer widgets */}

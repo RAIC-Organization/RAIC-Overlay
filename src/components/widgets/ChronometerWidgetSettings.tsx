@@ -261,12 +261,13 @@ export function ChronometerWidgetSettings({
 
   return (
     <div
-      className="absolute inset-0 rounded-lg bg-black/90 border border-blue-500/40 overflow-hidden flex flex-col"
+      className="inline-flex flex-col rounded-lg bg-black/90 border border-blue-500/40"
+      style={{ minWidth: 160 }}
       onPointerDown={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
     >
       {/* Compact Header */}
-      <div className="flex items-center justify-between px-2 py-1 border-b border-blue-500/30 bg-blue-950/50 shrink-0">
+      <div className="flex items-center justify-between px-2 py-1 border-b border-blue-500/30 bg-blue-950/50">
         <span className="text-[10px] font-medium text-blue-300 uppercase tracking-wider">
           Settings
         </span>
@@ -280,8 +281,8 @@ export function ChronometerWidgetSettings({
         </button>
       </div>
 
-      {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto p-2 space-y-2">
+      {/* Content - auto-sized to fit */}
+      <div className="p-2 space-y-2">
         {/* Opacity control */}
         <div className="space-y-1">
           <div className="flex items-center justify-between">
