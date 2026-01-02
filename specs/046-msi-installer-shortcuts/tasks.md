@@ -106,7 +106,7 @@ This feature modifies Tauri configuration:
 - [ ] T022 [P] Test silent uninstallation: `msiexec /x app.msi /quiet`
 - [ ] T023 Verify upgrade scenario: reinstall without uninstalling first, confirm shortcuts update correctly
 - [ ] T024 Run quickstart.md validation checklist (all items should pass)
-- [ ] T025 Document Tauri WiX template version used as comment in src-tauri/windows/installer.wxs for future maintenance
+- [X] T025 Document Tauri WiX template version used as comment in src-tauri/windows/installer.wxs for future maintenance
 
 ---
 
