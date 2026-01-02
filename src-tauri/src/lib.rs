@@ -81,6 +81,13 @@ fn get_overlay_state(state: tauri::State<'_, OverlayState>) -> types::OverlaySta
     state.to_response()
 }
 
+/// Check if target process is currently running
+/// @feature 044-session-timer-widget
+#[tauri::command]
+fn is_target_process_running() -> bool {
+    process_monitor::PROCESS_MONITOR_STATE.is_target_found()
+}
+
 // T019: F3: Toggle visibility with target window validation (Windows)
 #[cfg(windows)]
 #[tauri::command]
@@ -443,6 +450,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             set_visibility,
             get_overlay_state,
+            is_target_process_running,
             toggle_visibility,
             toggle_mode,
             get_target_window_info,

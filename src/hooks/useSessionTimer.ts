@@ -18,6 +18,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { listen, UnlistenFn } from '@tauri-apps/api/event';
+import { invoke } from '@tauri-apps/api/core';
 import { debug } from '@/lib/logger';
 
 // ============================================================================
@@ -150,12 +151,27 @@ function stopGlobalInterval(): void {
 /**
  * Sets up Tauri event listeners for process lifecycle.
  * Only called once when the first hook instance mounts.
+ * Also checks if process is already running on mount.
  */
 async function setupEventListeners(): Promise<void> {
   if (eventListenersSetup) return;
   eventListenersSetup = true;
 
   try {
+    // Check if process is already running (handles case where process
+    // was detected before frontend was ready)
+    const isAlreadyRunning = await invoke<boolean>('is_target_process_running');
+    if (isAlreadyRunning && !globalState.isRunning) {
+      debug('Session timer: Process already running on mount, starting timer');
+      setGlobalState(() => ({
+        isRunning: true,
+        sessionStartTime: Date.now(),
+        elapsedMs: 0,
+        lastSessionMs: 0,
+      }));
+      startGlobalInterval();
+    }
+
     // Listen for target process detection
     unlistenDetected = await listen<ProcessEventPayload>('target-process-detected', (event) => {
       debug(`Session timer: Process detected - ${event.payload.process_name}`);
