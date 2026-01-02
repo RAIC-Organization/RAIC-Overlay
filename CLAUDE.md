@@ -1,4 +1,4 @@
-# RAICOverlay Development Guidelines
+﻿# RAICOverlay Development Guidelines
 
 Auto-generated from all feature plans. Last updated: 2025-12-22
 
@@ -87,6 +87,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - N/A (version is read from build configuration at runtime) (047-settings-version-display)
 - YAML (GitHub Actions), PowerShell/Bash (scripts) + GitHub Actions (actions/checkout, actions/setup-node, dtolnay/rust-action, softprops/action-gh-release), Tauri CLI 2.x (048-github-release-workflow)
 - N/A (workflow artifacts only) (048-github-release-workflow)
+- Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x, React 19.0.0, Next.js 16.x, @tauri-apps/api 2.0.0, reqwest (Rust HTTP client), semver (version comparison) (049-auto-update)
+- JSON file in Tauri app data directory (`update-state.json`) (049-auto-update)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -111,9 +113,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 049-auto-update: Added Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x, React 19.0.0, Next.js 16.x, @tauri-apps/api 2.0.0, reqwest (Rust HTTP client), semver (version comparison)
 - 048-github-release-workflow: Added YAML (GitHub Actions), PowerShell/Bash (scripts) + GitHub Actions (actions/checkout, actions/setup-node, dtolnay/rust-action, softprops/action-gh-release), Tauri CLI 2.x
 - 047-settings-version-display: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, @tauri-apps/api 2.0.0, Tailwind CSS 4.x
-- 046-msi-installer-shortcuts: Added WiX XML 3.x (installer definition), JSON (Tauri config) + Tauri 2.x bundler, WiX Toolset v3 (bundled with Tauri CLI)
 
 
 <!-- MANUAL ADDITIONS START -->

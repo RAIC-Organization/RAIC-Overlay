@@ -33,11 +33,11 @@
 
 **Critical**: No user story work can begin until this phase is complete
 
-- [ ] T006 Create update types module at src-tauri/src/update/types.rs with UpdateState, GitHubRelease, ReleaseAsset, UpdateInfo, UpdateCheckResult, DownloadEvent
-- [ ] T007 Create update state persistence module at src-tauri/src/update/state.rs with load/save/cleanup functions
-- [ ] T008 Create update module exports at src-tauri/src/update/mod.rs
-- [ ] T009 Register tauri_plugin_process in src-tauri/src/lib.rs plugin chain
-- [ ] T010 Add update module import to src-tauri/src/lib.rs
+- [X] T006 Create update types module at src-tauri/src/update/types.rs with UpdateState, GitHubRelease, ReleaseAsset, UpdateInfo, UpdateCheckResult, DownloadEvent
+- [X] T007 Create update state persistence module at src-tauri/src/update/state.rs with load/save/cleanup functions
+- [X] T008 Create update module exports at src-tauri/src/update/mod.rs
+- [X] T009 Register tauri_plugin_process in src-tauri/src/lib.rs plugin chain
+- [X] T010 Add update module import to src-tauri/src/lib.rs
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
