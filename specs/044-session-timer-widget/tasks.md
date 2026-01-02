@@ -99,7 +99,7 @@
 > - Remove button (WidgetSettings.tsx)
 > - Persistence of position/size/opacity (WidgetsContext.tsx + usePersistence.ts)
 
-- [ ] T017 [US4] Verify widget interactions work correctly (move, resize, opacity, remove) - manual testing only
+- [x] T017 [US4] Verify widget interactions work correctly (move, resize, opacity, remove) - manual testing only
 
 **Checkpoint**: Widget fully customizable. Manual test: move, resize, adjust opacity, remove widget.
 
