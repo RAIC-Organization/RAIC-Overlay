@@ -4,18 +4,18 @@
 
 // Note: This module is cfg(windows) in lib.rs, no need for #![cfg(windows)] here
 
-use std::sync::atomic::{AtomicBool, AtomicU32, AtomicU64, AtomicPtr, Ordering};
+use std::ffi::c_void;
+use std::sync::atomic::{AtomicBool, AtomicPtr, AtomicU32, AtomicU64, Ordering};
 use std::sync::Mutex;
 use std::thread;
 use std::time::{SystemTime, UNIX_EPOCH};
-use std::ffi::c_void;
 
 use tauri::{AppHandle, Emitter, Runtime};
 use windows::Win32::Foundation::{GetLastError, LPARAM, LRESULT, WPARAM};
 use windows::Win32::UI::WindowsAndMessaging::{
     CallNextHookEx, DispatchMessageW, GetMessageW, PostThreadMessageW, SetWindowsHookExW,
-    TranslateMessage, UnhookWindowsHookEx, HC_ACTION, HHOOK, KBDLLHOOKSTRUCT, MSG,
-    WH_KEYBOARD_LL, WM_KEYDOWN, WM_QUIT, WM_SYSKEYDOWN,
+    TranslateMessage, UnhookWindowsHookEx, HC_ACTION, HHOOK, KBDLLHOOKSTRUCT, MSG, WH_KEYBOARD_LL,
+    WM_KEYDOWN, WM_QUIT, WM_SYSKEYDOWN,
 };
 
 // T006: Virtual key code constants
@@ -29,12 +29,17 @@ pub const VK_F5: u32 = 0x74;
 pub const DEBOUNCE_MS: u64 = 200;
 
 // T005: HotkeyAction enum representing actions for detected hotkeys
+// T006 (045): Extended with ChronometerStartPause and ChronometerReset
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum HotkeyAction {
     /// F3 pressed - toggle overlay visibility
     ToggleVisibility,
     /// F5 pressed - toggle overlay mode (click-through/interactive)
     ToggleMode,
+    /// Ctrl+T pressed - toggle chronometer start/pause
+    ChronometerStartPause,
+    /// Ctrl+Y pressed - reset chronometer
+    ChronometerReset,
 }
 
 /// Type alias for the event emitter function
@@ -55,6 +60,10 @@ pub struct KeyboardHookState {
     last_f3_press: AtomicU64,
     /// Last F5 press timestamp for debouncing
     last_f5_press: AtomicU64,
+    /// Last chronometer toggle (Ctrl+T) press timestamp for debouncing
+    last_chrono_toggle: AtomicU64,
+    /// Last chronometer reset (Ctrl+Y) press timestamp for debouncing
+    last_chrono_reset: AtomicU64,
     /// App handle for event emission (protected by mutex)
     app_handle: Mutex<Option<EventEmitter>>,
 }
@@ -74,6 +83,8 @@ impl KeyboardHookState {
             use_fallback: AtomicBool::new(false),
             last_f3_press: AtomicU64::new(0),
             last_f5_press: AtomicU64::new(0),
+            last_chrono_toggle: AtomicU64::new(0),
+            last_chrono_reset: AtomicU64::new(0),
             app_handle: Mutex::new(None),
         }
     }
@@ -124,6 +135,18 @@ impl KeyboardHookState {
 
     pub fn set_last_f5_press(&self, timestamp: u64) {
         self.last_f5_press.store(timestamp, Ordering::SeqCst);
+    }
+    pub fn get_last_chrono_toggle(&self) -> u64 {
+        self.last_chrono_toggle.load(Ordering::SeqCst)
+    }
+    pub fn set_last_chrono_toggle(&self, timestamp: u64) {
+        self.last_chrono_toggle.store(timestamp, Ordering::SeqCst);
+    }
+    pub fn get_last_chrono_reset(&self) -> u64 {
+        self.last_chrono_reset.load(Ordering::SeqCst)
+    }
+    pub fn set_last_chrono_reset(&self, timestamp: u64) {
+        self.last_chrono_reset.store(timestamp, Ordering::SeqCst);
     }
 
     pub fn set_event_emitter(&self, emitter: Box<dyn Fn(HotkeyAction) + Send + Sync>) {
@@ -198,35 +221,46 @@ unsafe extern "system" fn keyboard_hook_callback(
                     KEYBOARD_HOOK_STATE.set_last_f3_press(now);
                     log::info!(
                         "{} pressed: toggle visibility requested (low-level hook, timestamp={})",
-                        vis.key, now
+                        vis.key,
+                        now
                     );
                     KEYBOARD_HOOK_STATE.emit_action(HotkeyAction::ToggleVisibility);
                 } else {
                     log::debug!(
                         "{} pressed: debounced ({}ms since last, threshold={}ms)",
-                        vis.key, now - last_press, DEBOUNCE_MS
+                        vis.key,
+                        now - last_press,
+                        DEBOUNCE_MS
                     );
                 }
             }
 
             // T025 (038): Check for toggle_mode hotkey with modifiers
             let mode = &hotkeys.toggle_mode;
-            if vk_code == mode.key_code && ctrl == mode.ctrl && shift == mode.shift && alt == mode.alt {
+            if vk_code == mode.key_code
+                && ctrl == mode.ctrl
+                && shift == mode.shift
+                && alt == mode.alt
+            {
                 let last_press = KEYBOARD_HOOK_STATE.get_last_f5_press();
                 if now - last_press >= DEBOUNCE_MS {
                     KEYBOARD_HOOK_STATE.set_last_f5_press(now);
                     log::info!(
                         "{} pressed: toggle mode requested (low-level hook, timestamp={})",
-                        mode.key, now
+                        mode.key,
+                        now
                     );
                     KEYBOARD_HOOK_STATE.emit_action(HotkeyAction::ToggleMode);
                 } else {
                     log::debug!(
                         "{} pressed: debounced ({}ms since last, threshold={}ms)",
-                        mode.key, now - last_press, DEBOUNCE_MS
+                        mode.key,
+                        now - last_press,
+                        DEBOUNCE_MS
                     );
                 }
             }
+            // T008 (045): Check for chronometer_start_pause hotkey with modifiers            let chrono_toggle = &hotkeys.chronometer_start_pause;            if vk_code == chrono_toggle.key_code                && ctrl == chrono_toggle.ctrl                && shift == chrono_toggle.shift                && alt == chrono_toggle.alt            {                let last_press = KEYBOARD_HOOK_STATE.get_last_chrono_toggle();                if now - last_press >= DEBOUNCE_MS {                    KEYBOARD_HOOK_STATE.set_last_chrono_toggle(now);                    log::debug!(                        "Ctrl+{} pressed: chronometer toggle (low-level hook, timestamp={})",                        chrono_toggle.key, now                    );                    KEYBOARD_HOOK_STATE.emit_action(HotkeyAction::ChronometerStartPause);                } else {                    log::debug!(                        "Ctrl+{} pressed: debounced ({}ms since last, threshold={}ms)",                        chrono_toggle.key, now - last_press, DEBOUNCE_MS                    );                }            }            // T009 (045): Check for chronometer_reset hotkey with modifiers            let chrono_reset = &hotkeys.chronometer_reset;            if vk_code == chrono_reset.key_code                && ctrl == chrono_reset.ctrl                && shift == chrono_reset.shift                && alt == chrono_reset.alt            {                let last_press = KEYBOARD_HOOK_STATE.get_last_chrono_reset();                if now - last_press >= DEBOUNCE_MS {                    KEYBOARD_HOOK_STATE.set_last_chrono_reset(now);                    log::debug!(                        "Ctrl+{} pressed: chronometer reset (low-level hook, timestamp={})",                        chrono_reset.key, now                    );                    KEYBOARD_HOOK_STATE.emit_action(HotkeyAction::ChronometerReset);                } else {                    log::debug!(                        "Ctrl+{} pressed: debounced ({}ms since last, threshold={}ms)",                        chrono_reset.key, now - last_press, DEBOUNCE_MS                    );                }            }
         }
     }
 
@@ -259,6 +293,8 @@ pub fn start_keyboard_hook<R: Runtime>(app_handle: AppHandle<R>) -> bool {
         let event_name = match action {
             HotkeyAction::ToggleVisibility => "toggle-visibility",
             HotkeyAction::ToggleMode => "toggle-mode",
+            HotkeyAction::ChronometerStartPause => "chronometer-start-pause",
+            HotkeyAction::ChronometerReset => "chronometer-reset",
         };
         if let Err(e) = app_handle_clone.emit(event_name, ()) {
             log::error!("Failed to emit {} event: {}", event_name, e);
@@ -317,12 +353,10 @@ pub fn start_keyboard_hook<R: Runtime>(app_handle: AppHandle<R>) -> bool {
                             log::debug!("WM_QUIT received, exiting hook message loop");
                             break;
                         }
-                        _ => {
-                            unsafe {
-                                let _ = TranslateMessage(&msg);
-                                DispatchMessageW(&msg);
-                            }
-                        }
+                        _ => unsafe {
+                            let _ = TranslateMessage(&msg);
+                            DispatchMessageW(&msg);
+                        },
                     }
                 }
 
@@ -436,10 +470,15 @@ mod tests {
     fn test_hotkey_action_enum() {
         let visibility = HotkeyAction::ToggleVisibility;
         let mode = HotkeyAction::ToggleMode;
+        let chrono_toggle = HotkeyAction::ChronometerStartPause;
+        let chrono_reset = HotkeyAction::ChronometerReset;
 
         assert_ne!(visibility, mode);
+        assert_ne!(chrono_toggle, chrono_reset);
         assert_eq!(visibility, HotkeyAction::ToggleVisibility);
         assert_eq!(mode, HotkeyAction::ToggleMode);
+        assert_eq!(chrono_toggle, HotkeyAction::ChronometerStartPause);
+        assert_eq!(chrono_reset, HotkeyAction::ChronometerReset);
     }
 
     #[test]
@@ -453,5 +492,7 @@ mod tests {
         assert!(!state.is_using_fallback());
         assert_eq!(state.get_last_f3_press(), 0);
         assert_eq!(state.get_last_f5_press(), 0);
+        assert_eq!(state.get_last_chrono_toggle(), 0);
+        assert_eq!(state.get_last_chrono_reset(), 0);
     }
 }

@@ -38,13 +38,13 @@
 
 **CRITICAL**: Must complete before user story implementation - hotkeys are the core interaction method
 
-- [ ] T006 Add ChronometerStartPause and ChronometerReset variants to HotkeyAction enum in src-tauri/src/keyboard_hook.rs
-- [ ] T007 Add last_chrono_toggle and last_chrono_reset AtomicU64 fields to KeyboardHookState in src-tauri/src/keyboard_hook.rs
-- [ ] T008 Add hotkey check logic for chronometer_start_pause in keyboard_hook_callback function in src-tauri/src/keyboard_hook.rs
-- [ ] T009 Add hotkey check logic for chronometer_reset in keyboard_hook_callback function in src-tauri/src/keyboard_hook.rs
-- [ ] T010 Extend event emission match to include chronometer-start-pause and chronometer-reset events in src-tauri/src/keyboard_hook.rs
-- [ ] T011 Add get_chronometer_hotkey_settings cache accessor function in src-tauri/src/user_settings.rs
-- [ ] T012 Register chronometer_start_pause and chronometer_reset Tauri commands in src-tauri/src/lib.rs
+- [X] T006 Add ChronometerStartPause and ChronometerReset variants to HotkeyAction enum in src-tauri/src/keyboard_hook.rs
+- [X] T007 Add last_chrono_toggle and last_chrono_reset AtomicU64 fields to KeyboardHookState in src-tauri/src/keyboard_hook.rs
+- [X] T008 Add hotkey check logic for chronometer_start_pause in keyboard_hook_callback function in src-tauri/src/keyboard_hook.rs
+- [X] T009 Add hotkey check logic for chronometer_reset in keyboard_hook_callback function in src-tauri/src/keyboard_hook.rs
+- [X] T010 Extend event emission match to include chronometer-start-pause and chronometer-reset events in src-tauri/src/keyboard_hook.rs
+- [X] T011 Add get_chronometer_hotkey_settings cache accessor function in src-tauri/src/user_settings.rs
+- [X] T012 Register chronometer_start_pause and chronometer_reset Tauri commands in src-tauri/src/lib.rs
 
 **Checkpoint**: Backend hotkey system ready - Ctrl+T and Ctrl+Y will emit events when pressed
 
