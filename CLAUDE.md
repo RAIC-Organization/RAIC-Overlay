@@ -83,6 +83,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - JSON files in Tauri app data directory (state.json + widget-{id}.json pattern) (045-chronometer-widget)
 - WiX XML 3.x (installer definition), JSON (Tauri config) + Tauri 2.x bundler, WiX Toolset v3 (bundled with Tauri CLI) (046-msi-installer-shortcuts)
 - N/A (installer artifacts only) (046-msi-installer-shortcuts)
+- TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, @tauri-apps/api 2.0.0, Tailwind CSS 4.x (047-settings-version-display)
+- N/A (version is read from build configuration at runtime) (047-settings-version-display)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -107,9 +109,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 047-settings-version-display: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, @tauri-apps/api 2.0.0, Tailwind CSS 4.x
 - 046-msi-installer-shortcuts: Added WiX XML 3.x (installer definition), JSON (Tauri config) + Tauri 2.x bundler, WiX Toolset v3 (bundled with Tauri CLI)
 - 045-chronometer-widget: Added TypeScript 5.7.2 (frontend), Rust 2021 Edition (backend) + React 19.0.0, Next.js 16.x, Tauri 2.x, motion 12.x, shadcn/ui
-- 044-session-timer-widget: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, motion 12.x, @tauri-apps/api 2.0.0 (event listening), existing widget system components
 
 
 <!-- MANUAL ADDITIONS START -->
