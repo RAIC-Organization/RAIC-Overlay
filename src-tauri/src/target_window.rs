@@ -21,7 +21,9 @@ use windows::Win32::UI::WindowsAndMessaging::{
 };
 
 use crate::settings;
-use crate::types::{DetectionResult, SearchCriteria, TargetWindowError, WindowCandidate, WindowRect};
+use crate::types::{
+    DetectionResult, SearchCriteria, TargetWindowError, WindowCandidate, WindowRect,
+};
 
 /// Get the target window name from runtime settings.
 /// This function provides a dynamic accessor that replaces the compile-time constant.
@@ -128,13 +130,17 @@ pub fn build_window_candidate(hwnd: HWND) -> WindowCandidate {
 // Note: No #[cfg(windows)] since this is pure logic without Windows API calls
 pub fn validate_candidate(candidate: &WindowCandidate, criteria: &SearchCriteria) -> bool {
     // Process name check (case-insensitive)
-    let process_match = candidate.process_name.to_lowercase() == criteria.process_name.to_lowercase();
+    let process_match =
+        candidate.process_name.to_lowercase() == criteria.process_name.to_lowercase();
 
     // Window class check (case-insensitive)
     let class_match = candidate.window_class.to_lowercase() == criteria.window_class.to_lowercase();
 
     // Title check (case-insensitive substring match)
-    let title_match = candidate.window_title.to_lowercase().contains(&criteria.window_title.to_lowercase());
+    let title_match = candidate
+        .window_title
+        .to_lowercase()
+        .contains(&criteria.window_title.to_lowercase());
 
     // Must be top-level window
     let top_level = candidate.is_top_level;
@@ -159,7 +165,9 @@ pub fn find_target_window_verified() -> DetectionResult {
     // T033, T004 (030): Log search criteria at TRACE level (per-poll, verbose)
     log::trace!(
         "Starting window detection: process={}, class={}, title={}",
-        criteria.process_name, criteria.window_class, criteria.window_title
+        criteria.process_name,
+        criteria.window_class,
+        criteria.window_title
     );
 
     let mut candidates: Vec<WindowCandidate> = Vec::new();
@@ -205,8 +213,11 @@ pub fn find_target_window_verified() -> DetectionResult {
         let valid = validate_candidate(candidate, &criteria);
         log::trace!(
             "Window candidate: process={}, class={}, title={}, top_level={}, valid={}",
-            candidate.process_name, candidate.window_class, candidate.window_title,
-            candidate.is_top_level, valid
+            candidate.process_name,
+            candidate.window_class,
+            candidate.window_title,
+            candidate.is_top_level,
+            valid
         );
     }
 
@@ -237,7 +248,9 @@ pub fn find_target_window_verified() -> DetectionResult {
     let match_count = cryengine_matches.len() + other_matches.len();
     log::trace!(
         "Detection complete: {} candidates evaluated, {} matched, time={}ms",
-        candidates.len(), match_count, detection_time_ms
+        candidates.len(),
+        match_count,
+        detection_time_ms
     );
 
     // T032 (030): Detection failure is logged by callers when user takes action (F3)
@@ -361,7 +374,8 @@ pub fn is_target_focused(hwnd: HWND) -> bool {
             let (fg_process, fg_title) = get_foreground_window_info();
             log::trace!(
                 "Target window not focused. Foreground: process={}, title={}",
-                fg_process, fg_title
+                fg_process,
+                fg_title
             );
         }
 

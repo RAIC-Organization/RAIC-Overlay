@@ -97,7 +97,11 @@ impl std::fmt::Display for TargetWindowError {
                 write!(f, "Game process running but window not ready ({})", process)
             }
             TargetWindowError::ClassMismatch { expected, actual } => {
-                write!(f, "Window class mismatch: expected '{}', found '{}'", expected, actual)
+                write!(
+                    f,
+                    "Window class mismatch: expected '{}', found '{}'",
+                    expected, actual
+                )
             }
         }
     }

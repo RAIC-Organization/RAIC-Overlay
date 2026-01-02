@@ -49,7 +49,12 @@ pub struct BrowserWebViewInfo {
 
 impl BrowserWebViewInfo {
     /// Create a new BrowserWebViewInfo with default values.
-    pub fn new(webview_id: String, window_id: String, initial_url: String, zoom_factor: f64) -> Self {
+    pub fn new(
+        webview_id: String,
+        window_id: String,
+        initial_url: String,
+        zoom_factor: f64,
+    ) -> Self {
         Self {
             webview_id,
             window_id,
@@ -134,7 +139,11 @@ impl BrowserWebViewState {
         *z_order += 1;
 
         webviews.insert(webview_id.to_string(), info);
-        log::debug!("Registered browser WebView: {} (window: {})", webview_id, window_id);
+        log::debug!(
+            "Registered browser WebView: {} (window: {})",
+            webview_id,
+            window_id
+        );
     }
 
     /// Unregister a WebView.

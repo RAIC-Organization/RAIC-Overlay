@@ -23,6 +23,7 @@ import { useState, useEffect, useRef } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { listen, UnlistenFn } from '@tauri-apps/api/event';
 import { info, debug } from '@/lib/logger';
+import { chronometerEvents } from '@/lib/chronometerEvents';
 import type { OverlayStateResponse } from '@/types/ipc';
 import type { HotkeySettings, HotkeyBinding, LoadUserSettingsResult } from '@/types/user-settings';
 import { DEFAULT_USER_SETTINGS } from '@/types/user-settings';
@@ -79,6 +80,8 @@ export function useHotkeyCapture(enabled: boolean): void {
   // Refs for timestamp-based debouncing - avoids re-renders
   const lastVisibilityPressRef = useRef<number>(0);
   const lastModePressRef = useRef<number>(0);
+  const lastChronoToggleRef = useRef<number>(0);
+  const lastChronoResetRef = useRef<number>(0);
 
   // Ref for event listener cleanup
   const unlistenRef = useRef<UnlistenFn | null>(null);
@@ -179,6 +182,34 @@ export function useHotkeyCapture(enabled: boolean): void {
           invoke<OverlayStateResponse>('toggle_mode').catch((err) => {
             debug(`toggle_mode failed: ${err} (webview capture)`);
           });
+        }
+        return;
+      }
+
+      // Check chronometer start/pause hotkey
+      if (matchesHotkey(e, config.chronometerStartPause)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        const elapsed = now - lastChronoToggleRef.current;
+        if (elapsed >= DEBOUNCE_MS) {
+          lastChronoToggleRef.current = now;
+          info('Chronometer toggle hotkey pressed (webview capture)');
+          chronometerEvents.emit('toggle');
+        }
+        return;
+      }
+
+      // Check chronometer reset hotkey
+      if (matchesHotkey(e, config.chronometerReset)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        const elapsed = now - lastChronoResetRef.current;
+        if (elapsed >= DEBOUNCE_MS) {
+          lastChronoResetRef.current = now;
+          info('Chronometer reset hotkey pressed (webview capture)');
+          chronometerEvents.emit('reset');
         }
         return;
       }

@@ -183,7 +183,6 @@ impl Default for GlobalSettings {
     }
 }
 
-
 impl Default for PersistedState {
     fn default() -> Self {
         Self {

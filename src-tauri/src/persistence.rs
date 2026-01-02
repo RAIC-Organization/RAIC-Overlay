@@ -28,8 +28,8 @@ fn atomic_write(path: &PathBuf, content: &[u8]) -> Result<(), String> {
     let temp_path = path.with_extension("json.tmp");
 
     // Write to temp file
-    let mut file = File::create(&temp_path)
-        .map_err(|e| format!("Failed to create temp file: {}", e))?;
+    let mut file =
+        File::create(&temp_path).map_err(|e| format!("Failed to create temp file: {}", e))?;
 
     file.write_all(content)
         .map_err(|e| format!("Failed to write to temp file: {}", e))?;
@@ -39,8 +39,7 @@ fn atomic_write(path: &PathBuf, content: &[u8]) -> Result<(), String> {
         .map_err(|e| format!("Failed to sync file: {}", e))?;
 
     // Atomic rename (atomic on POSIX and Windows NTFS)
-    fs::rename(&temp_path, path)
-        .map_err(|e| format!("Failed to rename temp file: {}", e))?;
+    fs::rename(&temp_path, path).map_err(|e| format!("Failed to rename temp file: {}", e))?;
 
     Ok(())
 }
@@ -113,7 +112,10 @@ pub async fn load_state(app: tauri::AppHandle) -> Result<LoadStateResult, String
                     if let Ok(content) = serde_json::from_str::<WindowContentFile>(&content_str) {
                         window_contents.push(content);
                     } else {
-                        log::warn!("Failed to parse window content file: {}", content_path.display());
+                        log::warn!(
+                            "Failed to parse window content file: {}",
+                            content_path.display()
+                        );
                     }
                 }
             }
@@ -122,14 +124,18 @@ pub async fn load_state(app: tauri::AppHandle) -> Result<LoadStateResult, String
 
     // Cleanup: delete orphaned window content files not referenced in state
     if let Ok(entries) = fs::read_dir(&data_dir) {
-        let valid_ids: std::collections::HashSet<_> = state.windows.iter().map(|w| w.id.as_str()).collect();
+        let valid_ids: std::collections::HashSet<_> =
+            state.windows.iter().map(|w| w.id.as_str()).collect();
 
         for entry in entries.flatten() {
             let file_name = entry.file_name();
             let file_name_str = file_name.to_string_lossy();
 
             // Check for orphaned window-*.json files
-            if file_name_str.starts_with(WINDOW_FILE_PREFIX) && file_name_str.ends_with(".json") && !file_name_str.ends_with(".json.tmp") {
+            if file_name_str.starts_with(WINDOW_FILE_PREFIX)
+                && file_name_str.ends_with(".json")
+                && !file_name_str.ends_with(".json.tmp")
+            {
                 // Extract window ID from filename
                 let id = file_name_str
                     .strip_prefix(WINDOW_FILE_PREFIX)
@@ -140,7 +146,11 @@ pub async fn load_state(app: tauri::AppHandle) -> Result<LoadStateResult, String
                         // Orphaned file - delete it
                         let orphan_path = entry.path();
                         if let Err(e) = fs::remove_file(&orphan_path) {
-                            log::warn!("Failed to delete orphaned file {}: {}", orphan_path.display(), e);
+                            log::warn!(
+                                "Failed to delete orphaned file {}: {}",
+                                orphan_path.display(),
+                                e
+                            );
                         }
                     }
                 }

@@ -15,16 +15,16 @@ pub mod persistence_types;
 pub mod process_monitor;
 pub mod settings;
 // T010 (038): Settings panel modules
-pub mod settings_window;
-pub mod user_settings;
-pub mod user_settings_types;
-pub mod state;
-pub mod tray;
 #[cfg(windows)]
 pub mod focus_monitor;
+pub mod settings_window;
+pub mod state;
 #[cfg(windows)]
 pub mod target_window;
+pub mod tray;
 pub mod types;
+pub mod user_settings;
+pub mod user_settings_types;
 pub mod window;
 
 use persistence::{delete_window_content, load_state, save_state, save_window_content};
@@ -68,9 +68,13 @@ async fn set_visibility(
 
     // Show/hide window
     if visible {
-        window.show().map_err(|e| format!("Failed to show window: {}", e))?;
+        window
+            .show()
+            .map_err(|e| format!("Failed to show window: {}", e))?;
     } else {
-        window.hide().map_err(|e| format!("Failed to hide window: {}", e))?;
+        window
+            .hide()
+            .map_err(|e| format!("Failed to hide window: {}", e))?;
     }
 
     Ok(())
@@ -99,7 +103,11 @@ async fn toggle_visibility(
     let mode_before = state.get_mode();
 
     // T027 (028): Log visibility toggle start
-    log::info!("F3 handler: visible_before={}, mode_before={:?}", is_visible, mode_before);
+    log::info!(
+        "F3 handler: visible_before={}, mode_before={:?}",
+        is_visible,
+        mode_before
+    );
 
     if is_visible {
         // Hide the window
@@ -116,7 +124,11 @@ async fn toggle_visibility(
         // T056 (040): Hide all browser WebViews when overlay hides
         let app = window.app_handle();
         let browser_state = app.state::<browser_webview_types::BrowserWebViewState>();
-        if let Err(e) = browser_webview::set_all_browser_webviews_visibility_internal(&app, &browser_state, false) {
+        if let Err(e) = browser_webview::set_all_browser_webviews_visibility_internal(
+            &app,
+            &browser_state,
+            false,
+        ) {
             log::warn!("Failed to hide browser WebViews: {}", e);
         }
 
@@ -139,11 +151,14 @@ async fn toggle_visibility(
                 let _ = window.show();
                 let _ = window.set_ignore_cursor_events(false);
 
-                let _ = window.emit("show-error-modal", ShowErrorModalPayload {
-                    target_name: detection_result.search_criteria.window_title.clone(),
-                    message: "Detection succeeded but no window found".to_string(),
-                    auto_dismiss_ms: 5000,
-                });
+                let _ = window.emit(
+                    "show-error-modal",
+                    ShowErrorModalPayload {
+                        target_name: detection_result.search_criteria.window_title.clone(),
+                        message: "Detection succeeded but no window found".to_string(),
+                        auto_dismiss_ms: 5000,
+                    },
+                );
                 // T027 (028): Log outcome
                 log::warn!("F3 outcome: detection anomaly - success but no matched window");
                 return Ok(state.to_response());
@@ -160,22 +175,29 @@ async fn toggle_visibility(
             let title_pattern = &detection_result.search_criteria.window_title;
 
             // Check if process is running but window not ready
-            let process_running = detection_result.candidates_evaluated.iter()
+            let process_running = detection_result
+                .candidates_evaluated
+                .iter()
                 .any(|c| c.process_name.to_lowercase() == process_name.to_lowercase());
 
             // Check if class mismatch (process running, but wrong class)
-            let class_mismatch = detection_result.candidates_evaluated.iter()
-                .any(|c| c.process_name.to_lowercase() == process_name.to_lowercase()
+            let class_mismatch = detection_result.candidates_evaluated.iter().any(|c| {
+                c.process_name.to_lowercase() == process_name.to_lowercase()
                     && c.window_class.to_lowercase() != class_name.to_lowercase()
-                    && c.window_title.to_lowercase().contains(&title_pattern.to_lowercase()));
+                    && c.window_title
+                        .to_lowercase()
+                        .contains(&title_pattern.to_lowercase())
+            });
 
             let message = if class_mismatch {
                 // FR-007: Class mismatch (e.g., RSI Launcher instead of game)
-                format!("Game process running but window not ready. Looking for {} with class {}",
-                    title_pattern, class_name)
+                format!(
+                    "Game process running but window not ready. Looking for {} with class {}",
+                    title_pattern, class_name
+                )
             } else if process_running {
                 // Process is running but window not found/ready
-"Game process running but main window not detected. Please wait for the game to fully load.".to_string()
+                "Game process running but main window not detected. Please wait for the game to fully load.".to_string()
             } else {
                 // Process not running at all
                 format!("Please start {} first", title_pattern)
@@ -184,11 +206,14 @@ async fn toggle_visibility(
             // T027 (028): Log outcome
             log::warn!("F3 outcome: detection failed - {}", message);
 
-            let _ = window.emit("show-error-modal", ShowErrorModalPayload {
-                target_name: title_pattern.clone(),
-                message,
-                auto_dismiss_ms: 5000,
-            });
+            let _ = window.emit(
+                "show-error-modal",
+                ShowErrorModalPayload {
+                    target_name: title_pattern.clone(),
+                    message,
+                    auto_dismiss_ms: 5000,
+                },
+            );
             return Ok(state.to_response());
         };
 
@@ -219,17 +244,22 @@ async fn toggle_visibility(
                 // T027 (028): Log outcome
                 log::warn!("F3 outcome: failed to get target window position: {}", e);
 
-                let _ = window.emit("show-error-modal", ShowErrorModalPayload {
-                    target_name: target_window::get_target_window_name().to_string(),
-                    message: format!("Failed to get target window position: {}", e),
-                    auto_dismiss_ms: 5000,
-                });
+                let _ = window.emit(
+                    "show-error-modal",
+                    ShowErrorModalPayload {
+                        target_name: target_window::get_target_window_name().to_string(),
+                        message: format!("Failed to get target window position: {}", e),
+                        auto_dismiss_ms: 5000,
+                    },
+                );
                 return Ok(state.to_response());
             }
         };
 
         // Store target binding
-        state.target_binding.set_hwnd(target_window::hwnd_to_u64(target_hwnd));
+        state
+            .target_binding
+            .set_hwnd(target_window::hwnd_to_u64(target_hwnd));
         state.target_binding.set_focused(true);
         state.target_binding.set_rect(Some(rect));
         state.target_binding.update_last_check();
@@ -260,13 +290,22 @@ async fn toggle_visibility(
         // T057 (040): Show all browser WebViews when overlay shows
         let app = window.app_handle();
         let browser_state = app.state::<browser_webview_types::BrowserWebViewState>();
-        if let Err(e) = browser_webview::set_all_browser_webviews_visibility_internal(&app, &browser_state, true) {
+        if let Err(e) = browser_webview::set_all_browser_webviews_visibility_internal(
+            &app,
+            &browser_state,
+            true,
+        ) {
             log::warn!("Failed to show browser WebViews: {}", e);
         }
 
         // T027 (028): Log outcome
-        log::info!("F3 outcome: shown overlay, bound to target at ({}, {}) {}x{}",
-            rect.x, rect.y, rect.width, rect.height);
+        log::info!(
+            "F3 outcome: shown overlay, bound to target at ({}, {}) {}x{}",
+            rect.x,
+            rect.y,
+            rect.width,
+            rect.height
+        );
     }
 
     Ok(state.to_response())
@@ -311,7 +350,11 @@ async fn toggle_mode(
     let current_mode = state.get_mode();
 
     // T028 (028): Log mode toggle start
-    log::info!("F5 handler: visible={}, mode_before={:?}", state.is_visible(), current_mode);
+    log::info!(
+        "F5 handler: visible={}, mode_before={:?}",
+        state.is_visible(),
+        current_mode
+    );
 
     // Only toggle mode if window is visible
     if !state.is_visible() {
@@ -438,7 +481,10 @@ pub fn run() {
             }
         }))
         // T012 (038): Initialize autostart plugin
-        .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, None))
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            None,
+        ))
         // T003 (039): Register prevent-default plugin to block browser shortcuts
         .plugin(get_prevent_default_plugin())
         // T036 (040): Register browser WebView plugin for navigation events

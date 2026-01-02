@@ -204,21 +204,19 @@ impl RuntimeSettings {
 
         // log_level
         let log_level = match file.log_level {
-            Some(ref level) => {
-                match parse_log_level(level) {
-                    Some(parsed) => {
-                        sources.log_level = SettingSource::File;
-                        parsed
-                    }
-                    None => {
-                        log::warn!(
-                            "Invalid log_level '{}' in settings.toml, using default",
-                            level
-                        );
-                        parse_log_level(env!("RAIC_LOG_LEVEL")).unwrap_or(LevelFilter::Warn)
-                    }
+            Some(ref level) => match parse_log_level(level) {
+                Some(parsed) => {
+                    sources.log_level = SettingSource::File;
+                    parsed
                 }
-            }
+                None => {
+                    log::warn!(
+                        "Invalid log_level '{}' in settings.toml, using default",
+                        level
+                    );
+                    parse_log_level(env!("RAIC_LOG_LEVEL")).unwrap_or(LevelFilter::Warn)
+                }
+            },
             None => parse_log_level(env!("RAIC_LOG_LEVEL")).unwrap_or(LevelFilter::Warn),
         };
 
@@ -699,7 +697,10 @@ another_unknown = 42
         assert_eq!(runtime.process_monitor_interval_ms, 2000);
         assert_eq!(runtime.sources.target_process_name, SettingSource::File);
         assert_eq!(runtime.sources.target_window_class, SettingSource::File);
-        assert_eq!(runtime.sources.process_monitor_interval_ms, SettingSource::File);
+        assert_eq!(
+            runtime.sources.process_monitor_interval_ms,
+            SettingSource::File
+        );
     }
 
     /// Test that zero interval falls back to default
@@ -711,7 +712,13 @@ another_unknown = 42
         };
         let runtime = RuntimeSettings::from_file_settings(file);
 
-        assert_eq!(runtime.process_monitor_interval_ms, DEFAULT_PROCESS_MONITOR_INTERVAL_MS);
-        assert_eq!(runtime.sources.process_monitor_interval_ms, SettingSource::Default);
+        assert_eq!(
+            runtime.process_monitor_interval_ms,
+            DEFAULT_PROCESS_MONITOR_INTERVAL_MS
+        );
+        assert_eq!(
+            runtime.sources.process_monitor_interval_ms,
+            SettingSource::Default
+        );
     }
 }

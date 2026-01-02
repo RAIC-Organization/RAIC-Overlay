@@ -58,12 +58,12 @@
 
 ### Implementation for User Story 1
 
-- [ ] T013 [P] [US1] Create chronometerEvents.ts event emitter with toggle and reset events in src/lib/chronometerEvents.ts
-- [ ] T014 [P] [US1] Create useChronometer.ts hook with singleton state (isRunning, elapsedMs, lastTickTimestamp) in src/hooks/useChronometer.ts
-- [ ] T015 [US1] Add toggle function to useChronometer hook that starts/pauses the interval timer in src/hooks/useChronometer.ts
-- [ ] T016 [US1] Add Tauri event listener for 'chronometer-start-pause' that calls toggle in src/hooks/useChronometer.ts
-- [ ] T017 [US1] Add chronometerStartPause matching and debounce logic to handleKeyDown in src/hooks/useHotkeyCapture.ts
-- [ ] T018 [US1] Add lastChronoToggleRef for debouncing in src/hooks/useHotkeyCapture.ts
+- [X] T013 [P] [US1] Create chronometerEvents.ts event emitter with toggle and reset events in src/lib/chronometerEvents.ts
+- [X] T014 [P] [US1] Create useChronometer.ts hook with singleton state (isRunning, elapsedMs, lastTickTimestamp) in src/hooks/useChronometer.ts
+- [X] T015 [US1] Add toggle function to useChronometer hook that starts/pauses the interval timer in src/hooks/useChronometer.ts
+- [X] T016 [US1] Add Tauri event listener for 'chronometer-start-pause' that calls toggle in src/hooks/useChronometer.ts
+- [X] T017 [US1] Add chronometerStartPause matching and debounce logic to handleKeyDown in src/hooks/useHotkeyCapture.ts
+- [X] T018 [US1] Add lastChronoToggleRef for debouncing in src/hooks/useHotkeyCapture.ts
 
 **Checkpoint**: Ctrl+T toggles chronometer start/pause in both interactive and non-interactive modes
 
