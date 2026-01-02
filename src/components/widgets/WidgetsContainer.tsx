@@ -16,6 +16,7 @@ import { usePersistenceContext } from '@/contexts/PersistenceContext';
 import { Widget } from './Widget';
 import { ClockWidgetContent } from './ClockWidgetContent';
 import { SessionTimerWidgetContent } from './SessionTimerWidgetContent';
+import { ChronometerWidgetContent } from './ChronometerWidgetContent';
 import type { WidgetInstance, WidgetType } from '@/types/widgets';
 
 // ============================================================================
@@ -48,6 +49,13 @@ function renderWidgetContent(
     case 'timer':
       return (
         <SessionTimerWidgetContent
+          isInteractive={isInteractive}
+          widgetId={widget.id}
+        />
+      );
+    case 'chronometer':
+      return (
+        <ChronometerWidgetContent
           isInteractive={isInteractive}
           widgetId={widget.id}
         />

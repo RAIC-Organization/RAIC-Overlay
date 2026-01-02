@@ -114,13 +114,13 @@
 
 ### Implementation for User Story 4
 
-- [ ] T030 [P] [US4] Create ChronometerWidgetContent.tsx component skeleton in src/components/widgets/ChronometerWidgetContent.tsx
-- [ ] T031 [US4] Add useChronometer hook integration for formattedTime display in src/components/widgets/ChronometerWidgetContent.tsx
-- [ ] T032 [US4] Add ResizeObserver for auto-scaling font size in src/components/widgets/ChronometerWidgetContent.tsx
-- [ ] T033 [US4] Add font-orbitron and liquid-glass-text styling in src/components/widgets/ChronometerWidgetContent.tsx
-- [ ] T034 [US4] Add formatElapsedTime function (HH:MM:SS format) to useChronometer hook in src/hooks/useChronometer.ts
-- [ ] T035 [US4] Add 'chronometer' case to renderWidgetContent switch in src/components/widgets/WidgetsContainer.tsx
-- [ ] T036 [US4] Export ChronometerWidgetContent and ChronometerWidgetSettings from src/components/widgets/index.ts
+- [X] T030 [P] [US4] Create ChronometerWidgetContent.tsx component skeleton in src/components/widgets/ChronometerWidgetContent.tsx
+- [X] T031 [US4] Add useChronometer hook integration for formattedTime display in src/components/widgets/ChronometerWidgetContent.tsx
+- [X] T032 [US4] Add ResizeObserver for auto-scaling font size in src/components/widgets/ChronometerWidgetContent.tsx
+- [X] T033 [US4] Add font-orbitron and liquid-glass-text styling in src/components/widgets/ChronometerWidgetContent.tsx
+- [X] T034 [US4] Add formatElapsedTime function (HH:MM:SS format) to useChronometer hook in src/hooks/useChronometer.ts
+- [X] T035 [US4] Add 'chronometer' case to renderWidgetContent switch in src/components/widgets/WidgetsContainer.tsx
+- [X] T036 [US4] Export ChronometerWidgetContent and ChronometerWidgetSettings from src/components/widgets/index.ts
 
 **Checkpoint**: Chronometer widget displays time in HH:MM:SS format with proper styling
 
