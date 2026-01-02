@@ -88,10 +88,10 @@ This feature modifies Tauri configuration:
 
 ### Implementation for User Story 3
 
-- [ ] T016 [US3] Verify RemoveShortcuts action exists for Start Menu shortcut component in src-tauri/windows/installer.wxs
-- [ ] T017 [US3] Verify RemoveShortcuts action exists for Desktop shortcut component in src-tauri/windows/installer.wxs
-- [ ] T018 [US3] Ensure desktop shortcut component tracks installation state for proper removal in src-tauri/windows/installer.wxs
-- [ ] T019 [US3] Build MSI and manually test uninstallation removes all shortcuts
+- [X] T016 [US3] Verify RemoveShortcuts action exists for Start Menu shortcut component in src-tauri/windows/installer.wxs
+- [X] T017 [US3] Verify RemoveShortcuts action exists for Desktop shortcut component in src-tauri/windows/installer.wxs
+- [X] T018 [US3] Ensure desktop shortcut component tracks installation state for proper removal in src-tauri/windows/installer.wxs
+- [X] T019 [US3] Build MSI and manually test uninstallation removes all shortcuts
 
 **Checkpoint**: User Story 3 complete - Uninstallation removes all created shortcuts
 
