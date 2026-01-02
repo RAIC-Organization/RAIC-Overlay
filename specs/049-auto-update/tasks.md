@@ -127,13 +127,13 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T039 [P] Add logging for update operations in all src-tauri/src/update/*.rs files
-- [ ] T040 [P] Add URL validation (only accept github.com URLs) in src-tauri/src/update/checker.rs
-- [ ] T041 [P] Add path validation (installer must be in app data dir) in src-tauri/src/update/installer.rs
-- [ ] T042 Style UpdateNotification and DownloadProgress components to match SC HUD theme
-- [ ] T043 Add timeout configuration for GitHub API requests (10s) in src-tauri/src/update/checker.rs
-- [ ] T044 Run cargo clippy and npm run lint, fix any issues
-- [ ] T045 Manual end-to-end test per quickstart.md validation steps
+- [X] T039 [P] Add logging for update operations in all src-tauri/src/update/*.rs files
+- [X] T040 [P] Add URL validation (only accept github.com URLs) in src-tauri/src/update/checker.rs
+- [X] T041 [P] Add path validation (installer must be in app data dir) in src-tauri/src/update/installer.rs
+- [X] T042 Style UpdateNotification and DownloadProgress components to match SC HUD theme
+- [X] T043 Add timeout configuration for GitHub API requests (10s) in src-tauri/src/update/checker.rs
+- [X] T044 Run cargo clippy and npm run lint, fix any issues
+- [X] T045 Manual end-to-end test per quickstart.md validation steps
 
 ---
 

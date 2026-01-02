@@ -58,7 +58,7 @@ pub async fn launch_installer_and_exit(
             }
             Err(e) => {
                 log::error!("Failed to launch installer: {}", e);
-                return Err(format!("Failed to launch installer: {}", e));
+                Err(format!("Failed to launch installer: {}", e))
             }
         }
     }

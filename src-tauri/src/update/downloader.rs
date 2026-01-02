@@ -47,8 +47,8 @@ pub async fn download_update(
 
     // Extract filename from URL
     let filename = url
-        .split('/')
-        .last()
+        .rsplit('/')
+        .next()
         .ok_or_else(|| "Invalid URL: no filename".to_string())?;
 
     if !filename.ends_with(".msi") {
