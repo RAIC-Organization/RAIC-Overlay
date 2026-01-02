@@ -75,8 +75,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T015 [US3] Add "Session Timer" button to Widgets section in src/components/MainMenu.tsx
-- [ ] T016 [US3] Implement widget:open event emission with type 'timer' on button click in src/components/MainMenu.tsx
+- [x] T015 [US3] Add "Session Timer" button to Widgets section in src/components/MainMenu.tsx
+- [x] T016 [US3] Implement widget:open event emission with type 'timer' on button click in src/components/MainMenu.tsx
 
 **Checkpoint**: Timer widget can be added from menu. Manual test: open menu, add timer, verify it appears.
 

@@ -96,6 +96,15 @@ export function MainMenu({
     });
   };
 
+  // Open session timer widget
+  // @feature 044-session-timer-widget
+  const handleOpenTimerWidget = () => {
+    log.info("Opening Session Timer widget");
+    widgetEvents.emit("widget:open", {
+      type: "timer",
+    });
+  };
+
   // Handle scanlines toggle - feature 026-sc-hud-theme
   const handleScanlinesChange = (enabled: boolean) => {
     if (onScanlinesChange) {
@@ -135,6 +144,9 @@ export function MainMenu({
             <ButtonGroup>
               <Button variant="secondary" onClick={handleOpenClockWidget}>
                 Clock
+              </Button>
+              <Button variant="secondary" onClick={handleOpenTimerWidget}>
+                Timer
               </Button>
             </ButtonGroup>
           </div>
