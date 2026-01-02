@@ -13,6 +13,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { getVersion } from "@tauri-apps/api/app";
 import { X } from "lucide-react";
 import { HotkeyInput } from "./HotkeyInput";
 import { AutoStartToggle } from "./AutoStartToggle";
@@ -27,6 +28,7 @@ export function SettingsPanel() {
   const [settings, setSettings] = useState<UserSettings>(DEFAULT_USER_SETTINGS);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [appVersion, setAppVersion] = useState<string | null>(null);
   const [errors, setErrors] = useState<{
     toggleVisibility?: string;
     toggleMode?: string;
@@ -35,6 +37,13 @@ export function SettingsPanel() {
   // T021: Load settings on mount
   useEffect(() => {
     loadSettings();
+  }, []);
+
+  // T005: Fetch app version on mount
+  useEffect(() => {
+    getVersion()
+      .then(setAppVersion)
+      .catch(() => setAppVersion(null));
   }, []);
 
   const loadSettings = async () => {
@@ -180,7 +189,7 @@ export function SettingsPanel() {
         </section>
       </div>
 
-      {/* Footer with Save button */}
+      {/* Footer with Save button and version display */}
       <div className="shrink-0 p-4 border-t border-border bg-muted/30">
         <button
           onClick={handleSave}
@@ -200,6 +209,13 @@ export function SettingsPanel() {
         >
           {isSaving ? "Saving..." : "Save Settings"}
         </button>
+
+        {/* T006, T007: Version display */}
+        <div className="mt-3 text-center">
+          <span className="text-xs text-muted-foreground font-display">
+            {appVersion ? `v${appVersion}` : "Version unavailable"}
+          </span>
+        </div>
       </div>
     </div>
   );
