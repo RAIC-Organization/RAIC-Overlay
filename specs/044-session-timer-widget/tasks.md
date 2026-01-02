@@ -109,13 +109,13 @@
 
 **Purpose**: Final verification and edge case testing
 
-- [ ] T018 Verify timer continues counting while overlay is hidden (F3 toggle)
-- [ ] T019 Verify timer displays correctly beyond 24 hours (e.g., 25:30:15)
-- [ ] T020 Verify widget position/size/opacity persists across app restart
-- [ ] T021 Verify multiple timer widgets show same time (shared state via hook)
-- [ ] T022 Verify timer shows 00:00:00 on first launch with no process running
-- [ ] T023 Verify timer freezes at last elapsed time when process terminates
-- [ ] T024 Run full quickstart.md testing checklist
+- [x] T018 Verify timer continues counting while overlay is hidden (F3 toggle)
+- [x] T019 Verify timer displays correctly beyond 24 hours (e.g., 25:30:15)
+- [x] T020 Verify widget position/size/opacity persists across app restart
+- [x] T021 Verify multiple timer widgets show same time (shared state via hook)
+- [x] T022 Verify timer shows 00:00:00 on first launch with no process running
+- [x] T023 Verify timer freezes at last elapsed time when process terminates
+- [x] T024 Run full quickstart.md testing checklist
 
 **Checkpoint**: Feature complete and verified against all acceptance scenarios.
 
