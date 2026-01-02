@@ -37,11 +37,11 @@
 
 **Note**: This is the core logic that ALL user stories depend on
 
-- [ ] T003 Create useSessionTimer hook with SessionTimerState interface in src/hooks/useSessionTimer.ts
-- [ ] T004 Implement Tauri event subscription for target-process-detected and target-process-terminated in src/hooks/useSessionTimer.ts
-- [ ] T005 Implement 1000ms interval timer update logic when session is running in src/hooks/useSessionTimer.ts
-- [ ] T006 Add formatElapsedTime utility function (HH:MM:SS with >24h support) in src/hooks/useSessionTimer.ts
-- [ ] T007 Export useSessionTimer and formatElapsedTime from src/hooks/useSessionTimer.ts
+- [x] T003 Create useSessionTimer hook with SessionTimerState interface in src/hooks/useSessionTimer.ts
+- [x] T004 Implement Tauri event subscription for target-process-detected and target-process-terminated in src/hooks/useSessionTimer.ts
+- [x] T005 Implement 1000ms interval timer update logic when session is running in src/hooks/useSessionTimer.ts
+- [x] T006 Add formatElapsedTime utility function (HH:MM:SS with >24h support) in src/hooks/useSessionTimer.ts
+- [x] T007 Export useSessionTimer and formatElapsedTime from src/hooks/useSessionTimer.ts
 
 **Checkpoint**: Core hook ready - can track session state and format elapsed time
 
