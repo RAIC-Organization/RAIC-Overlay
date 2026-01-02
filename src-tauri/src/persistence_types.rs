@@ -99,10 +99,12 @@ pub struct WindowFlags {
 
 /// Widget type enum - extensible for future widget types
 /// @feature 027-widget-container
+/// @feature 044-session-timer-widget
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum WidgetType {
     Clock,
+    Timer,
 }
 
 /// Persisted widget structure for storage

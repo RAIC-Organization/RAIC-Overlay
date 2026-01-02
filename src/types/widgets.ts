@@ -14,7 +14,7 @@
 /**
  * Widget content types - extensible for future widgets.
  */
-export type WidgetType = 'clock';
+export type WidgetType = 'clock' | 'timer';
 
 /**
  * Runtime widget instance with full state.
@@ -164,3 +164,19 @@ export function clampWidgetDimensions(
     height: Math.max(WIDGET_CONSTANTS.MIN_HEIGHT, height),
   };
 }
+
+/**
+ * Timer widget specific defaults.
+ */
+export const TIMER_WIDGET_DEFAULTS = {
+  /** Default timer widget width */
+  WIDTH: 200,
+  /** Default timer widget height */
+  HEIGHT: 80,
+  /** Default timer widget opacity */
+  OPACITY: 0.8,
+  /** Timer update interval in ms */
+  UPDATE_INTERVAL_MS: 1000,
+  /** Minimum font size for timer display */
+  MIN_FONT_SIZE: 12,
+} as const;

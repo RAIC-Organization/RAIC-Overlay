@@ -92,6 +92,7 @@ const initialState: WidgetsState = {
 function getDefaultDimensions(type: WidgetType): { width: number; height: number } {
   switch (type) {
     case 'clock':
+    case 'timer':
       return { width: 200, height: 80 };
     default:
       return { width: WIDGET_CONSTANTS.DEFAULT_WIDTH, height: WIDGET_CONSTANTS.DEFAULT_HEIGHT };
@@ -104,6 +105,7 @@ function getDefaultDimensions(type: WidgetType): { width: number; height: number
 function getDefaultOpacity(type: WidgetType): number {
   switch (type) {
     case 'clock':
+    case 'timer':
       return 0.8;
     default:
       return WIDGET_CONSTANTS.DEFAULT_OPACITY;
