@@ -95,8 +95,8 @@ function getDefaultDimensions(type: WidgetType): { width: number; height: number
     case 'timer':
       return { width: 200, height: 80 };
     case 'chronometer':
-      // Chronometer needs larger size to accommodate hotkey settings panel
-      return { width: 260, height: 300 };
+      // Chronometer needs space for compact hotkey settings panel
+      return { width: 180, height: 180 };
     default:
       return { width: WIDGET_CONSTANTS.DEFAULT_WIDTH, height: WIDGET_CONSTANTS.DEFAULT_HEIGHT };
   }
