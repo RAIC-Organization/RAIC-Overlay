@@ -14,7 +14,7 @@
 /**
  * Widget content types - extensible for future widgets.
  */
-export type WidgetType = 'clock' | 'timer';
+export type WidgetType = 'clock' | 'timer' | 'chronometer';
 
 /**
  * Runtime widget instance with full state.
@@ -178,5 +178,21 @@ export const TIMER_WIDGET_DEFAULTS = {
   /** Timer update interval in ms */
   UPDATE_INTERVAL_MS: 1000,
   /** Minimum font size for timer display */
+  MIN_FONT_SIZE: 12,
+} as const;
+
+/**
+ * Chronometer widget specific defaults.
+ */
+export const CHRONOMETER_WIDGET_DEFAULTS = {
+  /** Default chronometer widget width */
+  WIDTH: 200,
+  /** Default chronometer widget height */
+  HEIGHT: 80,
+  /** Default chronometer widget opacity */
+  OPACITY: 0.8,
+  /** Chronometer update interval in ms */
+  UPDATE_INTERVAL_MS: 1000,
+  /** Minimum font size for chronometer display */
   MIN_FONT_SIZE: 12,
 } as const;

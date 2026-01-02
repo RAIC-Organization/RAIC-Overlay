@@ -32,6 +32,14 @@ pub struct HotkeySettings {
 
     /// Toggle overlay mode - passthrough/interactive (default: F5)
     pub toggle_mode: HotkeyBinding,
+
+    /// Chronometer start/pause (default: Ctrl+T)
+    #[serde(default = "default_chronometer_start_pause")]
+    pub chronometer_start_pause: HotkeyBinding,
+
+    /// Chronometer reset (default: Ctrl+Y)
+    #[serde(default = "default_chronometer_reset")]
+    pub chronometer_reset: HotkeyBinding,
 }
 
 /// Single hotkey binding configuration
@@ -65,6 +73,28 @@ impl Default for UserSettings {
     }
 }
 
+/// Default chronometer start/pause hotkey (Ctrl+T)
+fn default_chronometer_start_pause() -> HotkeyBinding {
+    HotkeyBinding {
+        key: "T".to_string(),
+        key_code: 0x54, // VK_T
+        ctrl: true,
+        shift: false,
+        alt: false,
+    }
+}
+
+/// Default chronometer reset hotkey (Ctrl+Y)
+fn default_chronometer_reset() -> HotkeyBinding {
+    HotkeyBinding {
+        key: "Y".to_string(),
+        key_code: 0x59, // VK_Y
+        ctrl: true,
+        shift: false,
+        alt: false,
+    }
+}
+
 impl Default for HotkeySettings {
     fn default() -> Self {
         Self {
@@ -82,6 +112,8 @@ impl Default for HotkeySettings {
                 shift: false,
                 alt: false,
             },
+            chronometer_start_pause: default_chronometer_start_pause(),
+            chronometer_reset: default_chronometer_reset(),
         }
     }
 }

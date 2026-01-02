@@ -29,6 +29,12 @@ export interface HotkeySettings {
 
   /** Toggle overlay mode - passthrough/interactive (default: F5) */
   toggleMode: HotkeyBinding;
+
+  /** Chronometer start/pause (default: Ctrl+T) */
+  chronometerStartPause: HotkeyBinding;
+
+  /** Chronometer reset (default: Ctrl+Y) */
+  chronometerReset: HotkeyBinding;
 }
 
 /**
@@ -68,6 +74,20 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
       key: "F5",
       keyCode: 0x74, // VK_F5
       ctrl: false,
+      shift: false,
+      alt: false,
+    },
+    chronometerStartPause: {
+      key: "T",
+      keyCode: 0x54, // VK_T
+      ctrl: true,
+      shift: false,
+      alt: false,
+    },
+    chronometerReset: {
+      key: "Y",
+      keyCode: 0x59, // VK_Y
+      ctrl: true,
       shift: false,
       alt: false,
     },
