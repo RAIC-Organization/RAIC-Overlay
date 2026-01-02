@@ -141,10 +141,10 @@
 
 **Purpose**: Verify feature correctness per constitution II (Testing Standards)
 
-- [ ] T046 [P] Create version comparison unit tests at tests/unit/update/version-compare.test.ts
-- [ ] T047 [P] Create update state persistence unit tests at src-tauri/src/update/state.rs (inline #[cfg(test)] module)
-- [ ] T048 Create update flow integration test at tests/integration/update/update-flow.test.tsx (mock GitHub API responses)
-- [ ] T049 Verify all acceptance scenarios from spec.md User Stories 1-4 pass manual testing
+- [X] T046 [P] Create version comparison unit tests at tests/unit/update/version-compare.test.ts
+- [X] T047 [P] Create update state persistence unit tests at src-tauri/src/update/state.rs (inline #[cfg(test)] module)
+- [X] T048 Create update flow integration test at tests/integration/update/update-flow.test.tsx (mock GitHub API responses)
+- [X] T049 Verify all acceptance scenarios from spec.md User Stories 1-4 pass manual testing
 
 **Checkpoint**: All tests passing, feature ready for merge
 
