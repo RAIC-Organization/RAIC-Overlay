@@ -15,6 +15,7 @@ import { useWidgetEvents } from '@/hooks/useWidgetEvents';
 import { usePersistenceContext } from '@/contexts/PersistenceContext';
 import { Widget } from './Widget';
 import { ClockWidgetContent } from './ClockWidgetContent';
+import { SessionTimerWidgetContent } from './SessionTimerWidgetContent';
 import type { WidgetInstance, WidgetType } from '@/types/widgets';
 
 // ============================================================================
@@ -40,6 +41,13 @@ function renderWidgetContent(
     case 'clock':
       return (
         <ClockWidgetContent
+          isInteractive={isInteractive}
+          widgetId={widget.id}
+        />
+      );
+    case 'timer':
+      return (
+        <SessionTimerWidgetContent
           isInteractive={isInteractive}
           widgetId={widget.id}
         />

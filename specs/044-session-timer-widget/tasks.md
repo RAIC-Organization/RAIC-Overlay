@@ -55,13 +55,13 @@
 
 ### Implementation for User Stories 1 & 2 (Combined - tightly coupled)
 
-- [ ] T008 [US1] Create SessionTimerWidgetContent component skeleton in src/components/widgets/SessionTimerWidgetContent.tsx
-- [ ] T009 [US1] Integrate useSessionTimer hook into SessionTimerWidgetContent in src/components/widgets/SessionTimerWidgetContent.tsx
-- [ ] T010 [US1] Add ResizeObserver for responsive font sizing (same pattern as ClockWidgetContent) in src/components/widgets/SessionTimerWidgetContent.tsx
-- [ ] T011 [US1] Apply liquid-glass-text and font-orbitron styling in src/components/widgets/SessionTimerWidgetContent.tsx
-- [ ] T012 [US1] Export SessionTimerWidgetContent from src/components/widgets/index.ts
-- [ ] T013 [US1] Add 'timer' case to renderWidgetContent switch in src/components/widgets/WidgetsContainer.tsx
-- [ ] T014 [US1] Import SessionTimerWidgetContent in src/components/widgets/WidgetsContainer.tsx
+- [x] T008 [US1] Create SessionTimerWidgetContent component skeleton in src/components/widgets/SessionTimerWidgetContent.tsx
+- [x] T009 [US1] Integrate useSessionTimer hook into SessionTimerWidgetContent in src/components/widgets/SessionTimerWidgetContent.tsx
+- [x] T010 [US1] Add ResizeObserver for responsive font sizing (same pattern as ClockWidgetContent) in src/components/widgets/SessionTimerWidgetContent.tsx
+- [x] T011 [US1] Apply liquid-glass-text and font-orbitron styling in src/components/widgets/SessionTimerWidgetContent.tsx
+- [x] T012 [US1] Export SessionTimerWidgetContent from src/components/widgets/index.ts
+- [x] T013 [US1] Add 'timer' case to renderWidgetContent switch in src/components/widgets/WidgetsContainer.tsx
+- [x] T014 [US1] Import SessionTimerWidgetContent in src/components/widgets/WidgetsContainer.tsx
 
 **Checkpoint**: Timer widget displays and counts correctly. Manual test: start/stop target process, verify timer behavior.
 
