@@ -92,9 +92,9 @@
 
 ### Implementation for User Story 3
 
-- [ ] T019 [US3] Add explicit step names for all workflow steps for clear failure identification in .github/workflows/release.yml
-- [ ] T020 [US3] Add continue-on-error: false (explicit) and fail-fast behavior to ensure clear failure points in .github/workflows/release.yml
-- [ ] T021 [US3] Add error output step using echo and workflow commands to surface build errors in .github/workflows/release.yml
+- [x] T019 [US3] Add explicit step names for all workflow steps for clear failure identification in .github/workflows/release.yml
+- [x] T020 [US3] Add continue-on-error: false (explicit) and fail-fast behavior to ensure clear failure points in .github/workflows/release.yml
+- [x] T021 [US3] Add error output step using echo and workflow commands to surface build errors in .github/workflows/release.yml
 
 **Checkpoint**: All user stories should now be independently functional
 

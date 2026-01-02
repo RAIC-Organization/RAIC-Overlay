@@ -84,6 +84,18 @@ jobs:
       - name: Build Tauri release
         run: npm run tauri build
 
+      # T014b: Verify MSI was created
+      - name: Verify MSI artifact exists
+        shell: pwsh
+        run: |
+          $msiFiles = Get-ChildItem -Path "src-tauri/target/release/bundle/msi/*.msi" -ErrorAction SilentlyContinue
+          if ($null -eq $msiFiles -or $msiFiles.Count -eq 0) {
+            Write-Error "::error::MSI installer was not generated. Check Tauri build output for errors."
+            exit 1
+          }
+          echo "Found MSI artifact(s):"
+          $msiFiles | ForEach-Object { echo "  - $($_.Name)" }
+
       # T015-T018: Create GitHub release with MSI attachment
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -95,3 +107,14 @@ jobs:
             src-tauri/target/release/bundle/msi/*.msi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # T021: Summary output for debugging
+      - name: Release summary
+        if: always()
+        shell: pwsh
+        run: |
+          echo "## Release Summary" >> $env:GITHUB_STEP_SUMMARY
+          echo "" >> $env:GITHUB_STEP_SUMMARY
+          echo "- **Tag**: ${{ github.ref_name }}" >> $env:GITHUB_STEP_SUMMARY
+          echo "- **Version**: ${{ steps.version.outputs.VERSION }}" >> $env:GITHUB_STEP_SUMMARY
+          echo "- **Pre-release**: ${{ contains(github.ref_name, '-') }}" >> $env:GITHUB_STEP_SUMMARY
