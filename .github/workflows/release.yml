@@ -47,3 +47,50 @@ jobs:
         uses: swatinem/rust-cache@v2
         with:
           workspaces: "src-tauri -> target"
+
+      # T009-T011: Update version in all config files
+      - name: Update version in config files
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.VERSION }}"
+
+          # Update tauri.conf.json
+          $tauriConf = Get-Content src-tauri/tauri.conf.json | ConvertFrom-Json
+          $tauriConf.version = $version
+          $tauriConf | ConvertTo-Json -Depth 10 | Set-Content src-tauri/tauri.conf.json
+          echo "Updated tauri.conf.json to version $version"
+
+          # Update package.json
+          $packageJson = Get-Content package.json | ConvertFrom-Json
+          $packageJson.version = $version
+          $packageJson | ConvertTo-Json -Depth 10 | Set-Content package.json
+          echo "Updated package.json to version $version"
+
+          # Update Cargo.toml (regex replace for TOML)
+          $cargoToml = Get-Content src-tauri/Cargo.toml -Raw
+          $cargoToml = $cargoToml -replace '(?m)^version = ".*"', "version = `"$version`""
+          Set-Content src-tauri/Cargo.toml $cargoToml -NoNewline
+          echo "Updated Cargo.toml to version $version"
+
+      # T012: Install frontend dependencies
+      - name: Install frontend dependencies
+        run: npm ci
+
+      # T013: Build frontend
+      - name: Build frontend
+        run: npm run build
+
+      # T014: Build Tauri application with MSI
+      - name: Build Tauri release
+        run: npm run tauri build
+
+      # T015-T017: Create GitHub release with MSI attachment
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          files: |
+            src-tauri/target/release/bundle/msi/*.msi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

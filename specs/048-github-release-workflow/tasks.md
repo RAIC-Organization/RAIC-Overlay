@@ -53,16 +53,16 @@
 
 ### Implementation for User Story 1
 
-- [ ] T008 [US1] Add tag trigger pattern in on.push.tags matching both 'v*.*.*' and '*.*.*' patterns in .github/workflows/release.yml
-- [ ] T009 [US1] Add PowerShell step to update version in src-tauri/tauri.conf.json using ConvertFrom-Json/ConvertTo-Json in .github/workflows/release.yml
-- [ ] T010 [US1] Add PowerShell step to update version in package.json using ConvertFrom-Json/ConvertTo-Json in .github/workflows/release.yml
-- [ ] T011 [US1] Add PowerShell step to update version in src-tauri/Cargo.toml using regex replace in .github/workflows/release.yml
-- [ ] T012 [US1] Add npm ci step to install frontend dependencies in .github/workflows/release.yml
-- [ ] T013 [US1] Add npm run build step to build frontend in .github/workflows/release.yml
-- [ ] T014 [US1] Add Tauri build step using 'npm run tauri build' to generate MSI installer in .github/workflows/release.yml
-- [ ] T015 [US1] Add GitHub release step using softprops/action-gh-release@v2 with generate_release_notes: true in .github/workflows/release.yml
-- [ ] T016 [US1] Configure release step to attach MSI from src-tauri/target/release/bundle/msi/*.msi in .github/workflows/release.yml
-- [ ] T017 [US1] Add pre-release detection using contains(github.ref_name, '-') expression in release step in .github/workflows/release.yml
+- [x] T008 [US1] Add tag trigger pattern in on.push.tags matching both 'v*.*.*' and '*.*.*' patterns in .github/workflows/release.yml
+- [x] T009 [US1] Add PowerShell step to update version in src-tauri/tauri.conf.json using ConvertFrom-Json/ConvertTo-Json in .github/workflows/release.yml
+- [x] T010 [US1] Add PowerShell step to update version in package.json using ConvertFrom-Json/ConvertTo-Json in .github/workflows/release.yml
+- [x] T011 [US1] Add PowerShell step to update version in src-tauri/Cargo.toml using regex replace in .github/workflows/release.yml
+- [x] T012 [US1] Add npm ci step to install frontend dependencies in .github/workflows/release.yml
+- [x] T013 [US1] Add npm run build step to build frontend in .github/workflows/release.yml
+- [x] T014 [US1] Add Tauri build step using 'npm run tauri build' to generate MSI installer in .github/workflows/release.yml
+- [x] T015 [US1] Add GitHub release step using softprops/action-gh-release@v2 with generate_release_notes: true in .github/workflows/release.yml
+- [x] T016 [US1] Configure release step to attach MSI from src-tauri/target/release/bundle/msi/*.msi in .github/workflows/release.yml
+- [x] T017 [US1] Add pre-release detection using contains(github.ref_name, '-') expression in release step in .github/workflows/release.yml
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
