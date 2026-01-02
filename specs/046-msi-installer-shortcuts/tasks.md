@@ -70,11 +70,11 @@ This feature modifies Tauri configuration:
 
 ### Implementation for User Story 2
 
-- [ ] T011 [US2] Add INSTALLDESKTOPSHORTCUT property with default value "0" to src-tauri/windows/installer.wxs
-- [ ] T012 [US2] Add checkbox control to WixUI dialog sequence bound to INSTALLDESKTOPSHORTCUT property in src-tauri/windows/installer.wxs
-- [ ] T013 [US2] Make ApplicationShortcutDesktop component conditional on INSTALLDESKTOPSHORTCUT="1" in src-tauri/windows/installer.wxs
-- [ ] T014 [US2] Ensure desktop shortcut uses same Icon and target as Start Menu shortcut in src-tauri/windows/installer.wxs
-- [ ] T015 [US2] Build MSI and manually test desktop shortcut opt-in behavior
+- [X] T011 [US2] Add INSTALLDESKTOPSHORTCUT property with default value "0" to src-tauri/windows/installer.wxs
+- [X] T012 [US2] Add checkbox control to WixUI dialog sequence bound to INSTALLDESKTOPSHORTCUT property in src-tauri/windows/installer.wxs
+- [X] T013 [US2] Make ApplicationShortcutDesktop component conditional on INSTALLDESKTOPSHORTCUT="1" in src-tauri/windows/installer.wxs
+- [X] T014 [US2] Ensure desktop shortcut uses same Icon and target as Start Menu shortcut in src-tauri/windows/installer.wxs
+- [X] T015 [US2] Build MSI and manually test desktop shortcut opt-in behavior
 
 **Checkpoint**: User Story 2 complete - Desktop shortcut checkbox works correctly (default off, opt-in creates shortcut)
 
