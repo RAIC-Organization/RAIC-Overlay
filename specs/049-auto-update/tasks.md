@@ -113,11 +113,11 @@
 
 ### Implementation for User Story 4
 
-- [ ] T034 [P] [US4] Create DownloadProgress component at src/components/update/DownloadProgress.tsx (progress bar, percentage, bytes downloaded)
-- [ ] T035 [US4] Integrate DownloadProgress in UpdateNotification.tsx (show during download state)
-- [ ] T036 [US4] Handle Channel progress events in UpdateNotification.tsx (update DownloadProgress props)
-- [ ] T037 [US4] Add cancel/retry buttons to DownloadProgress component
-- [ ] T038 [US4] Export DownloadProgress from src/components/update/index.ts
+- [X] T034 [P] [US4] Create DownloadProgress component at src/components/update/DownloadProgress.tsx (progress bar, percentage, bytes downloaded)
+- [X] T035 [US4] Integrate DownloadProgress in UpdateNotification.tsx (show during download state)
+- [X] T036 [US4] Handle Channel progress events in UpdateNotification.tsx (update DownloadProgress props)
+- [X] T037 [US4] Add cancel/retry buttons to DownloadProgress component
+- [X] T038 [US4] Export DownloadProgress from src/components/update/index.ts
 
 **Checkpoint**: User Story 4 complete - users see download progress
 
