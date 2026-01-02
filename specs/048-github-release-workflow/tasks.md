@@ -76,7 +76,7 @@
 
 ### Implementation for User Story 2
 
-- [ ] T018 [US2] Configure release title to show version (using tag_name) in softprops/action-gh-release step in .github/workflows/release.yml
+- [x] T018 [US2] Configure release title to show version (using tag_name) in softprops/action-gh-release step in .github/workflows/release.yml
 
 **Note**: Changelog categories and exclusion patterns are configured in T002 (Setup phase) since .github/release.yml is created once.
 

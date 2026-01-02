@@ -84,10 +84,11 @@ jobs:
       - name: Build Tauri release
         run: npm run tauri build
 
-      # T015-T017: Create GitHub release with MSI attachment
+      # T015-T018: Create GitHub release with MSI attachment
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          name: RAIC Overlay ${{ github.ref_name }}
           generate_release_notes: true
           prerelease: ${{ contains(github.ref_name, '-') }}
           files: |
