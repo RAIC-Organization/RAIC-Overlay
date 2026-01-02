@@ -52,11 +52,11 @@ This feature modifies Tauri configuration:
 
 ### Implementation for User Story 1
 
-- [ ] T006 [US1] Verify Start Menu shortcut element exists in src-tauri/windows/installer.wxs (ApplicationStartMenuShortcut component)
-- [ ] T007 [US1] Ensure shortcut uses ProgramMenuFolder (not a subfolder) in src-tauri/windows/installer.wxs
-- [ ] T008 [US1] Verify shortcut includes Icon="ProductIcon" and correct target path in src-tauri/windows/installer.wxs
-- [ ] T009 [US1] Add AppUserModel.ID property to shortcut for Windows taskbar integration in src-tauri/windows/installer.wxs
-- [ ] T010 [US1] Build MSI and manually test Start Menu shortcut creation
+- [X] T006 [US1] Verify Start Menu shortcut element exists in src-tauri/windows/installer.wxs (ApplicationStartMenuShortcut component)
+- [X] T007 [US1] Ensure shortcut uses ProgramMenuFolder (not a subfolder) in src-tauri/windows/installer.wxs
+- [X] T008 [US1] Verify shortcut includes Icon="ProductIcon" and correct target path in src-tauri/windows/installer.wxs
+- [X] T009 [US1] Add AppUserModel.ID property to shortcut for Windows taskbar integration in src-tauri/windows/installer.wxs
+- [X] T010 [US1] Build MSI and manually test Start Menu shortcut creation
 
 **Checkpoint**: User Story 1 complete - Start Menu shortcut appears and launches app correctly
 
