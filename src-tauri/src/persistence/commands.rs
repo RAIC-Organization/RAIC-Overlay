@@ -5,7 +5,7 @@
 //!
 //! @feature 010-state-persistence-system
 
-use crate::persistence_types::*;
+use super::types::*;
 use log::{error, info};
 use std::fs::{self, File};
 use std::io::{Read, Write};

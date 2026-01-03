@@ -12,9 +12,9 @@ use tauri::{
 };
 
 #[cfg(windows)]
-use crate::keyboard_hook;
+use super::keyboard_hook;
 
-use crate::settings_window;
+use crate::settings::window as settings_window;
 
 /// Initialize the system tray icon with menu.
 ///

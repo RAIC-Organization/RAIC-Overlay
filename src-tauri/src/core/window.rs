@@ -1,6 +1,6 @@
 use tauri::{LogicalPosition, LogicalSize, WebviewWindow};
 
-use crate::types::WindowState;
+use super::types::WindowState;
 
 const WINDOW_WIDTH: f64 = 400.0;
 const WINDOW_HEIGHT: f64 = 60.0;
@@ -154,7 +154,7 @@ pub fn get_default_windowed_state(window: &WebviewWindow) -> Result<WindowState,
 
 // T018: Sync overlay position and size to target window
 #[cfg(windows)]
-use crate::types::WindowRect;
+use super::types::WindowRect;
 
 // T046: Sync overlay position and size to target window with timing instrumentation
 #[cfg(windows)]

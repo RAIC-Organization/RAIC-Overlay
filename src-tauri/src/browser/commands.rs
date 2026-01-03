@@ -5,10 +5,10 @@
 //!
 //! @feature 040-webview-browser
 
-use crate::browser_webview_types::{
+use super::types::{
     BrowserLoadingPayload, BrowserUrlPayload, BrowserWebViewBounds, BrowserWebViewState,
 };
-use crate::state::OverlayState;
+use crate::core::OverlayState;
 use tauri::webview::PageLoadEvent;
 use tauri::{AppHandle, Emitter, Manager, State, WebviewUrl, WebviewWindowBuilder};
 

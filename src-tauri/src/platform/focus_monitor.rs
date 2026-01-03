@@ -14,8 +14,8 @@ use std::time::{Duration, Instant};
 #[cfg(windows)]
 use tauri::{AppHandle, Emitter, Manager};
 
-use crate::browser_webview_types::BrowserWebViewState;
-use crate::state::OverlayState;
+use crate::browser::types::BrowserWebViewState;
+use crate::core::OverlayState;
 
 // T002 (030): Deduplication state for focus logging
 // Tracks the last logged focus state to prevent rapid oscillation spam
@@ -66,10 +66,10 @@ pub fn reset_focus_log_state() {
 }
 
 #[cfg(windows)]
-use crate::target_window;
-use crate::types::AutoHideChangedPayload;
+use super::target_window;
+use crate::core::types::AutoHideChangedPayload;
 #[cfg(windows)]
-use crate::window;
+use crate::core::window;
 
 // T024: Shutdown signal for the focus monitor thread
 #[cfg(windows)]
@@ -252,7 +252,7 @@ fn handle_focus_lost(app: &AppHandle, state: &OverlayState) {
 
     // Hide all browser WebViews (they are part of the overlay system)
     let browser_state = app.state::<BrowserWebViewState>();
-    let _ = crate::browser_webview::set_all_browser_webviews_visibility_internal(
+    let _ = crate::browser::commands::set_all_browser_webviews_visibility_internal(
         app,
         &browser_state,
         false,
@@ -297,7 +297,7 @@ fn handle_focus_gained(app: &AppHandle, state: &OverlayState) {
 
         // Show all browser WebViews (they are part of the overlay system)
         let browser_state = app.state::<BrowserWebViewState>();
-        let _ = crate::browser_webview::set_all_browser_webviews_visibility_internal(
+        let _ = crate::browser::commands::set_all_browser_webviews_visibility_internal(
             app,
             &browser_state,
             true,

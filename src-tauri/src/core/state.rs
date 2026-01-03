@@ -2,8 +2,8 @@ use std::sync::atomic::{AtomicBool, AtomicU8, Ordering};
 use std::sync::Mutex;
 
 #[cfg(windows)]
-use crate::types::TargetWindowState;
-use crate::types::{OverlayMode, OverlayStateResponse, WindowState};
+use super::types::TargetWindowState;
+use super::types::{OverlayMode, OverlayStateResponse, WindowState};
 
 // T007: Extended OverlayState with mode, saved_window_state, target_binding, and auto_hidden fields
 pub struct OverlayState {
@@ -97,7 +97,7 @@ impl OverlayState {
     // T015: Updated to use runtime settings for target window name
     #[cfg(windows)]
     pub fn to_response(&self) -> OverlayStateResponse {
-        use crate::target_window::get_target_window_name;
+        use crate::platform::target_window::get_target_window_name;
 
         let mode_str = match self.get_mode() {
             OverlayMode::Windowed => "windowed",

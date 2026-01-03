@@ -1,4 +1,4 @@
-use crate::logging_types::CleanupResult;
+use super::types::CleanupResult;
 use crate::settings;
 use log::LevelFilter;
 use std::fs;
@@ -63,8 +63,8 @@ pub fn get_log_file_path(app: tauri::AppHandle) -> Result<String, String> {
 
 /// Get the current log configuration.
 #[tauri::command]
-pub fn get_log_config(app: tauri::AppHandle) -> Result<crate::logging_types::LogConfig, String> {
-    use crate::logging_types::{LogConfig, LogLevelName};
+pub fn get_log_config(app: tauri::AppHandle) -> Result<super::types::LogConfig, String> {
+    use super::types::{LogConfig, LogLevelName};
 
     let log_dir = app
         .path()

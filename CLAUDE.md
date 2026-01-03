@@ -99,6 +99,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - N/A (no persistence required - static URL) (053-buymeacoffee-button)
 - Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x, React 19.0.0, Next.js 16.x, serde/serde_json (Rust), @tauri-apps/api 2.0.0 (054-settings-panel-startup)
 - JSON files in Tauri app data directory (user-settings.json) (054-settings-panel-startup)
+- Rust 2021 Edition (1.92+) + Tauri 2.x, serde, tokio, windows-rs 0.62, tauri-plugin-* ecosystem (055-rust-modular-refactor)
+- N/A (pure code reorganization - no data model changes) (055-rust-modular-refactor)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -123,10 +125,120 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 055-rust-modular-refactor: Added Rust 2021 Edition (1.92+) + Tauri 2.x, serde, tokio, windows-rs 0.62, tauri-plugin-* ecosystem
 - 054-settings-panel-startup: Added Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x, React 19.0.0, Next.js 16.x, serde/serde_json (Rust), @tauri-apps/api 2.0.0
 - 053-buymeacoffee-button: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, @tauri-apps/plugin-opener (already installed), Tailwind CSS 4.x, lucide-react (for icons)
-- 052-settings-update-button: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, Tauri 2.x, @tauri-apps/api 2.0.0, motion 12.x, shadcn/ui, Tailwind CSS 4.x, lucide-react
 
 
 <!-- MANUAL ADDITIONS START -->
+
+## Rust Backend Module Architecture (Feature 055)
+
+The Rust backend (`src-tauri/src/`) uses a modular architecture organized by feature domain:
+
+### Module Structure
+
+```text
+src-tauri/src/
+├── lib.rs              # Entry point, module declarations, run() setup
+├── main.rs             # Binary entry (calls lib::run())
+│
+├── core/               # Core infrastructure (no external deps)
+│   ├── mod.rs          # Re-exports: types, state, window
+│   ├── types.rs        # OverlayMode, WindowState, WindowRect, etc.
+│   ├── state.rs        # OverlayState (visibility, mode, target binding)
+│   └── window.rs       # Window positioning utilities
+│
+├── logging/            # Infrastructure: logging system
+│   ├── mod.rs          # Re-exports
+│   ├── types.rs        # LogConfig, CleanupResult
+│   └── cleanup.rs      # Log rotation, get_log_level, build_log_plugin
+│
+├── persistence/        # Infrastructure: state persistence
+│   ├── mod.rs          # Re-exports
+│   ├── types.rs        # LoadStateResult, SaveResult, etc.
+│   └── commands.rs     # load_state, save_state, save_window_content
+│
+├── hotkey/             # Infrastructure: global shortcuts
+│   ├── mod.rs          # Re-exports
+│   └── shortcuts.rs    # build_shortcut_plugin, register_shortcuts
+│
+├── settings/           # Feature: configuration management
+│   ├── mod.rs          # Re-exports
+│   ├── types.rs        # UserSettings, HotkeySettings
+│   ├── runtime.rs      # settings.toml parsing, get_settings()
+│   ├── user.rs         # user-settings.json persistence
+│   └── window.rs       # Settings panel window management
+│
+├── browser/            # Feature: WebView browser windows
+│   ├── mod.rs          # Re-exports
+│   ├── types.rs        # BrowserWebViewState, BrowserWebViewBounds
+│   └── commands.rs     # create/destroy/navigate WebView commands
+│
+├── platform/           # Platform-specific (Windows)
+│   ├── mod.rs          # #[cfg(windows)] gated re-exports
+│   ├── keyboard_hook.rs # Low-level keyboard hook (F3/F5)
+│   ├── target_window.rs # Window detection (3-point verification)
+│   ├── process_monitor.rs # Game process detection
+│   ├── focus_monitor.rs # Auto-hide on focus loss
+│   └── tray.rs         # System tray icon and menu
+│
+├── commands/           # Application layer: Tauri command handlers
+│   ├── mod.rs          # Re-exports
+│   └── overlay.rs      # toggle_visibility, toggle_mode, etc.
+│
+└── update/             # Feature: auto-update system
+    ├── mod.rs          # Re-exports
+    ├── types.rs        # UpdateInfo, UpdateState
+    ├── check.rs        # GitHub release checking
+    ├── download.rs     # Installer download
+    └── window.rs       # Update notification window
+```
+
+### Module Dependencies (Layered Architecture)
+
+```
+           ┌─────────────────────────────────────┐
+           │           commands/                  │  Application Layer
+           │     (Tauri command handlers)         │  (delegates to features)
+           └──────────────┬──────────────────────┘
+                          │
+     ┌────────────────────┼────────────────────┐
+     │                    │                    │
+┌────▼────┐         ┌─────▼─────┐        ┌─────▼─────┐
+│ browser │         │ settings  │        │ platform  │  Feature Modules
+│         │         │           │        │ (windows) │
+└────┬────┘         └─────┬─────┘        └─────┬─────┘
+     │                    │                    │
+     └────────────────────┼────────────────────┘
+                          │
+     ┌────────────────────┼────────────────────┐
+     │                    │                    │
+┌────▼────┐         ┌─────▼─────┐        ┌─────▼─────┐
+│ logging │         │persistence│        │  hotkey   │  Infrastructure
+└────┬────┘         └─────┬─────┘        └─────┬─────┘
+     │                    │                    │
+     └────────────────────┼────────────────────┘
+                          │
+                    ┌─────▼─────┐
+                    │   core    │  Foundation
+                    │types/state│  (no deps)
+                    └───────────┘
+```
+
+### Import Conventions
+
+- Core types: `use crate::core::{OverlayState, OverlayMode, WindowRect}`
+- Module-local: `use super::types::*`
+- Cross-module: `use crate::browser::commands::*`
+- Platform features: `#[cfg(windows)] use crate::platform::target_window`
+
+### Adding a New Module
+
+1. Create directory: `src-tauri/src/mymodule/`
+2. Add files: `mod.rs`, `types.rs`, `commands.rs` (as needed)
+3. In `mod.rs`: declare submodules, add `pub use` re-exports
+4. In `lib.rs`: add `pub mod mymodule;` under appropriate section
+5. Run `cargo build` to verify compilation
+
 <!-- MANUAL ADDITIONS END -->

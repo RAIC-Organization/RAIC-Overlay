@@ -21,7 +21,7 @@ use windows::Win32::UI::WindowsAndMessaging::{
 };
 
 use crate::settings;
-use crate::types::{
+use crate::core::types::{
     DetectionResult, SearchCriteria, TargetWindowError, WindowCandidate, WindowRect,
 };
 

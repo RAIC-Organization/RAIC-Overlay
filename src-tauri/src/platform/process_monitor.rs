@@ -8,7 +8,7 @@ use std::time::{Duration, Instant};
 use tauri::{AppHandle, Emitter, Runtime};
 
 use crate::settings;
-use crate::target_window;
+use super::target_window;
 
 // T039: ProcessMonitorState struct
 pub struct ProcessMonitorState {
