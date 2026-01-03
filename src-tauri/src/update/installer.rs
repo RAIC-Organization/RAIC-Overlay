@@ -43,10 +43,11 @@ pub async fn launch_installer_and_exit(
     // Launch msiexec with the installer
     // /passive gives a progress bar but no user prompts
     // /norestart prevents automatic restart (user can restart manually)
+    // AUTOLAUNCHAPP=1 triggers the app to launch after installation completes
     #[cfg(windows)]
     {
         match Command::new("msiexec")
-            .args(["/i", &installer_path, "/passive", "/norestart"])
+            .args(["/i", &installer_path, "/passive", "/norestart", "AUTOLAUNCHAPP=1"])
             .spawn()
         {
             Ok(_child) => {
