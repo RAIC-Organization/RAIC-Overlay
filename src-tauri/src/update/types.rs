@@ -1,7 +1,9 @@
 //! T006 (049): Auto-update type definitions
 //! @see specs/049-auto-update/data-model.md
+//! @feature 051-fix-update-popup
 
 use serde::{Deserialize, Serialize};
+use std::sync::Mutex;
 
 /// Persisted update state for tracking check history
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -67,4 +69,26 @@ pub enum DownloadEvent {
     Finished { installer_path: String },
     #[serde(rename_all = "camelCase")]
     Error { message: String },
+}
+
+// ============================================================================
+// T001, T002 (051): Update window state types
+// @feature 051-fix-update-popup
+// ============================================================================
+
+/// T001: Managed state for the update notification window
+/// Holds the update info to be displayed when the window opens
+#[derive(Default)]
+pub struct UpdateWindowState {
+    pub update_info: Mutex<Option<UpdateInfo>>,
+}
+
+/// T002: Result of opening the update window
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OpenUpdateWindowResult {
+    pub success: bool,
+    pub created: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
 }

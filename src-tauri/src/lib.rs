@@ -497,6 +497,8 @@ pub fn run() {
         .manage(OverlayState::default())
         // T008 (040): Initialize BrowserWebViewState for WebView tracking
         .manage(browser_webview_types::BrowserWebViewState::new())
+        // T003 (051): Initialize UpdateWindowState for update notification window
+        .manage(update::types::UpdateWindowState::default())
         .invoke_handler(tauri::generate_handler![
             set_visibility,
             get_overlay_state,
