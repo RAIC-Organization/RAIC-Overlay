@@ -161,7 +161,7 @@ export function SettingsPanel() {
       </div>
 
       {/* Content area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-6">
+      <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-6">
         {/* Hotkeys Section */}
         <section>
           <h2 className="font-display text-xs font-medium uppercase tracking-wide text-muted-foreground mb-3">
