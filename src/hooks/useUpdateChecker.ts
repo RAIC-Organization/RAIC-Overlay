@@ -106,9 +106,16 @@ export function useUpdateChecker(): UpdateCheckerResult {
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Refs for cleanup
+  // Refs for cleanup and state tracking
   const checkIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const installerPathRef = useRef<string | null>(null);
+  // Ref to track blocked state without causing re-renders
+  const isCheckBlockedRef = useRef(false);
+
+  // Keep the ref in sync with uiState
+  useEffect(() => {
+    isCheckBlockedRef.current = uiState === "downloading" || uiState === "installing";
+  }, [uiState]);
 
   // Cleanup old installers on mount
   useEffect(() => {
@@ -123,9 +130,9 @@ export function useUpdateChecker(): UpdateCheckerResult {
     cleanup();
   }, []);
 
-  // Check for updates function
+  // Check for updates function - uses ref to avoid dependency on uiState
   const checkForUpdates = useCallback(async () => {
-    if (uiState === "downloading" || uiState === "installing") {
+    if (isCheckBlockedRef.current) {
       debug("Update: Skipping check - download/install in progress");
       return;
     }
@@ -152,9 +159,9 @@ export function useUpdateChecker(): UpdateCheckerResult {
       logError(`Update: Check failed: ${err}`);
       setUiState("idle");
     }
-  }, [uiState]);
+  }, []); // No dependencies - uses ref for state check
 
-  // Setup initial check and interval
+  // Setup initial check and interval - runs only once on mount
   useEffect(() => {
     // Initial delayed check
     const initialTimeout = setTimeout(() => {
@@ -172,7 +179,7 @@ export function useUpdateChecker(): UpdateCheckerResult {
         clearInterval(checkIntervalRef.current);
       }
     };
-  }, [checkForUpdates]);
+  }, [checkForUpdates]); // checkForUpdates is now stable (empty deps)
 
   // Accept update - start download
   const onAccept = useCallback(async () => {
