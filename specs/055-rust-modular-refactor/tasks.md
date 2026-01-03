@@ -57,57 +57,57 @@
 
 ### Logging Module (Infrastructure)
 
-- [ ] T012 [P] [US1] Move `src-tauri/src/logging_types.rs` to `src-tauri/src/logging/types.rs`
-- [ ] T013 [P] [US1] Move `src-tauri/src/logging.rs` to `src-tauri/src/logging/cleanup.rs`
-- [ ] T014 [US1] Create `src-tauri/src/logging/mod.rs` with pub use re-exports
-- [ ] T015 [US1] Update imports in `logging/cleanup.rs`: change `use crate::logging_types::` to `use super::types::`
-- [ ] T016 [US1] Update `lib.rs` to declare `pub mod logging;` and update logging imports
+- [x] T012 [P] [US1] Move `src-tauri/src/logging_types.rs` to `src-tauri/src/logging/types.rs`
+- [x] T013 [P] [US1] Move `src-tauri/src/logging.rs` to `src-tauri/src/logging/cleanup.rs`
+- [x] T014 [US1] Create `src-tauri/src/logging/mod.rs` with pub use re-exports
+- [x] T015 [US1] Update imports in `logging/cleanup.rs`: change `use crate::logging_types::` to `use super::types::`
+- [x] T016 [US1] Update `lib.rs` to declare `pub mod logging;` and update logging imports
 
 ### Persistence Module (Infrastructure)
 
-- [ ] T017 [P] [US1] Move `src-tauri/src/persistence_types.rs` to `src-tauri/src/persistence/types.rs`
-- [ ] T018 [P] [US1] Move `src-tauri/src/persistence.rs` to `src-tauri/src/persistence/commands.rs`
-- [ ] T019 [US1] Create `src-tauri/src/persistence/mod.rs` with pub use re-exports
-- [ ] T020 [US1] Update imports in `persistence/commands.rs`: change `use crate::persistence_types::` to `use super::types::`
-- [ ] T021 [US1] Update `lib.rs` to declare `pub mod persistence;` and update persistence imports
+- [x] T017 [P] [US1] Move `src-tauri/src/persistence_types.rs` to `src-tauri/src/persistence/types.rs`
+- [x] T018 [P] [US1] Move `src-tauri/src/persistence.rs` to `src-tauri/src/persistence/commands.rs`
+- [x] T019 [US1] Create `src-tauri/src/persistence/mod.rs` with pub use re-exports
+- [x] T020 [US1] Update imports in `persistence/commands.rs`: change `use crate::persistence_types::` to `use super::types::`
+- [x] T021 [US1] Update `lib.rs` to declare `pub mod persistence;` and update persistence imports
 
 ### Hotkey Module (Infrastructure)
 
-- [ ] T022 [P] [US1] Move `src-tauri/src/hotkey.rs` to `src-tauri/src/hotkey/shortcuts.rs`
-- [ ] T023 [US1] Create `src-tauri/src/hotkey/mod.rs` with pub use re-exports
-- [ ] T024 [US1] Update `lib.rs` to declare `pub mod hotkey;` and update hotkey imports
+- [x] T022 [P] [US1] Move `src-tauri/src/hotkey.rs` to `src-tauri/src/hotkey/shortcuts.rs`
+- [x] T023 [US1] Create `src-tauri/src/hotkey/mod.rs` with pub use re-exports
+- [x] T024 [US1] Update `lib.rs` to declare `pub mod hotkey;` and update hotkey imports
 
 ### Settings Module (Feature)
 
-- [ ] T025 [P] [US1] Move `src-tauri/src/settings.rs` to `src-tauri/src/settings/runtime.rs`
-- [ ] T026 [P] [US1] Move `src-tauri/src/user_settings_types.rs` to `src-tauri/src/settings/types.rs`
-- [ ] T027 [P] [US1] Move `src-tauri/src/user_settings.rs` to `src-tauri/src/settings/user.rs`
-- [ ] T028 [P] [US1] Move `src-tauri/src/settings_window.rs` to `src-tauri/src/settings/window.rs`
-- [ ] T029 [US1] Create `src-tauri/src/settings/mod.rs` with pub use re-exports
-- [ ] T030 [US1] Update imports in `settings/user.rs`: change `use crate::user_settings_types::` to `use super::types::`
-- [ ] T031 [US1] Update `lib.rs` to declare `pub mod settings;` and update settings imports
+- [x] T025 [P] [US1] Move `src-tauri/src/settings.rs` to `src-tauri/src/settings/runtime.rs`
+- [x] T026 [P] [US1] Move `src-tauri/src/user_settings_types.rs` to `src-tauri/src/settings/types.rs`
+- [x] T027 [P] [US1] Move `src-tauri/src/user_settings.rs` to `src-tauri/src/settings/user.rs`
+- [x] T028 [P] [US1] Move `src-tauri/src/settings_window.rs` to `src-tauri/src/settings/window.rs`
+- [x] T029 [US1] Create `src-tauri/src/settings/mod.rs` with pub use re-exports
+- [x] T030 [US1] Update imports in `settings/user.rs`: change `use crate::user_settings_types::` to `use super::types::`
+- [x] T031 [US1] Update `lib.rs` to declare `pub mod settings;` and update settings imports
 
 ### Browser Module (Feature)
 
-- [ ] T032 [P] [US1] Move `src-tauri/src/browser_webview_types.rs` to `src-tauri/src/browser/types.rs`
-- [ ] T033 [P] [US1] Move `src-tauri/src/browser_webview.rs` to `src-tauri/src/browser/commands.rs`
-- [ ] T034 [US1] Create `src-tauri/src/browser/mod.rs` with pub use re-exports
-- [ ] T035 [US1] Update imports in `browser/commands.rs`: change `use crate::browser_webview_types::` to `use super::types::` and `use crate::state::` to `use crate::core::`
-- [ ] T036 [US1] Update `lib.rs` to declare `pub mod browser;` and update browser imports
+- [x] T032 [P] [US1] Move `src-tauri/src/browser_webview_types.rs` to `src-tauri/src/browser/types.rs`
+- [x] T033 [P] [US1] Move `src-tauri/src/browser_webview.rs` to `src-tauri/src/browser/commands.rs`
+- [x] T034 [US1] Create `src-tauri/src/browser/mod.rs` with pub use re-exports
+- [x] T035 [US1] Update imports in `browser/commands.rs`: change `use crate::browser_webview_types::` to `use super::types::` and `use crate::state::` to `use crate::core::`
+- [x] T036 [US1] Update `lib.rs` to declare `pub mod browser;` and update browser imports
 
 ### Platform Module (Feature - Windows)
 
-- [ ] T037 [P] [US1] Move `src-tauri/src/keyboard_hook.rs` to `src-tauri/src/platform/keyboard_hook.rs`
-- [ ] T038 [P] [US1] Move `src-tauri/src/target_window.rs` to `src-tauri/src/platform/target_window.rs`
-- [ ] T039 [P] [US1] Move `src-tauri/src/process_monitor.rs` to `src-tauri/src/platform/process_monitor.rs`
-- [ ] T040 [P] [US1] Move `src-tauri/src/focus_monitor.rs` to `src-tauri/src/platform/focus_monitor.rs`
-- [ ] T041 [P] [US1] Move `src-tauri/src/tray.rs` to `src-tauri/src/platform/tray.rs`
-- [ ] T042 [US1] Create `src-tauri/src/platform/mod.rs` with #[cfg(windows)] gating and pub use re-exports
-- [ ] T043 [US1] Update imports in `platform/target_window.rs`: use `crate::core::` and `crate::settings::`
-- [ ] T044 [US1] Update imports in `platform/process_monitor.rs`: use `crate::settings::` and `crate::platform::target_window::`
-- [ ] T045 [US1] Update imports in `platform/focus_monitor.rs`: use `crate::core::`, `crate::browser::`, `crate::platform::`
-- [ ] T046 [US1] Update imports in `platform/tray.rs`: use `crate::platform::keyboard_hook::` and `crate::settings::`
-- [ ] T047 [US1] Update `lib.rs` to declare `#[cfg(windows)] pub mod platform;` and update platform imports
+- [x] T037 [P] [US1] Move `src-tauri/src/keyboard_hook.rs` to `src-tauri/src/platform/keyboard_hook.rs`
+- [x] T038 [P] [US1] Move `src-tauri/src/target_window.rs` to `src-tauri/src/platform/target_window.rs`
+- [x] T039 [P] [US1] Move `src-tauri/src/process_monitor.rs` to `src-tauri/src/platform/process_monitor.rs`
+- [x] T040 [P] [US1] Move `src-tauri/src/focus_monitor.rs` to `src-tauri/src/platform/focus_monitor.rs`
+- [x] T041 [P] [US1] Move `src-tauri/src/tray.rs` to `src-tauri/src/platform/tray.rs`
+- [x] T042 [US1] Create `src-tauri/src/platform/mod.rs` with #[cfg(windows)] gating and pub use re-exports
+- [x] T043 [US1] Update imports in `platform/target_window.rs`: use `crate::core::` and `crate::settings::`
+- [x] T044 [US1] Update imports in `platform/process_monitor.rs`: use `crate::settings::` and `crate::platform::target_window::`
+- [x] T045 [US1] Update imports in `platform/focus_monitor.rs`: use `crate::core::`, `crate::browser::`, `crate::platform::`
+- [x] T046 [US1] Update imports in `platform/tray.rs`: use `crate::platform::keyboard_hook::` and `crate::settings::`
+- [x] T047 [US1] Update `lib.rs` to declare `#[cfg(windows)] pub mod platform;` and update platform imports
 
 ### Commands Module (Application Layer)
 
