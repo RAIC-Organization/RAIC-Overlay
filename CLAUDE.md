@@ -1,4 +1,4 @@
-# RAICOverlay Development Guidelines
+﻿# RAICOverlay Development Guidelines
 
 Auto-generated from all feature plans. Last updated: 2025-12-22
 
@@ -103,6 +103,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - N/A (pure code reorganization - no data model changes) (055-rust-modular-refactor)
 - TypeScript 5.7.2 (React 19.0.0 frontend), CSS (Tailwind CSS 4.x) + Next.js 16.x, Tailwind CSS 4.x, React 19.0.0, TipTap 3.13.0, Excalidraw 0.18.0 (057-disable-text-select)
 - N/A (pure CSS styling change) (057-disable-text-select)
+- TypeScript 5.7.2, React 19.0.0 + Next.js 16.x, motion 12.x, shadcn/ui (Button, ButtonGroup) (058-timer-menu-rename)
+- N/A (UI-only change) (058-timer-menu-rename)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -127,9 +129,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 058-timer-menu-rename: Added TypeScript 5.7.2, React 19.0.0 + Next.js 16.x, motion 12.x, shadcn/ui (Button, ButtonGroup)
 - 057-disable-text-select: Added TypeScript 5.7.2 (React 19.0.0 frontend), CSS (Tailwind CSS 4.x) + Next.js 16.x, Tailwind CSS 4.x, React 19.0.0, TipTap 3.13.0, Excalidraw 0.18.0
 - 056-kofi-button: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, @tauri-apps/plugin-opener (already installed), Tailwind CSS 4.x, lucide-react
-- 055-rust-modular-refactor: Added Rust 2021 Edition (1.92+) + Tauri 2.x, serde, tokio, windows-rs 0.62, tauri-plugin-* ecosystem
 
 
 <!-- MANUAL ADDITIONS START -->
