@@ -1,6 +1,6 @@
 <!-- Custom WiX template for RAIC Overlay MSI installer -->
 <!-- Based on Tauri bundler default template (v2.x) -->
-<!-- Last synced: 2026-01-02 -->
+<!-- Last synced: 2026-01-03 -->
 <!-- Source: https://github.com/tauri-apps/tauri/blob/dev/crates/tauri-bundler/src/bundle/windows/msi/main.wxs -->
 
 <?if $(sys.BUILDARCH)="x86"?>
