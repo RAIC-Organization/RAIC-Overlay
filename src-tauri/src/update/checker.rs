@@ -8,9 +8,9 @@ use semver::Version;
 use std::time::Duration;
 
 /// GitHub repository owner
-const GITHUB_OWNER: &str = "Logianer";
+const GITHUB_OWNER: &str = "RAIC-Organization";
 /// GitHub repository name
-const GITHUB_REPO: &str = "RAICOverlay";
+const GITHUB_REPO: &str = "RAIC-Overlay";
 /// Request timeout for GitHub API
 const REQUEST_TIMEOUT_SECS: u64 = 10;
 
