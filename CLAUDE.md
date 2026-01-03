@@ -95,6 +95,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - JSON files in Tauri app data directory (existing update-state.json) (051-fix-update-popup)
 - TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, Tauri 2.x, @tauri-apps/api 2.0.0, motion 12.x, shadcn/ui, Tailwind CSS 4.x, lucide-react (052-settings-update-button)
 - N/A (reuses existing update state persistence) (052-settings-update-button)
+- TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, @tauri-apps/plugin-opener (already installed), Tailwind CSS 4.x, lucide-react (for icons) (053-buymeacoffee-button)
+- N/A (no persistence required - static URL) (053-buymeacoffee-button)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -119,9 +121,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 053-buymeacoffee-button: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, @tauri-apps/plugin-opener (already installed), Tailwind CSS 4.x, lucide-react (for icons)
 - 052-settings-update-button: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, Tauri 2.x, @tauri-apps/api 2.0.0, motion 12.x, shadcn/ui, Tailwind CSS 4.x, lucide-react
 - 051-fix-update-popup: Added Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x, React 19.0.0, Next.js 16.x, @tauri-apps/api 2.0.0, motion 12.x, shadcn/ui
-- 050-desktop-shortcut: Added WiX XML 3.x (Windows Installer XML) + Tauri 2.x bundler, WiX Toolset (bundled with Tauri CLI)
 
 
 <!-- MANUAL ADDITIONS START -->
