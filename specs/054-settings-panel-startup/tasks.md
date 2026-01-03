@@ -53,9 +53,9 @@ This feature extends existing files only. No new project initialization needed.
 
 ### Implementation for User Story 1
 
-- [ ] T005 [US1] Add `get_start_minimized()` function to read cached preference from `USER_SETTINGS` in `src-tauri/src/user_settings.rs`
-- [ ] T006 [US1] Add startup logic in `setup()` callback to conditionally open Settings window in `src-tauri/src/lib.rs`
-- [ ] T007 [US1] Import `settings_window` module in startup logic (if not already) in `src-tauri/src/lib.rs`
+- [x] T005 [US1] Add `get_start_minimized()` function to read cached preference from `USER_SETTINGS` in `src-tauri/src/user_settings.rs`
+- [x] T006 [US1] Add startup logic in `setup()` callback to conditionally open Settings window in `src-tauri/src/lib.rs`
+- [x] T007 [US1] Import `settings_window` module in startup logic (if not already) in `src-tauri/src/lib.rs`
 
 **Checkpoint**: At this point, fresh installs should show Settings panel on startup
 
