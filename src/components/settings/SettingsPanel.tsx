@@ -227,9 +227,13 @@ export function SettingsPanel() {
         {/* T053: Buy Me A Coffee button */}
         <button
           onClick={handleOpenBuyMeCoffee}
-          className="w-full mt-3 py-2 px-4 rounded font-display text-sm tracking-wide sc-glow-transition bg-[#FFDD00]/20 hover:bg-[#FFDD00]/30 text-[#FFDD00] border border-[#FFDD00]/30 hover:shadow-glow-sm cursor-pointer flex items-center justify-center gap-2"
+          className="w-full mt-3 flex justify-center cursor-pointer hover:opacity-80 transition-opacity"
         >
-          <span>☕</span> Buy Me A Coffee
+          <img
+            src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=braindaamage&button_colour=0b0e13&font_colour=ffffff&font_family=Cookie&outline_colour=ffffff&coffee_colour=FFDD00"
+            alt="Buy Me A Coffee"
+            className="h-10"
+          />
         </button>
 
         {/* T006, T007: Version display */}
