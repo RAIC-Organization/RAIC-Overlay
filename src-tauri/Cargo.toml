@@ -1,6 +1,6 @@
 [package]
 name = "raic-overlay"
-version = "0.1.0"
+version = "1.0.0"
 description = "RAIC Overlay for Star Citizen"
 authors = ["you"]
 edition = "2021"
