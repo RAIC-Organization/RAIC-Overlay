@@ -14,6 +14,7 @@ import { useState, useEffect, useCallback } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { getVersion } from "@tauri-apps/api/app";
+import { openUrl } from "@tauri-apps/plugin-opener";
 import { X } from "lucide-react";
 import { HotkeyInput } from "./HotkeyInput";
 import { AutoStartToggle } from "./AutoStartToggle";
@@ -67,6 +68,15 @@ export function SettingsPanel() {
       await window.hide();
     } catch (e) {
       console.error("Failed to close settings window:", e);
+    }
+  };
+
+  // T053: Handle Buy Me A Coffee button click - open external URL
+  const handleOpenBuyMeCoffee = async () => {
+    try {
+      await openUrl("https://www.buymeacoffee.com/braindaamage");
+    } catch (e) {
+      console.error("Failed to open Buy Me A Coffee page:", e);
     }
   };
 
@@ -212,6 +222,14 @@ export function SettingsPanel() {
           `}
         >
           {isSaving ? "Saving..." : "Save Settings"}
+        </button>
+
+        {/* T053: Buy Me A Coffee button */}
+        <button
+          onClick={handleOpenBuyMeCoffee}
+          className="w-full mt-3 py-2 px-4 rounded font-display text-sm tracking-wide sc-glow-transition bg-[#FFDD00]/20 hover:bg-[#FFDD00]/30 text-[#FFDD00] border border-[#FFDD00]/30 hover:shadow-glow-sm cursor-pointer flex items-center justify-center gap-2"
+        >
+          Buy Me A Coffee
         </button>
 
         {/* T006, T007: Version display */}
