@@ -229,7 +229,7 @@ export function SettingsPanel() {
           onClick={handleOpenBuyMeCoffee}
           className="w-full mt-3 py-2 px-4 rounded font-display text-sm tracking-wide sc-glow-transition bg-[#FFDD00]/20 hover:bg-[#FFDD00]/30 text-[#FFDD00] border border-[#FFDD00]/30 hover:shadow-glow-sm cursor-pointer flex items-center justify-center gap-2"
         >
-          Buy Me A Coffee
+          <span>☕</span> Buy Me A Coffee
         </button>
 
         {/* T006, T007: Version display */}

@@ -67,9 +67,9 @@ This feature has no foundational tasks - it modifies an existing component with 
 
 ### Implementation for User Story 2
 
-- [ ] T004 [US2] Apply BMC brand color styling (#FFDD00) with SC HUD theme effects in src/components/settings/SettingsPanel.tsx
-- [ ] T005 [US2] Ensure proper spacing (mt-3) between Save button and BMC button in src/components/settings/SettingsPanel.tsx
-- [ ] T006 [US2] Add coffee emoji or icon for visual identification in src/components/settings/SettingsPanel.tsx
+- [x] T004 [US2] Apply BMC brand color styling (#FFDD00) with SC HUD theme effects in src/components/settings/SettingsPanel.tsx
+- [x] T005 [US2] Ensure proper spacing (mt-3) between Save button and BMC button in src/components/settings/SettingsPanel.tsx
+- [x] T006 [US2] Add coffee emoji or icon for visual identification in src/components/settings/SettingsPanel.tsx
 
 **Checkpoint**: At this point, the button should match the Settings panel aesthetic with recognizable BMC branding.
 
