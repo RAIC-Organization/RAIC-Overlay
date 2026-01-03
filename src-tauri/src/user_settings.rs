@@ -139,6 +139,17 @@ pub fn get_hotkey_settings() -> HotkeySettings {
         .unwrap_or_default()
 }
 
+/// Get the start_minimized preference from cached settings
+/// @feature 054-settings-panel-startup
+/// Returns false (show Settings on startup) if not set or on error
+pub fn get_start_minimized() -> bool {
+    USER_SETTINGS
+        .read()
+        .ok()
+        .and_then(|s| s.as_ref().map(|s| s.start_minimized))
+        .unwrap_or(false)
+}
+
 /// Initialize user settings cache on startup
 pub fn init_user_settings(app: &tauri::AppHandle) {
     let path = match get_user_settings_path(app) {

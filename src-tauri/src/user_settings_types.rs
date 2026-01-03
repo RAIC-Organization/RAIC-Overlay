@@ -19,6 +19,11 @@ pub struct UserSettings {
     /// Auto-start with Windows preference
     pub auto_start: bool,
 
+    /// Start minimized (skip showing Settings on startup)
+    /// @feature 054-settings-panel-startup
+    #[serde(default)]
+    pub start_minimized: bool,
+
     /// Last modified timestamp (ISO 8601)
     pub last_modified: String,
 }
@@ -68,6 +73,7 @@ impl Default for UserSettings {
             version: CURRENT_USER_SETTINGS_VERSION,
             hotkeys: HotkeySettings::default(),
             auto_start: false,
+            start_minimized: false,
             last_modified: String::new(),
         }
     }

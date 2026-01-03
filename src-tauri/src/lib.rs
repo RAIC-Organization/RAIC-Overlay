@@ -572,6 +572,20 @@ pub fn run() {
             // T026 (038): Initialize user settings cache
             user_settings::init_user_settings(&handle);
 
+            // T006 (054): Conditionally open Settings panel on startup
+            // If start_minimized is false (default), show Settings panel
+            if !user_settings::get_start_minimized() {
+                log::debug!("start_minimized=false, opening Settings panel on startup");
+                let startup_handle = handle.clone();
+                tauri::async_runtime::spawn(async move {
+                    if let Err(e) = settings_window::open_settings_window(startup_handle).await {
+                        log::warn!("Failed to open settings window on startup: {}", e);
+                    }
+                });
+            } else {
+                log::debug!("start_minimized=true, skipping Settings panel on startup");
+            }
+
             // T018 (029): Start low-level keyboard hook for F3/F5 hotkeys
             // This replaces global shortcut registration which doesn't work with Star Citizen
             #[cfg(windows)]

@@ -16,6 +16,11 @@ export interface UserSettings {
   /** Auto-start with Windows preference */
   autoStart: boolean;
 
+  /** Start minimized (skip showing Settings on startup)
+   * @feature 054-settings-panel-startup
+   */
+  startMinimized: boolean;
+
   /** Last modified timestamp (ISO 8601) */
   lastModified: string;
 }
@@ -93,6 +98,7 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
     },
   },
   autoStart: false,
+  startMinimized: false,
   lastModified: "",
 };
 
