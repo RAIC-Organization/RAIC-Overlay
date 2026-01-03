@@ -36,12 +36,12 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Create `src-tauri/src/update/window.rs` with module documentation header
-- [ ] T005 Implement `open_update_window` command in `src-tauri/src/update/window.rs` following `settings_window.rs` pattern with `skip_taskbar(false)`, add `log::info!` for window creation/focus events
-- [ ] T006 Implement `get_pending_update` command in `src-tauri/src/update/window.rs` to return `Option<UpdateInfo>` from state
-- [ ] T007 Implement `close_update_window` command in `src-tauri/src/update/window.rs` with `dismiss` parameter, add `log::info!` for window close and dismiss events
-- [ ] T008 Export `window` module from `src-tauri/src/update/mod.rs`
-- [ ] T009 Register `open_update_window`, `get_pending_update`, `close_update_window` commands in `src-tauri/src/lib.rs`
+- [X] T004 Create `src-tauri/src/update/window.rs` with module documentation header
+- [X] T005 Implement `open_update_window` command in `src-tauri/src/update/window.rs` following `settings_window.rs` pattern with `skip_taskbar(false)`, add `log::info!` for window creation/focus events
+- [X] T006 Implement `get_pending_update` command in `src-tauri/src/update/window.rs` to return `Option<UpdateInfo>` from state
+- [X] T007 Implement `close_update_window` command in `src-tauri/src/update/window.rs` with `dismiss` parameter, add `log::info!` for window close and dismiss events
+- [X] T008 Export `window` module from `src-tauri/src/update/mod.rs`
+- [X] T009 Register `open_update_window`, `get_pending_update`, `close_update_window` commands in `src-tauri/src/lib.rs`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 

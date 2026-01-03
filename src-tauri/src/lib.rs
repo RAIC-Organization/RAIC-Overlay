@@ -551,7 +551,11 @@ pub fn run() {
             update::launch_installer_and_exit,
             update::cleanup_old_installers,
             update::dismiss_update,
-            update::get_update_state
+            update::get_update_state,
+            // T009 (051): Update window commands
+            update::open_update_window,
+            update::get_pending_update,
+            update::close_update_window
         ])
         .setup(|app| {
             let handle = app.handle().clone();
