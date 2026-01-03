@@ -69,11 +69,11 @@ This feature extends existing files only. No new project initialization needed.
 
 ### Implementation for User Story 2
 
-- [ ] T008 [US2] Create `StartMinimizedToggle.tsx` component following `AutoStartToggle.tsx` pattern in `src/components/settings/StartMinimizedToggle.tsx`
-- [ ] T009 [US2] Export `StartMinimizedToggle` from settings module in `src/components/settings/index.ts` (if exists)
-- [ ] T010 [US2] Import `StartMinimizedToggle` component in `src/components/settings/SettingsPanel.tsx`
-- [ ] T011 [US2] Render `StartMinimizedToggle` in Startup section of `src/components/settings/SettingsPanel.tsx`
-- [ ] T012 [US2] Wire up `settings.startMinimized` state and `onChange` handler in `src/components/settings/SettingsPanel.tsx`
+- [x] T008 [US2] Create `StartMinimizedToggle.tsx` component following `AutoStartToggle.tsx` pattern in `src/components/settings/StartMinimizedToggle.tsx`
+- [x] T009 [US2] Export `StartMinimizedToggle` from settings module in `src/components/settings/index.ts` (if exists)
+- [x] T010 [US2] Import `StartMinimizedToggle` component in `src/components/settings/SettingsPanel.tsx`
+- [x] T011 [US2] Render `StartMinimizedToggle` in Startup section of `src/components/settings/SettingsPanel.tsx`
+- [x] T012 [US2] Wire up `settings.startMinimized` state and `onChange` handler in `src/components/settings/SettingsPanel.tsx`
 
 **Checkpoint**: Users can toggle the "Start Minimized" preference in the Settings panel
 

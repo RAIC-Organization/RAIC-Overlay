@@ -18,6 +18,7 @@ import { openUrl } from "@tauri-apps/plugin-opener";
 import { X } from "lucide-react";
 import { HotkeyInput } from "./HotkeyInput";
 import { AutoStartToggle } from "./AutoStartToggle";
+import { StartMinimizedToggle } from "./StartMinimizedToggle";
 import { UpdatesSection } from "./UpdatesSection";
 import type {
   UserSettings,
@@ -186,17 +187,26 @@ export function SettingsPanel() {
           </div>
         </section>
 
-        {/* Startup Section - T040 */}
+        {/* Startup Section - T040, T054 */}
         <section>
           <h2 className="font-display text-xs font-medium uppercase tracking-wide text-muted-foreground mb-3">
             Startup
           </h2>
-          <AutoStartToggle
-            enabled={settings.autoStart}
-            onChange={(enabled) =>
-              setSettings((prev) => ({ ...prev, autoStart: enabled }))
-            }
-          />
+          <div className="space-y-3">
+            <AutoStartToggle
+              enabled={settings.autoStart}
+              onChange={(enabled) =>
+                setSettings((prev) => ({ ...prev, autoStart: enabled }))
+              }
+            />
+            {/* T054: Start Minimized toggle */}
+            <StartMinimizedToggle
+              enabled={settings.startMinimized}
+              onChange={(enabled) =>
+                setSettings((prev) => ({ ...prev, startMinimized: enabled }))
+              }
+            />
+          </div>
         </section>
 
         {/* Updates Section - T052 */}
