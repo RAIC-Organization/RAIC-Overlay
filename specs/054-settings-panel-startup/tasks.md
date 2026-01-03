@@ -89,9 +89,9 @@ This feature extends existing files only. No new project initialization needed.
 
 > **NOTE**: Persistence is automatically handled by existing infrastructure once the data model is extended (T001-T004) and UI wires up the state (T012). This phase is verification only.
 
-- [ ] T013 [US3] Verify existing `save_user_settings` command serializes `startMinimized` field in `src-tauri/src/user_settings.rs`
-- [ ] T014 [US3] Verify existing `load_user_settings` command deserializes `startMinimized` field (with default fallback) in `src-tauri/src/user_settings.rs`
-- [ ] T015 [US3] Verify `init_user_settings` caches `startMinimized` field on startup in `src-tauri/src/user_settings.rs`
+- [x] T013 [US3] Verify existing `save_user_settings` command serializes `startMinimized` field in `src-tauri/src/user_settings.rs`
+- [x] T014 [US3] Verify existing `load_user_settings` command deserializes `startMinimized` field (with default fallback) in `src-tauri/src/user_settings.rs`
+- [x] T015 [US3] Verify `init_user_settings` caches `startMinimized` field on startup in `src-tauri/src/user_settings.rs`
 
 **Checkpoint**: All user stories complete - Settings panel startup behavior fully functional
 
