@@ -49,22 +49,22 @@ This feature modifies only the WiX installer template:
 
 ### Verification for User Story 1
 
-- [ ] T006 [US1] Build the MSI installer (`npm run tauri build`)
-- [ ] T007 [US1] Test Case 2: Interactive installation with checkbox checked
+- [X] T006 [US1] Build the MSI installer (`npm run tauri build`)
+- [X] T007 [US1] Test Case 2: Interactive installation with checkbox checked
   - Run MSI installer
   - Check "Create a desktop shortcut" checkbox
   - Complete installation
   - Verify shortcut appears on desktop
-- [ ] T008 [US1] Verify shortcut displays correct RAIC Overlay icon (not generic)
-- [ ] T009 [US1] Verify double-clicking shortcut launches RAIC Overlay
-- [ ] T010 [US1] Verify shortcut properties show correct target path
-- [ ] T011 [US1] Test Case 1: Interactive installation with checkbox unchecked
+- [X] T008 [US1] Verify shortcut displays correct RAIC Overlay icon (not generic)
+- [X] T009 [US1] Verify double-clicking shortcut launches RAIC Overlay
+- [X] T010 [US1] Verify shortcut properties show correct target path
+- [X] T011 [US1] Test Case 1: Interactive installation with checkbox unchecked
   - Uninstall previous installation
   - Run MSI installer
   - Leave checkbox unchecked
   - Complete installation
   - Verify NO shortcut on desktop
-- [ ] T012 [US1] Test Case 5: Uninstall removes desktop shortcut
+- [X] T012 [US1] Test Case 5: Uninstall removes desktop shortcut
   - Install with checkbox checked
   - Verify shortcut exists
   - Uninstall via Windows Settings
@@ -82,12 +82,12 @@ This feature modifies only the WiX installer template:
 
 ### Verification for User Story 2
 
-- [ ] T013 [US2] Test Case 4: Silent installation with `INSTALLDESKTOPSHORTCUT=1`
+- [X] T013 [US2] Test Case 4: Silent installation with `INSTALLDESKTOPSHORTCUT=1`
   - Ensure clean state (no prior installation)
   - Run: `msiexec /i "RAIC Overlay.msi" /quiet INSTALLDESKTOPSHORTCUT=1`
   - Verify shortcut is created on desktop
   - Verify shortcut works correctly
-- [ ] T014 [US2] Test Case 3: Silent installation without parameter
+- [X] T014 [US2] Test Case 3: Silent installation without parameter
   - Uninstall previous installation
   - Run: `msiexec /i "RAIC Overlay.msi" /quiet`
   - Verify NO shortcut on desktop
@@ -100,9 +100,9 @@ This feature modifies only the WiX installer template:
 
 **Purpose**: Final verification and commit
 
-- [ ] T015 Verify all 5 test cases from contracts/wix-changes.md pass
-- [ ] T016 Update installer.wxs header comment with sync date
-- [ ] T017 Commit changes with descriptive message:
+- [X] T015 Verify all 5 test cases from contracts/wix-changes.md pass
+- [X] T016 Update installer.wxs header comment with sync date
+- [X] T017 Commit changes with descriptive message:
   - "fix(installer): Fix desktop shortcut creation condition"
   - Reference WiX truthy evaluation pattern in commit body
 
