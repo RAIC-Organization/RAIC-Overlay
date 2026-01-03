@@ -24,9 +24,9 @@
 
 **Purpose**: Create module directories and prepare for file migration
 
-- [ ] T001 Create module directories under `src-tauri/src/`: core/, browser/, persistence/, settings/, hotkey/, logging/, platform/, commands/
-- [ ] T002 Verify `cargo build` works before starting migration in `src-tauri/`
-- [ ] T003 [P] Backup current `lib.rs` content for reference (copy to `lib.rs.bak` temporarily)
+- [x] T001 Create module directories under `src-tauri/src/`: core/, browser/, persistence/, settings/, hotkey/, logging/, platform/, commands/
+- [x] T002 Verify `cargo build` works before starting migration in `src-tauri/`
+- [x] T003 [P] Backup current `lib.rs` content for reference (copy to `lib.rs.bak` temporarily)
 
 ---
 
@@ -36,14 +36,14 @@
 
 **CRITICAL**: No other module work can begin until core/ is complete and compiling
 
-- [ ] T004 Move `src-tauri/src/types.rs` to `src-tauri/src/core/types.rs`
-- [ ] T005 Move `src-tauri/src/state.rs` to `src-tauri/src/core/state.rs`
-- [ ] T006 Move `src-tauri/src/window.rs` to `src-tauri/src/core/window.rs`
-- [ ] T007 Create `src-tauri/src/core/mod.rs` with pub use re-exports for types, state, window
-- [ ] T008 Update imports in `core/state.rs`: change `use crate::types::` to `use super::types::`
-- [ ] T009 Update imports in `core/window.rs`: change `use crate::types::` to `use super::types::`
-- [ ] T010 Update `src-tauri/src/lib.rs` to declare `pub mod core;` and update all `use crate::types::` to `use crate::core::`
-- [ ] T011 Run `cargo build` to verify core module compiles correctly
+- [x] T004 Move `src-tauri/src/types.rs` to `src-tauri/src/core/types.rs`
+- [x] T005 Move `src-tauri/src/state.rs` to `src-tauri/src/core/state.rs`
+- [x] T006 Move `src-tauri/src/window.rs` to `src-tauri/src/core/window.rs`
+- [x] T007 Create `src-tauri/src/core/mod.rs` with pub use re-exports for types, state, window
+- [x] T008 Update imports in `core/state.rs`: change `use crate::types::` to `use super::types::`
+- [x] T009 Update imports in `core/window.rs`: change `use crate::types::` to `use super::types::`
+- [x] T010 Update `src-tauri/src/lib.rs` to declare `pub mod core;` and update all `use crate::types::` to `use crate::core::`
+- [x] T011 Run `cargo build` to verify core module compiles correctly
 
 **Checkpoint**: Core module ready - all dependencies on types/state/window now use `crate::core::`
 

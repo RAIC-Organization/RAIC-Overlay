@@ -1,3 +1,6 @@
+// Core infrastructure
+pub mod core;
+
 // T002 (040): Browser WebView types for WebView architecture
 pub mod browser_webview_types;
 // T005-T006 (040): Browser WebView commands for WebView architecture
