@@ -125,9 +125,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 056-kofi-button: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, @tauri-apps/plugin-opener (already installed), Tailwind CSS 4.x, lucide-react
 - 055-rust-modular-refactor: Added Rust 2021 Edition (1.92+) + Tauri 2.x, serde, tokio, windows-rs 0.62, tauri-plugin-* ecosystem
 - 054-settings-panel-startup: Added Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x, React 19.0.0, Next.js 16.x, serde/serde_json (Rust), @tauri-apps/api 2.0.0
-- 053-buymeacoffee-button: Added TypeScript 5.7.2 (React 19.0.0 frontend), Rust 2021 Edition (Tauri backend - unchanged) + React 19.0.0, Next.js 16.x, @tauri-apps/plugin-opener (already installed), Tailwind CSS 4.x, lucide-react (for icons)
 
 
 <!-- MANUAL ADDITIONS START -->

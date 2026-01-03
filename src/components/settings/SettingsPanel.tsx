@@ -72,12 +72,12 @@ export function SettingsPanel() {
     }
   };
 
-  // T053: Handle Buy Me A Coffee button click - open external URL
-  const handleOpenBuyMeCoffee = async () => {
+  // T056: Handle Ko-fi button click - open external URL
+  const handleOpenKofi = async () => {
     try {
-      await openUrl("https://www.buymeacoffee.com/braindaamage");
+      await openUrl("https://ko-fi.com/Y8Y01QVRYF");
     } catch (e) {
-      console.error("Failed to open Buy Me A Coffee page:", e);
+      console.error("Failed to open Ko-fi page:", e);
     }
   };
 
@@ -234,15 +234,16 @@ export function SettingsPanel() {
           {isSaving ? "Saving..." : "Save Settings"}
         </button>
 
-        {/* T053: Buy Me A Coffee button */}
+        {/* T056: Ko-fi support button */}
         <button
-          onClick={handleOpenBuyMeCoffee}
+          onClick={handleOpenKofi}
           className="w-full mt-3 flex justify-center cursor-pointer hover:opacity-80 transition-opacity"
         >
           <img
-            src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=braindaamage&button_colour=0b0e13&font_colour=ffffff&font_family=Cookie&outline_colour=ffffff&coffee_colour=FFDD00"
-            alt="Buy Me A Coffee"
-            className="h-10"
+            src="https://storage.ko-fi.com/cdn/kofi3.png?v=6"
+            alt="Buy Me a Coffee at ko-fi.com"
+            height={36}
+            style={{ height: '36px', border: 0 }}
           />
         </button>
 
