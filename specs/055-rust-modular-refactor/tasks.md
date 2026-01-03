@@ -111,9 +111,9 @@
 
 ### Commands Module (Application Layer)
 
-- [ ] T048 [US1] Extract inline Tauri commands from `lib.rs` to `src-tauri/src/commands/overlay.rs`: toggle_visibility, toggle_mode, set_visibility, get_overlay_state, get_target_window_info, dismiss_error_modal, is_target_process_running
-- [ ] T049 [US1] Create `src-tauri/src/commands/mod.rs` with pub use re-exports for overlay commands
-- [ ] T050 [US1] Update `lib.rs` to declare `pub mod commands;` and use commands from `crate::commands::`
+- [x] T048 [US1] Extract inline Tauri commands from `lib.rs` to `src-tauri/src/commands/overlay.rs`: toggle_visibility, toggle_mode, set_visibility, get_overlay_state, get_target_window_info, dismiss_error_modal, is_target_process_running
+- [x] T049 [US1] Create `src-tauri/src/commands/mod.rs` with pub use re-exports for overlay commands
+- [x] T050 [US1] Update `lib.rs` to declare `pub mod commands;` and use commands from `crate::commands::`
 
 **FR-005 Verification**: After completing T048-T050, confirm that:
 - `commands/overlay.rs` contains ONLY Tauri `#[command]` handler functions
@@ -122,10 +122,10 @@
 
 ### Validation
 
-- [ ] T051 [US1] Run `cargo build` to verify all modules compile correctly
-- [ ] T052 [US1] Run `cargo clippy` to verify no new warnings introduced
-- [ ] T053 [US1] Delete old flat files that were migrated (types.rs, state.rs, window.rs, etc. at root level)
-- [ ] T054 [US1] Run `cargo build` again to verify clean build without old files
+- [x] T051 [US1] Run `cargo build` to verify all modules compile correctly
+- [x] T052 [US1] Run `cargo clippy` to verify no new warnings introduced
+- [x] T053 [US1] Delete old flat files that were migrated (types.rs, state.rs, window.rs, etc. at root level)
+- [x] T054 [US1] Run `cargo build` again to verify clean build without old files
 
 **Checkpoint**: All 28 files reorganized into 9 modules. Developer can find browser code in `browser/` directory.
 
@@ -139,15 +139,15 @@
 
 ### Pattern Consistency Verification
 
-- [ ] T055 [US2] Verify `core/mod.rs` follows pattern: declares submodules, pub use re-exports public API
-- [ ] T056 [US2] Verify `browser/mod.rs` follows pattern: types.rs, commands.rs, mod.rs with re-exports
-- [ ] T057 [US2] Verify `settings/mod.rs` follows pattern: types.rs, runtime.rs, user.rs, window.rs, mod.rs with re-exports
-- [ ] T058 [US2] Verify `persistence/mod.rs` follows pattern: types.rs, commands.rs, mod.rs with re-exports
-- [ ] T059 [US2] Verify `logging/mod.rs` follows pattern: types.rs, cleanup.rs, mod.rs with re-exports
-- [ ] T060 [US2] Verify `hotkey/mod.rs` follows pattern: shortcuts.rs, mod.rs with re-exports
-- [ ] T061 [US2] Verify `platform/mod.rs` follows pattern: multiple .rs files, mod.rs with #[cfg(windows)] gating
-- [ ] T062 [US2] Verify `commands/mod.rs` follows pattern: overlay.rs, mod.rs with re-exports
-- [ ] T063 [US2] Verify `update/mod.rs` (existing) follows pattern: types.rs, multiple .rs files, mod.rs with re-exports
+- [x] T055 [US2] Verify `core/mod.rs` follows pattern: declares submodules, pub use re-exports public API
+- [x] T056 [US2] Verify `browser/mod.rs` follows pattern: types.rs, commands.rs, mod.rs with re-exports
+- [x] T057 [US2] Verify `settings/mod.rs` follows pattern: types.rs, runtime.rs, user.rs, window.rs, mod.rs with re-exports
+- [x] T058 [US2] Verify `persistence/mod.rs` follows pattern: types.rs, commands.rs, mod.rs with re-exports
+- [x] T059 [US2] Verify `logging/mod.rs` follows pattern: types.rs, cleanup.rs, mod.rs with re-exports
+- [x] T060 [US2] Verify `hotkey/mod.rs` follows pattern: shortcuts.rs, mod.rs with re-exports
+- [x] T061 [US2] Verify `platform/mod.rs` follows pattern: multiple .rs files, mod.rs with #[cfg(windows)] gating
+- [x] T062 [US2] Verify `commands/mod.rs` follows pattern: overlay.rs, mod.rs with re-exports
+- [x] T063 [US2] Verify `update/mod.rs` (existing) follows pattern: types.rs, multiple .rs files, mod.rs with re-exports
 
 **Checkpoint**: All modules follow consistent internal structure pattern
 
