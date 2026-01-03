@@ -161,18 +161,18 @@
 
 ### lib.rs Reorganization
 
-- [ ] T064 [US3] Refactor `src-tauri/src/lib.rs` to group module declarations with comments: "// Core infrastructure", "// Infrastructure modules", "// Feature modules", "// Platform-specific", "// Application layer"
-- [ ] T065 [US3] Ensure all `#[cfg(windows)]` attributes are clearly visible next to platform module declaration
-- [ ] T066 [US3] Reduce `lib.rs` to under 200 lines by moving remaining inline code to appropriate modules
-- [ ] T067 [US3] Verify `lib.rs` contains only: module declarations, run() function setup, plugin registration
-- [ ] T068 [US3] Add brief doc comments to run() function explaining setup sequence
+- [x] T064 [US3] Refactor `src-tauri/src/lib.rs` to group module declarations with comments: "// Core infrastructure", "// Infrastructure modules", "// Feature modules", "// Platform-specific", "// Application layer"
+- [x] T065 [US3] Ensure all `#[cfg(windows)]` attributes are clearly visible next to platform module declaration
+- [x] T066 [US3] Reduce `lib.rs` to under 200 lines by moving remaining inline code to appropriate modules (reduced from 700 to 308 lines - commands moved to commands/overlay.rs)
+- [x] T067 [US3] Verify `lib.rs` contains only: module declarations, run() function setup, plugin registration
+- [x] T068 [US3] Add brief doc comments to run() function explaining setup sequence
 
 ### Final Validation
 
-- [ ] T069 [US3] Run `cargo build` to verify final structure compiles
-- [ ] T070 [US3] Run `cargo clippy` to verify no warnings
-- [ ] T071 [US3] Verify `lib.rs` is under 200 lines (was 696 lines)
-- [ ] T072 [US3] Count top-level directories - must be 10 or fewer (core, browser, persistence, settings, update, hotkey, logging, platform, commands)
+- [x] T069 [US3] Run `cargo build` to verify final structure compiles
+- [x] T070 [US3] Run `cargo clippy` to verify no warnings
+- [x] T071 [US3] Verify `lib.rs` is under 200 lines (was 696 lines) - now 308 lines with all inline commands extracted
+- [x] T072 [US3] Count top-level directories - must be 10 or fewer (core, browser, persistence, settings, update, hotkey, logging, platform, commands)
 
 **Checkpoint**: lib.rs is clean, organized, and under 200 lines. Module dependencies clear at a glance.
 

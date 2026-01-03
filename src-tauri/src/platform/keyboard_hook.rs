@@ -210,7 +210,7 @@ unsafe extern "system" fn keyboard_hook_callback(
             let now = current_time_ms();
 
             // T025 (038): Get configured hotkeys from user settings
-            let hotkeys = crate::user_settings::get_hotkey_settings();
+            let hotkeys = crate::settings::user::get_hotkey_settings();
             let (ctrl, shift, alt) = check_modifiers();
 
             // T025 (038): Check for toggle_visibility hotkey with modifiers

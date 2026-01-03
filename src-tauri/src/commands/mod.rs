@@ -1,7 +1,7 @@
 // Commands module - Tauri command handlers
-// Note: Overlay commands remain in lib.rs during Phase 3
-// They will be migrated in Phase 5 during lib.rs reorganization
+// Application layer that delegates to feature modules
 
-// Placeholder for overlay commands migration
-// pub mod overlay;
-// pub use overlay::*;
+pub mod overlay;
+
+// Re-export all overlay commands
+pub use overlay::*;

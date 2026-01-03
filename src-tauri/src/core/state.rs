@@ -97,7 +97,7 @@ impl OverlayState {
     // T015: Updated to use runtime settings for target window name
     #[cfg(windows)]
     pub fn to_response(&self) -> OverlayStateResponse {
-        use crate::target_window::get_target_window_name;
+        use crate::platform::target_window::get_target_window_name;
 
         let mode_str = match self.get_mode() {
             OverlayMode::Windowed => "windowed",

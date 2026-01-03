@@ -1,7 +1,7 @@
 //! User settings persistence module
 //! @feature 038-settings-panel
 
-use crate::user_settings_types::*;
+use super::types::*;
 use std::fs::{self, File};
 use std::io::{Read, Write};
 use std::path::PathBuf;
