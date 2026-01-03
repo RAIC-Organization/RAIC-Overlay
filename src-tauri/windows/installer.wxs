@@ -1,6 +1,6 @@
 <!-- Custom WiX template for RAIC Overlay MSI installer -->
 <!-- Based on Tauri bundler default template (v2.x) -->
-<!-- Last synced: 2026-01-02 -->
+<!-- Last synced: 2026-01-03 -->
 <!-- Source: https://github.com/tauri-apps/tauri/blob/dev/crates/tauri-bundler/src/bundle/windows/msi/main.wxs -->
 
 <?if $(sys.BUILDARCH)="x86"?>
@@ -188,7 +188,7 @@
             <Directory Id="DesktopFolder" Name="Desktop">
                 <!-- Desktop shortcut component - conditional on INSTALLDESKTOPSHORTCUT property -->
                 <Component Id="ApplicationShortcutDesktop" Guid="*">
-                    <Condition>INSTALLDESKTOPSHORTCUT = "1"</Condition>
+                    <Condition>INSTALLDESKTOPSHORTCUT</Condition>
                     <Shortcut Id="ApplicationDesktopShortcut"
                               Name="{{product_name}}"
                               Description="Runs {{product_name}}"
