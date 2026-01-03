@@ -95,10 +95,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T023 [US3] Verify `open_update_window` does not depend on main window visibility state in `src-tauri/src/update/window.rs`
-- [ ] T024 [US3] Remove `UpdateNotification` component from `app/page.tsx` (overlay main page)
-- [ ] T025 [US3] Remove `useUpdateChecker` hook usage from `app/page.tsx`
-- [ ] T026 [US3] Keep `useUpdateChecker.ts` hook but simplify - only export `checkForUpdates` function for manual trigger if needed
+- [X] T023 [US3] Verify `open_update_window` does not depend on main window visibility state in `src-tauri/src/update/window.rs`
+- [X] T024 [US3] Remove `UpdateNotification` component from `app/page.tsx` (overlay main page)
+- [X] T025 [US3] Remove `useUpdateChecker` hook usage from `app/page.tsx`
+- [X] T026 [US3] Keep `useUpdateChecker.ts` hook but simplify - only export `checkForUpdates` function for manual trigger if needed
 
 **Checkpoint**: All user stories complete - update window fully independent of overlay
 
