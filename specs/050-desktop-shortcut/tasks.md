@@ -35,7 +35,7 @@ This feature modifies only the WiX installer template:
 
 **Purpose**: Apply the WiX condition fix - this is the core change
 
-- [ ] T005 Fix desktop shortcut condition in `src-tauri/windows/installer.wxs` (line ~191)
+- [X] T005 Fix desktop shortcut condition in `src-tauri/windows/installer.wxs` (line ~191)
   - Find: `<Condition>INSTALLDESKTOPSHORTCUT = "1"</Condition>`
   - Replace with: `<Condition>INSTALLDESKTOPSHORTCUT</Condition>`
 

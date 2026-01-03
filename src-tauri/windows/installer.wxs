@@ -188,7 +188,7 @@
             <Directory Id="DesktopFolder" Name="Desktop">
                 <!-- Desktop shortcut component - conditional on INSTALLDESKTOPSHORTCUT property -->
                 <Component Id="ApplicationShortcutDesktop" Guid="*">
-                    <Condition>INSTALLDESKTOPSHORTCUT = "1"</Condition>
+                    <Condition>INSTALLDESKTOPSHORTCUT</Condition>
                     <Shortcut Id="ApplicationDesktopShortcut"
                               Name="{{product_name}}"
                               Description="Runs {{product_name}}"
