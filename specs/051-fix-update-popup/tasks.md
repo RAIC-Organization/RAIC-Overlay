@@ -79,9 +79,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T020 [US2] Verify `open_update_window` in `src-tauri/src/update/window.rs` uses `.skip_taskbar(false)` (should be done in T005)
-- [ ] T021 [US2] Verify window title is set to "RAIC Overlay Update" for taskbar identification in `src-tauri/src/update/window.rs`
-- [ ] T022 [US2] Implement window reuse logic in `open_update_window` - if window exists, update `UpdateWindowState` with new info, emit `update-info-changed` event to frontend, call `.show()` and `.set_focus()` instead of creating new
+- [X] T020 [US2] Verify `open_update_window` in `src-tauri/src/update/window.rs` uses `.skip_taskbar(false)` (should be done in T005)
+- [X] T021 [US2] Verify window title is set to "RAIC Overlay Update" for taskbar identification in `src-tauri/src/update/window.rs`
+- [X] T022 [US2] Implement window reuse logic in `open_update_window` - if window exists, update `UpdateWindowState` with new info, emit `update-info-changed` event to frontend, call `.show()` and `.set_focus()` instead of creating new
 
 **Checkpoint**: User Story 2 complete - update window appears in taskbar and can be focused via taskbar click
 
