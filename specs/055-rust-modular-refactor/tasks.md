@@ -182,11 +182,11 @@
 
 **Purpose**: Final cleanup and documentation
 
-- [ ] T073 [P] Remove temporary `lib.rs.bak` file if it exists
-- [ ] T074 [P] Update CLAUDE.md if any new patterns or conventions were established
+- [x] T073 [P] Remove temporary `lib.rs.bak` file if it exists
+- [x] T074 [P] Update CLAUDE.md if any new patterns or conventions were established
 - [ ] T075 Run full application to verify all 50+ Tauri commands work (manual functional test)
-- [ ] T076 Verify zero circular dependency warnings in `cargo build` output
-- [ ] T077 Document the module structure in project README or CLAUDE.md
+- [x] T076 Verify zero circular dependency warnings in `cargo build` output
+- [x] T077 Document the module structure in project README or CLAUDE.md
 
 ---
 

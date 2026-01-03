@@ -131,4 +131,114 @@ TypeScript/React 19.2: Follow standard conventions
 
 
 <!-- MANUAL ADDITIONS START -->
+
+## Rust Backend Module Architecture (Feature 055)
+
+The Rust backend (`src-tauri/src/`) uses a modular architecture organized by feature domain:
+
+### Module Structure
+
+```text
+src-tauri/src/
+├── lib.rs              # Entry point, module declarations, run() setup
+├── main.rs             # Binary entry (calls lib::run())
+│
+├── core/               # Core infrastructure (no external deps)
+│   ├── mod.rs          # Re-exports: types, state, window
+│   ├── types.rs        # OverlayMode, WindowState, WindowRect, etc.
+│   ├── state.rs        # OverlayState (visibility, mode, target binding)
+│   └── window.rs       # Window positioning utilities
+│
+├── logging/            # Infrastructure: logging system
+│   ├── mod.rs          # Re-exports
+│   ├── types.rs        # LogConfig, CleanupResult
+│   └── cleanup.rs      # Log rotation, get_log_level, build_log_plugin
+│
+├── persistence/        # Infrastructure: state persistence
+│   ├── mod.rs          # Re-exports
+│   ├── types.rs        # LoadStateResult, SaveResult, etc.
+│   └── commands.rs     # load_state, save_state, save_window_content
+│
+├── hotkey/             # Infrastructure: global shortcuts
+│   ├── mod.rs          # Re-exports
+│   └── shortcuts.rs    # build_shortcut_plugin, register_shortcuts
+│
+├── settings/           # Feature: configuration management
+│   ├── mod.rs          # Re-exports
+│   ├── types.rs        # UserSettings, HotkeySettings
+│   ├── runtime.rs      # settings.toml parsing, get_settings()
+│   ├── user.rs         # user-settings.json persistence
+│   └── window.rs       # Settings panel window management
+│
+├── browser/            # Feature: WebView browser windows
+│   ├── mod.rs          # Re-exports
+│   ├── types.rs        # BrowserWebViewState, BrowserWebViewBounds
+│   └── commands.rs     # create/destroy/navigate WebView commands
+│
+├── platform/           # Platform-specific (Windows)
+│   ├── mod.rs          # #[cfg(windows)] gated re-exports
+│   ├── keyboard_hook.rs # Low-level keyboard hook (F3/F5)
+│   ├── target_window.rs # Window detection (3-point verification)
+│   ├── process_monitor.rs # Game process detection
+│   ├── focus_monitor.rs # Auto-hide on focus loss
+│   └── tray.rs         # System tray icon and menu
+│
+├── commands/           # Application layer: Tauri command handlers
+│   ├── mod.rs          # Re-exports
+│   └── overlay.rs      # toggle_visibility, toggle_mode, etc.
+│
+└── update/             # Feature: auto-update system
+    ├── mod.rs          # Re-exports
+    ├── types.rs        # UpdateInfo, UpdateState
+    ├── check.rs        # GitHub release checking
+    ├── download.rs     # Installer download
+    └── window.rs       # Update notification window
+```
+
+### Module Dependencies (Layered Architecture)
+
+```
+           ┌─────────────────────────────────────┐
+           │           commands/                  │  Application Layer
+           │     (Tauri command handlers)         │  (delegates to features)
+           └──────────────┬──────────────────────┘
+                          │
+     ┌────────────────────┼────────────────────┐
+     │                    │                    │
+┌────▼────┐         ┌─────▼─────┐        ┌─────▼─────┐
+│ browser │         │ settings  │        │ platform  │  Feature Modules
+│         │         │           │        │ (windows) │
+└────┬────┘         └─────┬─────┘        └─────┬─────┘
+     │                    │                    │
+     └────────────────────┼────────────────────┘
+                          │
+     ┌────────────────────┼────────────────────┐
+     │                    │                    │
+┌────▼────┐         ┌─────▼─────┐        ┌─────▼─────┐
+│ logging │         │persistence│        │  hotkey   │  Infrastructure
+└────┬────┘         └─────┬─────┘        └─────┬─────┘
+     │                    │                    │
+     └────────────────────┼────────────────────┘
+                          │
+                    ┌─────▼─────┐
+                    │   core    │  Foundation
+                    │types/state│  (no deps)
+                    └───────────┘
+```
+
+### Import Conventions
+
+- Core types: `use crate::core::{OverlayState, OverlayMode, WindowRect}`
+- Module-local: `use super::types::*`
+- Cross-module: `use crate::browser::commands::*`
+- Platform features: `#[cfg(windows)] use crate::platform::target_window`
+
+### Adding a New Module
+
+1. Create directory: `src-tauri/src/mymodule/`
+2. Add files: `mod.rs`, `types.rs`, `commands.rs` (as needed)
+3. In `mod.rs`: declare submodules, add `pub use` re-exports
+4. In `lib.rs`: add `pub mod mymodule;` under appropriate section
+5. Run `cargo build` to verify compilation
+
 <!-- MANUAL ADDITIONS END -->
