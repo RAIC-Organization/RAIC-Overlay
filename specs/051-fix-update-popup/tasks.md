@@ -108,9 +108,9 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T027 [P] Adapt `UpdateNotification.tsx` styling for full-window layout - remove `fixed top-4 right-4` positioning in `src/components/update/UpdateNotification.tsx`
-- [ ] T028 [P] Export `UpdatePage` from `src/components/update/index.ts`
-- [ ] T029 Update feature annotation comments in new files with `@feature 051-fix-update-popup`
+- [X] T027 [P] Adapt `UpdateNotification.tsx` styling for full-window layout - remove `fixed top-4 right-4` positioning in `src/components/update/UpdateNotification.tsx`
+- [X] T028 [P] Export `UpdatePage` from `src/components/update/index.ts`
+- [X] T029 Update feature annotation comments in new files with `@feature 051-fix-update-popup`
 - [ ] T030 Run manual test: Launch app with update available, verify window appears in taskbar within 5 seconds
 - [ ] T031 Run manual test: Click "Update Now", verify download starts
 - [ ] T032 Run manual test: Click "Ask Again Later", verify window closes

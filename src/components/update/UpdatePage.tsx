@@ -22,7 +22,7 @@ import { openUrl } from "@tauri-apps/plugin-opener";
 import { exit } from "@tauri-apps/plugin-process";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { UpdateNotification } from "./UpdateNotification";
-import { debug, error as logError, info } from "@/lib/logger";
+import { debug, error as logError, info as logInfo } from "@/lib/logger";
 import type { UpdateInfo, DownloadEvent, UpdateUIState } from "@/types/update";
 
 export function UpdatePage() {
@@ -48,10 +48,7 @@ export function UpdatePage() {
         if (info) {
           setUpdateInfo(info);
           setUiState("available");
-          info("UpdatePage: Loaded update info", {
-            version: info.version,
-            currentVersion: info.currentVersion,
-          });
+          logInfo(`UpdatePage: Loaded update info - v${info.currentVersion} -> v${info.version}`);
         } else {
           debug("UpdatePage: No pending update info available");
           // Close the window if no update info
@@ -107,7 +104,7 @@ export function UpdatePage() {
     });
     setError(null);
 
-    info(`UpdatePage: Starting download from ${updateInfo.downloadUrl}`);
+    logInfo(`UpdatePage: Starting download from ${updateInfo.downloadUrl}`);
 
     try {
       // Create channel for progress events
@@ -134,7 +131,7 @@ export function UpdatePage() {
             break;
 
           case "finished":
-            info(`UpdatePage: Download complete: ${event.data.installerPath}`);
+            logInfo(`UpdatePage: Download complete: ${event.data.installerPath}`);
             installerPathRef.current = event.data.installerPath;
             launchInstaller(event.data.installerPath);
             break;
@@ -162,7 +159,7 @@ export function UpdatePage() {
   // Launch installer and exit
   const launchInstaller = async (installerPath: string) => {
     setUiState("installing");
-    info(`UpdatePage: Launching installer: ${installerPath}`);
+    logInfo(`UpdatePage: Launching installer: ${installerPath}`);
 
     try {
       await invoke("launch_installer_and_exit", { installerPath });
@@ -189,7 +186,7 @@ export function UpdatePage() {
     }
 
     // T019: Log window close event
-    info("UpdatePage: Window closed via 'Ask Again Later'");
+    logInfo("UpdatePage: Window closed via 'Ask Again Later'");
 
     // Close the window
     await invoke("close_update_window", { dismiss: true });
@@ -212,7 +209,7 @@ export function UpdatePage() {
     }
 
     // T019: Log window close event
-    info("UpdatePage: Window dismissed via X button");
+    logInfo("UpdatePage: Window dismissed via X button");
 
     // Close the window
     await invoke("close_update_window", { dismiss: true });
@@ -270,8 +267,9 @@ export function UpdatePage() {
   }
 
   // Render the update notification as full window content
+  // T027 (051): Use fullWindow mode to fill the dedicated window
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="h-screen overflow-hidden bg-background/90 backdrop-blur-xl">
       <UpdateNotification
         visible={true}
         updateInfo={updateInfo}
@@ -283,6 +281,7 @@ export function UpdatePage() {
         onDismiss={onDismiss}
         onRetry={onRetry}
         onOpenReleasePage={onOpenReleasePage}
+        fullWindow={true}
       />
     </div>
   );

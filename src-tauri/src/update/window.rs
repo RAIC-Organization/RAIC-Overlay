@@ -1,8 +1,11 @@
-//! T004-T007 (051): Update window management
+//! T004-T007, T020-T022 (051): Update window management
 //! @feature 051-fix-update-popup
 //!
 //! This module handles the dedicated update notification window that appears
 //! in the Windows taskbar. It follows the same pattern as settings_window.rs.
+//!
+//! The window is created by the backend when an update is found, ensuring it
+//! appears regardless of the main overlay window's visibility state.
 
 use super::types::{OpenUpdateWindowResult, UpdateInfo, UpdateWindowState};
 use tauri::{Emitter, Manager, WebviewUrl, WebviewWindowBuilder};

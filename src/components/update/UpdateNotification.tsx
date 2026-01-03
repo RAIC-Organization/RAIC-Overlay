@@ -7,7 +7,13 @@
  * Users can accept (download and install) or postpone (ask later).
  * Styled with SC HUD theme to match the overlay.
  *
+ * T027 (051): Updated to support both overlay popup and dedicated window layouts.
+ * When used in the dedicated update window (UpdatePage), the component fills
+ * the entire window. When used as an overlay popup (original behavior),
+ * it positions fixed in top-right corner.
+ *
  * @feature 049-auto-update
+ * @feature 051-fix-update-popup
  */
 
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
@@ -27,6 +33,8 @@ interface UpdateNotificationProps {
   onDismiss: () => void;
   onRetry: () => void;
   onOpenReleasePage: () => void;
+  /** T027 (051): If true, fills container; if false, positions fixed top-right */
+  fullWindow?: boolean;
 }
 
 export function UpdateNotification({
@@ -40,9 +48,15 @@ export function UpdateNotification({
   onDismiss,
   onRetry,
   onOpenReleasePage,
+  fullWindow = false,
 }: UpdateNotificationProps) {
   const prefersReducedMotion = useReducedMotion();
   const duration = prefersReducedMotion ? 0 : 0.2;
+
+  // T027 (051): Different layout classes for full window vs overlay popup
+  const containerClasses = fullWindow
+    ? "h-full w-full flex items-center justify-center select-none"
+    : "fixed top-4 right-4 z-50 select-none";
 
   // Format file size for display
   const formatSize = (bytes: number): string => {
@@ -60,7 +74,7 @@ export function UpdateNotification({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -20, scale: 0.95 }}
           transition={{ duration, ease: "easeOut" }}
-          className="fixed top-4 right-4 z-50 select-none"
+          className={containerClasses}
           role="alertdialog"
           aria-modal="true"
           aria-labelledby="update-notification-title"
