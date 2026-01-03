@@ -55,17 +55,17 @@
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Modify `check_for_updates` in `src-tauri/src/update/checker.rs` to set `UpdateWindowState` when update found
-- [ ] T011 [US1] Modify `check_for_updates` in `src-tauri/src/update/checker.rs` to call `open_update_window` after setting state
-- [ ] T012 [P] [US1] Create `app/update/page.tsx` Next.js route that renders UpdatePage component
-- [ ] T013 [P] [US1] Create `src/components/update/UpdatePage.tsx` page wrapper component
-- [ ] T014 [US1] Implement `useEffect` in `UpdatePage.tsx` to call `get_pending_update` on mount and store result
-- [ ] T014a [US1] Add event listener in `UpdatePage.tsx` for `update-info-changed` to refresh displayed update info without remounting
-- [ ] T015 [US1] Render existing `UpdateNotification` component inside `UpdatePage.tsx` with fetched update info
-- [ ] T016 [US1] Implement `onAccept` handler in `UpdatePage.tsx` to call existing `download_update` command
-- [ ] T017 [US1] Implement `onLater` handler in `UpdatePage.tsx` to call `close_update_window` with `dismiss: true`
-- [ ] T018 [US1] Implement `onDismiss` handler in `UpdatePage.tsx` to call `close_update_window` with `dismiss: true`
-- [ ] T019 [US1] Add logging for window open/close events using existing logger in `UpdatePage.tsx`
+- [X] T010 [US1] Modify `check_for_updates` in `src-tauri/src/update/checker.rs` to set `UpdateWindowState` when update found
+- [X] T011 [US1] Modify `check_for_updates` in `src-tauri/src/update/checker.rs` to call `open_update_window` after setting state
+- [X] T012 [P] [US1] Create `app/update/page.tsx` Next.js route that renders UpdatePage component
+- [X] T013 [P] [US1] Create `src/components/update/UpdatePage.tsx` page wrapper component
+- [X] T014 [US1] Implement `useEffect` in `UpdatePage.tsx` to call `get_pending_update` on mount and store result
+- [X] T014a [US1] Add event listener in `UpdatePage.tsx` for `update-info-changed` to refresh displayed update info without remounting
+- [X] T015 [US1] Render existing `UpdateNotification` component inside `UpdatePage.tsx` with fetched update info
+- [X] T016 [US1] Implement `onAccept` handler in `UpdatePage.tsx` to call existing `download_update` command
+- [X] T017 [US1] Implement `onLater` handler in `UpdatePage.tsx` to call `close_update_window` with `dismiss: true`
+- [X] T018 [US1] Implement `onDismiss` handler in `UpdatePage.tsx` to call `close_update_window` with `dismiss: true`
+- [X] T019 [US1] Add logging for window open/close events using existing logger in `UpdatePage.tsx`
 
 **Checkpoint**: User Story 1 complete - update window appears on app launch when update available
 
