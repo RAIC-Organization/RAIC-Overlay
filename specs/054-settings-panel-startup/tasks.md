@@ -117,9 +117,9 @@ This feature extends existing files only. No new project initialization needed.
 
 **Purpose**: Logging and edge case handling
 
-- [ ] T016 Add debug logging for startup preference read in `src-tauri/src/lib.rs`
-- [ ] T017 Add warn logging if Settings window fails to open on startup in `src-tauri/src/lib.rs`
-- [ ] T018 Verify duplicate window prevention still works (existing `open_settings_window` handles this)
+- [x] T016 Add debug logging for startup preference read in `src-tauri/src/lib.rs`
+- [x] T017 Add warn logging if Settings window fails to open on startup in `src-tauri/src/lib.rs`
+- [x] T018 Verify duplicate window prevention still works (existing `open_settings_window` handles this)
 
 ---
 
