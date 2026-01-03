@@ -226,14 +226,18 @@ export function UpdatePage() {
     }
   }, [updateInfo]);
 
-  // Handle window close button (native close)
+  // Handle window close button (native close - e.g., Alt+F4)
   useEffect(() => {
     const setupCloseHandler = async () => {
       const window = getCurrentWindow();
       const unlisten = await window.onCloseRequested(async (event) => {
-        // Prevent default close
+        // If we're already closing programmatically, let it happen
+        if (isClosingRef.current) {
+          return; // Don't prevent, let window close
+        }
+
+        // User initiated close (e.g., Alt+F4) - handle like "Ask Again Later"
         event.preventDefault();
-        // Use our dismiss handler (same as Ask Again Later)
         await onLater();
       });
 
