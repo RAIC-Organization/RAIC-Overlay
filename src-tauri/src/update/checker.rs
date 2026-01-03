@@ -1,11 +1,14 @@
 //! T011-T014 (049): GitHub release checker
 //! @see specs/049-auto-update/research.md
+//! @feature 051-fix-update-popup
 
 use super::state::{load_update_state, save_update_state};
-use super::types::{GitHubRelease, UpdateCheckResult, UpdateInfo};
+use super::types::{GitHubRelease, UpdateCheckResult, UpdateInfo, UpdateWindowState};
+use super::window::open_update_window;
 use reqwest::Client;
 use semver::Version;
 use std::time::Duration;
+use tauri::Manager;
 
 /// GitHub repository owner
 const GITHUB_OWNER: &str = "RAIC-Organization";
@@ -177,15 +180,46 @@ pub async fn check_for_updates(app: tauri::AppHandle) -> Result<UpdateCheckResul
     state.last_check_timestamp = Some(chrono::Utc::now().to_rfc3339());
     save_update_state(&app, &state)?;
 
+    // Build UpdateInfo for both return value and window state
+    let update_info = UpdateInfo {
+        version: latest_version.to_string(),
+        current_version: current_version.clone(),
+        download_url: msi_asset.browser_download_url.clone(),
+        download_size: msi_asset.size,
+        release_url: release.html_url.clone(),
+    };
+
+    // T010, T011 (051): Set window state and open update window
+    let window_state = app.state::<UpdateWindowState>();
+    {
+        let mut guard = window_state
+            .update_info
+            .lock()
+            .map_err(|_| "Internal error: state lock failed")?;
+        *guard = Some(update_info.clone());
+    }
+
+    // Open the update window (async - fire and forget style)
+    let app_clone = app.clone();
+    tauri::async_runtime::spawn(async move {
+        let window_state = app_clone.state::<UpdateWindowState>();
+        match open_update_window(app_clone.clone(), window_state).await {
+            Ok(result) => {
+                if result.created {
+                    log::info!("Update window created automatically");
+                } else {
+                    log::info!("Update window focused automatically");
+                }
+            }
+            Err(e) => {
+                log::warn!("Failed to open update window: {}", e);
+            }
+        }
+    });
+
     Ok(UpdateCheckResult {
         update_available: true,
-        update_info: Some(UpdateInfo {
-            version: latest_version.to_string(),
-            current_version: current_version.clone(),
-            download_url: msi_asset.browser_download_url.clone(),
-            download_size: msi_asset.size,
-            release_url: release.html_url.clone(),
-        }),
+        update_info: Some(update_info),
     })
 }
 

@@ -497,6 +497,8 @@ pub fn run() {
         .manage(OverlayState::default())
         // T008 (040): Initialize BrowserWebViewState for WebView tracking
         .manage(browser_webview_types::BrowserWebViewState::new())
+        // T003 (051): Initialize UpdateWindowState for update notification window
+        .manage(update::types::UpdateWindowState::default())
         .invoke_handler(tauri::generate_handler![
             set_visibility,
             get_overlay_state,
@@ -549,7 +551,11 @@ pub fn run() {
             update::launch_installer_and_exit,
             update::cleanup_old_installers,
             update::dismiss_update,
-            update::get_update_state
+            update::get_update_state,
+            // T009 (051): Update window commands
+            update::open_update_window,
+            update::get_pending_update,
+            update::close_update_window
         ])
         .setup(|app| {
             let handle = app.handle().clone();
@@ -634,7 +640,40 @@ pub fn run() {
 
             // T026: Start focus monitor (Windows only)
             #[cfg(windows)]
-            focus_monitor::start_focus_monitor(handle);
+            focus_monitor::start_focus_monitor(handle.clone());
+
+            // T010-T011 (051): Trigger update check after 3 second delay
+            // Previously this was done by the frontend useUpdateChecker hook,
+            // but now the backend handles it to ensure updates are checked
+            // regardless of overlay visibility state.
+            let update_handle = handle.clone();
+            std::thread::spawn(move || {
+                // Wait 3 seconds before checking for updates (gives app time to initialize)
+                std::thread::sleep(std::time::Duration::from_secs(3));
+                log::info!("Triggering automatic update check...");
+
+                // Use tauri's async runtime to run the async update check
+                tauri::async_runtime::block_on(async {
+                    // Clean up old installers first
+                    if let Err(e) = update::cleanup_old_installers(update_handle.clone()).await {
+                        log::warn!("Failed to cleanup old installers: {}", e);
+                    }
+
+                    // Check for updates - this will automatically open the update window if found
+                    match update::check_for_updates(update_handle).await {
+                        Ok(result) => {
+                            if result.update_available {
+                                log::info!("Update check complete: update available");
+                            } else {
+                                log::info!("Update check complete: no updates available");
+                            }
+                        }
+                        Err(e) => {
+                            log::warn!("Update check failed: {}", e);
+                        }
+                    }
+                });
+            });
 
             Ok(())
         })

@@ -32,8 +32,10 @@ import { WidgetsProvider } from "@/contexts/WidgetsContext";
 import { WidgetsContainer } from "@/components/widgets/WidgetsContainer";
 import { useHydration } from "@/hooks/useHydration";
 import { useHotkeyCapture } from "@/hooks/useHotkeyCapture";
-import { useUpdateChecker } from "@/hooks/useUpdateChecker";
-import { UpdateNotification } from "@/components/update";
+// T025 (051): Update checker moved to dedicated update window
+// import { useUpdateChecker } from "@/hooks/useUpdateChecker";
+// T024 (051): UpdateNotification moved to dedicated update window
+// import { UpdateNotification } from "@/components/update";
 import { useWindows } from "@/contexts/WindowsContext";
 import { NotesContent } from "@/components/windows/NotesContent";
 import { DrawContent } from "@/components/windows/DrawContent";
@@ -260,8 +262,9 @@ function OverlayContent({
   scanlinesEnabled: boolean;
   onScanlinesChange: (enabled: boolean) => void;
 }) {
-  // T020 (049): Auto-update checker hook
-  const update = useUpdateChecker();
+  // T025 (051): Update checker moved to dedicated update window
+  // The update window is now opened by the backend (checker.rs) when an update is found.
+  // This allows the update notification to appear regardless of overlay visibility.
 
   return (
     <div className="flex flex-col justify-between h-full relative">
@@ -302,19 +305,9 @@ function OverlayContent({
         onDismiss={onDismissError}
       />
 
-      {/* T020 (049): Update notification popup */}
-      <UpdateNotification
-        visible={update.visible}
-        updateInfo={update.updateInfo}
-        uiState={update.uiState}
-        downloadProgress={update.downloadProgress}
-        error={update.error}
-        onAccept={update.onAccept}
-        onLater={update.onLater}
-        onDismiss={update.onDismiss}
-        onRetry={update.onRetry}
-        onOpenReleasePage={update.onOpenReleasePage}
-      />
+      {/* T024 (051): Update notification moved to dedicated update window */}
+      {/* The update window is opened by the backend when an update is found. */}
+      {/* See app/update/page.tsx and src/components/update/UpdatePage.tsx */}
     </div>
   );
 }

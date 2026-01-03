@@ -3,10 +3,17 @@
 /**
  * useUpdateChecker Hook
  *
- * Checks for updates on mount and at 24-hour intervals.
- * Manages update notification state and user interactions.
+ * @deprecated T026 (051): This hook is deprecated in favor of the dedicated update window.
+ * The update window is now opened directly by the backend (checker.rs) when an update
+ * is found. This allows update notifications to appear regardless of overlay visibility.
  *
- * Features:
+ * This hook is kept for backward compatibility and potential manual trigger use.
+ * The `checkForUpdates` export can be used to manually trigger an update check.
+ *
+ * @see app/update/page.tsx - Dedicated update window route
+ * @see src/components/update/UpdatePage.tsx - Update window component
+ *
+ * Original features (now handled by dedicated window):
  * - Checks for updates on app startup (after 3 second delay)
  * - Checks every 24 hours while app is running
  * - Manages download progress via Tauri Channel events
@@ -14,6 +21,7 @@
  * - Persists dismissed version state
  *
  * @feature 049-auto-update
+ * @feature 051-fix-update-popup
  */
 
 import { useState, useEffect, useRef, useCallback } from "react";

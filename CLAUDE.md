@@ -91,6 +91,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - JSON file in Tauri app data directory (`update-state.json`) (049-auto-update)
 - WiX XML 3.x (Windows Installer XML) + Tauri 2.x bundler, WiX Toolset (bundled with Tauri CLI) (050-desktop-shortcut)
 - N/A (installer configuration only) (050-desktop-shortcut)
+- Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x, React 19.0.0, Next.js 16.x, @tauri-apps/api 2.0.0, motion 12.x, shadcn/ui (051-fix-update-popup)
+- JSON files in Tauri app data directory (existing update-state.json) (051-fix-update-popup)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -115,9 +117,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 051-fix-update-popup: Added Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x, React 19.0.0, Next.js 16.x, @tauri-apps/api 2.0.0, motion 12.x, shadcn/ui
 - 050-desktop-shortcut: Added WiX XML 3.x (Windows Installer XML) + Tauri 2.x bundler, WiX Toolset (bundled with Tauri CLI)
 - 049-auto-update: Added Rust 2021 Edition (Tauri backend), TypeScript 5.7.2 (React 19.0.0 frontend) + Tauri 2.x, React 19.0.0, Next.js 16.x, @tauri-apps/api 2.0.0, reqwest (Rust HTTP client), semver (version comparison)
-- 048-github-release-workflow: Added YAML (GitHub Actions), PowerShell/Bash (scripts) + GitHub Actions (actions/checkout, actions/setup-node, dtolnay/rust-action, softprops/action-gh-release), Tauri CLI 2.x
 
 
 <!-- MANUAL ADDITIONS START -->
