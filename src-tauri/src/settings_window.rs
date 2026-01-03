@@ -33,7 +33,7 @@ pub async fn open_settings_window(app: tauri::AppHandle) -> Result<OpenSettingsR
     // Create new settings window
     WebviewWindowBuilder::new(&app, "settings", WebviewUrl::App("settings".into()))
         .title("RAIC Overlay Settings")
-        .inner_size(450.0, 400.0)
+        .inner_size(450.0, 520.0)
         .decorations(false) // Custom titlebar with drag region
         .transparent(true) // Match overlay styling
         .skip_taskbar(false) // FR-002: Visible in taskbar

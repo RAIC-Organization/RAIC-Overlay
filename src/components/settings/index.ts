@@ -6,3 +6,4 @@
 export { SettingsPanel } from "./SettingsPanel";
 export { HotkeyInput } from "./HotkeyInput";
 export { AutoStartToggle } from "./AutoStartToggle";
+export { UpdatesSection } from "./UpdatesSection";
