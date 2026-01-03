@@ -43,11 +43,11 @@ Files to modify:
 
 ### Implementation for User Story 1
 
-- [ ] T004 [US1] Create README header with centered app logo using src-tauri/icons/icon.png in README.md
-- [ ] T005 [US1] Add version badge (v1.0.0) and platform badge (Windows 11) using shields.io in README.md
-- [ ] T006 [US1] Write About section with short Star Citizen overlay description in README.md
-- [ ] T007 [US1] Add Screenshots section displaying screenshots/overlay.png and screenshots/settings.png in README.md
-- [ ] T008 [US1] Add Installation section with link to https://github.com/RAIC-Organization/RAIC-Overlay/releases/latest in README.md
+- [X] T004 [US1] Create README header with centered app logo using src-tauri/icons/icon.png in README.md
+- [X] T005 [US1] Add version badge (v1.0.0) and platform badge (Windows 11) using shields.io in README.md
+- [X] T006 [US1] Write About section with short Star Citizen overlay description in README.md
+- [X] T007 [US1] Add Screenshots section displaying screenshots/overlay.png and screenshots/settings.png in README.md
+- [X] T008 [US1] Add Installation section with link to https://github.com/RAIC-Organization/RAIC-Overlay/releases/latest in README.md
 
 **Checkpoint**: User Story 1 complete - users can discover, understand, and install the overlay
 
@@ -61,7 +61,7 @@ Files to modify:
 
 ### Implementation for User Story 2
 
-- [ ] T009 [US2] Add Controls section with F3 (show/hide overlay) and F5 (toggle mode) shortcuts in README.md
+- [X] T009 [US2] Add Controls section with F3 (show/hide overlay) and F5 (toggle mode) shortcuts in README.md
 
 **Checkpoint**: User Story 2 complete - controls are documented
 
@@ -75,8 +75,8 @@ Files to modify:
 
 ### Implementation for User Story 3
 
-- [ ] T010 [US3] Add Windows section listing Notes, Draw, Browser, and File Viewer with descriptions in README.md
-- [ ] T011 [US3] Add Widgets section listing Clock, Session Timer, and Chronometer with descriptions in README.md
+- [X] T010 [US3] Add Windows section listing Notes, Draw, Browser, and File Viewer with descriptions in README.md
+- [X] T011 [US3] Add Widgets section listing Clock, Session Timer, and Chronometer with descriptions in README.md
 
 **Checkpoint**: User Story 3 complete - all features are documented
 
@@ -90,8 +90,8 @@ Files to modify:
 
 ### Implementation for User Story 4
 
-- [ ] T012 [US4] Add Ko-fi donation button using provided HTML in README.md header section
-- [ ] T013 [US4] Add in-game tip text with "braindaamage" linked to https://robertsspaceindustries.com/en/citizens/braindaamage in README.md
+- [X] T012 [US4] Add Ko-fi donation button using provided HTML in README.md header section
+- [X] T013 [US4] Add in-game tip text with "braindaamage" linked to https://robertsspaceindustries.com/en/citizens/braindaamage in README.md
 
 **Checkpoint**: User Story 4 complete - support options are visible
 
@@ -105,7 +105,7 @@ Files to modify:
 
 ### Implementation for User Story 5
 
-- [ ] T014 [US5] Add License section with MIT license summary at bottom of README.md
+- [X] T014 [US5] Add License section with MIT license summary at bottom of README.md
 
 **Checkpoint**: User Story 5 complete - license is documented
 
@@ -115,10 +115,10 @@ Files to modify:
 
 **Purpose**: Final cleanup and verification
 
-- [ ] T015 Remove all technical build/dev instructions from README.md (npm/cargo commands)
-- [ ] T016 Verify all images load correctly (logo, screenshots) by checking relative paths
-- [ ] T017 Verify all external links work (Ko-fi, RSI profile, GitHub releases)
-- [ ] T018 Verify Markdown renders correctly on GitHub
+- [X] T015 Remove all technical build/dev instructions from README.md (npm/cargo commands)
+- [X] T016 Verify all images load correctly (logo, screenshots) by checking relative paths
+- [X] T017 Verify all external links work (Ko-fi, RSI profile, GitHub releases)
+- [X] T018 Verify Markdown renders correctly on GitHub
 
 ---
 
