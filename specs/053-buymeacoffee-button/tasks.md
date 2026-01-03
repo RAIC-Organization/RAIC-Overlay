@@ -79,10 +79,10 @@ This feature has no foundational tasks - it modifies an existing component with 
 
 **Purpose**: Final verification and cleanup
 
-- [ ] T007 Manual test: Open Settings panel, verify button position (after Save, before version)
-- [ ] T008 Manual test: Click button, verify external browser opens to correct URL
-- [ ] T009 Manual test: Verify Settings panel remains responsive after button click
-- [ ] T010 Build verification: Run `pnpm tauri:build` and verify no errors
+- [x] T007 Manual test: Open Settings panel, verify button position (after Save, before version)
+- [x] T008 Manual test: Click button, verify external browser opens to correct URL
+- [x] T009 Manual test: Verify Settings panel remains responsive after button click
+- [x] T010 Build verification: Run `pnpm tauri:build` and verify no errors
 
 ---
 
