@@ -3,14 +3,8 @@
 /**
  * T013-T019 (051): UpdatePage Component
  *
- * Page wrapper for the dedicated update notification window.
- * Fetches update info from backend state and renders the UpdateNotification component.
- *
- * Features:
- * - Loads update info via get_pending_update command on mount
- * - Listens for update-info-changed events to refresh displayed info
- * - Handles accept/later/dismiss actions via Tauri commands
- * - Manages download progress and error states
+ * Dedicated update notification window with Settings-like layout.
+ * Features draggable header and X close button (behaves like "Ask Again Later").
  *
  * @feature 051-fix-update-popup
  */
@@ -21,7 +15,9 @@ import { listen } from "@tauri-apps/api/event";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { exit } from "@tauri-apps/plugin-process";
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { UpdateNotification } from "./UpdateNotification";
+import { X, Download, Clock, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { DownloadProgress } from "./DownloadProgress";
 import { debug, error as logError, info as logInfo } from "@/lib/logger";
 import type { UpdateInfo, DownloadEvent, UpdateUIState } from "@/types/update";
 
@@ -38,6 +34,13 @@ export function UpdatePage() {
 
   // Ref for installer path
   const installerPathRef = useRef<string | null>(null);
+
+  // Format file size for display
+  const formatSize = (bytes: number): string => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
 
   // T014: Load update info on mount
   useEffect(() => {
@@ -172,8 +175,13 @@ export function UpdatePage() {
     }
   };
 
-  // T017: Handle "Ask Again Later"
+  // T017: Handle "Ask Again Later" - also used by X button
   const onLater = useCallback(async () => {
+    if (uiState === "downloading" || uiState === "installing") {
+      debug("UpdatePage: Cannot dismiss during download/install");
+      return;
+    }
+
     if (!updateInfo?.version) return;
 
     debug(`UpdatePage: User chose 'Ask Again Later' for version ${updateInfo.version}`);
@@ -190,30 +198,7 @@ export function UpdatePage() {
 
     // Close the window
     await invoke("close_update_window", { dismiss: true });
-  }, [updateInfo]);
-
-  // T018: Handle dismiss (X button)
-  const onDismiss = useCallback(async () => {
-    if (uiState === "downloading" || uiState === "installing") {
-      debug("UpdatePage: Cannot dismiss during download/install");
-      return;
-    }
-
-    // Dismiss behaves like "Ask Again Later" per FR-008
-    if (updateInfo?.version) {
-      try {
-        await invoke("dismiss_update", { version: updateInfo.version });
-      } catch (err) {
-        debug(`UpdatePage: Failed to save dismissed state: ${err}`);
-      }
-    }
-
-    // T019: Log window close event
-    logInfo("UpdatePage: Window dismissed via X button");
-
-    // Close the window
-    await invoke("close_update_window", { dismiss: true });
-  }, [uiState, updateInfo]);
+  }, [updateInfo, uiState]);
 
   // Handle retry
   const onRetry = useCallback(() => {
@@ -238,8 +223,8 @@ export function UpdatePage() {
       const unlisten = await window.onCloseRequested(async (event) => {
         // Prevent default close
         event.preventDefault();
-        // Use our dismiss handler
-        await onDismiss();
+        // Use our dismiss handler (same as Ask Again Later)
+        await onLater();
       });
 
       return unlisten;
@@ -250,13 +235,13 @@ export function UpdatePage() {
     return () => {
       unlistenPromise.then((unlisten) => unlisten());
     };
-  }, [onDismiss]);
+  }, [onLater]);
 
   // Show loading state
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-background/90 backdrop-blur-xl">
-        <div className="text-muted-foreground">Loading...</div>
+      <div className="h-screen bg-background/80 backdrop-blur-xl border border-border rounded-lg flex items-center justify-center">
+        <p className="font-display text-sm text-muted-foreground">Loading...</p>
       </div>
     );
   }
@@ -266,23 +251,144 @@ export function UpdatePage() {
     return null;
   }
 
-  // Render the update notification as full window content
-  // T027 (051): Use fullWindow mode to fill the dedicated window
+  // Render with Settings-like window layout
   return (
-    <div className="h-screen overflow-hidden bg-background/90 backdrop-blur-xl">
-      <UpdateNotification
-        visible={true}
-        updateInfo={updateInfo}
-        uiState={uiState}
-        downloadProgress={downloadProgress}
-        error={error}
-        onAccept={onAccept}
-        onLater={onLater}
-        onDismiss={onDismiss}
-        onRetry={onRetry}
-        onOpenReleasePage={onOpenReleasePage}
-        fullWindow={true}
-      />
+    <div className="h-screen bg-background/80 backdrop-blur-xl border border-border rounded-lg overflow-hidden sc-glow-transition sc-corner-accents shadow-glow-sm flex flex-col">
+      {/* Draggable header with data-tauri-drag-region */}
+      <div
+        data-tauri-drag-region
+        className="flex items-center justify-between px-3 py-2 border-b border-border bg-muted/50 shrink-0 cursor-move"
+      >
+        <h1 className="font-display text-sm font-medium uppercase tracking-wide">
+          Update Available
+        </h1>
+        {/* X button - behaves like "Ask Again Later" */}
+        <button
+          onClick={onLater}
+          disabled={uiState === "downloading" || uiState === "installing"}
+          className={`p-1 rounded sc-glow-transition ${
+            uiState === "downloading" || uiState === "installing"
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-muted/50 hover:shadow-glow-sm cursor-pointer"
+          }`}
+          aria-label="Close"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      {/* Content area */}
+      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+        {/* Version info */}
+        <div className="flex flex-col gap-1">
+          <p className="font-display text-sm text-foreground">
+            A new version is available!
+          </p>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span className="font-mono">v{updateInfo.currentVersion}</span>
+            <span className="text-primary">→</span>
+            <span className="font-mono text-primary font-medium">
+              v{updateInfo.version}
+            </span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Size: {formatSize(updateInfo.downloadSize)}
+          </p>
+        </div>
+
+        {/* Download progress (shown during download) */}
+        {uiState === "downloading" && downloadProgress && (
+          <DownloadProgress
+            bytesDownloaded={downloadProgress.bytesDownloaded}
+            totalBytes={downloadProgress.totalBytes}
+          />
+        )}
+
+        {/* Installing state */}
+        {uiState === "installing" && (
+          <div className="flex items-center gap-2 text-sm text-primary">
+            <div className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <span>Launching installer...</span>
+          </div>
+        )}
+
+        {/* Error state */}
+        {uiState === "error" && error && (
+          <div className="p-2 rounded bg-destructive/10 border border-destructive/20">
+            <p className="text-xs text-destructive">{error}</p>
+          </div>
+        )}
+
+        {/* Action buttons */}
+        <div className="flex flex-col gap-2">
+          {/* Show Accept/Later for available state */}
+          {uiState === "available" && (
+            <>
+              <Button
+                onClick={onAccept}
+                className="w-full gap-2"
+                variant="default"
+              >
+                <Download className="h-4 w-4" />
+                Update Now
+              </Button>
+              <Button
+                onClick={onLater}
+                variant="ghost"
+                className="w-full gap-2"
+              >
+                <Clock className="h-4 w-4" />
+                Ask Again Later
+              </Button>
+            </>
+          )}
+
+          {/* Show retry for error state */}
+          {uiState === "error" && (
+            <>
+              <Button
+                onClick={onRetry}
+                className="w-full gap-2"
+                variant="default"
+              >
+                <Download className="h-4 w-4" />
+                Retry Download
+              </Button>
+              <Button
+                onClick={onOpenReleasePage}
+                variant="ghost"
+                className="w-full gap-2"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Manual Download
+              </Button>
+            </>
+          )}
+
+          {/* Show cancel for downloading state */}
+          {uiState === "downloading" && (
+            <Button
+              onClick={onLater}
+              variant="ghost"
+              className="w-full"
+              disabled
+            >
+              Downloading...
+            </Button>
+          )}
+        </div>
+
+        {/* Release page link (available state only) */}
+        {uiState === "available" && (
+          <button
+            onClick={onOpenReleasePage}
+            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary sc-glow-transition cursor-pointer"
+          >
+            <ExternalLink className="h-3 w-3" />
+            View release notes
+          </button>
+        )}
+      </div>
     </div>
   );
 }
