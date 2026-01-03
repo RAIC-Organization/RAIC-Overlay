@@ -154,11 +154,11 @@ export function MainMenu({
               <Button variant="secondary" onClick={handleOpenClockWidget}>
                 Clock
               </Button>
-              <Button variant="secondary" onClick={handleOpenTimerWidget}>
+              <Button variant="secondary" onClick={handleOpenChronometerWidget}>
                 Timer
               </Button>
-              <Button variant="secondary" onClick={handleOpenChronometerWidget}>
-                Stopwatch
+              <Button variant="secondary" onClick={handleOpenTimerWidget}>
+                Session Timer
               </Button>
             </ButtonGroup>
           </div>
