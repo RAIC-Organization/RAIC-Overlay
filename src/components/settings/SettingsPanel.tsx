@@ -17,6 +17,7 @@ import { getVersion } from "@tauri-apps/api/app";
 import { X } from "lucide-react";
 import { HotkeyInput } from "./HotkeyInput";
 import { AutoStartToggle } from "./AutoStartToggle";
+import { UpdatesSection } from "./UpdatesSection";
 import type {
   UserSettings,
   LoadUserSettingsResult,
@@ -187,6 +188,9 @@ export function SettingsPanel() {
             }
           />
         </section>
+
+        {/* Updates Section - T052 */}
+        <UpdatesSection />
       </div>
 
       {/* Footer with Save button and version display */}
