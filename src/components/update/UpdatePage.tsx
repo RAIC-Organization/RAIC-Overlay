@@ -34,6 +34,8 @@ export function UpdatePage() {
 
   // Ref for installer path
   const installerPathRef = useRef<string | null>(null);
+  // Ref to prevent re-entry in close handler
+  const isClosingRef = useRef(false);
 
   // Format file size for display
   const formatSize = (bytes: number): string => {
@@ -177,12 +179,20 @@ export function UpdatePage() {
 
   // T017: Handle "Ask Again Later" - also used by X button
   const onLater = useCallback(async () => {
+    // Prevent re-entry (fixes infinite loop when close triggers onCloseRequested)
+    if (isClosingRef.current) {
+      return;
+    }
+
     if (uiState === "downloading" || uiState === "installing") {
       debug("UpdatePage: Cannot dismiss during download/install");
       return;
     }
 
     if (!updateInfo?.version) return;
+
+    // Set flag to prevent re-entry
+    isClosingRef.current = true;
 
     debug(`UpdatePage: User chose 'Ask Again Later' for version ${updateInfo.version}`);
 
