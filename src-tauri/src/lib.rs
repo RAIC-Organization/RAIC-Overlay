@@ -23,6 +23,8 @@ pub mod state;
 pub mod target_window;
 pub mod tray;
 pub mod types;
+// T010 (049): Auto-update module
+pub mod update;
 pub mod user_settings;
 pub mod user_settings_types;
 pub mod window;
@@ -487,6 +489,8 @@ pub fn run() {
         ))
         // T003 (039): Register prevent-default plugin to block browser shortcuts
         .plugin(get_prevent_default_plugin())
+        // T009 (049): Register process plugin for app exit during update
+        .plugin(tauri_plugin_process::init())
         // T036 (040): Register browser WebView plugin for navigation events
         .plugin(browser_webview::build_browser_webview_plugin())
         .plugin(hotkey::build_shortcut_plugin().build())
@@ -538,7 +542,14 @@ pub fn run() {
             // T054 (040): Browser WebView visibility commands
             browser_webview::set_browser_webview_visibility,
             browser_webview::set_all_browser_webviews_visibility,
-            browser_webview::destroy_all_browser_webviews
+            browser_webview::destroy_all_browser_webviews,
+            // T016, T025, T031 (049): Auto-update commands
+            update::check_for_updates,
+            update::download_update,
+            update::launch_installer_and_exit,
+            update::cleanup_old_installers,
+            update::dismiss_update,
+            update::get_update_state
         ])
         .setup(|app| {
             let handle = app.handle().clone();

@@ -27,6 +27,12 @@ tauri-plugin-log = "2"
 log = "0.4"
 chrono = "0.4"
 lazy_static = "1.4"
+# T001 (049): Auto-update dependencies
+reqwest = { version = "0.12", features = ["json", "stream"] }
+semver = "1"
+tokio-stream = "0.1"
+# T009 (049): Process plugin for app exit during update
+tauri-plugin-process = "2"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-global-shortcut = "2"

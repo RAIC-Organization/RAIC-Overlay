@@ -32,6 +32,8 @@ import { WidgetsProvider } from "@/contexts/WidgetsContext";
 import { WidgetsContainer } from "@/components/widgets/WidgetsContainer";
 import { useHydration } from "@/hooks/useHydration";
 import { useHotkeyCapture } from "@/hooks/useHotkeyCapture";
+import { useUpdateChecker } from "@/hooks/useUpdateChecker";
+import { UpdateNotification } from "@/components/update";
 import { useWindows } from "@/contexts/WindowsContext";
 import { NotesContent } from "@/components/windows/NotesContent";
 import { DrawContent } from "@/components/windows/DrawContent";
@@ -258,6 +260,9 @@ function OverlayContent({
   scanlinesEnabled: boolean;
   onScanlinesChange: (enabled: boolean) => void;
 }) {
+  // T020 (049): Auto-update checker hook
+  const update = useUpdateChecker();
+
   return (
     <div className="flex flex-col justify-between h-full relative">
       {/* Window restorer - runs once on mount */}
@@ -295,6 +300,20 @@ function OverlayContent({
         message={errorModal.message}
         autoDismissMs={errorModal.autoDismissMs}
         onDismiss={onDismissError}
+      />
+
+      {/* T020 (049): Update notification popup */}
+      <UpdateNotification
+        visible={update.visible}
+        updateInfo={update.updateInfo}
+        uiState={update.uiState}
+        downloadProgress={update.downloadProgress}
+        error={update.error}
+        onAccept={update.onAccept}
+        onLater={update.onLater}
+        onDismiss={update.onDismiss}
+        onRetry={update.onRetry}
+        onOpenReleasePage={update.onOpenReleasePage}
       />
     </div>
   );
