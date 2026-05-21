@@ -38,6 +38,7 @@ pub mod commands;
 use core::types::{OverlayReadyPayload, Position};
 use core::OverlayState;
 use persistence::{delete_window_content, load_state, save_state, save_window_content};
+use plugins::registry::PluginRegistryState;
 use tauri::{Emitter, Manager};
 
 // T002 (039): Helper function to get prevent-default plugin with conditional debug/release configuration
@@ -81,6 +82,12 @@ pub fn run() {
     let log_builder = logging::build_log_plugin(log_level);
 
     tauri::Builder::default()
+        // 060: register the custom URI scheme that serves plugin UI bundles
+        // from disk into plugin webviews
+        .register_uri_scheme_protocol(
+            plugins::runtime::protocol::SCHEME,
+            plugins::runtime::protocol::handle,
+        )
         .plugin(log_builder)
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
@@ -109,6 +116,8 @@ pub fn run() {
         .manage(browser::types::BrowserWebViewState::new())
         // T003 (051): Initialize UpdateWindowState for update notification window
         .manage(update::types::UpdateWindowState::default())
+        // 060: PluginRegistryState — populated from registry.json in setup()
+        .manage(PluginRegistryState::default())
         .invoke_handler(tauri::generate_handler![
             // Overlay commands (from commands module)
             commands::set_visibility,
@@ -169,7 +178,9 @@ pub fn run() {
             // T009 (051): Update window commands
             update::open_update_window,
             update::get_pending_update,
-            update::close_update_window
+            update::close_update_window,
+            // 060: Plugin JSON-RPC v1 entry point (single command for plugin webviews)
+            plugins::rpc::plugin_rpc
         ])
         .setup(|app| {
             let handle = app.handle().clone();
@@ -185,6 +196,22 @@ pub fn run() {
 
             // T026 (038): Initialize user settings cache
             settings::user::init_user_settings(&handle);
+
+            // 060: Load plugin registry from disk into managed state.
+            // Failure is non-fatal — we just start with an empty registry.
+            match plugins::registry::load_registry(&handle) {
+                Ok(reg) => {
+                    let state = app.state::<PluginRegistryState>();
+                    state.mutate(|r| *r = reg);
+                    log::info!(
+                        "[plugins] registry loaded ({} installed)",
+                        state.snapshot().plugins.len()
+                    );
+                }
+                Err(e) => {
+                    log::warn!("[plugins] failed to load registry: {e}; starting empty");
+                }
+            }
 
             // T006 (054): Conditionally open Settings panel on startup
             // If start_minimized is false (default), show Settings panel
