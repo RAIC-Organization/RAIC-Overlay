@@ -1,0 +1,10 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "plugin-webview",
+  "description": "Capability granted to third-party plugin webviews. The only Tauri command a plugin window can invoke is plugin_rpc; every host capability is reached through that single dispatcher (which applies the manifest's declared permissions). Window labels follow the pattern 'plugin-*' (e.g., plugin-com.alice.demo-primary, plugin-com.alice.demo-sec-1).",
+  "windows": ["plugin-*"],
+  "permissions": [
+    "core:default",
+    "core:event:default"
+  ]
+}

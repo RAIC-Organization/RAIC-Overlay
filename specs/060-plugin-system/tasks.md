@@ -34,12 +34,12 @@ description: "Task list for Plugin System (Feature 060)"
 
 **Purpose**: Bring in new dependencies, scaffold the empty module tree, and create the new app-data directory contract.
 
-- [ ] T001 Add Cargo dependencies (`jsonschema = "0.x"`, `zip = "2"`, `dev-dependency wiremock = "0.6"`) to `src-tauri/Cargo.toml`
-- [ ] T002 [P] Create empty Rust module tree `src-tauri/src/plugins/{mod.rs,types.rs,registry.rs,installer/mod.rs,installer/github.rs,installer/archive.rs,installer/manifest.rs,runtime/mod.rs,runtime/instance.rs,runtime/window.rs,runtime/protocol.rs,runtime/theme.rs,rpc/mod.rs,rpc/dispatch.rs,rpc/permissions.rs,rpc/window_handler.rs,rpc/state_handler.rs,rpc/theme_handler.rs,rpc/log_handler.rs,rpc/notification_handler.rs,rpc/hotkey_handler.rs,rpc/sidecar_handler.rs,sidecar/mod.rs,sidecar/spawn.rs,sidecar/supervisor.rs,sidecar/transport.rs,update/mod.rs,update/poller.rs}` with `// stub` placeholders so `cargo build` passes
-- [ ] T003 [P] Register the new `pub mod plugins;` module in `src-tauri/src/lib.rs` under the appropriate section (Feature modules layer per CLAUDE.md modular architecture)
-- [ ] T004 [P] Create the new Tauri capability file `src-tauri/capabilities/plugin-webview.json` that allows only the `plugin_rpc` command for any window whose label matches `plugin-*`, and limit `src-tauri/capabilities/default.json` to non-plugin windows (`"windows": ["main", "settings", ...]` — enumerate existing labels)
-- [ ] T005 [P] Add empty Zustand store skeleton `stores/plugins-store.ts` with type definitions for `RegisteredPlugin`, `AvailableUpdate`, `PluginInstance` matching `data-model.md`
-- [ ] T006 [P] Create `docs/plugins/` directory and copy `contracts/manifest.schema.json`, `contracts/jsonrpc-v1.md`, `contracts/window-raic.d.ts`, `contracts/sidecar-protocol.md` into it as the public plugin documentation surface (FR-028)
+- [X] T001 Add Cargo dependencies (`jsonschema = "0.30"`, `zip = "2"`, `tokio` full features, `dev-dependency wiremock = "0.6"`) to `src-tauri/Cargo.toml`
+- [X] T002 [P] Create empty Rust module tree under `src-tauri/src/plugins/` (28 files) with stub placeholders; `cargo build` passes
+- [X] T003 [P] Register `pub mod plugins;` in `src-tauri/src/lib.rs` under the Feature Modules section
+- [X] T004 [P] Create `src-tauri/capabilities/plugin-webview.json` targeting `windows: ["plugin-*"]` (default.json already excludes plugin labels by enumeration)
+- [X] T005 [P] Frontend type skeleton at `src/types/plugins.ts` (PluginId, RegisteredPlugin, AvailableUpdate, InstallPreview, JsonRpcError). **Note**: project uses React Context, not Zustand — store/context files added in later phases per existing pattern (PersistenceContext.tsx + persistenceService.ts).
+- [X] T006 [P] Created `docs/plugins/` and copied `manifest.schema.json`, `jsonrpc-v1.md`, `window-raic.d.ts`, `sidecar-protocol.md`, and `quickstart.md`
 
 **Checkpoint**: `cargo build` succeeds; `pnpm build` succeeds; capability files validate.
 

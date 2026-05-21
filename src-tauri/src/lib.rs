@@ -19,6 +19,8 @@ pub mod hotkey;
 pub mod browser;
 pub mod settings;
 pub mod update;
+// 060 (plugin-system): Third-party plugin runtime + installer
+pub mod plugins;
 
 // ============================================================================
 // Platform-specific modules - Windows-only functionality
