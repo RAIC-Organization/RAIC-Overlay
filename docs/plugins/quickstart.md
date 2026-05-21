@@ -4,6 +4,11 @@
 
 This walkthrough takes a plugin author from "empty folder" to "user can install my plugin from GitHub" in under an hour. It also documents the install flow from the end user's perspective.
 
+> Looking for the deep dive? See **[`plugin-development-guide.md`](plugin-development-guide.md)**
+> — a comprehensive reference covering manifest, UI, state, hotkeys,
+> notifications, sidecars, publishing, debugging, security, and best
+> practices.
+
 ---
 
 ## Part 1 — For plugin authors

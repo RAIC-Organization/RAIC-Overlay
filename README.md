@@ -88,11 +88,15 @@ your explicit consent. Plugins must publish source publicly on GitHub.
 
 ### Building Plugins
 
-See **[`docs/plugins/quickstart.md`](docs/plugins/quickstart.md)** for the
-full walkthrough — a minimal Hello World plugin is under 30 lines of
-HTML/JS and 10 lines of CSS. Authors can ship native sidecar binaries
-written in any language (Rust, Python, Node.js, Go, etc.) using the
-documented JSON-RPC v1 protocol.
+- **[Quickstart](docs/plugins/quickstart.md)** — 3-minute Hello World
+- **[Plugin Development Guide](docs/plugins/plugin-development-guide.md)** —
+  the full walkthrough: manifest, UI, state, hotkeys, notifications,
+  sidecars, publishing, debugging, security, best practices
+
+A minimal Hello World plugin is under 30 lines of HTML/JS and 10 lines
+of CSS. Authors can ship native sidecar binaries written in any
+language (Rust, Python, Node.js, Go, etc.) using the documented
+JSON-RPC v1 protocol.
 
 Plugin contracts:
 
