@@ -68,6 +68,10 @@ export function PluginsMenu() {
     return null;
   }
 
+  // Phase 6: count of enabled plugins with an available update — drives
+  // the badge on the menu trigger.
+  const updatesAvailable = enabledPlugins.filter((p) => p.availableUpdate).length;
+
   function handleTriggerKey(e: React.KeyboardEvent<HTMLButtonElement>) {
     if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -126,10 +130,23 @@ export function PluginsMenu() {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={menuId}
-        className="inline-flex items-center gap-1.5"
+        aria-label={
+          updatesAvailable > 0
+            ? `Plugins, ${updatesAvailable} update${updatesAvailable === 1 ? '' : 's'} available`
+            : 'Plugins'
+        }
+        className="inline-flex items-center gap-1.5 relative"
       >
         <Puzzle className="h-3.5 w-3.5" aria-hidden />
         Plugins
+        {updatesAvailable > 0 && (
+          <span
+            aria-hidden
+            className="ml-0.5 inline-flex items-center justify-center min-w-[1rem] h-4 px-1 rounded-full bg-amber-500 text-[10px] font-semibold text-background"
+          >
+            {updatesAvailable}
+          </span>
+        )}
         <ChevronDown className="h-3 w-3" aria-hidden />
       </Button>
 

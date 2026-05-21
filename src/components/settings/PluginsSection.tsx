@@ -135,7 +135,11 @@ export function PluginsSection() {
           ) : (
             <ul aria-label="Installed plugins">
               {plugins.map((p) => (
-                <PluginRow key={p.id} plugin={p} />
+                <PluginRow
+                  key={p.id}
+                  plugin={p}
+                  onUpdateRequested={(p) => setPreview(p)}
+                />
               ))}
             </ul>
           )}

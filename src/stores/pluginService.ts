@@ -83,6 +83,26 @@ export const pluginService = {
   async reloadRegistry(): Promise<void> {
     await invoke<null>('plugin_reload_registry');
   },
+
+  /** Toggle enabled state. Disabling tears down any running instance. */
+  async setEnabled(pluginId: string, enabled: boolean): Promise<void> {
+    await invoke<null>('plugin_set_enabled', { pluginId, enabled });
+  },
+
+  /** Remove a plugin entirely (files + state + registry entry). */
+  async uninstall(pluginId: string): Promise<void> {
+    await invoke<null>('plugin_uninstall', { pluginId });
+  },
+
+  /** Return on-disk size (bytes) of the plugin's state directory. */
+  async getStorageBytes(pluginId: string): Promise<number> {
+    return await invoke<number>('plugin_get_storage_bytes', { pluginId });
+  },
+
+  /** Force one poll cycle ("Check for updates" button). */
+  async checkUpdates(): Promise<void> {
+    await invoke<null>('plugin_check_updates');
+  },
 };
 
 // ---------------------------------------------------------------------------

@@ -64,18 +64,20 @@ export function PluginsProvider({ children }: { children: ReactNode }) {
     void refresh();
   }, [refresh]);
 
-  // The backend emits raic:plugin-installed after a successful confirm.
-  // Listen and refresh so the Settings list + the menu update without
-  // a manual reload.
+  // The backend emits four events that should refresh our list:
+  //   raic:plugin-installed         after confirm install
+  //   raic:plugin-changed           after enable/disable
+  //   raic:plugin-uninstalled       after uninstall
+  //   raic:plugin-update-available  after the daily poller detects upstream
   useEffect(() => {
-    let unlisten: UnlistenFn | null = null;
-    (async () => {
-      unlisten = await listen<string>('raic:plugin-installed', () => {
-        void refresh();
-      });
-    })();
+    const subs: Array<Promise<UnlistenFn>> = [
+      listen('raic:plugin-installed', () => void refresh()),
+      listen('raic:plugin-changed', () => void refresh()),
+      listen('raic:plugin-uninstalled', () => void refresh()),
+      listen('raic:plugin-update-available', () => void refresh()),
+    ];
     return () => {
-      if (unlisten) unlisten();
+      subs.forEach((p) => p.then((f) => f()).catch(() => {}));
     };
   }, [refresh]);
 

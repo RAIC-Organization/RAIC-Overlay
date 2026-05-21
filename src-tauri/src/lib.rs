@@ -197,6 +197,11 @@ pub fn run() {
             plugins::installer::plugin_install_cancel,
             plugins::installer::plugin_list,
             plugins::installer::plugin_reload_registry,
+            // 060 Phase 6: management commands (Settings UI)
+            plugins::installer::plugin_set_enabled,
+            plugins::installer::plugin_uninstall,
+            plugins::installer::plugin_get_storage_bytes,
+            plugins::installer::plugin_check_updates,
             // 060: Open a plugin's primary window from the Plugins menu
             plugins::runtime::instance::plugin_open
         ])
@@ -230,6 +235,9 @@ pub fn run() {
                     log::warn!("[plugins] failed to load registry: {e}; starting empty");
                 }
             }
+
+            // 060 Phase 6: start daily auto-update poller (initial delay 10 s)
+            plugins::update::poller::start(handle.clone());
 
             // T006 (054): Conditionally open Settings panel on startup
             // If start_minimized is false (default), show Settings panel
