@@ -8,7 +8,9 @@ use tauri::AppHandle;
 use tauri::Manager;
 
 use crate::plugins::registry::PluginRegistryState;
-use crate::plugins::rpc::{log_handler, state_handler, subscription, theme_handler, window_handler};
+use crate::plugins::rpc::{
+    log_handler, sidecar_handler, state_handler, subscription, theme_handler, window_handler,
+};
 use crate::plugins::types::{
     JsonRpcError, JsonRpcRequest, JsonRpcResponse, PluginId, RpcErrorCode,
 };
@@ -78,6 +80,13 @@ pub async fn dispatch(
         // permissions.* (no permission)
         "permissions.list" => permissions_list(&app, &plugin_id),
         "permissions.has" => permissions_has(&app, &plugin_id, &request.params),
+
+        // sidecar.* (permission: sidecar)
+        "sidecar.call" => sidecar_handler::call(&app, &plugin_id, &request.params).await,
+        "sidecar.onEvent" => {
+            sidecar_handler::on_event(&app, &plugin_id, &caller_label, &request.params)
+        }
+        "sidecar.status" => sidecar_handler::status(&app, &plugin_id, &request.params),
 
         _ => Err(JsonRpcError::new(
             RpcErrorCode::MethodNotFound,

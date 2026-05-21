@@ -218,7 +218,7 @@ pub fn on_focus_change(
 pub fn open_secondary(
     app: &AppHandle,
     plugin_id: &PluginId,
-    caller_label: &str,
+    _caller_label: &str,
     params: &Value,
 ) -> RpcResult {
     let caller_id = params

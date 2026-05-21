@@ -7,12 +7,16 @@
 
 use tauri::{AppHandle, Manager, WindowEvent};
 
+use std::sync::Arc;
+
 use crate::plugins::installer::manifest::{self, Manifest};
 use crate::plugins::registry::{plugin_install_dir, PluginRegistryState};
 use crate::plugins::rpc::subscription;
 use crate::plugins::rpc::window_handler::{self, PluginInstanceStore};
 use crate::plugins::runtime::theme::current_tokens;
 use crate::plugins::runtime::window::{create_plugin_window, plugin_window_label};
+use crate::plugins::sidecar::spawn::spawn_sidecar;
+use crate::plugins::sidecar::supervisor::{self, SidecarStore};
 use crate::plugins::types::PluginId;
 
 /// Open the plugin's primary window. Invoked when the user clicks the plugin
@@ -68,6 +72,27 @@ pub async fn plugin_open(app: AppHandle, plugin_id: PluginId) -> Result<String, 
     let store = app.state::<PluginInstanceStore>();
     store.record_primary(&plugin.id);
 
+    // 060 Phase 5: spawn the sidecar (if manifest declares one for our
+    // platform). Failure to spawn is non-fatal — the plugin UI just gets
+    // SidecarUnavailable on any sidecar.call.
+    if manifest.sidecar.is_some() {
+        match spawn_sidecar(&app, &plugin.id, &plugin.installed_version, &manifest).await {
+            Ok(Some(proc)) => {
+                let sidecar_store = app.state::<SidecarStore>();
+                sidecar_store.put(plugin.id.clone(), Arc::new(proc));
+            }
+            Ok(None) => {
+                log::warn!(
+                    "[plugin={}] sidecar declared but no binary for this platform — UI will see SidecarUnavailable",
+                    plugin.id
+                );
+            }
+            Err(e) => {
+                log::error!("[plugin={}] sidecar spawn failed: {e}", plugin.id);
+            }
+        }
+    }
+
     let teardown_app = app.clone();
     let teardown_id = plugin.id.clone();
     let teardown_label = label.clone();
@@ -100,7 +125,8 @@ pub async fn plugin_open(app: AppHandle, plugin_id: PluginId) -> Result<String, 
 }
 
 /// Tear down a plugin instance — invoked when the primary window's
-/// Destroyed event fires.
+/// Destroyed event fires. Closes secondaries, drops subscriptions, and
+/// gracefully shuts down the sidecar (if any).
 pub fn teardown_primary(app: &AppHandle, plugin_id: &PluginId, _primary_label: &str) {
     let store = app.state::<PluginInstanceStore>();
     let secondaries = store.drop_plugin(plugin_id);
@@ -111,6 +137,17 @@ pub fn teardown_primary(app: &AppHandle, plugin_id: &PluginId, _primary_label: &
         subscription::drop_all_for_window(app, sec_label);
     }
     subscription::drop_all_for_plugin(app, plugin_id);
+
+    // 060 Phase 5: sidecar shutdown (5s grace) in background.
+    let sidecar_store = app.state::<SidecarStore>();
+    if let Some(proc) = sidecar_store.take(plugin_id) {
+        let pid_for_log = plugin_id.clone();
+        tokio::spawn(async move {
+            supervisor::shutdown(&proc).await;
+            log::info!("[plugin={pid_for_log}] sidecar shut down");
+        });
+    }
+
     log::info!(
         "[plugin={plugin_id}] primary window closed → torn down ({} secondaries, all subs dropped)",
         secondaries.len()

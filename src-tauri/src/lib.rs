@@ -126,6 +126,8 @@ pub fn run() {
         .manage(plugins::rpc::state_handler::PluginStateCache::default())
         // 060: SubscriptionRegistry — owns *.on* registrations across handlers
         .manage(plugins::rpc::subscription::SubscriptionRegistry::default())
+        // 060: SidecarStore — keyed by plugin id → live SidecarProcess
+        .manage(plugins::sidecar::supervisor::SidecarStore::default())
         .invoke_handler(tauri::generate_handler![
             // Overlay commands (from commands module)
             commands::set_visibility,
