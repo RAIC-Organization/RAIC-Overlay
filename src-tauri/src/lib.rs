@@ -120,6 +120,12 @@ pub fn run() {
         .manage(PluginRegistryState::default())
         // 060: InstallPreviewStore — held between preview/confirm/cancel
         .manage(plugins::installer::InstallPreviewStore::default())
+        // 060: PluginInstanceStore — tracks live primary + secondary windows
+        .manage(plugins::rpc::window_handler::PluginInstanceStore::default())
+        // 060: PluginStateCache — per-plugin KV store backing state.* methods
+        .manage(plugins::rpc::state_handler::PluginStateCache::default())
+        // 060: SubscriptionRegistry — owns *.on* registrations across handlers
+        .manage(plugins::rpc::subscription::SubscriptionRegistry::default())
         .invoke_handler(tauri::generate_handler![
             // Overlay commands (from commands module)
             commands::set_visibility,

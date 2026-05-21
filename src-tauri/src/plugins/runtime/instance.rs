@@ -1,15 +1,17 @@
 // Plugin instance lifecycle.
 //
-// Phase 3 (US1 MVP): just spawn the primary window with the host's chrome.
-// Sidecar spawn (Phase 5), secondary windows (Phase 4 via window.openSecondary),
-// and full teardown bookkeeping are added in later phases.
+// plugin_open builds the primary window; we record it in the
+// PluginInstanceStore so future window.openSecondary calls can attach
+// secondaries. On primary-window close we tear the instance down: close
+// all secondaries, drop subscriptions, evict from the store.
 
-use std::collections::HashMap;
-
-use tauri::{AppHandle, Manager};
+use tauri::{AppHandle, Manager, WindowEvent};
 
 use crate::plugins::installer::manifest::{self, Manifest};
 use crate::plugins::registry::{plugin_install_dir, PluginRegistryState};
+use crate::plugins::rpc::subscription;
+use crate::plugins::rpc::window_handler::{self, PluginInstanceStore};
+use crate::plugins::runtime::theme::current_tokens;
 use crate::plugins::runtime::window::{create_plugin_window, plugin_window_label};
 use crate::plugins::types::PluginId;
 
@@ -25,8 +27,6 @@ pub async fn plugin_open(app: AppHandle, plugin_id: PluginId) -> Result<String, 
         return Err(format!("plugin disabled: {plugin_id}"));
     }
 
-    // Load the manifest from the install dir so we know the entry path,
-    // default size, etc.
     let install_dir = plugin_install_dir(&app, &plugin.id, &plugin.installed_version)?;
     let manifest_path = install_dir.join("raic-plugin.json");
     let manifest_bytes = std::fs::read(&manifest_path)
@@ -38,15 +38,11 @@ pub async fn plugin_open(app: AppHandle, plugin_id: PluginId) -> Result<String, 
 
     // If the window already exists (re-open), focus it.
     if let Some(existing) = app.get_webview_window(&label) {
-        existing
-            .set_focus()
-            .map_err(|e| format!("set_focus: {e}"))?;
+        existing.set_focus().map_err(|e| format!("set_focus: {e}"))?;
         existing.show().map_err(|e| format!("show: {e}"))?;
         return Ok(label);
     }
 
-    // Build the entry URL. On Windows the custom-scheme path is served as
-    // http://plugin.localhost/<id>/<entry-path> by the protocol handler.
     let entry = manifest.entry.ui.replace('\\', "/");
     let url_str = format!("http://plugin.localhost/{}/{}", plugin.id, entry);
     let entry_url = tauri::Url::parse(&url_str).map_err(|e| format!("parse url: {e}"))?;
@@ -54,10 +50,7 @@ pub async fn plugin_open(app: AppHandle, plugin_id: PluginId) -> Result<String, 
     let width = manifest.entry.default_width.unwrap_or(480) as f64;
     let height = manifest.entry.default_height.unwrap_or(320) as f64;
 
-    // Phase 3 ships an empty theme-token map; the real SC HUD tokens land in
-    // Phase 4 (T045). Plugins that opt into var(--raic-*) tokens before that
-    // will resolve to invalid CSS, which is acceptable for an MVP.
-    let theme_tokens: HashMap<&'static str, String> = HashMap::new();
+    let theme_tokens = current_tokens();
 
     let window = create_plugin_window(
         &app,
@@ -71,12 +64,55 @@ pub async fn plugin_open(app: AppHandle, plugin_id: PluginId) -> Result<String, 
     )
     .map_err(|e| format!("create plugin window: {e}"))?;
 
+    // Track the instance + wire teardown on window close.
+    let store = app.state::<PluginInstanceStore>();
+    store.record_primary(&plugin.id);
+
+    let teardown_app = app.clone();
+    let teardown_id = plugin.id.clone();
+    let teardown_label = label.clone();
+    window.on_window_event(move |event| {
+        // CloseRequested fires before the window is destroyed, Destroyed
+        // after. Use Destroyed so any owned secondaries we close don't
+        // re-emit the cleanup loop.
+        if matches!(event, WindowEvent::Destroyed) {
+            teardown_primary(&teardown_app, &teardown_id, &teardown_label);
+        }
+    });
+
+    // Focus-change event → emit window.onFocusChange subscriptions.
+    let focus_app = app.clone();
+    let focus_id = plugin.id.clone();
+    let focus_label = label.clone();
+    window.on_window_event(move |event| {
+        if let WindowEvent::Focused(focused) = event {
+            window_handler::fire_focus_change(&focus_app, &focus_id, &focus_label, *focused);
+        }
+    });
+
+    let _ = window.set_focus();
     log::info!(
-        "[plugin={}] opened primary window label={} from {}",
+        "[plugin={}] opened primary window {label} from {}",
         plugin.id,
-        label,
         manifest.entry.ui
     );
-    let _ = window.set_focus();
     Ok(label)
+}
+
+/// Tear down a plugin instance — invoked when the primary window's
+/// Destroyed event fires.
+pub fn teardown_primary(app: &AppHandle, plugin_id: &PluginId, _primary_label: &str) {
+    let store = app.state::<PluginInstanceStore>();
+    let secondaries = store.drop_plugin(plugin_id);
+    for sec_label in &secondaries {
+        if let Some(win) = app.get_webview_window(sec_label) {
+            let _ = win.close();
+        }
+        subscription::drop_all_for_window(app, sec_label);
+    }
+    subscription::drop_all_for_plugin(app, plugin_id);
+    log::info!(
+        "[plugin={plugin_id}] primary window closed → torn down ({} secondaries, all subs dropped)",
+        secondaries.len()
+    );
 }

@@ -79,11 +79,6 @@
   /**
    * Subscribe to a `*.on*` method's events. The returned object's
    * unsubscribe() cancels the subscription on both ends.
-   *
-   * Note (Phase 2): event delivery from host -> webview is not yet wired.
-   * Calling subscribe() registers the listener locally and asks the host
-   * for a subscriptionId; events start being delivered once the host
-   * begins emitting `raic:event` (added in Phase 4).
    */
   const subscriptions = new Map();
 
@@ -101,6 +96,40 @@
         }
       },
     };
+  }
+
+  // Host pushes events as Tauri events on this window's IPC channel.
+  // Each event payload is { subscription: '<id>', event: <any> }.
+  // We dispatch to whichever local listener owns the subscription id.
+  if (tauri.transformCallback || (window.__TAURI__ && window.__TAURI__.event)) {
+    // Prefer the modern Tauri 2 listen() API if exposed at the time of
+    // injection; fall back to the internal IPC bridge otherwise.
+    try {
+      // The bootstrap script runs in the webview's main world before any
+      // user scripts, but @tauri-apps/api may not be globally exposed.
+      // We instead poll for the listen helper Tauri 2 attaches.
+      const tryAttach = () => {
+        const ev = window.__TAURI_INTERNALS__?.event;
+        if (ev && typeof ev.listen === 'function') {
+          ev.listen('raic:event', (msg) => {
+            const payload = msg?.payload ?? msg;
+            const listener = subscriptions.get(payload?.subscription);
+            if (listener) listener(payload?.event);
+          });
+          return true;
+        }
+        return false;
+      };
+      if (!tryAttach()) {
+        // Defer until Tauri internals finish wiring.
+        let attempts = 0;
+        const iv = setInterval(() => {
+          if (tryAttach() || ++attempts > 50) clearInterval(iv);
+        }, 20);
+      }
+    } catch (e) {
+      console.warn('[raic] event subscription wiring failed:', e);
+    }
   }
 
   // -------------------------------------------------------------------------

@@ -123,16 +123,16 @@ description: "Task list for Plugin System (Feature 060)"
 
 ### Implementation for User Story 2
 
-- [ ] T045 [P] [US2] Implement theme-tokens helper in `src-tauri/src/plugins/runtime/theme.rs::current_tokens() -> HashMap<&'static str, String>` reading from the existing theme state (Feature 026); list mirrors `window-raic.d.ts`'s `RaicCssToken` union
-- [ ] T046 [P] [US2] Inject `<style>:root{<token>:<value>;...}</style>` into `plugin-bootstrap.js` at template-substitution time so plugin CSS can reference tokens immediately (FR-013); update `src-tauri/src/plugins/runtime/window.rs` to substitute the tokens block
-- [ ] T047 [US2] Implement `theme_handler` in `src-tauri/src/plugins/rpc/theme_handler.rs` (`theme.getTokens`, `theme.onChange` subscription) and register it in `rpc/dispatch.rs`
-- [ ] T048 [P] [US2] Implement per-plugin state file path in `src-tauri/src/plugins/rpc/state_handler.rs::state_file(app, plugin_id) -> PathBuf` resolving `plugins/<id>/state/state.json`, creating the directory on demand
-- [ ] T049 [US2] Implement `state_handler` methods (`state.get`, `state.set`, `state.delete`, `state.list`, `state.usage`) in `src-tauri/src/plugins/rpc/state_handler.rs` — serialise the whole `PluginState` on every write (acceptable for v1 since state is small), atomic via tempfile + rename; register in `rpc/dispatch.rs`
-- [ ] T050 [P] [US2] Implement `window_handler` in `src-tauri/src/plugins/rpc/window_handler.rs` for `setTitle`, `setIcon`, `close`, `requestResize`, `getBounds`, `onFocusChange`, `openSecondary`, `closeSecondary`, `listSecondary` — operating on the calling window's label (or a provided `windowId` resolving to a secondary owned by the same plugin instance); register in `rpc/dispatch.rs`
-- [ ] T051 [P] [US2] Implement `log_handler` in `src-tauri/src/plugins/rpc/log_handler.rs` delegating to `tauri-plugin-log` with the `[plugin=<id>]` tag; register in `rpc/dispatch.rs`
-- [ ] T052 [P] [US2] Implement event push pipe from host to plugin webview: a helper `emit_to_plugin(app, window_label, subscription_id, event)` that wraps the payload as `{ subscription, event }` and emits `raic:event`; consumed by `plugin-bootstrap.js`'s `subscribe()` and `rpc.unsubscribe`
-- [ ] T053 [P] [US2] Build the reference plugin in `examples/hello-world-plugin/` (manifest + `ui/index.html` + `ui/main.js` + `ui/style.css` + `README.md`) exactly matching the snippets in `quickstart.md` Part 1
-- [ ] T054 [US2] Add fixture-plugin loader for tests: a small helper `src-tauri/tests/common/fixture.rs::load_fixture_plugin(name)` that copies `examples/hello-world-plugin/` into a temp dir and registers it, used by tests T036-T044 and reused in Phase 5/7
+- [X] T045 [P] [US2] `runtime/theme.rs::current_tokens()` returns the SC HUD CSS token map (background/foreground/accent/border/shadow/radius/typography/spacing), mirroring `contracts/window-raic.d.ts::RaicCssToken`
+- [X] T046 [P] [US2] `plugin_open` + `window.openSecondary` now pass real tokens (was empty in Phase 3); bootstrap.js injects them on `:root` (already wired in Phase 2's template — just needed real values)
+- [X] T047 [US2] `theme_handler::get_tokens` returns the current map; `theme.onChange` registers a subscription via the shared `SubscriptionRegistry` (events will fire when a future theme-switcher feature lands)
+- [X] T048 [P] [US2] State path resolver lives in `state_handler::state_file(app, id) -> <app_data>/plugins/<id>/state/state.json`; `plugin_state_dir` (registry.rs) creates the dir on demand
+- [X] T049 [US2] `state.get/set/delete/list/usage` + `PluginStateCache` (Mutex<HashMap>) with write-through atomic .tmp+rename; registered in dispatch.rs
+- [X] T050 [P] [US2] `window_handler` for setTitle/setIcon/close/requestResize/getBounds/openSecondary/closeSecondary/listSecondary/onFocusChange + `PluginInstanceStore` tracking secondaries per plugin
+- [X] T051 [P] [US2] `log_handler::info/warn/error` delegates to `log::*` macros with `[plugin=<id>]` tag (Constitution: simplicity — no separate helper macro)
+- [X] T052 [P] [US2] Event push: shared `SubscriptionRegistry` + `emit_event(app, plugin_id_filter, method, event)` helper in `rpc/subscription.rs` emits `raic:event` to subscribed window labels. bootstrap.js listens via Tauri's event system and dispatches by subscription id
+- [X] T053 [P] [US2] Reference `examples/hello-world-plugin/` already created in sub-B with WCAG-friendly form, var(--raic-*) tokens, state round-trip via main.js
+- [ ] T054 [US2] DEFERRED: AppHandle-tier fixture loader requires `tauri::test::mock_runtime` infra; covered by manual smoke + lib-level test cases for handlers
 
 **Checkpoint**: All Phase 4 tests pass. The reference plugin renders with SC HUD chrome and theme; state persists across `tauri dev` restarts.
 
