@@ -38,6 +38,7 @@ jsonschema = "0.30"
 zip = "2"
 tokio = { version = "1", features = ["full"] }
 url = "2"
+tempfile = "3"
 
 [dev-dependencies]
 # T001 (060): Mock HTTP server for plugin install / GitHub Releases API tests

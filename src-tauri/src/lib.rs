@@ -118,6 +118,8 @@ pub fn run() {
         .manage(update::types::UpdateWindowState::default())
         // 060: PluginRegistryState — populated from registry.json in setup()
         .manage(PluginRegistryState::default())
+        // 060: InstallPreviewStore — held between preview/confirm/cancel
+        .manage(plugins::installer::InstallPreviewStore::default())
         .invoke_handler(tauri::generate_handler![
             // Overlay commands (from commands module)
             commands::set_visibility,
@@ -180,7 +182,15 @@ pub fn run() {
             update::get_pending_update,
             update::close_update_window,
             // 060: Plugin JSON-RPC v1 entry point (single command for plugin webviews)
-            plugins::rpc::plugin_rpc
+            plugins::rpc::plugin_rpc,
+            // 060: Plugin installer commands (Settings UI)
+            plugins::installer::plugin_install_preview,
+            plugins::installer::plugin_install_confirm,
+            plugins::installer::plugin_install_cancel,
+            plugins::installer::plugin_list,
+            plugins::installer::plugin_reload_registry,
+            // 060: Open a plugin's primary window from the Plugins menu
+            plugins::runtime::instance::plugin_open
         ])
         .setup(|app| {
             let handle = app.handle().clone();
