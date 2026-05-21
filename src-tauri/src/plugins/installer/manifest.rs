@@ -278,4 +278,41 @@ mod tests {
     fn rejects_non_github_url() {
         assert!(parse_github_repo("https://gitlab.com/alice/demo").is_none());
     }
+
+    #[test]
+    fn accepts_unknown_permission_name_at_schema_level() {
+        // T110 / spec edge case: an unknown permission name must not break the
+        // manifest parse. The consent dialog separately classifies it as
+        // "unrecognized permission" (verified in the InstallPreview struct
+        // logic — see installer/mod.rs::plugin_install_preview).
+        let mut j = minimal_manifest_json();
+        j["permissions"] = serde_json::json!(["notifications", "future-cool-thing"]);
+        let bytes = serde_json::to_vec(&j).unwrap();
+        let m = validate_and_parse(&bytes).expect("unknown permission must not break parse (T110)");
+        assert!(m.permissions.contains(&"future-cool-thing".to_string()));
+        // Permission::parse classifies it as Unknown
+        let perm = crate::plugins::types::Permission::parse("future-cool-thing");
+        assert!(!perm.is_known());
+    }
+
+    #[test]
+    fn accepts_partial_platform_sidecar() {
+        // T109 / spec edge case: a sidecar declared only for some platforms
+        // must validate. The runtime decides whether to actually spawn it on
+        // a per-OS basis (data-model.md §E-6 edge case).
+        let mut j = minimal_manifest_json();
+        j["permissions"] = serde_json::json!(["sidecar"]);
+        j["sidecar"] = serde_json::json!({
+            "platforms": {
+                "linux-x86_64": { "bin": "bin/linux-x86_64/sc" }
+                // Note: deliberately NO windows-x86_64 entry
+            }
+        });
+        let bytes = serde_json::to_vec(&j).unwrap();
+        let m = validate_and_parse(&bytes).expect("partial-platform sidecar must validate (T109)");
+        let sidecar = m.sidecar.expect("sidecar field");
+        assert_eq!(sidecar.platforms.len(), 1);
+        assert!(sidecar.platforms.contains_key("linux-x86_64"));
+        assert!(!sidecar.platforms.contains_key("windows-x86_64"));
+    }
 }

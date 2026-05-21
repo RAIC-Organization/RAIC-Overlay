@@ -141,4 +141,20 @@ mod tests {
         let err = extract_into(&zpath, dest.path()).expect_err("should reject zip-slip");
         assert!(err.contains("zip-slip"));
     }
+
+    #[test]
+    fn rejects_absolute_path_entry() {
+        // Windows-shaped absolute path inside a zip entry — must be rejected
+        // even though it doesn't contain `..`.
+        let zip_bytes = make_zip(&[("C:/Windows/System32/evil.txt", b"x")]);
+        let zpath = write_temp_zip(&zip_bytes);
+        let dest = tempfile::tempdir().unwrap();
+        let err = extract_into(&zpath, dest.path())
+            .expect_err("absolute path must be rejected");
+        let lower = err.to_lowercase();
+        assert!(
+            lower.contains("zip-slip") || lower.contains("escape"),
+            "unexpected error: {err}"
+        );
+    }
 }

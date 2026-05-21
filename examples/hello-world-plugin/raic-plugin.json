@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raic-overlay.app/schemas/plugin-manifest/v1.json",
+  "manifest_version": 1,
+  "id": "com.raic.hello-world",
+  "name": "Hello World",
+  "version": "0.1.0",
+  "author": "RAIC Overlay",
+  "description": "Reference plugin used by tests and the developer quickstart. Says hi and remembers your name across restarts.",
+  "source_repo_url": "https://github.com/RAIC-Organization/RAIC-Overlay",
+  "min_host_version": "1.0.0",
+  "protocol_version": 1,
+  "entry": {
+    "ui": "ui/index.html",
+    "default_width": 320,
+    "default_height": 200
+  },
+  "permissions": [],
+  "license": "MIT"
+}
