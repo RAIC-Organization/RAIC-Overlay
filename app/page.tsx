@@ -25,10 +25,14 @@ import { AppIcon } from "@/components/AppIcon";
 import { ErrorModal } from "@/components/ErrorModal";
 import { MainMenu } from "@/components/MainMenu";
 import { LoadingScreen } from "@/components/LoadingScreen";
+// 060 Phase 7: in-overlay surface for plugin-emitted notifications
+import { PluginNotifications } from "@/components/PluginNotifications";
 import { WindowsProvider } from "@/contexts/WindowsContext";
 import { PersistenceProvider, usePersistenceContext } from "@/contexts/PersistenceContext";
 import { WindowsContainer } from "@/components/windows/WindowsContainer";
 import { WidgetsProvider } from "@/contexts/WidgetsContext";
+// 060: Installed-plugins context used by both MainMenu and the Settings panel
+import { PluginsProvider } from "@/contexts/PluginsContext";
 import { WidgetsContainer } from "@/components/widgets/WidgetsContainer";
 import { useHydration } from "@/hooks/useHydration";
 import { useHotkeyCapture } from "@/hooks/useHotkeyCapture";
@@ -308,6 +312,9 @@ function OverlayContent({
       {/* T024 (051): Update notification moved to dedicated update window */}
       {/* The update window is opened by the backend when an update is found. */}
       {/* See app/update/page.tsx and src/components/update/UpdatePage.tsx */}
+
+      {/* 060 Phase 7: plugin-emitted toast notifications (role=status / aria-live) */}
+      <PluginNotifications />
     </div>
   );
 }
@@ -588,16 +595,18 @@ export default function Home() {
           overlayMode={state.mode as 'windowed' | 'fullscreen'}
           overlayVisible={state.visible}
         >
-          <OverlayContent
-            state={state}
-            errorModal={errorModal}
-            onDismissError={handleDismissError}
-            hydratedWindows={hydratedState.windows}
-            hydratedContents={hydratedContents}
-            hydratedWidgets={hydratedWidgets}
-            scanlinesEnabled={scanlinesEnabled}
-            onScanlinesChange={setScanlinesEnabled}
-          />
+          <PluginsProvider>
+            <OverlayContent
+              state={state}
+              errorModal={errorModal}
+              onDismissError={handleDismissError}
+              hydratedWindows={hydratedState.windows}
+              hydratedContents={hydratedContents}
+              hydratedWidgets={hydratedWidgets}
+              scanlinesEnabled={scanlinesEnabled}
+              onScanlinesChange={setScanlinesEnabled}
+            />
+          </PluginsProvider>
         </PersistenceProvider>
       </WidgetsProvider>
     </WindowsProvider>

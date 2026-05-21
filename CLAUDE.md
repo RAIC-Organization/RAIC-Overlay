@@ -1,4 +1,4 @@
-﻿# RAICOverlay Development Guidelines
+# RAICOverlay Development Guidelines
 
 Auto-generated from all feature plans. Last updated: 2025-12-22
 
@@ -106,6 +106,8 @@ Auto-generated from all feature plans. Last updated: 2025-12-22
 - TypeScript 5.7.2, React 19.0.0 + Next.js 16.x, motion 12.x, shadcn/ui (Button, ButtonGroup) (058-timer-menu-rename)
 - N/A (UI-only change) (058-timer-menu-rename)
 - Markdown (README), JSON (package.json, tauri.conf.json), TOML (Cargo.toml) + N/A (documentation and configuration files only) (059-readme-v1-release)
+- Rust 2021 Edition (backend, requires 1.92+, matches the existing host), TypeScript 5.7.2 (React 19.0.0 frontend, Next.js 16.x). (060-plugin-system)
+- JSON files in the Tauri app data directory: (060-plugin-system)
 
 - Rust 1.92 (backend/native), TypeScript 5.x (React UI) + Tauri 2.x (Rust-React bridge, native window management), React 19.2 (UI layer) (001-rust-overlay-init)
 
@@ -130,9 +132,9 @@ Rust 1.92: Follow standard conventions
 TypeScript/React 19.2: Follow standard conventions
 
 ## Recent Changes
+- 060-plugin-system: Added Rust 2021 Edition (backend, requires 1.92+, matches the existing host), TypeScript 5.7.2 (React 19.0.0 frontend, Next.js 16.x).
 - 059-readme-v1-release: Added Markdown (README), JSON (package.json, tauri.conf.json), TOML (Cargo.toml) + N/A (documentation and configuration files only)
 - 058-timer-menu-rename: Added TypeScript 5.7.2, React 19.0.0 + Next.js 16.x, motion 12.x, shadcn/ui (Button, ButtonGroup)
-- 057-disable-text-select: Added TypeScript 5.7.2 (React 19.0.0 frontend), CSS (Tailwind CSS 4.x) + Next.js 16.x, Tailwind CSS 4.x, React 19.0.0, TipTap 3.13.0, Excalidraw 0.18.0
 
 
 <!-- MANUAL ADDITIONS START -->
@@ -247,3 +249,8 @@ src-tauri/src/
 5. Run `cargo build` to verify compilation
 
 <!-- MANUAL ADDITIONS END -->
+
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan
+<!-- SPECKIT END -->

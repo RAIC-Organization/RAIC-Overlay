@@ -20,6 +20,9 @@ import { HotkeyInput } from "./HotkeyInput";
 import { AutoStartToggle } from "./AutoStartToggle";
 import { StartMinimizedToggle } from "./StartMinimizedToggle";
 import { UpdatesSection } from "./UpdatesSection";
+// 060: Plugins management section
+import { PluginsSection } from "./PluginsSection";
+import { PluginsProvider } from "@/contexts/PluginsContext";
 import type {
   UserSettings,
   LoadUserSettingsResult,
@@ -211,6 +214,11 @@ export function SettingsPanel() {
 
         {/* Updates Section - T052 */}
         <UpdatesSection />
+
+        {/* 060: Plugins management section */}
+        <PluginsProvider>
+          <PluginsSection />
+        </PluginsProvider>
       </div>
 
       {/* Footer with Save button and version display */}

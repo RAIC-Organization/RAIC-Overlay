@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raic-overlay.app/schemas/plugin-manifest/v1.json",
+  "title": "RAIC Overlay Plugin Manifest v1",
+  "description": "Authoritative schema for the raic-plugin.json file shipped with every plugin release.",
+  "type": "object",
+  "required": [
+    "manifest_version",
+    "id",
+    "name",
+    "version",
+    "author",
+    "description",
+    "source_repo_url",
+    "min_host_version",
+    "protocol_version",
+    "entry",
+    "permissions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "Pointer to this JSON Schema for editor autocomplete. Not used by the host."
+    },
+    "manifest_version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Schema version of this manifest file."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*){1,}$",
+      "minLength": 5,
+      "maxLength": 120,
+      "description": "Globally unique reverse-DNS-style plugin id, e.g. com.alice.build-order-tracker."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "description": "Human-readable display name."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-(?:(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+[0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*)?$",
+      "description": "SemVer 2.0.0 version, matching the GitHub release tag (with or without leading 'v')."
+    },
+    "author": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280,
+      "description": "Short description shown in the install consent screen and Settings list."
+    },
+    "source_repo_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://github\\.com/[^/]+/[^/]+/?$",
+      "description": "GitHub repository URL. Only github.com is allowed in v1."
+    },
+    "min_host_version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+      "description": "Minimum RAIC Overlay version required. Install is rejected if the running host is older."
+    },
+    "protocol_version": {
+      "type": "integer",
+      "const": 1,
+      "description": "JSON-RPC protocol version this plugin targets."
+    },
+    "entry": {
+      "type": "object",
+      "required": ["ui"],
+      "additionalProperties": false,
+      "properties": {
+        "ui": {
+          "type": "string",
+          "pattern": "^[^/\\\\][^\\\\]*$",
+          "description": "Relative path within the bundle to the primary window's HTML file, e.g. ui/index.html. Must not start with / or \\ and must not contain backslashes."
+        },
+        "default_width": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 4000,
+          "default": 480
+        },
+        "default_height": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 4000,
+          "default": 320
+        }
+      }
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "description": "Capability groups the plugin needs. Known values in v1: 'notifications', 'hotkeys', 'sidecar'. Unknown values are surfaced in the consent screen as 'unrecognized permission' but do not block install."
+    },
+    "sidecar": {
+      "type": ["object", "null"],
+      "required": ["platforms"],
+      "additionalProperties": false,
+      "properties": {
+        "platforms": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "required": ["bin"],
+            "additionalProperties": false,
+            "properties": {
+              "bin": {
+                "type": "string",
+                "pattern": "^[^/\\\\][^\\\\]*$",
+                "description": "Relative path to the executable within the bundle."
+              },
+              "args": {
+                "type": "array",
+                "items": { "type": "string" },
+                "default": []
+              }
+            }
+          },
+          "description": "Map of platform id (e.g. 'windows-x86_64') to its binary location."
+        }
+      }
+    },
+    "icon": {
+      "type": "string",
+      "pattern": "^[^/\\\\][^\\\\]*\\.(png|svg)$",
+      "description": "Relative path to a PNG or SVG icon shown in the Plugins dropdown."
+    },
+    "license": {
+      "type": "string",
+      "description": "SPDX license identifier (e.g. 'MIT', 'Apache-2.0'). Informational."
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional project homepage shown in Settings."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "sidecar": { "type": "object" } },
+        "required": ["sidecar"]
+      },
+      "then": {
+        "properties": {
+          "permissions": {
+            "contains": { "const": "sidecar" }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -75,6 +75,43 @@ Small utility widgets that stay visible on your overlay:
 - **Session Timer** - Track how long you've been playing
 - **Chronometer** - Stopwatch and countdown timer
 
+## Plugins
+
+RAIC Overlay supports third-party plugins distributed as public GitHub
+repositories. Open **Settings → Plugins**, paste a plugin's GitHub URL,
+review the consent screen, and confirm — the plugin appears in a
+conditional "Plugins" entry in the main overlay menu.
+
+The end user is the trust authority: the host shows source URL,
+requested permissions, and any shipped native binaries, then installs at
+your explicit consent. Plugins must publish source publicly on GitHub.
+
+### Building Plugins
+
+- **[Quickstart](docs/plugins/quickstart.md)** — 3-minute Hello World
+- **[Plugin Development Guide](docs/plugins/plugin-development-guide.md)** —
+  the full walkthrough: manifest, UI, state, hotkeys, notifications,
+  sidecars, publishing, debugging, security, best practices
+
+A minimal Hello World plugin is under 30 lines of HTML/JS and 10 lines
+of CSS. Authors can ship native sidecar binaries written in any
+language (Rust, Python, Node.js, Go, etc.) using the documented
+JSON-RPC v1 protocol.
+
+Plugin contracts:
+
+- [Manifest JSON Schema](docs/plugins/manifest.schema.json) — the
+  authoritative `raic-plugin.json` shape; reference it via `"$schema"`
+  for autocompletion in your editor.
+- [JSON-RPC v1 method catalog](docs/plugins/jsonrpc-v1.md) — every
+  method, parameter, return shape, and error code that plugins can call.
+- [`window.raic` TypeScript types](docs/plugins/window-raic.d.ts) —
+  ambient types for the global injected into your plugin webview.
+- [Sidecar protocol](docs/plugins/sidecar-protocol.md) — stdio framing
+  and lifecycle for native helper binaries.
+- [Reference sidecars](examples/sidecars/) — minimal implementations in
+  Rust, Python, and Node.js.
+
 ## License
 
 MIT License

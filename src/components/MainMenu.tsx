@@ -13,6 +13,8 @@
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
+// 060: Conditional Plugins entry — hidden when no plugins installed (FR-012a)
+import { PluginsMenu } from "@/components/PluginsMenu";
 import { OverlayMode } from "@/types/overlay";
 import { WindowRect } from "@/types/ipc";
 import { windowEvents } from "@/lib/windowEvents";
@@ -170,6 +172,11 @@ export function MainMenu({
               onChange={handleScanlinesChange}
               onCommit={() => {/* Persistence handled by parent */}}
             />
+          </div>
+
+          {/* 060: Conditional Plugins dropdown — self-hides when 0 enabled plugins (FR-012a) */}
+          <div className="flex items-center gap-1 ml-2 pl-2">
+            <PluginsMenu />
           </div>
         </motion.div>
       )}
