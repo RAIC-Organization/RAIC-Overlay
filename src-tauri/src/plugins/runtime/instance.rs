@@ -148,6 +148,9 @@ pub fn teardown_primary(app: &AppHandle, plugin_id: &PluginId, _primary_label: &
         });
     }
 
+    // 060 Phase 7: release any hotkeys this plugin had registered.
+    crate::plugins::rpc::hotkey_handler::release_all(app, plugin_id);
+
     log::info!(
         "[plugin={plugin_id}] primary window closed → torn down ({} secondaries, all subs dropped)",
         secondaries.len()

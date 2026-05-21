@@ -25,6 +25,8 @@ import { AppIcon } from "@/components/AppIcon";
 import { ErrorModal } from "@/components/ErrorModal";
 import { MainMenu } from "@/components/MainMenu";
 import { LoadingScreen } from "@/components/LoadingScreen";
+// 060 Phase 7: in-overlay surface for plugin-emitted notifications
+import { PluginNotifications } from "@/components/PluginNotifications";
 import { WindowsProvider } from "@/contexts/WindowsContext";
 import { PersistenceProvider, usePersistenceContext } from "@/contexts/PersistenceContext";
 import { WindowsContainer } from "@/components/windows/WindowsContainer";
@@ -310,6 +312,9 @@ function OverlayContent({
       {/* T024 (051): Update notification moved to dedicated update window */}
       {/* The update window is opened by the backend when an update is found. */}
       {/* See app/update/page.tsx and src/components/update/UpdatePage.tsx */}
+
+      {/* 060 Phase 7: plugin-emitted toast notifications (role=status / aria-live) */}
+      <PluginNotifications />
     </div>
   );
 }

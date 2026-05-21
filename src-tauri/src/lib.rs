@@ -128,6 +128,9 @@ pub fn run() {
         .manage(plugins::rpc::subscription::SubscriptionRegistry::default())
         // 060: SidecarStore — keyed by plugin id → live SidecarProcess
         .manage(plugins::sidecar::supervisor::SidecarStore::default())
+        // 060: PluginHotkeyRegistry — tracks runtime hotkey registrations
+        // per plugin for clean teardown
+        .manage(plugins::rpc::hotkey_handler::PluginHotkeyRegistry::default())
         .invoke_handler(tauri::generate_handler![
             // Overlay commands (from commands module)
             commands::set_visibility,

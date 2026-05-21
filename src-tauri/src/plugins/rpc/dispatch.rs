@@ -9,7 +9,8 @@ use tauri::Manager;
 
 use crate::plugins::registry::PluginRegistryState;
 use crate::plugins::rpc::{
-    log_handler, sidecar_handler, state_handler, subscription, theme_handler, window_handler,
+    hotkey_handler, log_handler, notification_handler, sidecar_handler, state_handler,
+    subscription, theme_handler, window_handler,
 };
 use crate::plugins::types::{
     JsonRpcError, JsonRpcRequest, JsonRpcResponse, PluginId, RpcErrorCode,
@@ -87,6 +88,16 @@ pub async fn dispatch(
             sidecar_handler::on_event(&app, &plugin_id, &caller_label, &request.params)
         }
         "sidecar.status" => sidecar_handler::status(&app, &plugin_id, &request.params),
+
+        // hotkey.* (permission: hotkeys)
+        "hotkey.register" => hotkey_handler::register(&app, &plugin_id, &request.params),
+        "hotkey.unregister" => hotkey_handler::unregister(&app, &plugin_id, &request.params),
+        "hotkey.onTrigger" => {
+            hotkey_handler::on_trigger(&app, &plugin_id, &caller_label, &request.params)
+        }
+
+        // notification.* (permission: notifications)
+        "notification.show" => notification_handler::show(&app, &plugin_id, &request.params),
 
         _ => Err(JsonRpcError::new(
             RpcErrorCode::MethodNotFound,
